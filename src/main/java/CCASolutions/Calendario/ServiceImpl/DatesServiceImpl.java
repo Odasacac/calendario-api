@@ -62,11 +62,11 @@ public class DatesServiceImpl implements DatesService {
 		}
 
 		MoonPhasesDTO moonPhases = makeHTTPGetRequest(moonPhaseUrl, MoonPhasesDTO.class);
-		SolsticiosAndEquinocciosDTO solsticios = makeHTTPGetRequest(solsEquiUrl, SolsticiosAndEquinocciosDTO.class);
+		SolsticiosAndEquinocciosDTO solsticiosYEquinoccios = makeHTTPGetRequest(solsEquiUrl, SolsticiosAndEquinocciosDTO.class);
 
 		dateVAU.setYear(getVAUYear(dateO));
 
-		dateVAU.setMonth(getVAUMonth(dateO, solsticios, moonPhases));
+		dateVAU.setMonth(getVAUMonth(dateO, solsticiosYEquinoccios, moonPhases));
 
 		dateVAU.setWeek(getVauWeek(dateO, moonPhases));
 
