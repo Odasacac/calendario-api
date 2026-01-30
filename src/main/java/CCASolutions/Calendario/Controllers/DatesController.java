@@ -5,8 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
@@ -20,18 +21,20 @@ public class DatesController {
 	@Autowired
 	DatesService datesService;
 	
-	
-	@PostMapping("/conversion")
-	public ResponseEntity <DateDTO> getDateVAU (LocalDateTime dateO){
+	@GetMapping("/conversion")
+	public ResponseEntity <DateDTO> getDateVAU (@RequestParam LocalDateTime dateO){
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
-		
+
+
 		try {
-			body = this.datesService.getDateVAU(dateO);
+			body = this.datesService.getDateVAUFromDateO(dateO);
 		}
 		catch (Exception e) {
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			System.out.println(e);
+		}		
 			
-		}
 		
 		return new ResponseEntity<DateDTO>(body, status);
 	}
