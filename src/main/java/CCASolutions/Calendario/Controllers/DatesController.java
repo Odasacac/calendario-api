@@ -26,7 +26,6 @@ public class DatesController {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
 
-
 		try {
 			body = this.datesService.getDateVAUFromDateO(dateO);
 		}

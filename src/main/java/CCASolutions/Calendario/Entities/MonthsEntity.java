@@ -19,6 +19,12 @@ public class MonthsEntity implements Serializable {
 	private Long id;
 	
 	private String name;
+	
+	private Boolean hibrid;
+	
+	private Integer season;
+	
+	private Integer monthOfSeason;
 
 	public Long getId() {
 		return id;
@@ -39,4 +45,30 @@ public class MonthsEntity implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public Boolean getHibrid() {
+		return hibrid;
+	}
+
+	public void setHibrid(Boolean hibrid) {
+		this.hibrid = hibrid;
+	}
+
+	public Integer getSeason() {
+		return season;
+	}
+
+	public void setSeason(Integer season) {
+		this.season = season;
+	}
+
+	public Integer getMonthOfSeason() {
+		return monthOfSeason;
+	}
+
+	public void setMonthOfSeason(Integer monthOfSeason) {
+		this.monthOfSeason = monthOfSeason;
+	}
+	
+	
 }

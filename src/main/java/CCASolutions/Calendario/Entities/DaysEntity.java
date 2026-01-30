@@ -19,6 +19,8 @@ public class DaysEntity implements Serializable {
 	private Long id;
 	
 	private String name;
+	
+	private String dayOfWeek;
 
 	public Long getId() {
 		return id;
@@ -39,5 +41,15 @@ public class DaysEntity implements Serializable {
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
+
+	public String getDayOfWeek() {
+		return dayOfWeek;
+	}
+
+	public void setDayOfWeek(String dayOfWeek) {
+		this.dayOfWeek = dayOfWeek;
+	}
+	
+	
 
 }
