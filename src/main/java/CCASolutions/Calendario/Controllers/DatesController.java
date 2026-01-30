@@ -1,4 +1,5 @@
 package CCASolutions.Calendario.Controllers;
+
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,21 +21,36 @@ public class DatesController {
 
 	@Autowired
 	DatesService datesService;
-	
+
 	@GetMapping("/conversion")
-	public ResponseEntity <DateDTO> getDateVAU (@RequestParam LocalDateTime dateO){
+	public ResponseEntity<DateDTO> getDateVAU(@RequestParam LocalDateTime dateO) {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
 
 		try {
 			body = this.datesService.getDateVAUFromDateO(dateO);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			System.out.println(e);
-		}		
-			
-		
+		}
+
+		return new ResponseEntity<DateDTO>(body, status);
+	}
+
+	@GetMapping("/now")
+	public ResponseEntity<DateDTO> getTodayVAU() {
+		HttpStatus status = HttpStatus.OK;
+		DateDTO body = new DateDTO();
+
+		LocalDateTime dateO = LocalDateTime.now();
+
+		try {
+			body = this.datesService.getDateVAUFromDateO(dateO);
+		} catch (Exception e) {
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			System.out.println(e);
+		}
+
 		return new ResponseEntity<DateDTO>(body, status);
 	}
 }
