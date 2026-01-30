@@ -4,6 +4,7 @@ public class DateDTO {
 	
 	private Long year;
 	private String month;
+	private String week;
 	private String day;
 
 	public Long getYear() {
@@ -29,5 +30,15 @@ public class DateDTO {
 	public void setDay(String day) {
 		this.day = day;
 	}
+
+	public String getWeek() {
+		return week;
+	}
+
+	public void setWeek(String week) {
+		this.week = week;
+	}
+	
+	
 	
 }
