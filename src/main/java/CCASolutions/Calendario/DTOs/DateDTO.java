@@ -2,16 +2,16 @@ package CCASolutions.Calendario.DTOs;
 
 public class DateDTO {
 
-	private Long year;
+	private String year;
 	private String month;
 	private String week;
 	private String day;
 
-	public Long getYear() {
+	public String getYear() {
 		return year;
 	}
 
-	public void setYear(Long year) {
+	public void setYear(String year) {
 		this.year = year;
 	}
 

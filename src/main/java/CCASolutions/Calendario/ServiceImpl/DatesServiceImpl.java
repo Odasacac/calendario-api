@@ -1,209 +1,184 @@
 package CCASolutions.Calendario.ServiceImpl;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
-import CCASolutions.Calendario.DTOs.MoonPhasesDTO;
-import CCASolutions.Calendario.DTOs.SolsticiosAndEquinocciosDTO;
+import CCASolutions.Calendario.DTOs.FenomenoDTO;
+import CCASolutions.Calendario.DTOs.GSYEFDTO;
 import CCASolutions.Calendario.Entities.DatosEntity;
-import CCASolutions.Calendario.Entities.DaysEntity;
-import CCASolutions.Calendario.Entities.MonthsEntity;
-import CCASolutions.Calendario.Entities.WeeksEntity;
+import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Repositories.DatosRepository;
-import CCASolutions.Calendario.Repositories.DaysRepository;
-import CCASolutions.Calendario.Repositories.MonthsRepository;
-import CCASolutions.Calendario.Repositories.WeeksRepository;
+import CCASolutions.Calendario.Repositories.MetonsRepository;
 import CCASolutions.Calendario.Services.DatesService;
-import CCASolutions.Calendario.Services.Utils;
 
 @Service
 public class DatesServiceImpl implements DatesService {
 
-	@Autowired
-	private Utils utils;
 
 	@Autowired
 	private DatosRepository datosRepository;
-
+	
 	@Autowired
-	private MonthsRepository monthsRepository;
+	private MetonsRepository metonsRepository;
 
-	@Autowired
-	private DaysRepository daysRepository;
-
-	@Autowired
-	private WeeksRepository weeksRepository;
-
+	
 	private final RestTemplate restTemplate = new RestTemplate();
 
 	@Override
 	public DateDTO getDateVAUFromDateO(LocalDateTime dateO) {
 
 		DateDTO dateVAU = new DateDTO();
+		
+		LocalDateTime dateLastMeton = this.getLastMetonDate(dateO);
+		
+		List<FenomenoDTO> solsticiosYEquinocciosDesdeElMetono = new ArrayList<>();
+		
 
-		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList("SolsEquiAPI", "MoonPhaseAPI"));
-		String solsEquiUrl = "", moonPhaseUrl = "";
-		for (DatosEntity url : urls) {
+		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList("ASYEF"));
+	
+		
+		for (DatosEntity url : urls) 
+		{
 			switch (url.getConcepto()) {
-			case "SolsEquiAPI":
-				solsEquiUrl = url.getValor().replace("{{XXXX}}", String.valueOf(dateO.getYear() - 1));
-				break;
-			case "MoonPhaseAPI":
-				moonPhaseUrl = url.getValor().replace("{{XXXX}}", String.valueOf(dateO.getYear()));
+			case "ASYEF":
+				solsticiosYEquinocciosDesdeElMetono = this.getSolsticiosYEquinocciosDesdeElMetono(dateO, url.getValor());
+		
 				break;
 			}
 		}
+		
+		
+		dateVAU.setYear(getVAUYear(dateO, dateLastMeton, solsticiosYEquinocciosDesdeElMetono));
 
-		MoonPhasesDTO moonPhases = makeHTTPGetRequest(moonPhaseUrl, MoonPhasesDTO.class);
-		SolsticiosAndEquinocciosDTO solsticiosYEquinoccios = makeHTTPGetRequest(solsEquiUrl, SolsticiosAndEquinocciosDTO.class);
+		//dateVAU.setMonth(getVAUMonth(dateO, solsticiosYEquinoccios, moonPhases));
 
-		dateVAU.setYear(getVAUYear(dateO));
+		//dateVAU.setWeek(getVauWeek(dateO, moonPhases));
 
-		dateVAU.setMonth(getVAUMonth(dateO, solsticiosYEquinoccios, moonPhases));
-
-		dateVAU.setWeek(getVauWeek(dateO, moonPhases));
-
-		dateVAU.setDay(getVAUDay(dateO, moonPhases));
+		//dateVAU.setDay(getVAUDay(dateO, moonPhases));
 
 		return dateVAU;
 	}
+	
+	
+	// MEETODOS PRIVADOS
+	
+	private String getVAUYear(LocalDateTime dateO, LocalDateTime dateLastMeton, List<FenomenoDTO> solsticiosYEquinocciosDesdeElMetono) {
+	
+		String vauYear = "-";
 
-	private boolean isNewMoon(LocalDateTime dateO, MoonPhasesDTO moonPhases) {
-		for (MoonPhasesDTO.Response.Data m : moonPhases.getResponse().getData()) {
-			if ("NewMoon".equals(m.getMoonPhase())
-					&& LocalDateTime.parse(m.getDate()).toLocalDate().isEqual(dateO.toLocalDate())) {
-				return true;
+		System.out.println(dateO.toLocalDate());
+		System.out.println(dateLastMeton.toLocalDate());
+		
+		
+		if(solsticiosYEquinocciosDesdeElMetono != null || !dateO.toLocalDate().isEqual(dateLastMeton.toLocalDate())) {
+
+			if(solsticiosYEquinocciosDesdeElMetono.size() == 0) {
+				
+				vauYear = "0";
 			}
-		}
-		return false;
-	}
-
-	private LocalDateTime getLastNewMoon(LocalDateTime dateO, MoonPhasesDTO moonPhases) {
-		LocalDateTime lastNewMoon = null;
-		for (MoonPhasesDTO.Response.Data m : moonPhases.getResponse().getData()) {
-			if ("NewMoon".equals(m.getMoonPhase())) {
-				LocalDateTime nmDate = LocalDateTime.parse(m.getDate());
-				if (!nmDate.isAfter(dateO) && (lastNewMoon == null || nmDate.isAfter(lastNewMoon))) {
-					lastNewMoon = nmDate;
+			else {
+				
+				int vauYearInt = 0;
+	
+				boolean esSolsticioDeInvierno = false;
+				
+				for(int i = 0; i < solsticiosYEquinocciosDesdeElMetono.size() && !esSolsticioDeInvierno; i++) {			
+					
+					FenomenoDTO fenomeno = solsticiosYEquinocciosDesdeElMetono.get(i);
+					
+					if("WinterSolstice".equals(fenomeno.getPhenomena())) {
+						
+						if(dateO.toLocalDate().isAfter(fenomeno.getDate().toLocalDate())) {
+							
+							vauYearInt = vauYearInt +1;
+						}
+						else if (dateO.toLocalDate().isEqual(fenomeno.getDate().toLocalDate())) {
+							esSolsticioDeInvierno = true;
+						}
+					}
 				}
+				
+				if(!esSolsticioDeInvierno) {
+					vauYear = String.valueOf(vauYearInt);
+				}
+				
 			}
 		}
-		return lastNewMoon;
+		
+		return vauYear;
+		
 	}
-
-	private String getVAUDay(LocalDateTime dateO, MoonPhasesDTO moonPhases) {
-		if (isNewMoon(dateO, moonPhases))
-			return "-";
-
-		LocalDateTime lastNewMoon = getLastNewMoon(dateO, moonPhases);
-		if (lastNewMoon == null)
-			return "?";
-
-		long daysSinceNewMoon = ChronoUnit.DAYS.between(lastNewMoon.toLocalDate(), dateO.toLocalDate());
-
-		int dayVAU;
-		if (daysSinceNewMoon <= 7) {
-			dayVAU = (int) daysSinceNewMoon;
-		} else if (daysSinceNewMoon <= 14) {
-			dayVAU = (int) (daysSinceNewMoon - 7);
-		} else if (daysSinceNewMoon <= 21) {
-			dayVAU = (int) (daysSinceNewMoon - 14);
-		} else if (daysSinceNewMoon <= 28) {
-			dayVAU = (int) (daysSinceNewMoon - 21);
-		} else {
-			dayVAU = (int) (daysSinceNewMoon - 21);
+	 
+	private List<FenomenoDTO> getSYEF(String url){
+		
+		List<FenomenoDTO> solsticiosYEquinocciosDesdeElMetono = new ArrayList<>();
+		
+		GSYEFDTO responseGetSYEFAPI = restTemplate.getForObject(url, GSYEFDTO.class);
+		
+		if(responseGetSYEFAPI != null && responseGetSYEFAPI.getResponse() != null && responseGetSYEFAPI.getResponse().getData() != null) {
+			solsticiosYEquinocciosDesdeElMetono = responseGetSYEFAPI.getResponse().getData();
 		}
-
-		DaysEntity dayEntity = daysRepository.findByDayOfWeek(String.valueOf(dayVAU));
-		return dayEntity != null ? dayEntity.getName() : "?";
+		
+		return solsticiosYEquinocciosDesdeElMetono;
 	}
 
-	private String getVauWeek(LocalDateTime dateO, MoonPhasesDTO moonPhases) {
-		if (isNewMoon(dateO, moonPhases))
-			return "-";
-
-		LocalDateTime lastNewMoon = getLastNewMoon(dateO, moonPhases);
-		if (lastNewMoon == null)
-			return "?";
-
-		long daysSinceNewMoon = ChronoUnit.DAYS.between(lastNewMoon.toLocalDate(), dateO.toLocalDate());
-
-		int weekNumber;
-		if (daysSinceNewMoon >= 28) {
-			weekNumber = 5;
-		} else {
-			weekNumber = (int) ((daysSinceNewMoon - 1) / 7) + 1;
+	
+	private List<FenomenoDTO> getSolsticiosYEquinocciosDesdeElMetono (LocalDateTime dateO, String url){
+		
+		List<FenomenoDTO> solsticiosYEquinocciosDesdeElMetono = new ArrayList<>();
+		
+		LocalDateTime dateLastMeton = this.getLastMetonDate(dateO);
+		
+		if((dateO.getYear() - dateLastMeton.getYear()) > 0) {
+			
+			// https://opale.imcce.fr/api/v1/phenomena/equinoxessolstices/399?year={{YYYY}}&nbd={{NNNN}}
+			String urlParaLlamada = url.replace("{{YYYY}}", String.valueOf(dateLastMeton.getYear())).replace("{{NNNN}}", String.valueOf(dateO.getYear() - dateLastMeton.getYear()+1));
+			
+			try {
+				solsticiosYEquinocciosDesdeElMetono = this.getSYEF(urlParaLlamada);
+			}
+			catch (Exception e) {
+				System.out.println("Error al llamar a GASYEF API: " + e);
+			}
+			
 		}
-
-		WeeksEntity weekEntity = weeksRepository.findByWeekOfMonth(String.valueOf(weekNumber));
-		return weekEntity != null ? weekEntity.getName() : "?";
+		
+		return solsticiosYEquinocciosDesdeElMetono;
+		
 	}
-
-	private String getVAUMonth(LocalDateTime dateO, SolsticiosAndEquinocciosDTO solsticios, MoonPhasesDTO moonPhases) {
-		if (isNewMoon(dateO, moonPhases))
-			return "-";
-
-		LocalDateTime lastEventDate = null;
-		String lastEventName = null;
-		for (SolsticiosAndEquinocciosDTO.Response.Data event : solsticios.getResponse().getData()) {
-			LocalDateTime eventDate = LocalDateTime.parse(event.getDate());
-			if (!eventDate.isAfter(dateO) && (lastEventDate == null || eventDate.isAfter(lastEventDate))) {
-				lastEventDate = eventDate;
-				lastEventName = event.getPhenomena();
+	
+	
+	private LocalDateTime getLastMetonDate (LocalDateTime dateO) {
+		LocalDateTime lastMeton = null;		
+		
+		try {
+			Optional<MetonsEntity> lastMetonOpt= this.metonsRepository.findFirstByDateLessThanEqualAndNuevoTrueAndSolsticialTrueAndInicialTrueOrderByDateDesc(dateO);
+			
+			if(lastMetonOpt.isPresent()) {
+				lastMeton = lastMetonOpt.get().getDate();
 			}
 		}
-
-		int season = 0;
-		if (lastEventName != null) {
-			switch (lastEventName) {
-			case "WinterSolstice":
-				season = 1;
-				break;
-			case "VernalEquinox":
-				season = 2;
-				break;
-			case "SummerSolstice":
-				season = 3;
-				break;
-			case "AutumnalEquinox":
-				season = 4;
-				break;
-			}
+		catch (Exception e) {
+			System.out.println("Error getting last meton: " + e);
 		}
-
-		int newMoonCount = 0;
-		for (MoonPhasesDTO.Response.Data m : moonPhases.getResponse().getData()) {
-			LocalDateTime nmDate = LocalDateTime.parse(m.getDate());
-			if ("NewMoon".equals(m.getMoonPhase()) && !nmDate.isBefore(lastEventDate) && !nmDate.isAfter(dateO)) {
-				newMoonCount++;
-			}
-		}
-
-		boolean isHibrid = newMoonCount == 0;
-		int monthOfSeason = isHibrid ? 0 : newMoonCount;
-
-		MonthsEntity vauMonth = monthsRepository.findBySeasonAndMonthOfSeasonAndHibrid(season, monthOfSeason, isHibrid);
-		return vauMonth != null ? vauMonth.getName() : "?";
+		
+		return lastMeton;
 	}
 
-	private <T> T makeHTTPGetRequest(String url, Class<T> responseType) {
-		return restTemplate.getForObject(url, responseType);
-	}
 
-	private Long getVAUYear(LocalDateTime dateO) {
-		LocalDateTime lastMeton = utils.getLastMeton(dateO);
-		if (dateO.toLocalDate().isEqual(lastMeton.toLocalDate()))
-			return 0L;
-		else if (dateO.getYear() == lastMeton.getYear())
-			return 1L;
-		else
-			return (long) (dateO.getYear() - lastMeton.getYear());
-	}
 }
+
+
+
+
+
+
+
