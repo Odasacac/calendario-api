@@ -2,7 +2,7 @@ package CCASolutions.Calendario.DTOs;
 
 import java.util.List;
 
-public class GSYEFDTO {
+public class YLPDTO {
 	private Response response;
 
 	public Response getResponse() { 
@@ -15,14 +15,15 @@ public class GSYEFDTO {
 
 	public static class Response {
 	
-		private List<FenomenoDTO> data;
+		private List<LunarPhaseDTO> data;
 		
-		public List<FenomenoDTO> getData() {
+		public List<LunarPhaseDTO> getData() {
 			return data; 
 		}
 		
-		public void setData(List<FenomenoDTO> data) { 
+		public void setData(List<LunarPhaseDTO> data) { 
 			this.data = data; 
 		}
 	}
 }
+
