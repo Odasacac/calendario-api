@@ -2,10 +2,20 @@ package CCASolutions.Calendario.DTOs;
 
 public class DateDTO {
 
+	private String meton;
 	private String year;
 	private String month;
 	private String week;
 	private String day;
+
+	
+	public String getMeton() {
+		return meton;
+	}
+
+	public void setMeton(String meton) {
+		this.meton = meton;
+	}
 
 	public String getYear() {
 		return year;

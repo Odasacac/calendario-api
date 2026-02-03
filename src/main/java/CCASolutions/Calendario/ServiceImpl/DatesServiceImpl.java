@@ -15,13 +15,18 @@ import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.FenomenoDTO;
 import CCASolutions.Calendario.DTOs.GASYEFDTO;
 import CCASolutions.Calendario.DTOs.LunarPhaseDTO;
+import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
 import CCASolutions.Calendario.DTOs.YLPDTO;
 import CCASolutions.Calendario.Entities.DatosEntity;
+import CCASolutions.Calendario.Entities.DaysEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
+import CCASolutions.Calendario.Entities.WeeksEntity;
 import CCASolutions.Calendario.Repositories.DatosRepository;
+import CCASolutions.Calendario.Repositories.DaysRepository;
 import CCASolutions.Calendario.Repositories.MetonsRepository;
 import CCASolutions.Calendario.Repositories.MonthsRepository;
+import CCASolutions.Calendario.Repositories.WeeksRepository;
 import CCASolutions.Calendario.Services.DatesService;
 
 @Service
@@ -36,6 +41,12 @@ public class DatesServiceImpl implements DatesService {
 	
 	@Autowired
 	private MonthsRepository monthsRepository;
+	
+	@Autowired
+	private WeeksRepository weeksRepository;
+	
+	@Autowired
+	private DaysRepository daysRepository;
 
 	
 	private final RestTemplate restTemplate = new RestTemplate();
@@ -72,14 +83,17 @@ public class DatesServiceImpl implements DatesService {
 			}
 		}
 		
+		dateVAU.setMeton(String.valueOf(dateLastMeton.getYear()));
 		
 		dateVAU.setYear(getVAUYear(dateO, dateLastMeton, solsticiosYEquinocciosDesdeElMetono));
 
 		dateVAU.setMonth(getVAUMonth(dateO, fasesLunaresDelAnyo, solsticiosYEquinocciosDesdeElMetono));
+		
+		VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(dateO, fasesLunaresDelAnyo, urls);
 
-		//dateVAU.setWeek(getVauWeek(dateO, moonPhases));
+		dateVAU.setWeek(vauWeekAndDay.getWeek());
 
-		//dateVAU.setDay(getVAUDay(dateO, moonPhases));
+		dateVAU.setDay(vauWeekAndDay.getDay());
 
 		return dateVAU;
 	}
@@ -87,7 +101,99 @@ public class DatesServiceImpl implements DatesService {
 	
 	// METODOS PRIVADOS
 	
+	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunarPhaseDTO> fasesLunaresDelAnyo, List<DatosEntity> urls) {
+		
+		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
+		WeeksEntity vauWeek = new WeeksEntity();
+		
+		long dayWeekNumber = 0L;
+		DaysEntity vauDay = new DaysEntity();
+		
+		LunarPhaseDTO lastNewMoon = this.getLastNewMoonForADateO(dateO, fasesLunaresDelAnyo, urls);
+		
+		long diasDesdeLaLunaNueva = ChronoUnit.DAYS.between(lastNewMoon.getDate().toLocalDate(), dateO.toLocalDate());
+		
+		if (diasDesdeLaLunaNueva == 0) {
+			
+			vauWeek.setName("-");
+			vauDay.setName("-");
+		}
+		else if (diasDesdeLaLunaNueva <= 7) {
+			
+			vauWeek = this.weeksRepository.findByWeekOfMonth("1");
+			dayWeekNumber = diasDesdeLaLunaNueva;
+			vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
+			
+		} else if (diasDesdeLaLunaNueva <= 14) {
+			
+			vauWeek = this.weeksRepository.findByWeekOfMonth("2");
+			dayWeekNumber = diasDesdeLaLunaNueva-7;
+			vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
 
+		} else if (diasDesdeLaLunaNueva <= 21) {
+			
+			vauWeek = this.weeksRepository.findByWeekOfMonth("3");
+			dayWeekNumber = diasDesdeLaLunaNueva-14;
+			vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
+
+		} else if (diasDesdeLaLunaNueva <= 28) {
+			
+			vauWeek = this.weeksRepository.findByWeekOfMonth("4");
+			dayWeekNumber = diasDesdeLaLunaNueva-21;
+			vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
+		}
+		else {
+			vauWeek.setName("-");
+			dayWeekNumber = diasDesdeLaLunaNueva-21;
+			vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
+		}
+		
+		vauWeekAndDay.setWeek(vauWeek.getName());
+		vauWeekAndDay.setDay(vauDay.getName());
+		
+		return vauWeekAndDay;
+	}
+
+	private LunarPhaseDTO getLastNewMoonForADateO (LocalDateTime dateO, List<LunarPhaseDTO> fasesLunaresDelAnyo, List<DatosEntity> urls) {
+		
+		LunarPhaseDTO lastNewMoon = new LunarPhaseDTO();
+		Long diasLastLPConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
+		Long diasLastLPDeDiferenciaConLaFechaO = Long.MAX_VALUE;
+		
+		for(int i = 0; i<fasesLunaresDelAnyo.size(); i++) {
+			
+			LunarPhaseDTO faseLunar = fasesLunaresDelAnyo.get(i);
+
+			if("NewMoon".equals(faseLunar.getMoonPhase()) && 
+				(faseLunar.getDate().toLocalDate().isBefore(dateO.toLocalDate())|| faseLunar.getDate().toLocalDate().isEqual(dateO.toLocalDate()))) {
+				
+				diasLastLPDeDiferenciaConLaFechaO = ChronoUnit.DAYS.between(faseLunar.getDate(), dateO);
+				
+				if(diasLastLPDeDiferenciaConLaFechaO < diasLastLPConMenorDiferenciaConLaFechaO) {
+					
+					lastNewMoon.setDate(faseLunar.getDate());
+					lastNewMoon.setMoonPhase(faseLunar.getMoonPhase());
+					diasLastLPConMenorDiferenciaConLaFechaO = diasLastLPDeDiferenciaConLaFechaO;
+				}	
+			}	
+		}
+		
+		if(lastNewMoon.getDate() == null) {
+
+			for (DatosEntity url : urls) 
+			{
+				if ("YLP".equals(url.getConcepto())) {	
+					LocalDateTime dateOMenosUnAnyo = dateO.minusYears(1);
+					List<LunarPhaseDTO> fasesLunaresDelAnyoAnterior = this.getFasesLunaresDelAnyo(dateOMenosUnAnyo, url.getValor());
+					lastNewMoon = this.getLastNewMoonForADateO(dateO, fasesLunaresDelAnyoAnterior, urls);
+					break;	
+				}
+			}						
+		}
+		
+		return lastNewMoon;
+	}
+	
 	private String getVAUYear(LocalDateTime dateO, LocalDateTime dateLastMeton, List<FenomenoDTO> solsticiosYEquinocciosDesdeElMetono) {
 	
 		String vauYear = "-";
@@ -216,12 +322,12 @@ public class DatesServiceImpl implements DatesService {
 		int season = 0;
 		
 		LunarPhaseDTO lastLP = new LunarPhaseDTO();
-		Long diasLastLPConMenorDiferenciaConLaFechaO = 1000L;
-		Long diasLastLPDeDiferenciaConLaFechaO = 1000L;
+		Long diasLastLPConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
+		Long diasLastLPDeDiferenciaConLaFechaO = Long.MAX_VALUE;
 		
 		LunarPhaseDTO nextLP = new LunarPhaseDTO();
-		Long diasNextLPConMenorDiferenciaConLaFechaO = 1000L;
-		Long diasNextLPDeDiferenciaConLaFechaO = 1000L;
+		Long diasNextLPConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
+		Long diasNextLPDeDiferenciaConLaFechaO = Long.MAX_VALUE;
 		
 		for(LunarPhaseDTO luna : lunasNuevasPasadasDesdeLastSOEHastaNextSOE) {
 			
@@ -314,12 +420,12 @@ public class DatesServiceImpl implements DatesService {
 		List<FenomenoDTO> lastAndNextSOE = new ArrayList<>();
 		
 		FenomenoDTO lastSOE = new FenomenoDTO();		
-		Long diasLastSOEConMenorDiferenciaConLaFechaO = 1000L;
-		Long diasLastSOEDeDiferenciaConLaFechaO = 1000L;
+		Long diasLastSOEConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
+		Long diasLastSOEDeDiferenciaConLaFechaO = Long.MAX_VALUE;
 		
 		FenomenoDTO nextSOE = new FenomenoDTO();
-		Long diasNextSOEConMenorDiferenciaConLaFechaO = 1000L;
-		Long diasNextSOEDeDiferenciaConLaFechaO = 1000L;
+		Long diasNextSOEConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
+		Long diasNextSOEDeDiferenciaConLaFechaO = Long.MAX_VALUE;
 
 		boolean caeEnSOE = false;
 		
