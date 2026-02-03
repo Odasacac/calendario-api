@@ -22,7 +22,7 @@ public class DatesController {
 	@Autowired
 	DatesService datesService;
 
-	@GetMapping("/conversion")
+	@GetMapping("/conversiontovau")
 	public ResponseEntity<DateDTO> getDateVAU(@RequestParam LocalDateTime dateO) {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
@@ -37,7 +37,7 @@ public class DatesController {
 		return new ResponseEntity<DateDTO>(body, status);
 	}
 
-	@GetMapping("/now")
+	@GetMapping("/nowtovau")
 	public ResponseEntity<DateDTO> getTodayVAU() {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
