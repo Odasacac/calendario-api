@@ -21,6 +21,8 @@ public class MetonsEntity implements Serializable {
 
 	private LocalDateTime date;
 	
+	private int year;
+	
 	private Boolean solsticial;
 	
 	private Boolean equinoccial;
@@ -31,11 +33,21 @@ public class MetonsEntity implements Serializable {
 	
 	private Boolean cuartal;
 	
-	private Boolean Tricuartal;
+	private Boolean tricuartal;
 	
 	private Boolean nuevo;
 	
 	private Boolean lleno;
+	
+	
+
+	public int getYear() {
+		return year;
+	}
+
+	public void setYear(int year) {
+		this.year = year;
+	}
 
 	public Long getId() {
 		return id;
@@ -94,11 +106,11 @@ public class MetonsEntity implements Serializable {
 	}
 
 	public Boolean getTricuartal() {
-		return Tricuartal;
+		return tricuartal;
 	}
 
 	public void setTricuartal(Boolean tricuartal) {
-		Tricuartal = tricuartal;
+		this.tricuartal = tricuartal;
 	}
 
 	public Boolean getNuevo() {

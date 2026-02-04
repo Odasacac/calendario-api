@@ -6,4 +6,5 @@ import CCASolutions.Calendario.Entities.DaysEntity;
 
 public interface DaysRepository extends JpaRepository <DaysEntity, Long> {
 	DaysEntity findByDayOfWeek(String dayOfWeek);
+	DaysEntity findByName(String name);
 }

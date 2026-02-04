@@ -9,4 +9,5 @@ import CCASolutions.Calendario.Entities.MetonsEntity;
 
 public interface MetonsRepository extends JpaRepository <MetonsEntity, Long> {
 	Optional<MetonsEntity> findFirstByDateLessThanEqualAndNuevoTrueAndSolsticialTrueAndInicialTrueOrderByDateDesc(LocalDateTime date);
+	MetonsEntity findByYear(int year);
 }

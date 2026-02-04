@@ -6,4 +6,5 @@ import CCASolutions.Calendario.Entities.WeeksEntity;
 
 public interface WeeksRepository extends JpaRepository<WeeksEntity, Long> {
 	WeeksEntity findByWeekOfMonth(String weekOfMonth);
+	WeeksEntity findByName(String name);
 }
