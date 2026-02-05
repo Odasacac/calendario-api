@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
-import CCASolutions.Calendario.DTOs.DateWithEntitiesDTO;
 import CCASolutions.Calendario.DTOs.FenomenoDTO;
 import CCASolutions.Calendario.DTOs.GASYEFDTO;
 import CCASolutions.Calendario.DTOs.LunarPhaseDTO;
@@ -51,36 +50,6 @@ public class DatesServiceImpl implements DatesService {
 
 	
 	private final RestTemplate restTemplate = new RestTemplate();
-
-	public LocalDateTime getDateOFromDateVAU (DateDTO dateVAU) {
-		
-		List<FenomenoDTO> solsticiosYEquinocciosDelAnyo = new ArrayList<>();
-		List<LunarPhaseDTO> fasesLunaresDelAnyo = new ArrayList<>();		
-
-		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList("ASYEF", "YLP"));
-	
-		
-		for (DatosEntity url : urls) 
-		{
-			switch (url.getConcepto()) {
-			
-				case "ASYEF":
-					
-					solsticiosYEquinocciosDelAnyo = this.getSolsticiosYEquinocciosDelAnyo(dateVAU.getYear(), url.getValor());
-					break;
-				
-				case "YLP":
-					fasesLunaresDelAnyo = this.getFasesLunaresDelAnyo(dateVAU.getYear(), url.getValor());
-					break;
-					
-			}
-		}
-		
-		String year = this.getOYear(dateVAU);
-		String month = this.getOMonth(dateVAU, solsticiosYEquinocciosDelAnyo, fasesLunaresDelAnyo);
-		
-		return LocalDateTime.now();
-	}
 
 	public DateDTO getDateVAUFromDateO(LocalDateTime dateO) {
 
@@ -130,20 +99,6 @@ public class DatesServiceImpl implements DatesService {
 	
 	// METODOS PRIVADOS
 	
-	private String getOMonth (DateDTO dateVAU, List<FenomenoDTO> solsticiosYEquinocciosDelAnyo,	List<LunarPhaseDTO> fasesLunaresDelAnyo) {
-		
-		String oMonth = "";
-		
-		MonthsEntity monthVAU = this.monthsRepository.findByName(dateVAU.getMonth());
-		
-		return oMonth;
-	}
-	
-	
-	private String getOYear (DateDTO dateVAU) {
-		
-		return Integer.toString(Integer.valueOf(dateVAU.getMeton())-Integer.valueOf(dateVAU.getYear()));
-	}
 	
 	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunarPhaseDTO> fasesLunaresDelAnyo, List<DatosEntity> urls) {
 		
@@ -601,26 +556,7 @@ public class DatesServiceImpl implements DatesService {
 		return solsticiosYEquinocciosDesdeElMetono;
 		
 	}
-	
-	private List<FenomenoDTO> getSolsticiosYEquinocciosDelAnyo (String anyo, String url){
-		
-		List<FenomenoDTO> solsticiosYEquinocciosDesdeElMetono = new ArrayList<>();
-		
 
-		// https://opale.imcce.fr/api/v1/phenomena/equinoxessolstices/399?year={{YYYY}}&nbd={{NNNN}}
-		String urlParaLlamada = url.replace("{{YYYY}}", anyo).replace("{{NNNN}}","1");
-			
-		try {
-			solsticiosYEquinocciosDesdeElMetono = this.getGASYEFDTO(urlParaLlamada);
-		}
-		catch (Exception e) {
-			System.out.println("Error al llamar a GASYEF API: " + e);
-		}					
-		
-		return solsticiosYEquinocciosDesdeElMetono;
-		
-	}
-	
 	 
 	private List<FenomenoDTO> getGASYEFDTO(String url){
 		
@@ -652,89 +588,6 @@ public class DatesServiceImpl implements DatesService {
 		
 		return lastMeton;
 	}
-
-	public DateWithEntitiesDTO validateDTO(DateDTO dateVAU) 
-	{
-		
-		DateWithEntitiesDTO vauDB = new DateWithEntitiesDTO();
-		boolean dtoCorrecto = true;
-		
-		if(dateVAU.getMeton() != null) {
-			
-			
-			try {
-				
-			    Integer year = Integer.parseInt(dateVAU.getMeton());
-			  
-			    MetonsEntity meton = this.metonsRepository.findByYear(year);
-					
-				if(meton != null) {
-						
-					vauDB.setMeton(meton);
-				}
-				else {
-						
-					dtoCorrecto = false;
-				}			    
-			    
-			} catch (NumberFormatException e) {
-				
-				dtoCorrecto = false;
-			}	
-			
-		}
-	
-		
-		if(dtoCorrecto && dateVAU.getMonth() != null) {
-			
-			MonthsEntity month = this.monthsRepository.findByName(dateVAU.getMonth());
-			
-			if(month != null) {
-				
-				vauDB.setMonth(month);
-			}
-			else {
-				
-				dtoCorrecto = false;
-			}
-	
-		}
-		
-		if(dtoCorrecto && dateVAU.getWeek() != null) {
-			
-			WeeksEntity week = this.weeksRepository.findByName(dateVAU.getWeek());
-			
-			if(week != null) {
-				
-				vauDB.setWeek(week);
-			}
-			else {
-				
-				dtoCorrecto = false;
-			}
-		
-		}
-		
-		if(dtoCorrecto && dateVAU.getDay() != null) {
-			
-			DaysEntity day = this.daysRepository.findByName(dateVAU.getDay());
-			
-			if(day != null) {
-				
-				vauDB.setDay(day);
-			}
-			else {
-				
-				dtoCorrecto = false;
-			}
-	
-		}
-		
-		vauDB.setValidated(dtoCorrecto);
-		
-		return vauDB;
-	}
-
 
 }
 

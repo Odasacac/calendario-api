@@ -7,14 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
-import CCASolutions.Calendario.DTOs.DateWithEntitiesDTO;
 import CCASolutions.Calendario.Services.DatesService;
 
 @RestController
@@ -23,38 +20,7 @@ import CCASolutions.Calendario.Services.DatesService;
 public class DatesController {
 
 	@Autowired
-	DatesService datesService;
-	
-	@PostMapping("/conversiontoofficial")
-	public ResponseEntity<LocalDateTime> getOfficialDate(@RequestBody DateDTO date) {
-		
-		HttpStatus status = HttpStatus.OK;
-		LocalDateTime body = LocalDateTime.now();
-		
-		DateWithEntitiesDTO dateDB = this.datesService.validateDTO(date);
-
-		if(dateDB.isValidated()) {
-			
-			try {
-				
-				body = this.datesService.getDateOFromDateVAU(date);
-			} 
-			catch (Exception e) {
-				
-				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				System.out.println(e);
-			}
-		}
-		else {
-			
-			status = HttpStatus.BAD_REQUEST;
-		}
-
-		return new ResponseEntity<LocalDateTime>(body, status);
-	}
-
-	
-	
+	DatesService datesService;		
 	
 	@GetMapping("/conversiontovau")
 	public ResponseEntity<DateDTO> getDateVAU(@RequestParam LocalDateTime date) {
