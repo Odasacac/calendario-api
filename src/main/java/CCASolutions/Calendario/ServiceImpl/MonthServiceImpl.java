@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import org.springframework.stereotype.Service;
+
 import CCASolutions.Calendario.DTOs.FenomenoDTO;
 import CCASolutions.Calendario.DTOs.LunarPhaseDTO;
 import CCASolutions.Calendario.Services.MonthService;
 
+@Service
 public class MonthServiceImpl implements MonthService{
 
 	public int getSeasonDelMesHibridoSiLoEs (List<LunarPhaseDTO> lunasNuevasPasadasDesdeLastSOEHastaNextSOE, FenomenoDTO lastSOE, FenomenoDTO nextSOE, LocalDateTime dateO) {
