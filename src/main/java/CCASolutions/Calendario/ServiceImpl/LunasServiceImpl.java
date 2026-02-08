@@ -28,7 +28,7 @@ public class LunasServiceImpl implements LunasService {
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
-	public String updateLunas() {
+	public String poblateLunas() {
 		
 		String resultado = "Lunas actualizadas sin problema.";
 		
@@ -38,15 +38,13 @@ public class LunasServiceImpl implements LunasService {
 
 			int anyoDeLaUltimaLunaGuardada = this.getAnyoDeLaUltimaLunaGuardada();
 			
-			int anyoParaLaApi = anyoDeLaUltimaLunaGuardada+1;
+			int anyoParaLaApi = anyoDeLaUltimaLunaGuardada+1;		
 			
-		
-			
-			while (anyoParaLaApi <= LocalDateTime.now().getYear()) {
+			for (int i = anyoParaLaApi; i <= 2100; i++) {
 				
-				System.out.println("Actualizando lunas del anyo: " + anyoParaLaApi);
+				System.out.println("Actualizando lunas del anyo: " + i);
 				
-				List<LunarPhaseDTO> fasesLunaresDelAnyo = this.getFasesLunaresDelAnyoViaAPI(String.valueOf(anyoParaLaApi), apiGetLunasUrl.getValor());
+				List<LunarPhaseDTO> fasesLunaresDelAnyo = this.getFasesLunaresDelAnyoViaAPI(String.valueOf(i), apiGetLunasUrl.getValor());
 				
 				if(!fasesLunaresDelAnyo.isEmpty()) {
 					
@@ -87,7 +85,7 @@ public class LunasServiceImpl implements LunasService {
 							}		
 					}
 					
-					System.out.println("Actualizadas las lunas del anyo: " + anyoParaLaApi);
+					System.out.println("Actualizadas las lunas del anyo: " + i);
 				}					
 				else {
 				
@@ -95,7 +93,6 @@ public class LunasServiceImpl implements LunasService {
 					resultado = "Error al actualizar lunas, checkear logs.";
 				}	
 				
-				anyoParaLaApi = anyoParaLaApi +1;
 			}
 		}	
 		

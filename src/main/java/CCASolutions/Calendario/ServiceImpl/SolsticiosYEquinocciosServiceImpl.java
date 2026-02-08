@@ -30,7 +30,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	private final RestTemplate restTemplate = new RestTemplate();
 	
 
-	public String updateSolsticiosYEquinoccios() {
+	public String poblateSolsticiosYEquinoccios() {
 		
 		String resultado = "Solsticios y equinoccios actualizados sin problema";
 		
@@ -44,11 +44,11 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 			
 			
 			
-			while (anyoParaLaApi <= LocalDateTime.now().getYear()) {
+			for (int i = anyoParaLaApi; i <= 2100; i++) {
 				
-				System.out.println("Actualizando los solsticios y equinoccios del anyo: " + anyoParaLaApi);
+				System.out.println("Actualizando los solsticios y equinoccios del anyo: " + i);
 				
-				List<FenomenoDTO> solsticiosYEquinocciosDelAnyo = this.getSolsticiosYEquinocciosDelAnyoViaAPI(String.valueOf(anyoParaLaApi), apiGetSYEUrl.getValor());
+				List<FenomenoDTO> solsticiosYEquinocciosDelAnyo = this.getSolsticiosYEquinocciosDelAnyoViaAPI(String.valueOf(i), apiGetSYEUrl.getValor());
 				
 				if(!solsticiosYEquinocciosDelAnyo.isEmpty()) {
 					
@@ -91,7 +91,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 						
 					}
 					
-					System.out.println("Actualizados los solsticios y equinoccios del anyo: " + anyoParaLaApi);
+					System.out.println("Actualizados los solsticios y equinoccios del anyo: " + i);
 												
 				}
 				else {
@@ -99,7 +99,6 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 					System.out.println("No se han obtenido solsticios ni equinoccios de la API.");
 					resultado = "Error al actualizar solsticios y equinoccios, checkear logs.";
 				}	
-				anyoParaLaApi = anyoParaLaApi +1;
 				
 			}				
 		}

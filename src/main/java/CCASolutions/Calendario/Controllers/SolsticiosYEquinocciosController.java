@@ -18,14 +18,14 @@ public class SolsticiosYEquinocciosController {
 	@Autowired
 	private SolsticiosYEquinocciosService solsticiosYEquinocciosService;
 	
-	@GetMapping("/updatesoes")
+	@GetMapping("/poblatesoes")
 	public ResponseEntity<String> getDateVAU() {
 		HttpStatus status = HttpStatus.OK;
 		String body = "Error al actualizar los solsticios y equinoccios.";
 
 		try {
 			
-			body = this.solsticiosYEquinocciosService.updateSolsticiosYEquinoccios();
+			body = this.solsticiosYEquinocciosService.poblateSolsticiosYEquinoccios();
 					
 		} catch (Exception e) {
 			

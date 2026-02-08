@@ -19,7 +19,7 @@ public class MetonsController {
 	@Autowired
 	private MetonsService metonsService;
 	
-	@GetMapping("/checkmetons")
+	@GetMapping("/poblatemetons")
 	public ResponseEntity<String> getDateVAU(@RequestParam int since, @RequestParam int to) {
 		HttpStatus status = HttpStatus.OK;
 		String body = "Error al actualizar los metonos.";

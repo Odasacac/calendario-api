@@ -9,7 +9,7 @@ import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 public interface SolsticiosYEquinocciosService {
 	
 	public abstract List<SolsticiosYEquinocciosEntity> getSolsticiosYEquinocciosEntityFromFenomenoDTO(List<FenomenoDTO> fenomenoDTO);
-	public abstract String updateSolsticiosYEquinoccios();
+	public abstract String poblateSolsticiosYEquinoccios();
 	public abstract int getAnyoDelUltimoSOEGuardado();
 	public abstract List<FenomenoDTO> getSolsticiosYEquinocciosDelAnyoViaAPI(String anyo, String url);
 	public abstract void saveOne(SolsticiosYEquinocciosEntity soeParaDB);

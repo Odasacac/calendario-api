@@ -18,14 +18,14 @@ public class LunasController {
 	@Autowired
 	private LunasService lunasService;
 	
-	@GetMapping("/updatemoons")
+	@GetMapping("/poblatelunas")
 	public ResponseEntity<String> getDateVAU() {
 		HttpStatus status = HttpStatus.OK;
 		String body = "Error al actualizar las lunas.";
 
 		try {
 			
-			body = this.lunasService.updateLunas();
+			body = this.lunasService.poblateLunas();
 		} catch (Exception e) {
 			
 			status = HttpStatus.INTERNAL_SERVER_ERROR;

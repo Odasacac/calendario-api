@@ -11,7 +11,7 @@ public interface LunasService {
 	
 	public abstract List<LunarPhaseDTO> getLunasNuevasPasadasDesdeLastSOEHastaNextSOE(List<LunarPhaseDTO> fasesLunaresDelAnyo, FenomenoDTO lastSOE, FenomenoDTO nextSOE);
 	public abstract List<LunasEntity> getLunasEntityFromLunarPhaseDTO(List<LunarPhaseDTO> lunarPhases);
-	public abstract String updateLunas();
+	public abstract String poblateLunas();
 	public abstract List<LunarPhaseDTO> getFasesLunaresDelAnyoViaAPI(String anyo, String url);
 	public abstract List<LunarPhaseDTO> getFasesLunaresDelAnyoViaDB(String anyo);
 	public abstract int getAnyoDeLaUltimaLunaGuardada();
