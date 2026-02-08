@@ -27,16 +27,9 @@ public class DatesController {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
 
-		try {
-			
-			if(date.getYear() > (LocalDateTime.now().getYear())) {
-				
-				body = this.datesService.getDateVAUFromDateO(date, true);
-			}
-			else {
-				
-				body = this.datesService.getDateVAUFromDateO(date, false);
-			}
+		try {			
+
+			body = this.datesService.getDateVAUFromDateO(date, this.datesService.esFechaDeAnyoFuturo(date));
 			
 		} catch (Exception e) {
 			

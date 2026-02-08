@@ -71,6 +71,18 @@ public class DatesServiceImpl implements DatesService {
 		return dateVAU;
 	}
 	
+	public boolean esFechaDeAnyoFuturo(LocalDateTime date) {
+		
+		boolean esFechaFutura = false;
+		
+		if(date.getYear() > (LocalDateTime.now().getYear())) {
+			
+			esFechaFutura = true;
+		}	
+		
+		return esFechaFutura;
+	}
+	
 	
 	// ========================= METODOS PRIVADOS
 	

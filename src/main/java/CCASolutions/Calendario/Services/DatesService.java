@@ -7,4 +7,5 @@ import CCASolutions.Calendario.DTOs.DateDTO;
 public interface DatesService {
 
 	public abstract DateDTO getDateVAUFromDateO (LocalDateTime dateO, boolean future);
+	public abstract boolean esFechaDeAnyoFuturo(LocalDateTime date);
 }
