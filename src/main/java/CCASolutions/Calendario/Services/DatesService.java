@@ -5,5 +5,6 @@ import java.time.LocalDateTime;
 import CCASolutions.Calendario.DTOs.DateDTO;
 
 public interface DatesService {
-	public abstract DateDTO getDateVAUFromDateO (LocalDateTime dateO);
+
+	public abstract DateDTO getDateVAUFromDateO (LocalDateTime dateO, boolean future);
 }

@@ -28,8 +28,18 @@ public class DatesController {
 		DateDTO body = new DateDTO();
 
 		try {
-			body = this.datesService.getDateVAUFromDateO(date);
+			
+			if(date.getYear() > (LocalDateTime.now().getYear())) {
+				
+				body = this.datesService.getDateVAUFromDateO(date, true);
+			}
+			else {
+				
+				body = this.datesService.getDateVAUFromDateO(date, false);
+			}
+			
 		} catch (Exception e) {
+			
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			System.out.println(e);
 		}
@@ -48,8 +58,11 @@ public class DatesController {
 		LocalDateTime dateO = LocalDateTime.now();
 
 		try {
-			body = this.datesService.getDateVAUFromDateO(dateO);
-		} catch (Exception e) {
+			
+			body = this.datesService.getDateVAUFromDateO(dateO, false);			
+		} 
+		catch (Exception e) {
+			
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			System.out.println(e);
 		}
