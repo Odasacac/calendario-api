@@ -23,19 +23,27 @@ public class DatesController {
 	DatesService datesService;		
 	
 	@GetMapping("/conversiontovau")
-	public ResponseEntity<DateDTO> getDateVAU(@RequestParam LocalDateTime date) {
+	public ResponseEntity<DateDTO> getDateVAU(@RequestParam LocalDateTime dateO) {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
 
-		try {			
-
-			body = this.datesService.getDateVAUFromDateO(date, this.datesService.esFechaDeAnyoFuturo(date));
+		if(dateO.getYear() > 2099) {
 			
-		} catch (Exception e) {
-			
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-			System.out.println(e);
+			status = HttpStatus.BAD_REQUEST;
 		}
+		else {
+			
+			try {			
+
+				body = this.datesService.getDateVAUFromDateO(dateO);
+				
+			} catch (Exception e) {
+				
+				status = HttpStatus.INTERNAL_SERVER_ERROR;
+				System.out.println(e);
+			}
+		}
+		
 
 		return new ResponseEntity<DateDTO>(body, status);
 	}
@@ -52,7 +60,7 @@ public class DatesController {
 
 		try {
 			
-			body = this.datesService.getDateVAUFromDateO(dateO, false);			
+			body = this.datesService.getDateVAUFromDateO(dateO);			
 		} 
 		catch (Exception e) {
 			

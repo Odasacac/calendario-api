@@ -24,7 +24,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository;
 	
 	@Autowired
-	private DatosRepository datosRepository;	
+	private DatosRepository datosRepository;
 	
 	
 	private final RestTemplate restTemplate = new RestTemplate();
@@ -110,13 +110,6 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		return resultado;
 	}
 	
-	public List<SolsticiosYEquinocciosEntity> getSolsticiosYEquinocciosEntityFromFenomenoDTO(List<FenomenoDTO> fenomenoDTO){
-		
-		List<SolsticiosYEquinocciosEntity> solsticiosYEquinocciosEntity = new ArrayList<>();
-		
-		return solsticiosYEquinocciosEntity;
-	}
-
 	
 	
 	public void saveOne (SolsticiosYEquinocciosEntity soeParaDB) {
@@ -125,11 +118,9 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		
 	}
 	
-	public List<FenomenoDTO> getSolsticiosYEquinocciosDesdeElMetonoViaDB (LocalDateTime dateO){
-		
-		List<FenomenoDTO> solsticiosYEquinocciosDesdeElMetonoViaDB = new ArrayList<>();
-		
-		return solsticiosYEquinocciosDesdeElMetonoViaDB;
+	public List<SolsticiosYEquinocciosEntity> getSolsticiosYEquinocciosDesdeElMetono (LocalDateTime dateO, LocalDateTime dateLastMeton){
+				
+		return this.solsticiosYEquinocciosRepository.findByYearBetweenOrderByDateAsc(dateLastMeton.getYear(), dateO.getYear());
 	}
 	
 	public int getAnyoDelUltimoSOEGuardado() {
@@ -190,15 +181,15 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		
 	}
 	
-	public List<FenomenoDTO> getLastAndNextSOEFrom (LocalDateTime dateO, List<FenomenoDTO> solsticiosYEquinocciosDesdeElMetono) {
+	public List<SolsticiosYEquinocciosEntity> getLastAndNextSOEFrom (LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> solsticiosYEquinocciosDesdeElMetono) {
 		
-		List<FenomenoDTO> lastAndNextSOE = new ArrayList<>();
+		List<SolsticiosYEquinocciosEntity> lastAndNextSOE = new ArrayList<>();
 		
-		FenomenoDTO lastSOE = new FenomenoDTO();		
+		SolsticiosYEquinocciosEntity lastSOE = new SolsticiosYEquinocciosEntity();		
 		Long diasLastSOEConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
 		Long diasLastSOEDeDiferenciaConLaFechaO = Long.MAX_VALUE;
 		
-		FenomenoDTO nextSOE = new FenomenoDTO();
+		SolsticiosYEquinocciosEntity nextSOE = new SolsticiosYEquinocciosEntity();
 		Long diasNextSOEConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
 		Long diasNextSOEDeDiferenciaConLaFechaO = Long.MAX_VALUE;
 
@@ -206,39 +197,52 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		
 		for(int i = 0; i < solsticiosYEquinocciosDesdeElMetono.size() && !caeEnSOE; i++) {			
 			
-			FenomenoDTO fenomeno = solsticiosYEquinocciosDesdeElMetono.get(i);
+			SolsticiosYEquinocciosEntity soe = solsticiosYEquinocciosDesdeElMetono.get(i);
 		
-			if(dateO.toLocalDate().isAfter(fenomeno.getDate().toLocalDate())) {
+			if(dateO.toLocalDate().isAfter(soe.getDate().toLocalDate())) {
 				
-				if(fenomeno.getDate().getYear() == dateO.getYear() || fenomeno.getDate().getYear() == dateO.getYear()-1) {
+				if(soe.getDate().getYear() == dateO.getYear() || soe.getDate().getYear() == dateO.getYear()-1) {
 					
-					diasLastSOEDeDiferenciaConLaFechaO = ChronoUnit.DAYS.between(fenomeno.getDate(), dateO);
+					diasLastSOEDeDiferenciaConLaFechaO = ChronoUnit.DAYS.between(soe.getDate(), dateO);
 					
 					if(diasLastSOEDeDiferenciaConLaFechaO < diasLastSOEConMenorDiferenciaConLaFechaO) {
 						
-						lastSOE.setDate(fenomeno.getDate());
-						lastSOE.setPhenomena(fenomeno.getPhenomena());
+						lastSOE.setDate(soe.getDate());
+						lastSOE.setSolsticioInvierno(soe.isSolsticioInvierno());
+						lastSOE.setEquinoccioPrimavera(soe.isEquinoccioPrimavera());
+						lastSOE.setSolsticioVerano(soe.isSolsticioVerano());
+						lastSOE.setEquinoccioOtonyo(soe.isEquinoccioOtonyo());							
+						
 						diasLastSOEConMenorDiferenciaConLaFechaO = diasLastSOEDeDiferenciaConLaFechaO;
 					}	
 				}
 			}
-			else if(dateO.toLocalDate().isBefore(fenomeno.getDate().toLocalDate()) && fenomeno.getDate().getYear() == dateO.getYear() ) {
+			else if(dateO.toLocalDate().isBefore(soe.getDate().toLocalDate()) && soe.getDate().getYear() == dateO.getYear() ) {
 				
-				diasNextSOEDeDiferenciaConLaFechaO = ChronoUnit.DAYS.between(dateO, fenomeno.getDate());
+				diasNextSOEDeDiferenciaConLaFechaO = ChronoUnit.DAYS.between(dateO, soe.getDate());
 				
 				if(diasNextSOEDeDiferenciaConLaFechaO < diasNextSOEConMenorDiferenciaConLaFechaO) {
 					
-					nextSOE.setDate(fenomeno.getDate());
-					nextSOE.setPhenomena(fenomeno.getPhenomena());
+					nextSOE.setDate(soe.getDate());
+					nextSOE.setSolsticioInvierno(soe.isSolsticioInvierno());
+					nextSOE.setEquinoccioPrimavera(soe.isEquinoccioPrimavera());
+					nextSOE.setSolsticioVerano(soe.isSolsticioVerano());
+					nextSOE.setEquinoccioOtonyo(soe.isEquinoccioOtonyo());		
 					diasNextSOEConMenorDiferenciaConLaFechaO = diasNextSOEDeDiferenciaConLaFechaO;
 				}	
 			}
-			else if(dateO.toLocalDate().isEqual(fenomeno.getDate().toLocalDate())) {
+			else if(dateO.toLocalDate().isEqual(soe.getDate().toLocalDate())) {
 				
-				lastSOE.setDate(fenomeno.getDate());
-				lastSOE.setPhenomena(fenomeno.getPhenomena());
-				nextSOE.setDate(fenomeno.getDate());
-				nextSOE.setPhenomena(fenomeno.getPhenomena());
+				lastSOE.setDate(soe.getDate());
+				lastSOE.setSolsticioInvierno(soe.isSolsticioInvierno());
+				lastSOE.setEquinoccioPrimavera(soe.isEquinoccioPrimavera());
+				lastSOE.setSolsticioVerano(soe.isSolsticioVerano());
+				lastSOE.setEquinoccioOtonyo(soe.isEquinoccioOtonyo());		
+				nextSOE.setDate(soe.getDate());
+				nextSOE.setSolsticioInvierno(soe.isSolsticioInvierno());
+				nextSOE.setEquinoccioPrimavera(soe.isEquinoccioPrimavera());
+				nextSOE.setSolsticioVerano(soe.isSolsticioVerano());
+				nextSOE.setEquinoccioOtonyo(soe.isEquinoccioOtonyo());		
 				caeEnSOE = true;
 			}
 		}		

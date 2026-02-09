@@ -6,26 +6,26 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 
-import CCASolutions.Calendario.DTOs.FenomenoDTO;
-import CCASolutions.Calendario.DTOs.LunarPhaseDTO;
+import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Services.MonthService;
 
 @Service
 public class MonthServiceImpl implements MonthService{
 
-	public int getSeasonDelMesHibridoSiLoEs (List<LunarPhaseDTO> lunasNuevasPasadasDesdeLastSOEHastaNextSOE, FenomenoDTO lastSOE, FenomenoDTO nextSOE, LocalDateTime dateO) {
+	public int getSeasonDelMesHibridoSiLoEs (List<LunasEntity> lunasNuevasPasadasDesdeLastSOEHastaNextSOE, SolsticiosYEquinocciosEntity lastSOE, SolsticiosYEquinocciosEntity nextSOE, LocalDateTime dateO) {
 
 		int season = 0;
 		
-		LunarPhaseDTO lastLP = new LunarPhaseDTO();
+		LunasEntity lastLP = new LunasEntity();
 		Long diasLastLPConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
 		Long diasLastLPDeDiferenciaConLaFechaO = Long.MAX_VALUE;
 		
-		LunarPhaseDTO nextLP = new LunarPhaseDTO();
+		LunasEntity nextLP = new LunasEntity();
 		Long diasNextLPConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
 		Long diasNextLPDeDiferenciaConLaFechaO = Long.MAX_VALUE;
 		
-		for(LunarPhaseDTO luna : lunasNuevasPasadasDesdeLastSOEHastaNextSOE) {
+		for(LunasEntity luna : lunasNuevasPasadasDesdeLastSOEHastaNextSOE) {
 			
 			if(luna.getDate().toLocalDate().isBefore(dateO.toLocalDate())) {
 				
@@ -34,7 +34,10 @@ public class MonthServiceImpl implements MonthService{
 				if(diasLastLPDeDiferenciaConLaFechaO < diasLastLPConMenorDiferenciaConLaFechaO) {
 					
 					lastLP.setDate(luna.getDate());
-					lastLP.setMoonPhase(luna.getMoonPhase());
+					lastLP.setNueva(luna.isNueva());
+					lastLP.setCuartoCreciente(luna.isCuartoCreciente());
+					lastLP.setLlena(luna.isLlena());
+					lastLP.setCuartoMenguante(luna.isCuartoMenguante());
 					diasLastLPConMenorDiferenciaConLaFechaO = diasLastLPDeDiferenciaConLaFechaO;
 
 				}	
@@ -46,7 +49,10 @@ public class MonthServiceImpl implements MonthService{
 				if(diasNextLPDeDiferenciaConLaFechaO < diasNextLPConMenorDiferenciaConLaFechaO) {
 					
 					nextLP.setDate(luna.getDate());
-					nextLP.setMoonPhase(luna.getMoonPhase());
+					nextLP.setNueva(luna.isNueva());
+					nextLP.setCuartoCreciente(luna.isCuartoCreciente());
+					nextLP.setLlena(luna.isLlena());
+					nextLP.setCuartoMenguante(luna.isCuartoMenguante());
 					diasNextLPConMenorDiferenciaConLaFechaO = diasNextLPDeDiferenciaConLaFechaO;
 
 				}	
@@ -55,38 +61,40 @@ public class MonthServiceImpl implements MonthService{
 		
 		if(lastLP.getDate() == null) {
 			
-			switch (lastSOE.getPhenomena()) {
-			
-				case "VernalEquinox":
-					season = 2;
-					break;
-				case "SummerSolstice":
-					season = 3;
-					break;
-				case "AutumnalEquinox":
-					season = 4;
-					break;
-				case "WinterSolstice":
-					season = 1;
-					break;
+			if(lastSOE.isSolsticioInvierno()) {
+				
+				season = 1;
+			}
+			else if(lastSOE.isEquinoccioPrimavera()) {
+				
+				season = 2;
+			}
+			else if(lastSOE.isSolsticioVerano()) {
+				
+				season = 3;
+			}
+			else if(lastSOE.isEquinoccioOtonyo()) {
+				
+				season = 4;
 			}
 		}
 		else if (nextLP.getDate() == null) {
 			
-			switch (nextSOE.getPhenomena()) {
-			
-				case "VernalEquinox":
-					season = 2;
-					break;
-				case "SummerSolstice":
-					season = 3;
-					break;
-				case "AutumnalEquinox":
-					season = 4;
-					break;
-				case "WinterSolstice":
-					season = 1;
-					break;
+			if(nextSOE.isSolsticioInvierno()) {
+				
+				season = 1;
+			}
+			else if(nextSOE.isEquinoccioPrimavera()) {
+				
+				season = 2;
+			}
+			else if(nextSOE.isSolsticioVerano()) {
+				
+				season = 3;
+			}
+			else if(nextSOE.isEquinoccioOtonyo()) {
+				
+				season = 4;
 			}
 		}
 		
