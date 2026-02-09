@@ -61,7 +61,6 @@ public class DatesServiceImpl implements DatesService {
 		
 		
 		
-		
 		return dateO;
 	}
 
@@ -93,11 +92,43 @@ public class DatesServiceImpl implements DatesService {
 		
 	}
 	
+	public DateDTOFromDB getDateDTOFromDB(DateDTO dateVAU) {
+
+		DateDTOFromDB dateVAUDTOFromDB = new DateDTOFromDB();
+		
+		try {
+			
+			MetonsEntity lastMeton = this.metonsRepository.findByNuevoTrueAndInicialTrueAndYear(Integer.valueOf(dateVAU.getMeton()));
+			MetonsEntity nextMeton = this.metonsService.getNextMetonDateByYear(Integer.valueOf(dateVAU.getMeton()));			
+			boolean anyoCuadra = (Integer.valueOf(nextMeton.getYear()) - Integer.valueOf(lastMeton.getYear())) > Integer.valueOf(dateVAU.getYear());			
+			MonthsEntity month = this.monthsRepository.findByName(dateVAU.getMonth());
+			WeeksEntity week = this.weeksRepository.findByName(dateVAU.getWeek());
+			DaysEntity day = this.daysRepository.findByName(dateVAU.getDay());
+			
+			if(lastMeton != null && month != null && week != null && day != null && anyoCuadra) {
+				
+				dateVAUDTOFromDB.setValid(true);
+				dateVAUDTOFromDB.setMeton(lastMeton);
+				dateVAUDTOFromDB.setYear(Integer.valueOf(dateVAU.getYear()));
+				dateVAUDTOFromDB.setMonth(month);
+				dateVAUDTOFromDB.setWeek(week);
+				dateVAUDTOFromDB.setDay(day);
+			}
+			
+		}
+		catch(Exception e) {
+			
+			System.out.println("Error al obtener el dateVAUDTO de la base de datos: " + e);
+		}
+		
+		
+		return dateVAUDTOFromDB;
+	}
+
 
 	
 	
 	// ========================= METODOS PRIVADOS
-	
 	
 	private String getVAUYear(LocalDateTime dateO, LocalDateTime dateLastMeton, List<SolsticiosYEquinocciosEntity> solsticiosYEquinocciosDesdeElMetono) {
 		
@@ -268,40 +299,6 @@ public class DatesServiceImpl implements DatesService {
 		vauWeekAndDay.setDay(vauDay.getName());
 		
 		return vauWeekAndDay;
-	}
-
-
-	public DateDTOFromDB getDateDTOFromDB(DateDTO dateVAU) {
-
-		DateDTOFromDB dateVAUDTOFromDB = new DateDTOFromDB();
-		
-		try {
-			
-			MetonsEntity lastMeton = this.metonsRepository.findByNuevoTrueAndInicialTrueAndYear(Integer.valueOf(dateVAU.getMeton()));
-			MetonsEntity nextMeton = this.metonsService.getNextMetonDateByYear(Integer.valueOf(dateVAU.getMeton()));			
-			boolean anyoCuadra = (Integer.valueOf(nextMeton.getYear()) - Integer.valueOf(lastMeton.getYear())) > Integer.valueOf(dateVAU.getYear());			
-			MonthsEntity month = this.monthsRepository.findByName(dateVAU.getMonth());
-			WeeksEntity week = this.weeksRepository.findByName(dateVAU.getWeek());
-			DaysEntity day = this.daysRepository.findByName(dateVAU.getDay());
-			
-			if(lastMeton != null && month != null && week != null && day != null && anyoCuadra) {
-				
-				dateVAUDTOFromDB.setValid(true);
-				dateVAUDTOFromDB.setMeton(lastMeton);
-				dateVAUDTOFromDB.setYear(Integer.valueOf(dateVAU.getYear()));
-				dateVAUDTOFromDB.setMonth(month);
-				dateVAUDTOFromDB.setWeek(week);
-				dateVAUDTOFromDB.setDay(day);
-			}
-			
-		}
-		catch(Exception e) {
-			
-			System.out.println("Error al obtener el dateVAUDTO de la base de datos: " + e);
-		}
-		
-		
-		return dateVAUDTOFromDB;
 	}
 
 

@@ -207,11 +207,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 					
 					if(diasLastSOEDeDiferenciaConLaFechaO < diasLastSOEConMenorDiferenciaConLaFechaO) {
 						
-						lastSOE.setDate(soe.getDate());
-						lastSOE.setSolsticioInvierno(soe.isSolsticioInvierno());
-						lastSOE.setEquinoccioPrimavera(soe.isEquinoccioPrimavera());
-						lastSOE.setSolsticioVerano(soe.isSolsticioVerano());
-						lastSOE.setEquinoccioOtonyo(soe.isEquinoccioOtonyo());							
+						lastSOE = soe;					
 						
 						diasLastSOEConMenorDiferenciaConLaFechaO = diasLastSOEDeDiferenciaConLaFechaO;
 					}	
@@ -223,26 +219,15 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 				
 				if(diasNextSOEDeDiferenciaConLaFechaO < diasNextSOEConMenorDiferenciaConLaFechaO) {
 					
-					nextSOE.setDate(soe.getDate());
-					nextSOE.setSolsticioInvierno(soe.isSolsticioInvierno());
-					nextSOE.setEquinoccioPrimavera(soe.isEquinoccioPrimavera());
-					nextSOE.setSolsticioVerano(soe.isSolsticioVerano());
-					nextSOE.setEquinoccioOtonyo(soe.isEquinoccioOtonyo());		
+					nextSOE = soe;
+					
 					diasNextSOEConMenorDiferenciaConLaFechaO = diasNextSOEDeDiferenciaConLaFechaO;
 				}	
 			}
 			else if(dateO.toLocalDate().isEqual(soe.getDate().toLocalDate())) {
 				
-				lastSOE.setDate(soe.getDate());
-				lastSOE.setSolsticioInvierno(soe.isSolsticioInvierno());
-				lastSOE.setEquinoccioPrimavera(soe.isEquinoccioPrimavera());
-				lastSOE.setSolsticioVerano(soe.isSolsticioVerano());
-				lastSOE.setEquinoccioOtonyo(soe.isEquinoccioOtonyo());		
-				nextSOE.setDate(soe.getDate());
-				nextSOE.setSolsticioInvierno(soe.isSolsticioInvierno());
-				nextSOE.setEquinoccioPrimavera(soe.isEquinoccioPrimavera());
-				nextSOE.setSolsticioVerano(soe.isSolsticioVerano());
-				nextSOE.setEquinoccioOtonyo(soe.isEquinoccioOtonyo());		
+				lastSOE = soe;		
+				nextSOE = soe;	
 				caeEnSOE = true;
 			}
 		}		
@@ -272,6 +257,6 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		
 		return fenomenos;
 	}
-	
+
 
 }
