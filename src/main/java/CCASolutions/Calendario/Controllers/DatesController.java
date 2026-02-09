@@ -27,7 +27,7 @@ public class DatesController {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
 
-		if(dateO.getYear() > 2099) {
+		if(dateO.getYear() < 0 || 2099 < dateO.getYear()) {
 			
 			status = HttpStatus.BAD_REQUEST;
 		}
