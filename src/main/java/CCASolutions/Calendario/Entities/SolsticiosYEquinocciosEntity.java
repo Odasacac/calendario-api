@@ -27,7 +27,14 @@ public class SolsticiosYEquinocciosEntity implements Serializable {
 	private boolean solsticioVerano;
 	private boolean equinoccioPrimavera;
 	private boolean equinoccioOtonyo;
+	private int startingSeason;
 	
+	public int getStartingSeason() {
+		return startingSeason;
+	}
+	public void setStartingSeason(int season) {
+		this.startingSeason = season;
+	}
 	public Long getId() {
 		return id;
 	}

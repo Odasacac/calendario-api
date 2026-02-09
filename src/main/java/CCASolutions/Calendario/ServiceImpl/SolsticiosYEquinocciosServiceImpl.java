@@ -60,18 +60,22 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 						
 							case "WinterSolstice":
 								soeParaDB.setSolsticioInvierno(true);
+								soeParaDB.setStartingSeason(1);
 								break;
 								
 							case "VernalEquinox":
 								soeParaDB.setEquinoccioPrimavera(true);
+								soeParaDB.setStartingSeason(2);
 								break;
 								
 							case "SummerSolstice":
 								soeParaDB.setSolsticioVerano(true);
+								soeParaDB.setStartingSeason(3);
 								break;
 								
 							case "AutumnalEquinox":
 								soeParaDB.setEquinoccioOtonyo(true);
+								soeParaDB.setStartingSeason(4);
 								break;
 						}
 						

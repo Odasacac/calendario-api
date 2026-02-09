@@ -9,6 +9,7 @@ import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 public interface SolsticiosYEquinocciosRepository extends JpaRepository <SolsticiosYEquinocciosEntity, Long> {
 
 	public abstract SolsticiosYEquinocciosEntity findTopByOrderByDateDesc();
-	  List<SolsticiosYEquinocciosEntity> findByYearBetweenOrderByDateAsc(int yearFrom, int yearTo);
+	public abstract List<SolsticiosYEquinocciosEntity> findByYearBetweenOrderByDateAsc(int yearFrom, int yearTo);
+	public abstract SolsticiosYEquinocciosEntity findByYearAndStartingSeason(int year, int startingSeason);
 		
 }

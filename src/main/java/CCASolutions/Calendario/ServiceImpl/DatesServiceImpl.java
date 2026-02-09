@@ -19,6 +19,7 @@ import CCASolutions.Calendario.Entities.WeeksEntity;
 import CCASolutions.Calendario.Repositories.DaysRepository;
 import CCASolutions.Calendario.Repositories.MetonsRepository;
 import CCASolutions.Calendario.Repositories.MonthsRepository;
+import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Repositories.WeeksRepository;
 import CCASolutions.Calendario.Services.DatesService;
 import CCASolutions.Calendario.Services.LunasService;
@@ -32,6 +33,9 @@ public class DatesServiceImpl implements DatesService {
 
 	@Autowired
 	private SolsticiosYEquinocciosService solsticiosYEquinocciosService;
+	
+	@Autowired
+	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository;
 	
 	@Autowired
 	private MetonsService metonsService;
@@ -60,7 +64,6 @@ public class DatesServiceImpl implements DatesService {
 		LocalDateTime dateO = LocalDateTime.now();
 		
 		
-		
 		return dateO;
 	}
 
@@ -77,7 +80,8 @@ public class DatesServiceImpl implements DatesService {
 			List<LunasEntity> fasesLunaresDelAnyo = this.lunasService.getFasesLunaresDelAnyo(String.valueOf(dateO.getYear()));
 			
 			if(!solsticiosYEquinocciosDesdeElMetono.isEmpty() && !fasesLunaresDelAnyo.isEmpty()) {
-								dateVAU.setMeton(String.valueOf(dateLastMeton.getYear()));
+				
+				dateVAU.setMeton(String.valueOf(dateLastMeton.getYear()));
 				dateVAU.setYear(getVAUYear(dateO, dateLastMeton, solsticiosYEquinocciosDesdeElMetono));
 				dateVAU.setMonth(this.getVAUMonth(dateO, fasesLunaresDelAnyo, solsticiosYEquinocciosDesdeElMetono));
 				
