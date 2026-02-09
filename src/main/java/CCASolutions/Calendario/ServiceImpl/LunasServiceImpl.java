@@ -30,6 +30,25 @@ public class LunasServiceImpl implements LunasService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	
 	
+	public LunasEntity getNewMoonBeforeADate(LocalDateTime date) {
+		
+		return this.lunasRepository.findFirstByDateBeforeOrderByDateDesc(date);
+	}
+	
+	
+	public LunasEntity getNewMoonFromSOEAndMonthOfSeason(SolsticiosYEquinocciosEntity lastSOE, int monthOfSeason) {
+		
+		LunasEntity newMoon = new LunasEntity();
+		
+		List<LunasEntity> lunasNuevasPasadas = this.lunasRepository.findTop4ByDateAfterAndNuevaIsTrueOrderByDateAsc(lastSOE.getDate());
+		
+		if(!lunasNuevasPasadas.isEmpty()) {
+			newMoon = lunasNuevasPasadas.get(monthOfSeason-1);
+		}
+		
+		return newMoon;
+	}
+	
 	public LunasEntity getLastNewMoonForADateO(LocalDateTime dateO, List<LunasEntity> fasesLunaresDelAnyo) {
 		
 		LunasEntity lastNewMoon = new LunasEntity();

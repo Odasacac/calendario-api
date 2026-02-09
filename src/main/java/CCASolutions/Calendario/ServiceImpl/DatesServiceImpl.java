@@ -26,6 +26,7 @@ import CCASolutions.Calendario.Services.LunasService;
 import CCASolutions.Calendario.Services.MetonsService;
 import CCASolutions.Calendario.Services.MonthService;
 import CCASolutions.Calendario.Services.SolsticiosYEquinocciosService;
+import CCASolutions.Calendario.Services.DaysService;
 
 @Service
 public class DatesServiceImpl implements DatesService {
@@ -58,11 +59,25 @@ public class DatesServiceImpl implements DatesService {
 	@Autowired
 	private LunasService lunasService;
 	
+	@Autowired
+	private DaysService daysService;
+	
 
 	public LocalDateTime getDateOFromDateVAU(DateDTOFromDB dateVAU) {
 
 		LocalDateTime dateO = LocalDateTime.now();
 		
+		String year = "-";
+		
+		if(dateVAU.getMonth().getHibrid()) {
+		
+			dateO=this.getDateOIfHibrid(dateVAU);
+		}
+		else {
+			
+			dateO=this.getDateOIfNoHibrid(dateVAU);
+
+		}
 		
 		return dateO;
 	}
@@ -133,6 +148,74 @@ public class DatesServiceImpl implements DatesService {
 	
 	
 	// ========================= METODOS PRIVADOS
+	
+	private LocalDateTime getDateOIfHibrid(DateDTOFromDB dateVAU) {
+		
+		LocalDateTime dateO = LocalDateTime.now();
+		
+		if(dateVAU.getMonth().getSeason() == 1) {
+			
+			dateO=this.getDateOIfOterno(dateVAU);
+		}
+		
+		else {
+			
+			dateO=this.getDateOIfHibridButNoOterno(dateVAU);				
+		}
+		
+		return dateO;
+	}
+	
+	private LocalDateTime getDateOIfOterno (DateDTOFromDB dateVAU) {
+		
+		LocalDateTime dateO = LocalDateTime.now();
+		
+		return dateO;
+	}
+	
+	
+	private LocalDateTime getDateOIfNoHibrid (DateDTOFromDB dateVAU) {
+		
+		LocalDateTime dateO = LocalDateTime.now();
+		
+		String year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear());
+		
+		SolsticiosYEquinocciosEntity lastSOE = new SolsticiosYEquinocciosEntity();
+				
+			if(dateVAU.getMonth().getSeason() == 1) {
+				
+				lastSOE=this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year)-1, dateVAU.getMonth().getSeason());
+			}
+			else {
+				
+				lastSOE=this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
+			}								
+	
+		LunasEntity newMoon = this.lunasService.getNewMoonFromSOEAndMonthOfSeason(lastSOE, dateVAU.getMonth().getMonthOfSeason());
+		
+		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
+		
+		dateO=newMoon.getDate().plusDays(diasASumarleALaLunaNueva);
+		
+		return dateO;
+	}
+	
+	private LocalDateTime getDateOIfHibridButNoOterno(DateDTOFromDB dateVAU) {
+		
+		LocalDateTime dateO = LocalDateTime.now();
+		
+		String year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear());
+		
+		SolsticiosYEquinocciosEntity lastSOE = new SolsticiosYEquinocciosEntity();
+		lastSOE=this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
+		LunasEntity newMoonBeforeADate = this.lunasService.getNewMoonBeforeADate(lastSOE.getDate());
+
+		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
+	
+		dateO=newMoonBeforeADate.getDate().plusDays(diasASumarleALaLunaNueva);
+		
+		return dateO;
+	}
 	
 	private String getVAUYear(LocalDateTime dateO, LocalDateTime dateLastMeton, List<SolsticiosYEquinocciosEntity> solsticiosYEquinocciosDesdeElMetono) {
 		

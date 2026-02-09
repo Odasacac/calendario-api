@@ -9,6 +9,8 @@ import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
 public interface LunasService {
 	
+	public abstract LunasEntity getNewMoonBeforeADate(LocalDateTime date);
+	public abstract LunasEntity getNewMoonFromSOEAndMonthOfSeason(SolsticiosYEquinocciosEntity lastSOE, int monthOfSeason);
 	public abstract LunasEntity getLastNewMoonForADateO(LocalDateTime dateO, List<LunasEntity> fasesLunaresDelAnyo);
 	public abstract List<LunasEntity> getLunasNuevasPasadasDesdeLastSOEHastaNextSOE(List<LunasEntity> fasesLunaresDelAnyo, SolsticiosYEquinocciosEntity lastSOE, SolsticiosYEquinocciosEntity nextSOE);
 	public abstract String poblateLunas();
