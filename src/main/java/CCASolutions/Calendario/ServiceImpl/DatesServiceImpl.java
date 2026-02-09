@@ -8,13 +8,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
+import CCASolutions.Calendario.DTOs.DateDTOFromDB;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
 import CCASolutions.Calendario.Entities.DaysEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Entities.WeeksEntity;
 import CCASolutions.Calendario.Repositories.DaysRepository;
+import CCASolutions.Calendario.Repositories.MetonsRepository;
 import CCASolutions.Calendario.Repositories.MonthsRepository;
 import CCASolutions.Calendario.Repositories.WeeksRepository;
 import CCASolutions.Calendario.Services.DatesService;
@@ -37,6 +40,9 @@ public class DatesServiceImpl implements DatesService {
 	private MonthService monthsService;
 	
 	@Autowired
+	private MetonsRepository metonsRepository;
+	
+	@Autowired
 	private MonthsRepository monthsRepository;
 	
 	@Autowired
@@ -47,6 +53,18 @@ public class DatesServiceImpl implements DatesService {
 	
 	@Autowired
 	private LunasService lunasService;
+	
+
+	public LocalDateTime getDateOFromDateVAU(DateDTOFromDB dateVAU) {
+
+		LocalDateTime dateO = LocalDateTime.now();
+		
+		
+		
+		
+		return dateO;
+	}
+
 	
 	public DateDTO getDateVAUFromDateO (LocalDateTime dateO) {
 		
@@ -250,6 +268,40 @@ public class DatesServiceImpl implements DatesService {
 		vauWeekAndDay.setDay(vauDay.getName());
 		
 		return vauWeekAndDay;
+	}
+
+
+	public DateDTOFromDB getDateDTOFromDB(DateDTO dateVAU) {
+
+		DateDTOFromDB dateVAUDTOFromDB = new DateDTOFromDB();
+		
+		try {
+			
+			MetonsEntity lastMeton = this.metonsRepository.findByNuevoTrueAndInicialTrueAndYear(Integer.valueOf(dateVAU.getMeton()));
+			MetonsEntity nextMeton = this.metonsService.getNextMetonDateByYear(Integer.valueOf(dateVAU.getMeton()));			
+			boolean anyoCuadra = (Integer.valueOf(nextMeton.getYear()) - Integer.valueOf(lastMeton.getYear())) > Integer.valueOf(dateVAU.getYear());			
+			MonthsEntity month = this.monthsRepository.findByName(dateVAU.getMonth());
+			WeeksEntity week = this.weeksRepository.findByName(dateVAU.getWeek());
+			DaysEntity day = this.daysRepository.findByName(dateVAU.getDay());
+			
+			if(lastMeton != null && month != null && week != null && day != null && anyoCuadra) {
+				
+				dateVAUDTOFromDB.setValid(true);
+				dateVAUDTOFromDB.setMeton(lastMeton);
+				dateVAUDTOFromDB.setYear(Integer.valueOf(dateVAU.getYear()));
+				dateVAUDTOFromDB.setMonth(month);
+				dateVAUDTOFromDB.setWeek(week);
+				dateVAUDTOFromDB.setDay(day);
+			}
+			
+		}
+		catch(Exception e) {
+			
+			System.out.println("Error al obtener el dateVAUDTO de la base de datos: " + e);
+		}
+		
+		
+		return dateVAUDTOFromDB;
 	}
 
 

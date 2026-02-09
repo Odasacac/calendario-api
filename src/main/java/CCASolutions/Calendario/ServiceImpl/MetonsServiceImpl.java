@@ -174,7 +174,7 @@ public class MetonsServiceImpl implements MetonsService {
 		LocalDateTime lastMeton = null;		
 		
 		try {
-			Optional<MetonsEntity> lastMetonOpt= this.metonsRepository.findFirstByDateLessThanEqualAndNuevoTrueAndSolsticialTrueAndInicialTrueOrderByDateDesc(dateO);
+			Optional<MetonsEntity> lastMetonOpt= this.metonsRepository.findFirstByDateLessThanEqualAndNuevoTrueAndInicialTrueOrderByDateDesc(dateO);
 			
 			if(lastMetonOpt.isPresent()) {
 				
@@ -189,5 +189,28 @@ public class MetonsServiceImpl implements MetonsService {
 		}
 		
 		return lastMeton;
+	}
+	
+	public MetonsEntity getNextMetonDateByYear (int year) {
+		
+		MetonsEntity nextMeton = null;		
+		
+		try {
+			
+			Optional<MetonsEntity> nextMetonOpt = this.metonsRepository.findFirstByYearGreaterThanAndNuevoTrueAndInicialTrueOrderByDateAsc(year);
+	
+			if(nextMetonOpt.isPresent()) {
+				
+				nextMeton = nextMetonOpt.get();
+			}
+			else {
+				System.out.println("No hay un metono registrado posterior a esta fecha");
+			}
+		}
+		catch (Exception e) {
+			System.out.println("Error getting next meton: " + e);
+		}
+		
+		return nextMeton;
 	}
 }
