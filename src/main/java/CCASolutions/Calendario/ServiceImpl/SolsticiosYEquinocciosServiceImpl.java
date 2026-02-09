@@ -159,28 +159,6 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	}
 	
 	
-	public List<FenomenoDTO> getSolsticiosYEquinocciosDesdeElMetonoViaAPI (LocalDateTime dateO, LocalDateTime dateLastMeton, String url){
-		
-		List<FenomenoDTO> solsticiosYEquinocciosDesdeElMetono = new ArrayList<>();
-		
-		if((dateO.getYear() - dateLastMeton.getYear()) > 0) {
-			
-			// https://opale.imcce.fr/api/v1/phenomena/equinoxessolstices/399?year={{YYYY}}&nbd={{NNNN}}
-			String urlParaLlamada = url.replace("{{YYYY}}", String.valueOf(dateLastMeton.getYear())).replace("{{NNNN}}", String.valueOf(dateO.getYear() - dateLastMeton.getYear()+1));
-			
-			try {
-				solsticiosYEquinocciosDesdeElMetono = this.getGASYEFDTO(urlParaLlamada);
-			}
-			catch (Exception e) {
-				System.out.println("Error al llamar a GASYEF API: " + e);
-			}
-			
-		}
-		
-		return solsticiosYEquinocciosDesdeElMetono;
-		
-	}
-	
 	public List<SolsticiosYEquinocciosEntity> getLastAndNextSOEFrom (LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> solsticiosYEquinocciosDesdeElMetono) {
 		
 		List<SolsticiosYEquinocciosEntity> lastAndNextSOE = new ArrayList<>();
