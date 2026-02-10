@@ -147,17 +147,56 @@ public class DatesServiceImpl implements DatesService {
 	
 	// ========================= METODOS PRIVADOS
 	
+
+	
+	private LocalDateTime getDateOIfHibrid(DateDTOFromDB dateVAU) {
+		
+		LocalDateTime dateO = LocalDateTime.now();
+				
+		if(dateVAU.getMonth().getSeason() == 1) {
+			
+			dateO=this.getDateOIfOterno(dateVAU);
+		}
+		else {
+			
+			dateO=this.getDateOIfHibridButNoOterno(dateVAU);
+		}
+				
+		
+		return dateO;
+	}
+	
 	
 	private LocalDateTime getDateOIfOterno(DateDTOFromDB dateVAU) {
 		
 		LocalDateTime dateO = LocalDateTime.now();
 		
-		String year = "-";
-		//If la fecha antes del solsticio
-		year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()); 
+		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
 		
-		//If la fecha despues del solsticio
-		year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()-1); 
+		String year = "-";
+		
+		/*
+		 	Un año no contiene un Oterno completo, sino dos mitades
+		 	
+		 	LN1 ---- SI ---Oterno---LN ... AÑO ... LN2 ----Oterno---- SI ---
+		 
+		 	Entonces, solo sabiendo el año 1 (2015-2014) por ejemplo, no podemos saber en que parte de Oterno esta.
+		 	Ya que puede estar despues del solsticio de invierno, o antes del solsticio de invierno
+		 	Por lo que no se sabe a partir de que luna contar los dias.
+		 	Vamos a coger ambas lunas
+		 
+		 */
+		
+		year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear());
+		SolsticiosYEquinocciosEntity solsticioInviernoForFirstMoon = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
+		LunasEntity firstMoon = this.lunasService.getNewMoonBeforeADate(solsticioInviernoForFirstMoon.getDate());
+		int diasDesdeFirstMoonASolsticio = (int) ChronoUnit.DAYS.between(firstMoon.getDate(), solsticioInviernoForFirstMoon.getDate());
+		
+		year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
+		SolsticiosYEquinocciosEntity solsticioInviernoForSecondMoon = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
+		LunasEntity secondMoon = this.lunasService.getNewMoonBeforeADate(solsticioInviernoForSecondMoon.getDate());
+		int diasDesdeSecondMoonASolsticio = (int) ChronoUnit.DAYS.between(secondMoon.getDate(), solsticioInviernoForSecondMoon.getDate());
+	
 		
 		return dateO;
 	}
@@ -169,9 +208,9 @@ public class DatesServiceImpl implements DatesService {
 		
 		String year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
 	
-		SolsticiosYEquinocciosEntity lastSOE = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
+		SolsticiosYEquinocciosEntity soe = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
 		
-		LunasEntity newMoonBeforeADate = this.lunasService.getNewMoonBeforeADate(lastSOE.getDate());
+		LunasEntity newMoonBeforeADate = this.lunasService.getNewMoonBeforeADate(soe.getDate());
 
 		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
 
@@ -181,7 +220,8 @@ public class DatesServiceImpl implements DatesService {
 	}
 	
 	
-		
+	
+	
 	private LocalDateTime getDateOIfNoHibrid (DateDTOFromDB dateVAU) {
 		
 		LocalDateTime dateO = LocalDateTime.now();
@@ -204,25 +244,6 @@ public class DatesServiceImpl implements DatesService {
 		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
 		
 		dateO=newMoon.getDate().plusDays(diasASumarleALaLunaNueva);
-		
-		return dateO;
-	}
-	
-	private LocalDateTime getDateOIfHibrid(DateDTOFromDB dateVAU) {
-		
-		LocalDateTime dateO = LocalDateTime.now();
-		
-		String year = "-";
-				
-		if(dateVAU.getMonth().getSeason() == 1) {
-			
-			dateO=this.getDateOIfOterno(dateVAU);
-		}
-		else {
-			
-			dateO=this.getDateOIfHibridButNoOterno(dateVAU);
-		}
-				
 		
 		return dateO;
 	}
