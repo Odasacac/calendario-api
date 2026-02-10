@@ -32,7 +32,7 @@ public class LunasServiceImpl implements LunasService {
 	
 	public LunasEntity getNewMoonBeforeADate(LocalDateTime date) {
 		
-		return this.lunasRepository.findFirstByDateBeforeOrderByDateDesc(date);
+		return this.lunasRepository.findFirstByDateBeforeAndNuevaTrueOrderByDateDesc(date);
 	}
 	
 	

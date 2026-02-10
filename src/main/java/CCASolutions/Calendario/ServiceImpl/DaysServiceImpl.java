@@ -19,19 +19,19 @@ public class DaysServiceImpl implements DaysService{
 				break;
 
 			case 2:
-				diasASumarleALaLunaNueva = Integer.valueOf(dateVAU.getDay().getDayOfWeek())*2;
+				diasASumarleALaLunaNueva = Integer.valueOf(dateVAU.getDay().getDayOfWeek())+7;
 				break;
 				
 			case 3:
-				diasASumarleALaLunaNueva = Integer.valueOf(dateVAU.getDay().getDayOfWeek())*3;
+				diasASumarleALaLunaNueva = Integer.valueOf(dateVAU.getDay().getDayOfWeek())+14;
 				break;
 
 			case 4:
-				diasASumarleALaLunaNueva = Integer.valueOf(dateVAU.getDay().getDayOfWeek())*4;
+				diasASumarleALaLunaNueva = Integer.valueOf(dateVAU.getDay().getDayOfWeek())+21;
 				break;
 
 			case 5:
-				diasASumarleALaLunaNueva = Integer.valueOf(dateVAU.getDay().getDayOfWeek())*4;
+				diasASumarleALaLunaNueva = Integer.valueOf(dateVAU.getDay().getDayOfWeek())+21;
 				break;							
 		}
 		

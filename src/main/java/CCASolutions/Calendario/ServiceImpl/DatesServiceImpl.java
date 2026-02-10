@@ -67,8 +67,6 @@ public class DatesServiceImpl implements DatesService {
 
 		LocalDateTime dateO = LocalDateTime.now();
 		
-		String year = "-";
-		
 		if(dateVAU.getMonth().getHibrid()) {
 		
 			dateO=this.getDateOIfHibrid(dateVAU);
@@ -119,7 +117,7 @@ public class DatesServiceImpl implements DatesService {
 			
 			MetonsEntity lastMeton = this.metonsRepository.findByNuevoTrueAndInicialTrueAndYear(Integer.valueOf(dateVAU.getMeton()));
 			MetonsEntity nextMeton = this.metonsService.getNextMetonDateByYear(Integer.valueOf(dateVAU.getMeton()));			
-			boolean anyoCuadra = (Integer.valueOf(nextMeton.getYear()) - Integer.valueOf(lastMeton.getYear())) > Integer.valueOf(dateVAU.getYear());			
+			boolean anyoCuadra = (Integer.valueOf(nextMeton.getYear()) - Integer.valueOf(lastMeton.getYear())) >= Integer.valueOf(dateVAU.getYear());			
 			MonthsEntity month = this.monthsRepository.findByName(dateVAU.getMonth());
 			WeeksEntity week = this.weeksRepository.findByName(dateVAU.getWeek());
 			DaysEntity day = this.daysRepository.findByName(dateVAU.getDay());
@@ -149,36 +147,12 @@ public class DatesServiceImpl implements DatesService {
 	
 	// ========================= METODOS PRIVADOS
 	
-	private LocalDateTime getDateOIfHibrid(DateDTOFromDB dateVAU) {
 		
-		LocalDateTime dateO = LocalDateTime.now();
-		
-		if(dateVAU.getMonth().getSeason() == 1) {
-			
-			dateO=this.getDateOIfOterno(dateVAU);
-		}
-		
-		else {
-			
-			dateO=this.getDateOIfHibridButNoOterno(dateVAU);				
-		}
-		
-		return dateO;
-	}
-	
-	private LocalDateTime getDateOIfOterno (DateDTOFromDB dateVAU) {
-		
-		LocalDateTime dateO = LocalDateTime.now();
-		
-		return dateO;
-	}
-	
-	
 	private LocalDateTime getDateOIfNoHibrid (DateDTOFromDB dateVAU) {
 		
 		LocalDateTime dateO = LocalDateTime.now();
 		
-		String year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear());
+		String year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
 		
 		SolsticiosYEquinocciosEntity lastSOE = new SolsticiosYEquinocciosEntity();
 				
@@ -200,14 +174,23 @@ public class DatesServiceImpl implements DatesService {
 		return dateO;
 	}
 	
-	private LocalDateTime getDateOIfHibridButNoOterno(DateDTOFromDB dateVAU) {
+	private LocalDateTime getDateOIfHibrid(DateDTOFromDB dateVAU) {
 		
 		LocalDateTime dateO = LocalDateTime.now();
 		
-		String year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear());
+		String year = "-";
+				
+		if(dateVAU.getMonth().getSeason() == 1) {
+			
+			year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
+		}
+		else {
+			
+			year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
+		}
 		
-		SolsticiosYEquinocciosEntity lastSOE = new SolsticiosYEquinocciosEntity();
-		lastSOE=this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
+		SolsticiosYEquinocciosEntity lastSOE = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
+			
 		LunasEntity newMoonBeforeADate = this.lunasService.getNewMoonBeforeADate(lastSOE.getDate());
 
 		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
@@ -237,9 +220,9 @@ public class DatesServiceImpl implements DatesService {
 					
 					SolsticiosYEquinocciosEntity soe = solsticiosYEquinocciosDesdeElMetono.get(i);
 					
-					if(soe.isSolsticioInvierno()) {
+					if(soe.isSolsticioInvierno() && !soe.getDate().isEqual(dateLastMeton)) {
 						
-						if(dateO.toLocalDate().isAfter(soe.getDate().toLocalDate())) {
+						if(dateO.isAfter(soe.getDate())) {
 							
 							vauYearInt = vauYearInt +1;
 						}
