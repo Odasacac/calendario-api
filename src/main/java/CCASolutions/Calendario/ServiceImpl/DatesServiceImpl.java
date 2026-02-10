@@ -147,6 +147,40 @@ public class DatesServiceImpl implements DatesService {
 	
 	// ========================= METODOS PRIVADOS
 	
+	
+	private LocalDateTime getDateOIfOterno(DateDTOFromDB dateVAU) {
+		
+		LocalDateTime dateO = LocalDateTime.now();
+		
+		String year = "-";
+		//If la fecha antes del solsticio
+		year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()); 
+		
+		//If la fecha despues del solsticio
+		year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()-1); 
+		
+		return dateO;
+	}
+	
+	
+	private LocalDateTime getDateOIfHibridButNoOterno(DateDTOFromDB dateVAU) {
+		
+		LocalDateTime dateO = LocalDateTime.now();
+		
+		String year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
+	
+		SolsticiosYEquinocciosEntity lastSOE = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
+		
+		LunasEntity newMoonBeforeADate = this.lunasService.getNewMoonBeforeADate(lastSOE.getDate());
+
+		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
+
+		dateO=newMoonBeforeADate.getDate().plusDays(diasASumarleALaLunaNueva);
+		
+		return dateO;
+	}
+	
+	
 		
 	private LocalDateTime getDateOIfNoHibrid (DateDTOFromDB dateVAU) {
 		
@@ -182,20 +216,13 @@ public class DatesServiceImpl implements DatesService {
 				
 		if(dateVAU.getMonth().getSeason() == 1) {
 			
-			year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
+			dateO=this.getDateOIfOterno(dateVAU);
 		}
 		else {
 			
-			year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
+			dateO=this.getDateOIfHibridButNoOterno(dateVAU);
 		}
-		
-		SolsticiosYEquinocciosEntity lastSOE = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
-			
-		LunasEntity newMoonBeforeADate = this.lunasService.getNewMoonBeforeADate(lastSOE.getDate());
-
-		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
-	
-		dateO=newMoonBeforeADate.getDate().plusDays(diasASumarleALaLunaNueva);
+				
 		
 		return dateO;
 	}
