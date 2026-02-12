@@ -26,7 +26,7 @@ public class MetonsController {
 
 		try {
 			
-			body = this.metonsService.checkMetonosSinceTo(since, to);
+			body = this.metonsService.checkMetonosSinceToViaAPI(since, to);
 		} catch (Exception e) {
 			
 			status = HttpStatus.INTERNAL_SERVER_ERROR;

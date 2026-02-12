@@ -25,6 +25,19 @@ public class MonthsEntity implements Serializable {
 	private Integer season;
 	
 	private Integer monthOfSeason;
+	
+	private boolean liminal;
+	
+	
+
+
+	public boolean isLiminal() {
+		return liminal;
+	}
+
+	public void setLiminal(boolean liminal) {
+		this.liminal = liminal;
+	}
 
 	public Long getId() {
 		return id;

@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -34,7 +33,7 @@ public class MetonsServiceImpl implements MetonsService {
 	@Autowired
 	private LunasService lunasService;
 	
-	public String checkMetonosSinceTo(int since, int to) {
+	public String checkMetonosSinceToViaAPI(int since, int to) {
 		
 		String resultado = "Metonos checkeados sin problema.";
 		
@@ -168,49 +167,4 @@ public class MetonsServiceImpl implements MetonsService {
 	}
 	
 
-
-	public LocalDateTime getLastMetonDate (LocalDateTime dateO) {
-		
-		LocalDateTime lastMeton = null;		
-		
-		try {
-			Optional<MetonsEntity> lastMetonOpt= this.metonsRepository.findFirstByDateLessThanEqualAndNuevoTrueAndInicialTrueOrderByDateDesc(dateO);
-			
-			if(lastMetonOpt.isPresent()) {
-				
-				lastMeton = lastMetonOpt.get().getDate();
-			}
-			else {
-				System.out.println("No hay un metono registrado anterior a esta fecha");
-			}
-		}
-		catch (Exception e) {
-			System.out.println("Error getting last meton: " + e);
-		}
-		
-		return lastMeton;
-	}
-	
-	public MetonsEntity getNextMetonDateByYear (int year) {
-		
-		MetonsEntity nextMeton = null;		
-		
-		try {
-			
-			Optional<MetonsEntity> nextMetonOpt = this.metonsRepository.findFirstByYearGreaterThanAndNuevoTrueAndInicialTrueOrderByDateAsc(year);
-	
-			if(nextMetonOpt.isPresent()) {
-				
-				nextMeton = nextMetonOpt.get();
-			}
-			else {
-				System.out.println("No hay un metono registrado posterior a esta fecha");
-			}
-		}
-		catch (Exception e) {
-			System.out.println("Error getting next meton: " + e);
-		}
-		
-		return nextMeton;
-	}
 }

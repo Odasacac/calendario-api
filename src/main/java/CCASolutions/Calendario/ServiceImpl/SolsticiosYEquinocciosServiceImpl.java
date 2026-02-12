@@ -1,7 +1,5 @@
 package CCASolutions.Calendario.ServiceImpl;
 
-import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -38,7 +36,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		
 		if(apiGetSYEUrl != null) {	
 			
-			int anyoDelUltimoSOEGuardado = this.getAnyoDelUltimoSOEGuardado();
+			int anyoDelUltimoSOEGuardado = this.solsticiosYEquinocciosRepository.findTopByOrderByDateDesc().getYear();
 			
 			int anyoParaLaApi = anyoDelUltimoSOEGuardado+1;
 			
@@ -84,7 +82,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 						
 						try {
 							
-							this.saveOne(soeParaDB);
+							this.solsticiosYEquinocciosRepository.save(soeParaDB);
 							
 						}
 						catch (Exception e)	{
@@ -115,31 +113,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	}
 	
 	
-	
-	public void saveOne (SolsticiosYEquinocciosEntity soeParaDB) {
 
-		this.solsticiosYEquinocciosRepository.save(soeParaDB);
-		
-	}
-	
-	public List<SolsticiosYEquinocciosEntity> getSolsticiosYEquinocciosDesdeElMetono (LocalDateTime dateO, LocalDateTime dateLastMeton){
-				
-		return this.solsticiosYEquinocciosRepository.findByYearBetweenOrderByDateAsc(dateLastMeton.getYear(), dateO.getYear());
-	}
-	
-	public int getAnyoDelUltimoSOEGuardado() {
-		
-		int anyoDelUltimoSOEGuardado = 0;
-		
-		SolsticiosYEquinocciosEntity ultimaSOEAlmacenado = this.solsticiosYEquinocciosRepository.findTopByOrderByDateDesc();
-		
-		if(ultimaSOEAlmacenado != null) {
-			
-			anyoDelUltimoSOEGuardado = ultimaSOEAlmacenado.getYear();
-		}
-		
-		return anyoDelUltimoSOEGuardado;
-	}
 
 	
 	public List<FenomenoDTO> getSolsticiosYEquinocciosDelAnyoViaAPI(String anyo, String url) {	
@@ -163,67 +137,6 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	}
 	
 	
-	public List<SolsticiosYEquinocciosEntity> getLastAndNextSOEFrom (LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> solsticiosYEquinocciosDesdeElMetono) {
-		
-		List<SolsticiosYEquinocciosEntity> lastAndNextSOE = new ArrayList<>();
-		
-		SolsticiosYEquinocciosEntity lastSOE = new SolsticiosYEquinocciosEntity();		
-		Long diasLastSOEConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
-		Long diasLastSOEDeDiferenciaConLaFechaO = Long.MAX_VALUE;
-		
-		SolsticiosYEquinocciosEntity nextSOE = new SolsticiosYEquinocciosEntity();
-		Long diasNextSOEConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
-		Long diasNextSOEDeDiferenciaConLaFechaO = Long.MAX_VALUE;
-
-		boolean caeEnSOE = false;
-		
-		for(int i = 0; i < solsticiosYEquinocciosDesdeElMetono.size() && !caeEnSOE; i++) {			
-			
-			SolsticiosYEquinocciosEntity soe = solsticiosYEquinocciosDesdeElMetono.get(i);
-		
-			if(dateO.toLocalDate().isAfter(soe.getDate().toLocalDate())) {
-				
-				if(soe.getDate().getYear() == dateO.getYear() || soe.getDate().getYear() == dateO.getYear()-1) {
-					
-					diasLastSOEDeDiferenciaConLaFechaO = ChronoUnit.DAYS.between(soe.getDate(), dateO);
-					
-					if(diasLastSOEDeDiferenciaConLaFechaO < diasLastSOEConMenorDiferenciaConLaFechaO) {
-						
-						lastSOE = soe;					
-						
-						diasLastSOEConMenorDiferenciaConLaFechaO = diasLastSOEDeDiferenciaConLaFechaO;
-					}	
-				}
-			}
-			else if(dateO.toLocalDate().isBefore(soe.getDate().toLocalDate()) && soe.getDate().getYear() == dateO.getYear() ) {
-				
-				diasNextSOEDeDiferenciaConLaFechaO = ChronoUnit.DAYS.between(dateO, soe.getDate());
-				
-				if(diasNextSOEDeDiferenciaConLaFechaO < diasNextSOEConMenorDiferenciaConLaFechaO) {
-					
-					nextSOE = soe;
-					
-					diasNextSOEConMenorDiferenciaConLaFechaO = diasNextSOEDeDiferenciaConLaFechaO;
-				}	
-			}
-			else if(dateO.toLocalDate().isEqual(soe.getDate().toLocalDate())) {
-				
-				lastSOE = soe;		
-				nextSOE = soe;	
-				caeEnSOE = true;
-			}
-		}		
-				
-		lastAndNextSOE.add(lastSOE);
-		
-		if(nextSOE.getDate() != null) {
-			
-			lastAndNextSOE.add(nextSOE);
-		}
-		
-		return lastAndNextSOE;
-		
-	}
 	
 	// PRIVATE METHODS
 	

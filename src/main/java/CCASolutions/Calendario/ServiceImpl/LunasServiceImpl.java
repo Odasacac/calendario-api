@@ -1,7 +1,6 @@
 package CCASolutions.Calendario.ServiceImpl;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,7 +12,6 @@ import CCASolutions.Calendario.DTOs.LunarPhaseDTO;
 import CCASolutions.Calendario.DTOs.YLPDTO;
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
-import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.LunasRepository;
 import CCASolutions.Calendario.Services.LunasService;
@@ -30,58 +28,7 @@ public class LunasServiceImpl implements LunasService {
 	private final RestTemplate restTemplate = new RestTemplate();
 	
 	
-	public LunasEntity getNewMoonBeforeADate(LocalDateTime date) {
-		
-		return this.lunasRepository.findFirstByDateBeforeAndNuevaTrueOrderByDateDesc(date);
-	}
-	
-	
-	public LunasEntity getNewMoonFromSOEAndMonthOfSeason(SolsticiosYEquinocciosEntity lastSOE, int monthOfSeason) {
-		
-		LunasEntity newMoon = new LunasEntity();
-		
-		List<LunasEntity> lunasNuevasPasadas = this.lunasRepository.findTop4ByDateAfterAndNuevaIsTrueOrderByDateAsc(lastSOE.getDate());
-		
-		if(!lunasNuevasPasadas.isEmpty()) {
-			newMoon = lunasNuevasPasadas.get(monthOfSeason-1);
-		}
-		
-		return newMoon;
-	}
-	
-	public LunasEntity getLastNewMoonForADateO(LocalDateTime dateO, List<LunasEntity> fasesLunaresDelAnyo) {
-		
-		LunasEntity lastNewMoon = new LunasEntity();
-		Long diasLastLPConMenorDiferenciaConLaFechaO = Long.MAX_VALUE;
-		Long diasLastLPDeDiferenciaConLaFechaO = Long.MAX_VALUE;
-		
-		for(int i = 0; i<fasesLunaresDelAnyo.size(); i++) {
-			
-			LunasEntity faseLunar = fasesLunaresDelAnyo.get(i);
-
-			if(faseLunar.isNueva() && 
-				(faseLunar.getDate().toLocalDate().isBefore(dateO.toLocalDate()) || faseLunar.getDate().toLocalDate().isEqual(dateO.toLocalDate()))) {
-				
-				diasLastLPDeDiferenciaConLaFechaO = ChronoUnit.DAYS.between(faseLunar.getDate(), dateO);
-				
-				if(diasLastLPDeDiferenciaConLaFechaO < diasLastLPConMenorDiferenciaConLaFechaO) {
-					
-					lastNewMoon.setDate(faseLunar.getDate());
-					lastNewMoon.setNueva(faseLunar.isNueva());;
-					diasLastLPConMenorDiferenciaConLaFechaO = diasLastLPDeDiferenciaConLaFechaO;
-				}	
-			}	
-		}
-		
-		if(lastNewMoon.getDate() == null) {
-	
-			List<LunasEntity> fasesLunaresDelAnyoAnterior = this.getFasesLunaresDelAnyo(String.valueOf(dateO.minusYears(1).getYear()));
-			lastNewMoon = this.getLastNewMoonForADateO(dateO, fasesLunaresDelAnyoAnterior);
-					
-		}
-		
-		return lastNewMoon;
-	}
+	// METODOS PUBLICOS
 	
 	
 	public String poblateLunas() {
@@ -92,7 +39,7 @@ public class LunasServiceImpl implements LunasService {
 		
 		if(apiGetLunasUrl != null) {	
 
-			int anyoDeLaUltimaLunaGuardada = this.getAnyoDeLaUltimaLunaGuardada();
+			int anyoDeLaUltimaLunaGuardada = this.lunasRepository.findTopByOrderByDateDesc().getYear();
 			
 			int anyoParaLaApi = anyoDeLaUltimaLunaGuardada+1;		
 			
@@ -132,7 +79,7 @@ public class LunasServiceImpl implements LunasService {
 
 							try {
 								
-								this.saveOne(lunaParaDB);
+								this.lunasRepository.save(lunaParaDB);
 							}
 							catch (Exception e)	{
 									
@@ -147,8 +94,7 @@ public class LunasServiceImpl implements LunasService {
 				
 					System.out.println("No se han obtenido lunas de la API.");
 					resultado = "Error al actualizar lunas, checkear logs.";
-				}	
-				
+				}					
 			}
 		}	
 		
@@ -159,33 +105,8 @@ public class LunasServiceImpl implements LunasService {
 		}
 		
 		return resultado;
-	}
-	
-	public void saveOne(LunasEntity lunaParaDB) {
-		
-		this.lunasRepository.save(lunaParaDB);
-	}
+	}	
 
-	
-	public int getAnyoDeLaUltimaLunaGuardada() {
-	
-		int anyoDeLaUltimaLunaGuardada = 0;
-		
-		LunasEntity ultimaLunaAlmacenada = this.lunasRepository.findTopByOrderByDateDesc();
-		
-		if(ultimaLunaAlmacenada != null) {
-			
-			anyoDeLaUltimaLunaGuardada = ultimaLunaAlmacenada.getYear();
-		}
-		
-		return anyoDeLaUltimaLunaGuardada;
-	}
-	
-	public List<LunasEntity> getFasesLunaresDelAnyo(String anyo){
-
-		return this.lunasRepository.findByYearOrderByDateAsc(Integer.valueOf(anyo));
-	}
-	
 	
 	public List<LunarPhaseDTO> getFasesLunaresDelAnyoViaAPI(String anyo, String url){
 		
@@ -207,6 +128,8 @@ public class LunasServiceImpl implements LunasService {
 		return fasesLunaresDelAnyo;
 	}
 	
+	// METODOS PRIVADOS
+	
 	public boolean esDateOLunaNueva(LocalDateTime dateO, List<LunasEntity> fasesLunaresDelAnyo) {
 		
 		boolean esLunaNueva = false;
@@ -226,41 +149,7 @@ public class LunasServiceImpl implements LunasService {
 		return esLunaNueva;
 	}
 	
-	public int getLunasNuevasPasadasDesdeLastSOEHastaDateO (List<LunasEntity> lunasNuevasPasadasDesdeLastSOEHastaNextSOE, SolsticiosYEquinocciosEntity lastSOE, LocalDateTime dateO){
-		
-		int lunasNuevasPasadasDesdeLastSOEHastaDateO = 0;
-		
-		for(LunasEntity lunaNueva : lunasNuevasPasadasDesdeLastSOEHastaNextSOE) {				
-			
-			if(dateO.toLocalDate().isAfter(lunaNueva.getDate().toLocalDate())) {
-					
-				lunasNuevasPasadasDesdeLastSOEHastaDateO = lunasNuevasPasadasDesdeLastSOEHastaDateO +1;
-			}
 
-		}
-		
-		return lunasNuevasPasadasDesdeLastSOEHastaDateO;
-	}
-	
-	public List<LunasEntity> getLunasNuevasPasadasDesdeLastSOEHastaNextSOE(List<LunasEntity> fasesLunaresDelAnyo, SolsticiosYEquinocciosEntity lastSOE, SolsticiosYEquinocciosEntity nextSOE) {
-		
-		List<LunasEntity> lunasNuevasPasadasDesdeLastSOEHastaNextSOE = new ArrayList<>();
-		
-		for(LunasEntity faseLunar :fasesLunaresDelAnyo) {
-			
-			if(faseLunar.getDate().isAfter(lastSOE.getDate()) && faseLunar.getDate().isBefore(nextSOE.getDate()) && faseLunar.isNueva()) {
-				
-				lunasNuevasPasadasDesdeLastSOEHastaNextSOE.add(faseLunar);
-			}
-			
-		}
-		
-		return lunasNuevasPasadasDesdeLastSOEHastaNextSOE;
-		
-	}
-	
-	
-	// PRIVATE METHODS
 	
 	private List<LunarPhaseDTO> getYLPDTO(String url){
 		

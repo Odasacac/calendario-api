@@ -7,6 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import CCASolutions.Calendario.Entities.DatosEntity;
 
 public interface DatosRepository extends JpaRepository <DatosEntity, Long> {
-	 List<DatosEntity> findByConceptoIn(List<String> conceptos);
 	 DatosEntity findByConcepto(String concepto);
+	 List<DatosEntity> findByConceptoIn(List<String> conceptos);
 }

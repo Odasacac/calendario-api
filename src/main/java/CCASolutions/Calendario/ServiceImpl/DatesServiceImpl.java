@@ -1,66 +1,22 @@
 package CCASolutions.Calendario.ServiceImpl;
 
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.DateDTOFromDB;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
-import CCASolutions.Calendario.Entities.DaysEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
-import CCASolutions.Calendario.Entities.MetonsEntity;
-import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
-import CCASolutions.Calendario.Entities.WeeksEntity;
-import CCASolutions.Calendario.Repositories.DaysRepository;
-import CCASolutions.Calendario.Repositories.MetonsRepository;
-import CCASolutions.Calendario.Repositories.MonthsRepository;
-import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
-import CCASolutions.Calendario.Repositories.WeeksRepository;
 import CCASolutions.Calendario.Services.DatesService;
-import CCASolutions.Calendario.Services.LunasService;
-import CCASolutions.Calendario.Services.MetonsService;
-import CCASolutions.Calendario.Services.MonthService;
-import CCASolutions.Calendario.Services.SolsticiosYEquinocciosService;
-import CCASolutions.Calendario.Services.DaysService;
 
 @Service
 public class DatesServiceImpl implements DatesService {
 
 
-	@Autowired
-	private SolsticiosYEquinocciosService solsticiosYEquinocciosService;
 	
-	@Autowired
-	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository;
-	
-	@Autowired
-	private MetonsService metonsService;
-	
-	@Autowired
-	private MonthService monthsService;
-	
-	@Autowired
-	private MetonsRepository metonsRepository;
-	
-	@Autowired
-	private MonthsRepository monthsRepository;
-	
-	@Autowired
-	private WeeksRepository weeksRepository;
-	
-	@Autowired
-	private DaysRepository daysRepository;
-	
-	@Autowired
-	private LunasService lunasService;
-	
-	@Autowired
-	private DaysService daysService;
 	
 
 	public LocalDateTime getDateOFromDateVAU(DateDTOFromDB dateVAU) {
@@ -85,25 +41,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		DateDTO dateVAU = new DateDTO();
 		
-		LocalDateTime dateLastMeton = this.metonsService.getLastMetonDate(dateO);
-		
-		if(dateLastMeton != null) {
-			
-			List<SolsticiosYEquinocciosEntity> solsticiosYEquinocciosDesdeElMetono = this.solsticiosYEquinocciosService.getSolsticiosYEquinocciosDesdeElMetono(dateO, dateLastMeton);
-			List<LunasEntity> fasesLunaresDelAnyo = this.lunasService.getFasesLunaresDelAnyo(String.valueOf(dateO.getYear()));
-			
-			if(!solsticiosYEquinocciosDesdeElMetono.isEmpty() && !fasesLunaresDelAnyo.isEmpty()) {
-				
-				dateVAU.setMeton(String.valueOf(dateLastMeton.getYear()));
-				dateVAU.setYear(getVAUYear(dateO, dateLastMeton, solsticiosYEquinocciosDesdeElMetono));
-				dateVAU.setMonth(this.getVAUMonth(dateO, fasesLunaresDelAnyo, solsticiosYEquinocciosDesdeElMetono));
-				
-				VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(dateO, fasesLunaresDelAnyo);
-				dateVAU.setWeek(vauWeekAndDay.getWeek());
-				dateVAU.setDay(vauWeekAndDay.getDay());
-			}
-
-		}		
+	
 		
 		return dateVAU;
 		
@@ -112,32 +50,7 @@ public class DatesServiceImpl implements DatesService {
 	public DateDTOFromDB getDateDTOFromDB(DateDTO dateVAU) {
 
 		DateDTOFromDB dateVAUDTOFromDB = new DateDTOFromDB();
-		
-		try {
-			
-			MetonsEntity lastMeton = this.metonsRepository.findByNuevoTrueAndInicialTrueAndYear(Integer.valueOf(dateVAU.getMeton()));
-			MetonsEntity nextMeton = this.metonsService.getNextMetonDateByYear(Integer.valueOf(dateVAU.getMeton()));			
-			boolean anyoCuadra = (Integer.valueOf(nextMeton.getYear()) - Integer.valueOf(lastMeton.getYear())) >= Integer.valueOf(dateVAU.getYear());			
-			MonthsEntity month = this.monthsRepository.findByName(dateVAU.getMonth());
-			WeeksEntity week = this.weeksRepository.findByName(dateVAU.getWeek());
-			DaysEntity day = this.daysRepository.findByName(dateVAU.getDay());
-			
-			if(lastMeton != null && month != null && week != null && day != null && anyoCuadra) {
-				
-				dateVAUDTOFromDB.setValid(true);
-				dateVAUDTOFromDB.setMeton(lastMeton);
-				dateVAUDTOFromDB.setYear(Integer.valueOf(dateVAU.getYear()));
-				dateVAUDTOFromDB.setMonth(month);
-				dateVAUDTOFromDB.setWeek(week);
-				dateVAUDTOFromDB.setDay(day);
-			}
-			
-		}
-		catch(Exception e) {
-			
-			System.out.println("Error al obtener el dateVAUDTO de la base de datos: " + e);
-		}
-		
+	
 		
 		return dateVAUDTOFromDB;
 	}
@@ -153,15 +66,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		LocalDateTime dateO = LocalDateTime.now();
 				
-		if(dateVAU.getMonth().getSeason() == 1) {
-			
-			dateO=this.getDateOIfOterno(dateVAU);
-		}
-		else {
-			
-			dateO=this.getDateOIfHibridButNoOterno(dateVAU);
-		}
-				
+		
 		
 		return dateO;
 	}
@@ -171,31 +76,6 @@ public class DatesServiceImpl implements DatesService {
 		
 		LocalDateTime dateO = LocalDateTime.now();
 		
-		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
-		
-		String year = "-";
-		
-		/*
-		 	Un año no contiene un Oterno completo, sino dos mitades
-		 	
-		 	LN1 ---- SI ---Oterno---LN ... AÑO ... LN2 ----Oterno---- SI ---
-		 
-		 	Entonces, solo sabiendo el año 1 (2015-2014) por ejemplo, no podemos saber en que parte de Oterno esta.
-		 	Ya que puede estar despues del solsticio de invierno, o antes del solsticio de invierno
-		 	Por lo que no se sabe a partir de que luna contar los dias.
-		 	Vamos a coger ambas lunas
-		 
-		 */
-		
-		year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear());
-		SolsticiosYEquinocciosEntity solsticioInviernoForFirstMoon = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
-		LunasEntity firstMoon = this.lunasService.getNewMoonBeforeADate(solsticioInviernoForFirstMoon.getDate());
-		int diasDesdeFirstMoonASolsticio = (int) ChronoUnit.DAYS.between(firstMoon.getDate(), solsticioInviernoForFirstMoon.getDate());
-		
-		year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
-		SolsticiosYEquinocciosEntity solsticioInviernoForSecondMoon = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
-		LunasEntity secondMoon = this.lunasService.getNewMoonBeforeADate(solsticioInviernoForSecondMoon.getDate());
-		int diasDesdeSecondMoonASolsticio = (int) ChronoUnit.DAYS.between(secondMoon.getDate(), solsticioInviernoForSecondMoon.getDate());
 	
 		
 		return dateO;
@@ -206,15 +86,6 @@ public class DatesServiceImpl implements DatesService {
 		
 		LocalDateTime dateO = LocalDateTime.now();
 		
-		String year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
-	
-		SolsticiosYEquinocciosEntity soe = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
-		
-		LunasEntity newMoonBeforeADate = this.lunasService.getNewMoonBeforeADate(soe.getDate());
-
-		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
-
-		dateO=newMoonBeforeADate.getDate().plusDays(diasASumarleALaLunaNueva);
 		
 		return dateO;
 	}
@@ -226,24 +97,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		LocalDateTime dateO = LocalDateTime.now();
 		
-		String year = String.valueOf(dateVAU.getMeton().getYear()+dateVAU.getYear()+1);
 		
-		SolsticiosYEquinocciosEntity lastSOE = new SolsticiosYEquinocciosEntity();
-				
-			if(dateVAU.getMonth().getSeason() == 1) {
-				
-				lastSOE=this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year)-1, dateVAU.getMonth().getSeason());
-			}
-			else {
-				
-				lastSOE=this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(Integer.valueOf(year), dateVAU.getMonth().getSeason());
-			}								
-	
-		LunasEntity newMoon = this.lunasService.getNewMoonFromSOEAndMonthOfSeason(lastSOE, dateVAU.getMonth().getMonthOfSeason());
-		
-		int diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
-		
-		dateO=newMoon.getDate().plusDays(diasASumarleALaLunaNueva);
 		
 		return dateO;
 	}
@@ -252,40 +106,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		String vauYear = "-";
 		
-		if(solsticiosYEquinocciosDesdeElMetono != null && !dateO.toLocalDate().isEqual(dateLastMeton.toLocalDate())) {
-
-			if(solsticiosYEquinocciosDesdeElMetono.size() == 0) {
-				
-				vauYear = "0";
-			}
-			else {
-				
-				int vauYearInt = 0;
-	
-				boolean esSolsticioDeInvierno = false;
-				
-				for(int i = 0; i < solsticiosYEquinocciosDesdeElMetono.size() && !esSolsticioDeInvierno; i++) {			
-					
-					SolsticiosYEquinocciosEntity soe = solsticiosYEquinocciosDesdeElMetono.get(i);
-					
-					if(soe.isSolsticioInvierno() && !soe.getDate().isEqual(dateLastMeton)) {
-						
-						if(dateO.isAfter(soe.getDate())) {
-							
-							vauYearInt = vauYearInt +1;
-						}
-						else if (dateO.toLocalDate().isEqual(soe.getDate().toLocalDate())) {
-							esSolsticioDeInvierno = true;
-						}
-					}
-				}
-				
-				if(!esSolsticioDeInvierno) {
-					vauYear = String.valueOf(vauYearInt);
-				}
-				
-			}
-		}
+		
 		
 		return vauYear;
 		
@@ -297,61 +118,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		String vauMonth = "-";
 		
-		if(!this.lunasService.esDateOLunaNueva(dateO, fasesLunaresDelAnyo)) {
-			
-			List<SolsticiosYEquinocciosEntity> lastAndNextSOE = this.solsticiosYEquinocciosService.getLastAndNextSOEFrom(dateO, solsticiosYEquinocciosDesdeElMetono);
-			
-			int season = 1;
-			int monthOfSeason = 0;
-			
-			if(lastAndNextSOE.size()==2) {
-				
-				SolsticiosYEquinocciosEntity lastSOE = lastAndNextSOE.get(0);
-				SolsticiosYEquinocciosEntity nextSOE = lastAndNextSOE.get(1);
-				
-				if(lastSOE.getDate().toLocalDate().isAfter(nextSOE.getDate().toLocalDate())) {
-					
-					lastSOE = lastAndNextSOE.get(1);
-					nextSOE = lastAndNextSOE.get(0);
-				}
-				
-				List<LunasEntity> lunasNuevasPasadasDesdeLastSOEHastaNextSOE = this.lunasService.getLunasNuevasPasadasDesdeLastSOEHastaNextSOE(fasesLunaresDelAnyo, lastSOE, nextSOE);
-
-				season = this.monthsService.getSeasonDelMesHibridoSiLoEs(lunasNuevasPasadasDesdeLastSOEHastaNextSOE, lastSOE, nextSOE, dateO);
-	
-				if(season == 0) {
-					
-					if(lastSOE.isSolsticioInvierno()) {
-						
-						season = 1;
-					}
-					else if(lastSOE.isEquinoccioPrimavera()) {
-						
-						season = 2;
-					}
-					else if(lastSOE.isSolsticioVerano()) {
-						
-						season = 3;
-					}
-					else if(lastSOE.isEquinoccioOtonyo()) {
-						
-						season = 4;
-					}
-					
-					monthOfSeason = this.lunasService.getLunasNuevasPasadasDesdeLastSOEHastaDateO(lunasNuevasPasadasDesdeLastSOEHastaNextSOE, lastSOE, dateO);
-				}
-			}
-	
-			
-			MonthsEntity vauMonthEntity = this.monthsRepository.findBySeasonAndMonthOfSeason(season, monthOfSeason);
-				
-			if(vauMonthEntity != null) {
-				
-				vauMonth = vauMonthEntity.getName();
-			}
-				
-			
-		}
+		
 		
 		
 		return vauMonth;
@@ -362,59 +129,6 @@ public class DatesServiceImpl implements DatesService {
 	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunasEntity> fasesLunaresDelAnyo) {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
-		WeeksEntity vauWeek = new WeeksEntity();
-		vauWeek.setName("-");
-		
-		long dayWeekNumber = 0L;
-		DaysEntity vauDay = new DaysEntity();
-		vauDay.setName("-");
-		
-		LunasEntity lastNewMoon = this.lunasService.getLastNewMoonForADateO(dateO, fasesLunaresDelAnyo);	
-		
-		if(lastNewMoon != null) {
-			
-			long diasDesdeLaLunaNueva = ChronoUnit.DAYS.between(lastNewMoon.getDate().toLocalDate(), dateO.toLocalDate());
-			
-			if (diasDesdeLaLunaNueva == 0) {
-				
-				vauWeek.setName("-");
-				vauDay.setName("-");
-			}
-			else if (diasDesdeLaLunaNueva <= 7) {
-				
-				vauWeek = this.weeksRepository.findByWeekOfMonth("1");
-				dayWeekNumber = diasDesdeLaLunaNueva;
-				vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
-				
-			} else if (diasDesdeLaLunaNueva <= 14) {
-				
-				vauWeek = this.weeksRepository.findByWeekOfMonth("2");
-				dayWeekNumber = diasDesdeLaLunaNueva-7;
-				vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
-
-			} else if (diasDesdeLaLunaNueva <= 21) {
-				
-				vauWeek = this.weeksRepository.findByWeekOfMonth("3");
-				dayWeekNumber = diasDesdeLaLunaNueva-14;
-				vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
-
-			} else if (diasDesdeLaLunaNueva <= 28) {
-				
-				vauWeek = this.weeksRepository.findByWeekOfMonth("4");
-				dayWeekNumber = diasDesdeLaLunaNueva-21;
-				vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
-			}
-			else {
-				vauWeek.setName("-");
-				dayWeekNumber = diasDesdeLaLunaNueva-21;
-				vauDay = this.daysRepository.findByDayOfWeek(String.valueOf(dayWeekNumber));
-			}
-		}
-		
-		
-		
-		vauWeekAndDay.setWeek(vauWeek.getName());
-		vauWeekAndDay.setDay(vauDay.getName());
 		
 		return vauWeekAndDay;
 	}
