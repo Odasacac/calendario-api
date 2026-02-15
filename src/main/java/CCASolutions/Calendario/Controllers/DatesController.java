@@ -40,6 +40,10 @@ public class DatesController {
 
 				body = this.datesService.getDateVAUFromDateO(dateO);
 				
+				if(body == null) {
+					status = HttpStatus.BAD_REQUEST;
+				}
+				
 			} catch (Exception e) {
 				
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
