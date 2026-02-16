@@ -11,14 +11,18 @@ import org.springframework.stereotype.Service;
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.DateDTOFromDB;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
+import CCASolutions.Calendario.Entities.DaysEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
+import CCASolutions.Calendario.Entities.WeeksEntity;
+import CCASolutions.Calendario.Repositories.DaysRepository;
 import CCASolutions.Calendario.Repositories.LunasRepository;
 import CCASolutions.Calendario.Repositories.MetonsRepository;
 import CCASolutions.Calendario.Repositories.MonthsRepository;
 import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
+import CCASolutions.Calendario.Repositories.WeeksRepository;
 import CCASolutions.Calendario.Services.DatesService;
 
 @Service
@@ -35,6 +39,12 @@ public class DatesServiceImpl implements DatesService {
 	
 	@Autowired
 	private MonthsRepository monthsRepository;
+	
+	@Autowired
+	private WeeksRepository weeksRepository;
+	
+	@Autowired
+	private DaysRepository daysRepository;
 	
 	// METODOS PUBLICOS
 
@@ -73,6 +83,14 @@ public class DatesServiceImpl implements DatesService {
 				
 				// Luego el mesVau
 				dateVAU.setMonth(this.getVAUMonth(dateO, soesDesdeElMetonoHastaUnAnyoMas, lunasDesdeElAnyoAnteriorHasElSiguiente));
+				
+				// Despues, la semana y el dia				
+				VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(dateO, lunasDesdeElAnyoAnteriorHasElSiguiente);
+				dateVAU.setWeek(vauWeekAndDay.getWeek());
+				dateVAU.setDay(vauWeekAndDay.getDay());
+				
+				// Finalmente, indicamos el metono
+				dateVAU.setMeton(String.valueOf(lastMeton.getYear()));
 			}
 			
 		}
@@ -205,11 +223,12 @@ public class DatesServiceImpl implements DatesService {
 					}
 					else if(luna.getDate().toLocalDate().isAfter(lastSOE.getDate().toLocalDate()) || luna.getDate().toLocalDate().isEqual(lastSOE.getDate().toLocalDate())) {
 						
-						if(luna.getDate().toLocalDate().isBefore(nextSOE.getDate().toLocalDate())) {
+						if(luna.getDate().toLocalDate().isBefore(nextSOE.getDate().toLocalDate())) {							
+						
 							lunasNuevasEntreLastSOEYNextSOE.add(luna);
 						}					
 					}	
-				}				
+				}
 			}
 			
 			// Si cae en luna nueva, no pertenece a ningun mes.
@@ -297,9 +316,84 @@ public class DatesServiceImpl implements DatesService {
 	
 	
 	
-	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunasEntity> fasesLunaresDelAnyo) {
+	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunasEntity> lunasDesdeElAnyoAnteriorHasElSiguiente) {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
+		String weekVauString = "-";
+		String dayVauString = "-";
+		WeeksEntity vauWeek = new WeeksEntity();
+		DaysEntity vauDay = new DaysEntity();
+		
+		// Lo primero es seleccionar la luna nueva mas reciente, si cae en luna llena, no hay dias ni semanas
+		
+		LunasEntity lastLN = new LunasEntity();
+		long diasDesdeLaLunaNueva = Long.MAX_VALUE;
+		boolean caeEnLunaNueva = false;
+		for (int i = 0; i<lunasDesdeElAnyoAnteriorHasElSiguiente.size() && !caeEnLunaNueva; i++) {
+			
+			LunasEntity luna = lunasDesdeElAnyoAnteriorHasElSiguiente.get(i);
+			
+			if(luna.isNueva()) {
+				
+				if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
+					
+					caeEnLunaNueva = true;
+				}
+				else if (luna.getDate().toLocalDate().isBefore(dateO.toLocalDate())) {
+					
+					long diasDeDiferenciaEntreLNYDateO = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), dateO.toLocalDate());
+					
+					if(diasDeDiferenciaEntreLNYDateO < diasDesdeLaLunaNueva) {
+						
+						lastLN=luna;
+						diasDesdeLaLunaNueva = diasDeDiferenciaEntreLNYDateO;						
+					}
+				}
+			}
+		}
+			
+		if(caeEnLunaNueva) {
+			
+			weekVauString = "Es el día de luna nueva, no pertenece a ninguna semana.";
+			dayVauString = "Es el día de luna nueva, no pertenece a ningún día.";
+		}
+		else if (lastLN != null) {
+			
+			// Con la luna llena más reciente y con los días que los separan, ya lo tenemos
+			
+			if (diasDesdeLaLunaNueva == 0) {
+				
+				weekVauString = "Es el día de luna nueva, no pertenece a ninguna semana.";
+				dayVauString = "Es el día de luna nueva, no pertenece a ningún día.";
+			}
+			else if (diasDesdeLaLunaNueva <= 7) {
+				
+				weekVauString = this.weeksRepository.findByWeekOfMonth("1").getName();
+				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva).getName();
+				
+			} else if (diasDesdeLaLunaNueva <= 14) {
+				
+				weekVauString = this.weeksRepository.findByWeekOfMonth("2").getName();
+				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-7).getName();
+
+			} else if (diasDesdeLaLunaNueva <= 21) {
+				
+				weekVauString = this.weeksRepository.findByWeekOfMonth("3").getName();
+				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-14).getName();
+
+			} else if (diasDesdeLaLunaNueva <= 28) {
+				
+				weekVauString = this.weeksRepository.findByWeekOfMonth("4").getName();
+				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-21).getName();
+			}
+			else {
+				weekVauString = "Día liminal";
+				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-21).getName();
+			}
+		}
+		
+		vauWeekAndDay.setWeek(weekVauString);
+		vauWeekAndDay.setDay(dayVauString);
 		
 		return vauWeekAndDay;
 	}

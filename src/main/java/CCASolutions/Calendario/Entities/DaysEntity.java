@@ -20,7 +20,7 @@ public class DaysEntity implements Serializable {
 	
 	private String name;
 	
-	private String dayOfWeek;
+	private int dayOfWeek;
 
 	public Long getId() {
 		return id;
@@ -42,11 +42,11 @@ public class DaysEntity implements Serializable {
 		return serialVersionUID;
 	}
 
-	public String getDayOfWeek() {
+	public int getDayOfWeek() {
 		return dayOfWeek;
 	}
 
-	public void setDayOfWeek(String dayOfWeek) {
+	public void setDayOfWeek(int dayOfWeek) {
 		this.dayOfWeek = dayOfWeek;
 	}
 	
