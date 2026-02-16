@@ -7,4 +7,5 @@ import CCASolutions.Calendario.Entities.MonthsEntity;
 
 public interface MonthsRepository extends JpaRepository <MonthsEntity, Long> {
 
+	public abstract MonthsEntity findBySeasonAndMonthOfSeasonAndLiminal (int season, int monthOfSeason, boolean liminal);
 }
