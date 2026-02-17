@@ -20,7 +20,7 @@ public class WeeksEntity implements Serializable {
 	
 	private String name;
 	
-	private String weekOfMonth;
+	private int weekOfMonth;
 
 	public Long getId() {
 		return id;
@@ -39,11 +39,11 @@ public class WeeksEntity implements Serializable {
 	}
 
 
-	public String getWeekOfMonth() {
+	public int getWeekOfMonth() {
 		return weekOfMonth;
 	}
 
-	public void setWeekOfMonth(String weekOfMonth) {
+	public void setWeekOfMonth(int weekOfMonth) {
 		this.weekOfMonth = weekOfMonth;
 	}
 

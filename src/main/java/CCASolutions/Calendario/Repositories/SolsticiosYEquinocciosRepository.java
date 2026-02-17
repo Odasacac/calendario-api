@@ -1,7 +1,6 @@
 package CCASolutions.Calendario.Repositories;
 
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -12,6 +11,8 @@ import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 public interface SolsticiosYEquinocciosRepository extends JpaRepository <SolsticiosYEquinocciosEntity, Long> {
 
 	public abstract  List<SolsticiosYEquinocciosEntity>	findByDateAfterAndDateLessThanEqual (LocalDateTime from, LocalDateTime to);
+	
+	public abstract  List<SolsticiosYEquinocciosEntity>	findByYearBetween (int from, int to);
 
 	public abstract SolsticiosYEquinocciosEntity findTopByOrderByDateDesc();
 	

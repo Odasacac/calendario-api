@@ -4,5 +4,5 @@ import CCASolutions.Calendario.DTOs.DateDTOFromDB;
 
 public interface DaysService {
 	
-	public abstract int getDiasASumarALaLunaNueva(DateDTOFromDB dateVAU);
+	public abstract long getDiasASumarALaLunaNueva(DateDTOFromDB dateVAU);
 }
