@@ -33,14 +33,14 @@ public class LunasServiceImpl implements LunasService {
 	// METODOS PUBLICOS
 	
 
-	public LunasEntity getPrimeraLunaNuevaAnteriorAFecha(List<LunasEntity> lunasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha) {
+	public LunasEntity getPrimeraLunaNuevaAnteriorAFecha(List<LunasEntity> lunasNuevasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha) {
 		
 		LunasEntity primeraLunaNuevaAnteriorAFecha = new LunasEntity();
 		
 		long diasMinimosDeDiferenciaConLastSOE = Long.MAX_VALUE;
-		for(LunasEntity luna :lunasDesdeAnyoMinimoAAnyoMaximo) {
+		for(LunasEntity luna :lunasNuevasDesdeAnyoMinimoAAnyoMaximo) {
 				
-			if(luna.isNueva() && luna.getDate().toLocalDate().isBefore(fecha)) {
+			if(luna.getDate().toLocalDate().isBefore(fecha)) {
 					
 				long diasDeDiferenciaEntreLastSOEYLuna = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), fecha);
 					

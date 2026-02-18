@@ -10,6 +10,6 @@ public interface LunasService {
 	
 	public abstract String poblateLunas();
 	public abstract List<LunarPhaseDTO> getFasesLunaresDelAnyoViaAPI(String anyo, String url);
-	public abstract LunasEntity getPrimeraLunaNuevaAnteriorAFecha(List<LunasEntity> lunasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha);
+	public abstract LunasEntity getPrimeraLunaNuevaAnteriorAFecha(List<LunasEntity> lunasNuevasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha);
 	public abstract LunasEntity getPrimeraLunaNuevaPosteriorAFecha(List<LunasEntity> lunasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha);
 }

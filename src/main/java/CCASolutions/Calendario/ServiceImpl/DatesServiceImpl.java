@@ -67,11 +67,11 @@ public class DatesServiceImpl implements DatesService {
 		
 		// Y con eso obtener los syes y las lunas
 		List<SolsticiosYEquinocciosEntity> soesDesdeAnyoMinimoAAnyoMaximo = this.solsticiosYEquinocciosRepository.findByYearBetween(anyoMinimoPosible, anyoMaximoPosible);	
-		List<LunasEntity> lunasDesdeAnyoMinimoAAnyoMaximo = this.lunasRepository.findByYearBetween(anyoMinimoPosible, anyoMaximoPosible);	
+		List<LunasEntity> lunasNuevasDesdeAnyoMinimoAAnyoMaximo = this.lunasRepository.findByYearBetweenAndNuevaTrue(anyoMinimoPosible, anyoMaximoPosible);	
 		
-		String year = this.getOYear(dateVAU, soesDesdeAnyoMinimoAAnyoMaximo, lunasDesdeAnyoMinimoAAnyoMaximo);
+		String year = this.getOYear(dateVAU, soesDesdeAnyoMinimoAAnyoMaximo, lunasNuevasDesdeAnyoMinimoAAnyoMaximo);
 		
-		String month = this.getOMonth(dateVAU, soesDesdeAnyoMinimoAAnyoMaximo, lunasDesdeAnyoMinimoAAnyoMaximo);
+		String month = this.getOMonth(dateVAU, soesDesdeAnyoMinimoAAnyoMaximo, lunasNuevasDesdeAnyoMinimoAAnyoMaximo);
 		
 		return dateO;
 	}
@@ -90,10 +90,10 @@ public class DatesServiceImpl implements DatesService {
 			List<SolsticiosYEquinocciosEntity> soesDesdeElMetonoHastaUnAnyoMas = this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(lastMeton.getDate(), dateO.plusYears(1));
 			
 			// Y todas las lunas, desde un año antes hasta un año despues de la fecha a consultar			
-			List<LunasEntity> lunasDesdeElAnyoAnteriorHasElSiguiente = this.lunasRepository.findByDateBetween(dateO.minusYears(1), dateO.plusYears(1));
+			List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente = this.lunasRepository.findByDateBetweenAndNuevaTrue(dateO.minusYears(1), dateO.plusYears(1));
 		
 			
-			if(soesDesdeElMetonoHastaUnAnyoMas.isEmpty() || lunasDesdeElAnyoAnteriorHasElSiguiente.isEmpty()) {
+			if(soesDesdeElMetonoHastaUnAnyoMas.isEmpty() || lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.isEmpty()) {
 				
 				System.out.println("Error al obtener dateVAU: no se han encontrado solsticios/equinoccios/lunas.");
 			}
@@ -103,10 +103,10 @@ public class DatesServiceImpl implements DatesService {
 				dateVAU.setYear(this.getVAUYear(dateO, soesDesdeElMetonoHastaUnAnyoMas));
 				
 				// Luego el mesVau
-				dateVAU.setMonth(this.getVAUMonth(dateO, soesDesdeElMetonoHastaUnAnyoMas, lunasDesdeElAnyoAnteriorHasElSiguiente));
+				dateVAU.setMonth(this.getVAUMonth(dateO, soesDesdeElMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHasElSiguiente));
 				
 				// Despues, la semana y el dia				
-				VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(dateO, lunasDesdeElAnyoAnteriorHasElSiguiente);
+				VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(dateO, lunasNuevasDesdeElAnyoAnteriorHasElSiguiente);
 				dateVAU.setWeek(vauWeekAndDay.getWeek());
 				dateVAU.setDay(vauWeekAndDay.getDay());
 				
@@ -188,7 +188,7 @@ public class DatesServiceImpl implements DatesService {
 		return month;
 	}
 
-	private String getOYear(DateDTOFromDB dateVAU, List<SolsticiosYEquinocciosEntity> soesDesdeAnyoMinimoAAnyoMaximo, List<LunasEntity> lunasDesdeAnyoMinimoAAnyoMaximo) {
+	private String getOYear(DateDTOFromDB dateVAU, List<SolsticiosYEquinocciosEntity> soesDesdeAnyoMinimoAAnyoMaximo, List<LunasEntity> lunasNuevasDesdeAnyoMinimoAAnyoMaximo) {
 		
 		String year = "";
 		
@@ -208,7 +208,7 @@ public class DatesServiceImpl implements DatesService {
 			
 			
 			// Y la LN anterior a ese SI				
-			LunasEntity primeraLunaNuevaAntesDelSIDelMetonoDateVAU = this.lunasService.getPrimeraLunaNuevaAnteriorAFecha(lunasDesdeAnyoMinimoAAnyoMaximo, solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate());			
+			LunasEntity primeraLunaNuevaAntesDelSIDelMetonoDateVAU = this.lunasService.getPrimeraLunaNuevaAnteriorAFecha(lunasNuevasDesdeAnyoMinimoAAnyoMaximo, solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate());			
 				
 			// Luego contar los dias que han pasado desde la LN				
 			long diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
@@ -240,7 +240,7 @@ public class DatesServiceImpl implements DatesService {
 			}
 			
 			// Pero en este caso cogemos la LN siguiente
-			LunasEntity primeraLunaNuevaDespuesDelSIDelMetonoDateVAU = this.lunasService.getPrimeraLunaNuevaPosteriorAFecha(lunasDesdeAnyoMinimoAAnyoMaximo, solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate());
+			LunasEntity primeraLunaNuevaDespuesDelSIDelMetonoDateVAU = this.lunasService.getPrimeraLunaNuevaPosteriorAFecha(lunasNuevasDesdeAnyoMinimoAAnyoMaximo, solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate());
 		
 			// Y luego contamos los dias que han pasado desde la LN				
 			long diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);			
@@ -311,7 +311,7 @@ public class DatesServiceImpl implements DatesService {
 	
 	
 	
-	private String getVAUMonth(LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElMetonoHastaUnAnyoMas, List<LunasEntity> fasesLunaresDelAnyoYDelAnterior) {
+	private String getVAUMonth(LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElMetonoHastaUnAnyoMas, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente) {
 		
 		String vauMonthName = "-";
 		
@@ -362,22 +362,20 @@ public class DatesServiceImpl implements DatesService {
 			List<LunasEntity> lunasNuevasEntreLastSOEYNextSOE = new ArrayList<>();
 			
 			boolean caeEnLunaNueva = false;				
-			for(int i = 0; i<fasesLunaresDelAnyoYDelAnterior.size() && !caeEnLunaNueva; i++) {
+			for(int i = 0; i<lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.size() && !caeEnLunaNueva; i++) {
 				
-				LunasEntity luna = fasesLunaresDelAnyoYDelAnterior.get(i);
+				LunasEntity luna = lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.get(i);
 				
-				if(luna.isNueva()) {
-					
-					if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
+	
+				if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
 						
-						caeEnLunaNueva = true;
-					}
-					else if(luna.getDate().toLocalDate().isAfter(lastSOE.getDate().toLocalDate()) || luna.getDate().toLocalDate().isEqual(lastSOE.getDate().toLocalDate())) {
+					caeEnLunaNueva = true;
+				}
+				else if(luna.getDate().toLocalDate().isAfter(lastSOE.getDate().toLocalDate()) || luna.getDate().toLocalDate().isEqual(lastSOE.getDate().toLocalDate())) {
 						
-						if(luna.getDate().toLocalDate().isBefore(nextSOE.getDate().toLocalDate())) {							
+					if(luna.getDate().toLocalDate().isBefore(nextSOE.getDate().toLocalDate())) {							
 						
-							lunasNuevasEntreLastSOEYNextSOE.add(luna);
-						}					
+						lunasNuevasEntreLastSOEYNextSOE.add(luna);					
 					}	
 				}
 			}
@@ -467,7 +465,7 @@ public class DatesServiceImpl implements DatesService {
 	
 	
 	
-	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunasEntity> lunasDesdeElAnyoAnteriorHasElSiguiente) {
+	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente) {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
 		String weekVauString = "-";
@@ -478,25 +476,23 @@ public class DatesServiceImpl implements DatesService {
 		LunasEntity lastLN = new LunasEntity();
 		long diasDesdeLaLunaNueva = Long.MAX_VALUE;
 		boolean caeEnLunaNueva = false;
-		for (int i = 0; i<lunasDesdeElAnyoAnteriorHasElSiguiente.size() && !caeEnLunaNueva; i++) {
+		for (int i = 0; i<lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.size() && !caeEnLunaNueva; i++) {
 			
-			LunasEntity luna = lunasDesdeElAnyoAnteriorHasElSiguiente.get(i);
+			LunasEntity luna = lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.get(i);
 			
-			if(luna.isNueva()) {
-				
-				if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
+
+			if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
 					
-					caeEnLunaNueva = true;
-				}
-				else if (luna.getDate().toLocalDate().isBefore(dateO.toLocalDate())) {
+				caeEnLunaNueva = true;
+			}
+			else if (luna.getDate().toLocalDate().isBefore(dateO.toLocalDate())) {
 					
-					long diasDeDiferenciaEntreLNYDateO = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), dateO.toLocalDate());
+				long diasDeDiferenciaEntreLNYDateO = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), dateO.toLocalDate());
 					
-					if(diasDeDiferenciaEntreLNYDateO < diasDesdeLaLunaNueva) {
+				if(diasDeDiferenciaEntreLNYDateO < diasDesdeLaLunaNueva) {
 						
-						lastLN=luna;
-						diasDesdeLaLunaNueva = diasDeDiferenciaEntreLNYDateO;						
-					}
+					lastLN=luna;
+					diasDesdeLaLunaNueva = diasDeDiferenciaEntreLNYDateO;						
 				}
 			}
 		}

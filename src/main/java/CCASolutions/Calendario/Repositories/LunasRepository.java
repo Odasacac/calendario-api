@@ -11,8 +11,8 @@ public interface LunasRepository extends JpaRepository <LunasEntity, Long> {
 	
 	public abstract LunasEntity findTopByOrderByDateDesc();
 	
-	public abstract List<LunasEntity> findByDateBetween(LocalDateTime yearFrom, LocalDateTime yearTo);
+	public abstract List<LunasEntity> findByDateBetweenAndNuevaTrue(LocalDateTime yearFrom, LocalDateTime yearTo);
 	
-	public abstract List<LunasEntity> findByYearBetween (int from, int to);
+	public abstract List<LunasEntity> findByYearBetweenAndNuevaTrue (int from, int to);
 
 }
