@@ -26,6 +26,7 @@ import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Repositories.WeeksRepository;
 import CCASolutions.Calendario.Services.DatesService;
 import CCASolutions.Calendario.Services.DaysService;
+import CCASolutions.Calendario.Services.LunasService;
 
 @Service
 public class DatesServiceImpl implements DatesService {	
@@ -47,6 +48,9 @@ public class DatesServiceImpl implements DatesService {
 	
 	@Autowired
 	private DaysRepository daysRepository;
+	
+	@Autowired
+	private LunasService lunasService;
 	
 	@Autowired
 	private DaysService daysService;
@@ -191,56 +195,28 @@ public class DatesServiceImpl implements DatesService {
 		if(dateVAU.getMonth().isLiminal()) {
 			
 			// Si estamos en Oterno liminal, podemos estar en Metono+dateVAU o en Metono+dateVAU+1
-			// Dependera de si hemos pasado el 1 de enero del año del Metono+dateVAU+1, si lo hemos pasado, el año es Metono+dateVAU+1, si no Metono+dateVAU			
-			// Es decir, cuantos dias han pasado desde el SI del año del Metono+dateVAU hasta la primera luna nueva del Meton+dateVAU+1			
+			// Dependera de si hemos pasado el 1 de enero del año del Metono+dateVAU+1, si lo hemos pasado, el año es Metono+dateVAU+1, si no Metono+dateVAU					
 			
+			// Para ello primero obtenemos el SI del Metono+dateVAU
 			SolsticiosYEquinocciosEntity solsticioDeInviernoDelMetonoDateVAU = new SolsticiosYEquinocciosEntity();
 			for(SolsticiosYEquinocciosEntity soe : soesDesdeAnyoMinimoAAnyoMaximo) {
 				
 				if(soe.isSolsticioInvierno() && soe.getYear() == (dateVAU.getMeton().getYear()+dateVAU.getYear())) {
 					solsticioDeInviernoDelMetonoDateVAU = soe;
 				}
-			}			
+			}	
 			
-			LunasEntity primeraLunaNuevaDespuesDelSIDelMetonoDateVAU = new LunasEntity();
-			long diasMinimosDeDiferenciaConLastSOE = Long.MAX_VALUE;
-			for(LunasEntity luna :lunasDesdeAnyoMinimoAAnyoMaximo) {
-				
-				if(luna.isNueva() && luna.getDate().toLocalDate().isAfter(solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate())) {
-					
-					long diasDeDiferenciaEntreLastSOEYLuna = ChronoUnit.DAYS.between(solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate(), luna.getDate().toLocalDate());
-					
-					if(diasDeDiferenciaEntreLastSOEYLuna < diasMinimosDeDiferenciaConLastSOE) {
-						diasMinimosDeDiferenciaConLastSOE = diasDeDiferenciaEntreLastSOEYLuna;
-						primeraLunaNuevaDespuesDelSIDelMetonoDateVAU = luna;
-					}
-
-				}
-			}
-				
 			
-			// Hay que obtener la LN anterior al SOE				
-			LunasEntity primeraLunaNuevaAntesDelSIDelMetonoDateVAU = new LunasEntity();
-			diasMinimosDeDiferenciaConLastSOE = Long.MAX_VALUE;
-			for(LunasEntity luna :lunasDesdeAnyoMinimoAAnyoMaximo) {
-					
-				if(luna.isNueva() && luna.getDate().toLocalDate().isBefore(solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate())) {
-						
-					long diasDeDiferenciaEntreLastSOEYLuna = ChronoUnit.DAYS.between( luna.getDate().toLocalDate(), solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate());
-						
-					if(diasDeDiferenciaEntreLastSOEYLuna < diasMinimosDeDiferenciaConLastSOE) {
-						diasMinimosDeDiferenciaConLastSOE = diasDeDiferenciaEntreLastSOEYLuna;
-						primeraLunaNuevaAntesDelSIDelMetonoDateVAU = luna;
-					}
-
-				}
-			}
+			// Y la LN anterior a ese SI				
+			LunasEntity primeraLunaNuevaAntesDelSIDelMetonoDateVAU = this.lunasService.getPrimeraLunaNuevaAnteriorAFecha(lunasDesdeAnyoMinimoAAnyoMaximo, solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate());			
 				
-			// Y luego contar los dias que han pasado desde la LN				
+			// Luego contar los dias que han pasado desde la LN				
 			long diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);
+			
+			
+			// Si la suma de los dias a la LN no pasa el 1 de enero, el año es Metono+dateVAU
 			LocalDate unoDeEnero = LocalDate.of(solsticioDeInviernoDelMetonoDateVAU.getDate().getYear()+1, 1, 1);
 			
-			// Si la suma de los dias a la LN pasa el 1 de enero, el año es Metono+dateVAU+1
 			if(primeraLunaNuevaAntesDelSIDelMetonoDateVAU.getDate().toLocalDate().plusDays(diasASumarleALaLunaNueva).isBefore(unoDeEnero)){
 					
 				year = String.valueOf(dateVAU.getMeton().getYear() + dateVAU.getYear());
@@ -250,9 +226,40 @@ public class DatesServiceImpl implements DatesService {
 				year = String.valueOf(dateVAU.getMeton().getYear() + dateVAU.getYear()+1);
 			}								
 		}
+		else if(dateVAU.getMonth().getSeason() == 1 && dateVAU.getMonth().getMonthOfSeason()==1) {
+			
+			// Si estamos en Prierno, podemos estar tambien entre ambos años, para ello el procedimiento es similar
+			
+			// Cogemos el SI anterior			
+			SolsticiosYEquinocciosEntity solsticioDeInviernoDelMetonoDateVAU = new SolsticiosYEquinocciosEntity();
+			for(SolsticiosYEquinocciosEntity soe : soesDesdeAnyoMinimoAAnyoMaximo) {
+				
+				if(soe.isSolsticioInvierno() && soe.getYear() == (dateVAU.getMeton().getYear()+dateVAU.getYear())) {
+					solsticioDeInviernoDelMetonoDateVAU = soe;
+				}
+			}
+			
+			// Pero en este caso cogemos la LN siguiente
+			LunasEntity primeraLunaNuevaDespuesDelSIDelMetonoDateVAU = this.lunasService.getPrimeraLunaNuevaPosteriorAFecha(lunasDesdeAnyoMinimoAAnyoMaximo, solsticioDeInviernoDelMetonoDateVAU.getDate().toLocalDate());
+		
+			// Y luego contamos los dias que han pasado desde la LN				
+			long diasASumarleALaLunaNueva = this.daysService.getDiasASumarALaLunaNueva(dateVAU);			
+						
+			// Si la suma de los dias a la LN no pasa el 1 de enero, el año es Metono+dateVAU
+			LocalDate unoDeEnero = LocalDate.of(solsticioDeInviernoDelMetonoDateVAU.getDate().getYear()+1, 1, 1);
+			if(primeraLunaNuevaDespuesDelSIDelMetonoDateVAU.getDate().toLocalDate().plusDays(diasASumarleALaLunaNueva).isBefore(unoDeEnero)){
+								
+				year = String.valueOf(dateVAU.getMeton().getYear() + dateVAU.getYear());
+			}
+			else {
+							
+				year = String.valueOf(dateVAU.getMeton().getYear() + dateVAU.getYear()+1);
+			}		
+		
+		}
 		else {
 			
-			// Si no estamos en Oterno liminal, el año va a ser Metono+dateVAU+1
+			// Si no estamos en Oterno liminal ni en PRierno, el año va es Metono+dateVAU+1
 			year = String.valueOf(dateVAU.getMeton().getYear() + dateVAU.getYear() +1);
 		}
 		

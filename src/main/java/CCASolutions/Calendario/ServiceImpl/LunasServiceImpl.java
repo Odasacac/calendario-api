@@ -1,6 +1,8 @@
 package CCASolutions.Calendario.ServiceImpl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +31,50 @@ public class LunasServiceImpl implements LunasService {
 	
 	
 	// METODOS PUBLICOS
+	
+
+	public LunasEntity getPrimeraLunaNuevaAnteriorAFecha(List<LunasEntity> lunasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha) {
+		
+		LunasEntity primeraLunaNuevaAnteriorAFecha = new LunasEntity();
+		
+		long diasMinimosDeDiferenciaConLastSOE = Long.MAX_VALUE;
+		for(LunasEntity luna :lunasDesdeAnyoMinimoAAnyoMaximo) {
+				
+			if(luna.isNueva() && luna.getDate().toLocalDate().isBefore(fecha)) {
+					
+				long diasDeDiferenciaEntreLastSOEYLuna = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), fecha);
+					
+				if(diasDeDiferenciaEntreLastSOEYLuna < diasMinimosDeDiferenciaConLastSOE) {
+					diasMinimosDeDiferenciaConLastSOE = diasDeDiferenciaEntreLastSOEYLuna;
+					primeraLunaNuevaAnteriorAFecha = luna;
+				}
+
+			}
+		}
+		return primeraLunaNuevaAnteriorAFecha;
+	}
+
+	public LunasEntity getPrimeraLunaNuevaPosteriorAFecha(List<LunasEntity> lunasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha) {
+		
+		LunasEntity primeraLunaNuevaAnteriorAFecha = new LunasEntity();
+		
+		long diasMinimosDeDiferenciaConLastSOE = Long.MAX_VALUE;
+		for(LunasEntity luna :lunasDesdeAnyoMinimoAAnyoMaximo) {
+				
+			if(luna.isNueva() && luna.getDate().toLocalDate().isAfter(fecha)) {
+					
+				long diasDeDiferenciaEntreLastSOEYLuna = ChronoUnit.DAYS.between(fecha, luna.getDate().toLocalDate());
+					
+				if(diasDeDiferenciaEntreLastSOEYLuna < diasMinimosDeDiferenciaConLastSOE) {
+					diasMinimosDeDiferenciaConLastSOE = diasDeDiferenciaEntreLastSOEYLuna;
+					primeraLunaNuevaAnteriorAFecha = luna;
+				}
+
+			}
+		}
+		return primeraLunaNuevaAnteriorAFecha;
+	}
+
 	
 	
 	public String poblateLunas() {
@@ -163,6 +209,8 @@ public class LunasServiceImpl implements LunasService {
 		
 		return fenomenos;
 	}
+
+
 
 
 
