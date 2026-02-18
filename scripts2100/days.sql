@@ -1,10 +1,10 @@
-INSERT INTO calendar_db.days (name,day_of_week) VALUES
-	 ('Luno','1'),
-	 ('Sole','2'),
-	 ('Merco','3'),
-	 ('Venuro','4'),
-	 ('Marte','5'),
-	 ('Júpeno','6'),
-	 ('Saturino','7'),
-	 ('Liminol','8'),
-	 ('Caelumbra','9');
+INSERT INTO calendar_db.days (day_of_week,name) VALUES
+	 (1,'Luno'),
+	 (2,'Sole'),
+	 (3,'Merco'),
+	 (4,'Venuro'),
+	 (5,'Marte'),
+	 (6,'Júpeno'),
+	 (7,'Saturino'),
+	 (8,'Liminol'),
+	 (9,'Caelumbra');
