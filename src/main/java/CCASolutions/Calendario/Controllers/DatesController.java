@@ -1,5 +1,6 @@
 package CCASolutions.Calendario.Controllers;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,9 +57,9 @@ public class DatesController {
 	}
 
 	@PostMapping("/conversiontoofficial")
-	public ResponseEntity<LocalDateTime> getDateO(@RequestBody DateDTO dateVAU) {
+	public ResponseEntity<LocalDate> getDateO(@RequestBody DateDTO dateVAU) {
 		HttpStatus status = HttpStatus.OK;
-		LocalDateTime body = LocalDateTime.now();
+		LocalDate body = LocalDate.now();
 
 		DateDTOFromDB dateDTOFromDB = this.datesService.getDateDTOFromDB(dateVAU);
 		
@@ -82,7 +83,7 @@ public class DatesController {
 					
 		
 
-		return new ResponseEntity<LocalDateTime>(body, status);
+		return new ResponseEntity<LocalDate>(body, status);
 	}
 	
 	
