@@ -13,9 +13,16 @@ public class DateDTOFromDB {
 	private WeeksEntity week;
 	private DaysEntity day;
 	private boolean isValid;
+	private String comentarios;
 	
 	
 	
+	public String getComentarios() {
+		return comentarios;
+	}
+	public void setComentarios(String comentarios) {
+		this.comentarios = comentarios;
+	}
 	public boolean isValid() {
 		return isValid;
 	}

@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.DateDTOFromDB;
+import CCASolutions.Calendario.Responses.FromDateVAUToDateOResponse;
 import CCASolutions.Calendario.Services.DatesService;
 
 @RestController
@@ -56,9 +57,9 @@ public class DatesController {
 	}
 
 	@PostMapping("/conversiontoofficial")
-	public ResponseEntity<LocalDate> getDateO(@RequestBody DateDTO dateVAU) {
+	public ResponseEntity<FromDateVAUToDateOResponse> getDateO(@RequestBody DateDTO dateVAU) {
 		HttpStatus status = HttpStatus.OK;
-		LocalDate body = LocalDate.now();
+		FromDateVAUToDateOResponse body = new FromDateVAUToDateOResponse();
 
 		DateDTOFromDB dateDTOFromDB = this.datesService.getDateDTOFromDB(dateVAU);
 		
@@ -67,22 +68,24 @@ public class DatesController {
 			try {			
 
 				body = this.datesService.getDateOFromDateVAU(dateDTOFromDB);
+				
+				if(body.getDateO() == null) {
+					
+					status = HttpStatus.BAD_REQUEST;
+				}
 					
 			} catch (Exception e) {
 					
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				System.out.println(e);
 			}	
-		}
-			
+		}		
 		else {
-			
 			status = HttpStatus.BAD_REQUEST;
+			body.setComentarios(dateDTOFromDB.getComentarios());
 		}
-					
 		
-
-		return new ResponseEntity<LocalDate>(body, status);
+		return new ResponseEntity<FromDateVAUToDateOResponse>(body, status);
 	}
 	
 	

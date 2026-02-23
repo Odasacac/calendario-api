@@ -24,6 +24,7 @@ import CCASolutions.Calendario.Repositories.MetonsRepository;
 import CCASolutions.Calendario.Repositories.MonthsRepository;
 import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Repositories.WeeksRepository;
+import CCASolutions.Calendario.Responses.FromDateVAUToDateOResponse;
 import CCASolutions.Calendario.Services.DatesService;
 import CCASolutions.Calendario.Services.DaysService;
 
@@ -53,9 +54,11 @@ public class DatesServiceImpl implements DatesService {
 	
 	// METODOS PUBLICOS 
 
-	public LocalDate getDateOFromDateVAU(DateDTOFromDB dateVAU) {
+	public FromDateVAUToDateOResponse getDateOFromDateVAU(DateDTOFromDB dateVAU) {
 
-		LocalDate dateO = LocalDate.now();
+		FromDateVAUToDateOResponse fromDateVAUToDateOResponse = new FromDateVAUToDateOResponse();
+		LocalDate dateO = null;
+		String response = "";
 
 		// Lo primero es obtener el soe correspondiente a ese mes
 		// Para ello necesitamos el año y el monthOfSeason, que basicamente es el numero de LN que han pasado		
@@ -67,34 +70,43 @@ public class DatesServiceImpl implements DatesService {
 			anyoDelSoe=anyoDelSoe-1;	
 		}
 		
-		SolsticiosYEquinocciosEntity soe =this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(anyoDelSoe, dateVAU.getMonth().getSeason());
+		SolsticiosYEquinocciosEntity soe = this.solsticiosYEquinocciosRepository.findByYearAndStartingSeason(anyoDelSoe, dateVAU.getMonth().getSeason());
 		
-		LunasEntity lunaCorrespondiente = new LunasEntity();
+		if(soe != null) {
+			
+			LunasEntity lunaCorrespondiente = new LunasEntity();
 
-		if(dateVAU.getMonth().getHibrid()) {
-			
-			// Si es hibrido, hay que coger la luna nueva anterior al soe y contar desde ahi
-			
-			lunaCorrespondiente = lunasRepository.findTopByDateLessThanOrderByDateDesc(soe.getDate());				
-		}
-		else {		
-			
-			// Ya con el SOE, selecciona la luna nueva a partir de la cual se cuentan los dias
-
-			List<LunasEntity> lunasAPartirDelSoe = this.lunasRepository.findTop3ByDateGreaterThanEqualAndNuevaIsTrueOrderByDateAsc(soe.getDate());			
-			lunaCorrespondiente = lunasAPartirDelSoe.get(dateVAU.getMonth().getMonthOfSeason()-1);
-		}
+			if(dateVAU.getMonth().getHibrid()) {
 				
-		dateO = lunaCorrespondiente.getDate().toLocalDate().plusDays(this.daysService.getDiasASumarALaLunaNueva(dateVAU));		
-		
+				// Si es hibrido, hay que coger la luna nueva anterior al soe y contar desde ahi
+				
+				lunaCorrespondiente = lunasRepository.findTopByDateLessThanOrderByDateDesc(soe.getDate());				
+			}
+			else {		
+				
+				// Ya con el SOE, selecciona la luna nueva a partir de la cual se cuentan los dias
 
-		return dateO;
+				List<LunasEntity> lunasAPartirDelSoe = this.lunasRepository.findTop3ByDateGreaterThanEqualAndNuevaIsTrueOrderByDateAsc(soe.getDate());			
+				lunaCorrespondiente = lunasAPartirDelSoe.get(dateVAU.getMonth().getMonthOfSeason()-1);
+			}
+					
+			dateO = lunaCorrespondiente.getDate().toLocalDate().plusDays(this.daysService.getDiasASumarALaLunaNueva(dateVAU));		
+		}
+		else {
+			
+			response ="Error, no existe un SOE correspondiente al año: " + anyoDelSoe;
+		}
+		
+		fromDateVAUToDateOResponse.setDateO(dateO);
+		fromDateVAUToDateOResponse.setComentarios(response);
+		
+		return fromDateVAUToDateOResponse;
 	}
 
 	
 	public DateDTO getDateVAUFromDateO (LocalDate date) {
 		
-		DateDTO dateVAU = new DateDTO();
+		DateDTO dateVAU = null;
 		
 		LocalDateTime dateO = date.atStartOfDay();	
 	
@@ -115,6 +127,8 @@ public class DatesServiceImpl implements DatesService {
 				System.out.println("Error al obtener dateVAU: no se han encontrado solsticios/equinoccios/lunas.");
 			}
 			else {
+				
+				dateVAU = new DateDTO();
 				
 				// Lo primero es obtener el añoVAU				
 				dateVAU.setYear(this.getVAUYear(dateO, soesDesdeElMetonoHastaUnAnyoMas));
@@ -144,52 +158,66 @@ public class DatesServiceImpl implements DatesService {
 
 		DateDTOFromDB dateVAUDTOFromDB = new DateDTOFromDB();
 	
-		MetonsEntity meton = this.metonsRepository.findByYearAndInicialIsTrueAndNuevoIsTrue(Integer.valueOf(dateVAU.getMeton()));
-		
-		if(meton != null) {
+		if(Integer.valueOf(dateVAU.getMeton()) >= 0) {
 			
-			dateVAUDTOFromDB.setMeton(meton);
-			MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth()); 
+			MetonsEntity meton = this.metonsRepository.findByYearAndInicialIsTrueAndNuevoIsTrue(Integer.valueOf(dateVAU.getMeton()));
 			
-			if(vauMonth != null) {
+			if(meton != null) {
 				
-				dateVAUDTOFromDB.setMonth(vauMonth);
-				WeeksEntity vauWeek = this.weeksRepository.findByName(dateVAU.getWeek());
+				dateVAUDTOFromDB.setMeton(meton);
 				
-				if(vauWeek != null) {
+				MetonsEntity nextMeton = this.metonsRepository.findFirstByYearGreaterThanAndNuevoIsTrueOrderByYearAsc(meton.getYear());
+				
+				if(nextMeton != null && (nextMeton.getYear() - meton.getYear() > Integer.valueOf(dateVAU.getYear()))) {
 					
-					dateVAUDTOFromDB.setWeek(vauWeek);
-					DaysEntity vauDay = this.daysRepository.findByName(dateVAU.getDay());
+					dateVAUDTOFromDB.setYear(Integer.valueOf(dateVAU.getYear()));
+					MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth()); 
 					
-					if(vauDay != null) {
+					if(vauMonth != null) {
 						
-						dateVAUDTOFromDB.setYear(Integer.valueOf(dateVAU.getYear()));
-						dateVAUDTOFromDB.setDay(vauDay);
-						dateVAUDTOFromDB.setValid(true);
+						dateVAUDTOFromDB.setMonth(vauMonth);
+						WeeksEntity vauWeek = this.weeksRepository.findByName(dateVAU.getWeek());
 						
+						if(vauWeek != null) {
+							
+							dateVAUDTOFromDB.setWeek(vauWeek);
+							DaysEntity vauDay = this.daysRepository.findByName(dateVAU.getDay());
+							
+							if(vauDay != null) {
+								
+								dateVAUDTOFromDB.setDay(vauDay);							
+								dateVAUDTOFromDB.setValid(true);									
+							}
+							else {
+								
+								dateVAUDTOFromDB.setComentarios("No se ha encontrado el día " + dateVAU.getDay() + " en la base de datos.");
+							}
+						}
+						else {
+							
+							dateVAUDTOFromDB.setComentarios("No se ha encontrado la semana " + dateVAU.getWeek() + " en la base de datos.");
+						}
 					}
 					else {
 						
-						System.out.println("No se ha encontrado este día en la base de datos: " + dateVAU.getDay());
-					}
-				}
+						dateVAUDTOFromDB.setComentarios("No se ha encontrado el mes " + dateVAU.getMonth() + " en la base de datos.");
+					}	
+				}						
 				else {
 					
-					System.out.println("No se ha encontrado esta semana en la base de datos: " + dateVAU.getWeek());
-				}
+					dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getYear() + " está fuera del rango para este métono.");
+				}						
 			}
 			else {
 				
-				System.out.println("No se ha encontrado este mes en la base de datos: " + dateVAU.getMonth());
+				dateVAUDTOFromDB.setComentarios("No ocurrió ningún métono en el año " + Integer.valueOf(dateVAU.getMeton() + "."));
 			}
-			
 		}
 		else {
 			
-			System.out.println("No se ha encontrado ningún métono para el año:" + Integer.valueOf(dateVAU.getMeton()));
+			dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getMeton() + " no es válido.");
 		}
-	
-		
+				
 		return dateVAUDTOFromDB;
 	}
 
