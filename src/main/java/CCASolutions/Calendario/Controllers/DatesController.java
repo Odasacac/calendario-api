@@ -1,7 +1,6 @@
 package CCASolutions.Calendario.Controllers;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,11 +26,11 @@ public class DatesController {
 	DatesService datesService;		
 	
 	@GetMapping("/conversiontovau")
-	public ResponseEntity<DateDTO> getDateVAU(@RequestParam LocalDateTime dateO) {
+	public ResponseEntity<DateDTO> getDateVAU(@RequestParam LocalDate date) {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
 
-		if(dateO.getYear() < 0 || 2099 < dateO.getYear()) {
+		if(date.getYear() < 0 || 2099 < date.getYear()) {
 			
 			status = HttpStatus.BAD_REQUEST;
 		}
@@ -39,7 +38,7 @@ public class DatesController {
 			
 			try {			
 
-				body = this.datesService.getDateVAUFromDateO(dateO);
+				body = this.datesService.getDateVAUFromDateO(date);
 				
 				if(body == null) {
 					status = HttpStatus.BAD_REQUEST;
@@ -93,7 +92,7 @@ public class DatesController {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
 
-		LocalDateTime dateO = LocalDateTime.now();
+		LocalDate dateO = LocalDate.now();
 
 		try {
 			

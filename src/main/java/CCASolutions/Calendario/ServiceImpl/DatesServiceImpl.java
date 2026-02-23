@@ -92,9 +92,11 @@ public class DatesServiceImpl implements DatesService {
 	}
 
 	
-	public DateDTO getDateVAUFromDateO (LocalDateTime dateO) {
+	public DateDTO getDateVAUFromDateO (LocalDate date) {
 		
 		DateDTO dateVAU = new DateDTO();
+		
+		LocalDateTime dateO = date.atStartOfDay();	
 	
 		// Lo primero es la fecha del último métono que haya ocurrido hasta la fecha a consultar
 		MetonsEntity lastMeton = this.metonsRepository.findTopByDateLessThanEqualAndInicialIsTrueAndNuevoIsTrueOrderByDateDesc(dateO);
