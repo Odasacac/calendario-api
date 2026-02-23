@@ -166,7 +166,7 @@ public class DatesServiceImpl implements DatesService {
 				
 				dateVAUDTOFromDB.setMeton(meton);
 				
-				MetonsEntity nextMeton = this.metonsRepository.findFirstByYearGreaterThanAndNuevoIsTrueOrderByYearAsc(meton.getYear());
+				MetonsEntity nextMeton = this.metonsRepository.findFirstByYearGreaterThanAndInicialIsTrueAndNuevoIsTrueOrderByYearAsc(meton.getYear());
 				
 				if(nextMeton != null && (nextMeton.getYear() - meton.getYear() > Integer.valueOf(dateVAU.getYear()))) {
 					
@@ -176,6 +176,7 @@ public class DatesServiceImpl implements DatesService {
 					if(vauMonth != null) {
 						
 						dateVAUDTOFromDB.setMonth(vauMonth);
+						
 						WeeksEntity vauWeek = this.weeksRepository.findByName(dateVAU.getWeek());
 						
 						if(vauWeek != null) {
@@ -492,7 +493,7 @@ public class DatesServiceImpl implements DatesService {
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-21).getName();
 			}
 			else {
-				weekVauString = "Día liminal";
+				weekVauString = this.weeksRepository.findByWeekOfMonth("5").getName();
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-21).getName();
 			}
 		}
