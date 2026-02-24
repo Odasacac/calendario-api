@@ -2,6 +2,7 @@ package CCASolutions.Calendario.DTOs;
 
 public class DateDTO {
 
+	private String eclipeno;
 	private String meton;
 	private String year;
 	private String month;
@@ -9,6 +10,15 @@ public class DateDTO {
 	private String day;
 
 	
+	
+	public String getEclipeno() {
+		return eclipeno;
+	}
+
+	public void setEclipeno(String eclipeno) {
+		this.eclipeno = eclipeno;
+	}
+
 	public String getMeton() {
 		return meton;
 	}
