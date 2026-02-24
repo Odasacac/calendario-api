@@ -1,15 +1,13 @@
 package CCASolutions.Calendario.ServiceImpl;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import CCASolutions.Calendario.DTOs.EclipseDTO;
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
 import CCASolutions.Calendario.Repositories.DatosRepository;
@@ -17,7 +15,10 @@ import CCASolutions.Calendario.Repositories.EclipsesRepository;
 import CCASolutions.Calendario.Services.EclipsesService;
 import CCASolutions.Calendario.DTOs.SEPYDTO;
 import CCASolutions.Calendario.DTOs.LEPYDTO;
+import CCASolutions.Calendario.DTOs.LunarEclipseDTO;
+import CCASolutions.Calendario.DTOs.SolarEclipseDTO;
 
+@Service
 public class EclipsesServiceImpl implements EclipsesService{
 	@Autowired
 	private DatosRepository datosRepository;
@@ -84,56 +85,84 @@ public class EclipsesServiceImpl implements EclipsesService{
 		
 		System.out.println("Actualizando los eclipses solares del anyo: " + anyo);
 		
-		List<EclipseDTO> eclipsesLunaresDelAnyo = this.getEclipsesLunaresDelAnyoViaAPI(anyo, url);
+		List<LunarEclipseDTO> eclipsesLunaresDelAnyo = this.getEclipsesLunaresDelAnyoViaAPI(anyo, url);
 		
-		for(EclipseDTO eclipse : eclipsesLunaresDelAnyo) {
+		if(!eclipsesLunaresDelAnyo.isEmpty()) {
 			
-			EclipsesEntity eclipseParaBD = new EclipsesEntity();						
-									
-			this.eclipsesRepository.save(eclipseParaBD);
+			for(LunarEclipseDTO eclipse : eclipsesLunaresDelAnyo) {
+				
+				EclipsesEntity eclipseParaBD = new EclipsesEntity();
+				eclipseParaBD.setDeLuna(true);
+				eclipseParaBD.setDate(eclipse.getDate());
+				eclipseParaBD.setYear(Integer.valueOf(anyo));
+				
+				switch(eclipse.getType()) {
+				
+					case "TotalEclipse":
+						eclipseParaBD.setEsTotal(true);
+						break;
+						
+					case "PartialEclipse":
+						eclipseParaBD.setEsParcial(true);
+						break;
+						
+					case "PenumbralEclipse":
+						eclipseParaBD.setEsPenumbral(true);
+						break;
+				}
+										
+				this.eclipsesRepository.save(eclipseParaBD);
+			}
 		}
+		
 		
 		System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
 	}
 	
-	private void actualizarEclipsesSolaresDelAnyo (String anyo, String url){
+	
+	
+	
+	
+
+	 private void actualizarEclipsesSolaresDelAnyo (String anyo, String url){
 		
 		System.out.println("Actualizando los eclipses solares del anyo: " + anyo);
 		
-		List<EclipseDTO> eclipsesSolaresDelAnyo = this.getEclipsesSolaresDelAnyoViaAPI(anyo, url);
+		List<SolarEclipseDTO> eclipsesSolaresDelAnyo = this.getEclipsesSolaresDelAnyoViaAPI(anyo, url);
 		
-		for(EclipseDTO eclipse : eclipsesSolaresDelAnyo) {
+		for(SolarEclipseDTO eclipse : eclipsesSolaresDelAnyo) {
 			
-			EclipsesEntity eclipseParaBD = new EclipsesEntity();						
-									
+			EclipsesEntity eclipseParaBD = new EclipsesEntity();
+			eclipseParaBD.setDeSol(true);
+			eclipseParaBD.setDate(eclipse.getDate());
+			eclipseParaBD.setYear(Integer.valueOf(anyo));
+			
+			switch(eclipse.getType()) {
+			
+				case "NonCentralPartialEclipse":
+					eclipseParaBD.setEsParcial(true);
+					break;
+				
+				case "CentralAnnularEclipse":
+					eclipseParaBD.setEsAnular(true);
+					break;
+					
+				case "CentralTotalEclipse":
+					eclipseParaBD.setEsTotal(true);
+					break;
+			}
+
+		
 			this.eclipsesRepository.save(eclipseParaBD);
+	
 		}
 		
 		System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
 	}
 	
-	private List<EclipseDTO> getEclipsesLunaresDelAnyoViaAPI(String anyo, String url) {
+	private List<SolarEclipseDTO> getEclipsesSolaresDelAnyoViaAPI(String anyo, String url) {
 
-		List<EclipseDTO> eclipsesLunaresDelAnyo = new ArrayList<>();
-
-		// https://opale.imcce.fr/api/v1/phenomena/eclipses/301/{{YYYY}}
-		String urlParaLlamadaAPILunar = url.replace("{{YYYY}}", anyo);		
-	
-		try {
-			
-			eclipsesLunaresDelAnyo = this.getLEPYDTO(urlParaLlamadaAPILunar);
-		} 
-		catch (Exception e) {
-	
-			System.out.println("Error al llamar a LEPY API: " + e);
-		}
-	
-		    return eclipsesLunaresDelAnyo;
-	}
-	
-	private List<EclipseDTO> getEclipsesSolaresDelAnyoViaAPI(String anyo, String url) {
-
-		List<EclipseDTO> eclipsesSolaresDelAnyo = new ArrayList<>();
+		List<SolarEclipseDTO> eclipsesSolaresDelAnyo = new ArrayList<>();
 
 		// https://opale.imcce.fr/api/v1/phenomena/eclipses/10/{{YYYY}}
 		String urlParaLlamadaAPISolar = url.replace("{{YYYY}}", anyo);
@@ -150,25 +179,69 @@ public class EclipsesServiceImpl implements EclipsesService{
 		    return eclipsesSolaresDelAnyo;
 	}
 	
+	private List<LunarEclipseDTO> getEclipsesLunaresDelAnyoViaAPI(String anyo, String url) {
+
+		List<LunarEclipseDTO> eclipsesLunaresDelAnyo = new ArrayList<>();
+
+		// https://opale.imcce.fr/api/v1/phenomena/eclipses/301/{{YYYY}}
+		String urlParaLlamadaAPILunar = url.replace("{{YYYY}}", anyo);		
 	
-	private List<EclipseDTO> getSEPYDTO(String url) {
-		
-		List<EclipseDTO> eclipsesSolares = new ArrayList<>();
-		
-		SEPYDTO responseFromOPALEAPI = restTemplate.getForObject(url, SEPYDTO.class);
-		
-
-		
-		return eclipsesSolares;
+		try {
+			
+			eclipsesLunaresDelAnyo = this.getLEPYDTO(urlParaLlamadaAPILunar);
+		} 
+		catch (Exception e) {
+	
+			System.out.println("Error al llamar a LEPY API: " + e);
+		}
+	
+		    return eclipsesLunaresDelAnyo;
 	}
-
-	private List<EclipseDTO> getLEPYDTO(String url) {
+	
+	private List<LunarEclipseDTO> getLEPYDTO(String url) {
 		
-		List<EclipseDTO> eclipsesLunares = new ArrayList<>();
+		List<LunarEclipseDTO> eclipsesLunares = new ArrayList<>();
 		
 		 LEPYDTO apiResponse = restTemplate.getForObject(url, LEPYDTO.class);
 
-		
+		 if(apiResponse != null && apiResponse.getResponse() != null && apiResponse.getResponse().getLunareclipse() != null) {
+			 
+			 for (LEPYDTO.LunarEclipse eclipse : apiResponse.getResponse().getLunareclipse()) {
+
+				 if (eclipse.getEvents() != null && eclipse.getEvents().getGreatest() != null && eclipse.getEvents().getGreatest().getDate() != null) {
+
+			        LunarEclipseDTO dto = new LunarEclipseDTO(eclipse.getEvents().getGreatest().getDate(), eclipse.getType());
+			        eclipsesLunares.add(dto);
+			    }
+			 }
+		 }	
+		 
 		return eclipsesLunares;
 	}
+	
+	
+	
+	private List<SolarEclipseDTO> getSEPYDTO(String url) {
+
+		List<SolarEclipseDTO> eclipsesSolares = new ArrayList<>();
+
+		SEPYDTO apiResponse = restTemplate.getForObject(url, SEPYDTO.class);
+
+	    if (apiResponse != null && apiResponse.getResponse() != null && apiResponse.getResponse().getData() != null) {
+	 
+	    	for (SEPYDTO.SolarEclipse eclipse : apiResponse.getResponse().getData()) {
+
+	    		if (eclipse.getEvents() != null && eclipse.getEvents().getGreatest() != null && eclipse.getEvents().getGreatest().getDate() != null) {
+	       
+	    			SolarEclipseDTO dto = new SolarEclipseDTO(eclipse.getEvents().getGreatest().getDate(), eclipse.getType());
+
+	    			eclipsesSolares.add(dto);
+	    		}
+	    	}
+	    }
+
+	    return eclipsesSolares;
+	}
+
+
 }
