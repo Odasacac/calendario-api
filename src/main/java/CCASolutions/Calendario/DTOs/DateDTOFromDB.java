@@ -1,12 +1,14 @@
 package CCASolutions.Calendario.DTOs;
 
 import CCASolutions.Calendario.Entities.DaysEntity;
+import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.WeeksEntity;
 
 public class DateDTOFromDB {
 
+	private EclipenosEntity eclipeno;
 	private MetonsEntity meton;
 	private int year;
 	private MonthsEntity month;
@@ -17,6 +19,12 @@ public class DateDTOFromDB {
 	
 	
 	
+	public EclipenosEntity getEclipeno() {
+		return eclipeno;
+	}
+	public void setEclipeno(EclipenosEntity eclipeno) {
+		this.eclipeno = eclipeno;
+	}
 	public String getComentarios() {
 		return comentarios;
 	}
