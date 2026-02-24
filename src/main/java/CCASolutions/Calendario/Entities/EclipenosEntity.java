@@ -35,6 +35,56 @@ public class EclipenosEntity implements Serializable{
 	
 	private Boolean lleno;
 
+	private boolean esTotal;
+	
+	private boolean esParcial;
+	
+	private boolean esAnular;
+	
+	private boolean esHibrido;
+		
+	private boolean esPenumbral;
+	
+	public boolean isEsTotal() {
+		return esTotal;
+	}
+
+	public void setEsTotal(boolean esTotal) {
+		this.esTotal = esTotal;
+	}
+
+	public boolean isEsParcial() {
+		return esParcial;
+	}
+
+	public void setEsParcial(boolean esParcial) {
+		this.esParcial = esParcial;
+	}
+
+	public boolean isEsAnular() {
+		return esAnular;
+	}
+
+	public void setEsAnular(boolean esAnular) {
+		this.esAnular = esAnular;
+	}
+
+	public boolean isEsHibrido() {
+		return esHibrido;
+	}
+
+	public void setEsHibrido(boolean esHibrido) {
+		this.esHibrido = esHibrido;
+	}
+
+	public boolean isEsPenumbral() {
+		return esPenumbral;
+	}
+
+	public void setEsPenumbral(boolean esPenumbral) {
+		this.esPenumbral = esPenumbral;
+	}
+
 	public Long getId() {
 		return id;
 	}

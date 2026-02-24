@@ -8,25 +8,26 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import CCASolutions.Calendario.Services.EclipenosService;
+import CCASolutions.Calendario.Services.EclipsesService;
 
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/api")
-public class EclipenosController {
-	
+public class EclipsesController {
+
 	@Autowired
-	private EclipenosService eclipenosService;
+	private EclipsesService eclipsesService;
 	
-	@GetMapping("/poblateeclipenos")
-	public ResponseEntity<String> poblateEclipenos() {
+	@GetMapping("/poblateeclipses")
+	public ResponseEntity<String> poblateEclipses() {
 		HttpStatus status = HttpStatus.OK;
-		String body = "Error al actualizar los eclipenos.";
+		String body = "Error al actualizar los eclipses.";
 
 		try {
 			
-			body = this.eclipenosService.poblateEclipenos();
-		} catch (Exception e) {
+			body = this.eclipsesService.poblateEclipses();
+		} 
+		catch (Exception e) {
 			
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			System.out.println(e);
