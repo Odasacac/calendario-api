@@ -83,7 +83,7 @@ public class MetonsServiceImpl implements MetonsService {
 								
 								long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(fechaLuna, fechaSoe));
 								
-								if(segundosDeDiferencia <= 43200) {
+								if(segundosDeDiferencia <= 86400) {
 									
 									MetonsEntity nuevoMetono = new MetonsEntity();
 									

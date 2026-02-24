@@ -43,7 +43,7 @@ public class EclipenosServiceImpl implements EclipenosService{
 					
 					long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(eclipse.getDate(), meton.getDate()));
 					
-					if(segundosDeDiferencia <= 43200) {
+					if(segundosDeDiferencia <= 86400) {
 						
 						EclipenosEntity eclipeno = new EclipenosEntity();
 						
