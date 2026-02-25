@@ -143,7 +143,7 @@ public class DatesServiceImpl implements DatesService {
 					dateVAU = new DateDTO();
 					
 					// Lo primero es obtener el añoVAU				
-					dateVAU.setYear(this.getVAUYear(dateO, soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas));
+					dateVAU.setYear(this.getVAUYear(dateO, soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, metons.get(0)));
 					
 					// Luego el mesVau
 					dateVAU.setMonth(this.getVAUMonth(dateO, soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHasElSiguiente));
@@ -197,7 +197,7 @@ public class DatesServiceImpl implements DatesService {
 						
 						MetonsEntity nextMeton = this.metonsRepository.findFirstByYearGreaterThanAndInicialIsTrueAndNuevoIsTrueOrderByYearAsc(meton.getYear());
 						
-						if(nextMeton != null && (nextMeton.getYear() - meton.getYear() > Integer.valueOf(dateVAU.getYear()))) {
+						if(nextMeton != null && (nextMeton.getYear() - meton.getYear() >= Integer.valueOf(dateVAU.getYear()))) {
 							
 							dateVAUDTOFromDB.setYear(Integer.valueOf(dateVAU.getYear()));
 							MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth()); 
@@ -271,7 +271,7 @@ public class DatesServiceImpl implements DatesService {
 	
 	
 
-	private String getVAUYear(LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas) {
+	private String getVAUYear(LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMeton) {
 		
 		String vauYear = "-";
 		
@@ -292,7 +292,7 @@ public class DatesServiceImpl implements DatesService {
 						
 					caeEnSolsticioDeInvierno=true;
 				}
-				else if (soe.getDate().toLocalDate().isBefore(dateO.toLocalDate())){
+				else if (soe.getDate().toLocalDate().isBefore(dateO.toLocalDate()) && soe.getDate().toLocalDate().isAfter(lastMeton.getDate().toLocalDate())){
 					
 					year=year+1;
 				}
@@ -305,7 +305,7 @@ public class DatesServiceImpl implements DatesService {
 			vauYear = "No pertenece a ningún año, es el día del solsticio de invierno.";
 		}
 		else {
-			vauYear = String.valueOf(year-1);
+			vauYear = String.valueOf(year);
 		}
 		
 		return vauYear;
