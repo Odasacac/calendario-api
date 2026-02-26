@@ -9,15 +9,15 @@ public class DateDTO {
 	private String week;
 	private String day;
 	private String eventoReseñable;
-	private SolilunioDTO solilunio;
+	private SoliluniosDTO solilunio;
 	
 	
 	
-	public SolilunioDTO getSolilunio() {
+	public SoliluniosDTO getSolilunios() {
 		return solilunio;
 	}
 
-	public void setSolilunio(SolilunioDTO solilunio) {
+	public void setSolilunios(SoliluniosDTO solilunio) {
 		this.solilunio = solilunio;
 	}
 
