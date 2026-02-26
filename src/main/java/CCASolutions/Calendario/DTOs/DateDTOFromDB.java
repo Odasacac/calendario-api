@@ -16,9 +16,23 @@ public class DateDTOFromDB {
 	private DaysEntity day;
 	private boolean isValid;
 	private String comentarios;
+	private boolean esMetono;
+	private boolean esEclipeno;
 	
 	
 	
+	public boolean isEsMetono() {
+		return esMetono;
+	}
+	public void setEsMetono(boolean esMetono) {
+		this.esMetono = esMetono;
+	}
+	public boolean isEsEclipeno() {
+		return esEclipeno;
+	}
+	public void setEsEclipeno(boolean esEclipeno) {
+		this.esEclipeno = esEclipeno;
+	}
 	public EclipenosEntity getEclipeno() {
 		return eclipeno;
 	}
