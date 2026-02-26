@@ -95,7 +95,7 @@ public class DatesServiceImpl implements DatesService {
 				
 				// Si es hibrido, hay que coger la luna nueva anterior al soe y contar desde ahi
 				
-				lunaCorrespondiente = lunasRepository.findTopByDateLessThanOrderByDateDesc(soe.getDate());				
+				lunaCorrespondiente = lunasRepository.findTopByDateLessThanAndNuevaIsTrueOrderByDateDesc(soe.getDate());				
 			}
 			else {		
 				
