@@ -2,20 +2,29 @@ package CCASolutions.Calendario.DTOs;
 
 public class DateDTO {
 
-	private String eclipeno;
+	private EclipenoDTO eclipeno;
 	private MetonDTO meton;
 	private YearDTO year;
 	private MonthDTO month;
 	private String week;
 	private String day;
+	private String eventoReseñable;
 
 	
 	
-	public String getEclipeno() {
+	public String getEventoReseñable() {
+		return eventoReseñable;
+	}
+
+	public void setEventoReseñable(String eventoReseñable) {
+		this.eventoReseñable = eventoReseñable;
+	}
+
+	public EclipenoDTO getEclipeno() {
 		return eclipeno;
 	}
 
-	public void setEclipeno(String eclipeno) {
+	public void setEclipeno(EclipenoDTO eclipeno) {
 		this.eclipeno = eclipeno;
 	}
 
