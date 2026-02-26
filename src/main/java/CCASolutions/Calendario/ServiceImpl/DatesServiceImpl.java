@@ -228,7 +228,7 @@ public class DatesServiceImpl implements DatesService {
 										}
 									}
 									else {
-										System.out.println("La búsqueda por días liminales no está implementada.");
+										dateVAUDTOFromDB.setComentarios("La búsqueda por días liminales no está implementada.");
 									}									
 								}
 								else {
