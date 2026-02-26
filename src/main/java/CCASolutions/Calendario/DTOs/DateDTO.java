@@ -4,7 +4,7 @@ public class DateDTO {
 
 	private String eclipeno;
 	private MetonDTO meton;
-	private String year;
+	private YearDTO year;
 	private MonthDTO month;
 	private String week;
 	private String day;
@@ -27,11 +27,11 @@ public class DateDTO {
 		this.meton = meton;
 	}
 
-	public String getYear() {
+	public YearDTO getYear() {
 		return year;
 	}
 
-	public void setYear(String year) {
+	public void setYear(YearDTO year) {
 		this.year = year;
 	}
 
