@@ -3,9 +3,9 @@ package CCASolutions.Calendario.DTOs;
 public class DateDTO {
 
 	private String eclipeno;
-	private String meton;
+	private MetonDTO meton;
 	private String year;
-	private String month;
+	private MonthDTO month;
 	private String week;
 	private String day;
 
@@ -19,11 +19,11 @@ public class DateDTO {
 		this.eclipeno = eclipeno;
 	}
 
-	public String getMeton() {
+	public MetonDTO getMeton() {
 		return meton;
 	}
 
-	public void setMeton(String meton) {
+	public void setMeton(MetonDTO meton) {
 		this.meton = meton;
 	}
 
@@ -35,11 +35,11 @@ public class DateDTO {
 		this.year = year;
 	}
 
-	public String getMonth() {
+	public MonthDTO getMonth() {
 		return month;
 	}
 
-	public void setMonth(String month) {
+	public void setMonth(MonthDTO month) {
 		this.month = month;
 	}
 
