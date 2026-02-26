@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.DateDTOFromDB;
+import CCASolutions.Calendario.DTOs.MetonDTO;
+import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
 import CCASolutions.Calendario.Entities.DaysEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
@@ -154,7 +156,7 @@ public class DatesServiceImpl implements DatesService {
 					dateVAU.setDay(vauWeekAndDay.getDay());
 					
 					// Indicamos el metono
-					dateVAU.setMeton(String.valueOf(metons.size()-1) + " ("+ metons.get(0).getYear() + ")");
+					dateVAU.setMeton(getVAUMeton(metons));
 					
 					// E indicamos el eclipeno
 					dateVAU.setEclipeno(String.valueOf(lastEclipeno.getYear()));
@@ -184,14 +186,13 @@ public class DatesServiceImpl implements DatesService {
 			
 			if(eclipeno != null) {
 				
-				if(Integer.valueOf(dateVAU.getMeton()) >= 0) {
+				if(dateVAU.getMeton().getNumberOfMeton() >= 0) {
 					
 					List<MetonsEntity> metons = this.metonsRepository.findByYearGreaterThanEqualAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getYear());			
 													
-					if(metons != null) {
-						
+					if(metons != null) {						
 	
-						MetonsEntity meton = metons.get(Integer.valueOf(dateVAU.getMeton()));
+						MetonsEntity meton = metons.get(Integer.valueOf(dateVAU.getMeton().getNumberOfMeton()));
 						
 						dateVAUDTOFromDB.setMeton(meton);
 						
@@ -200,7 +201,7 @@ public class DatesServiceImpl implements DatesService {
 						if(nextMeton != null && (nextMeton.getYear() - meton.getYear() >= Integer.valueOf(dateVAU.getYear()))) {
 							
 							dateVAUDTOFromDB.setYear(Integer.valueOf(dateVAU.getYear()));
-							MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth()); 
+							MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth().getName()); 
 							
 							if(vauMonth != null) {
 								
@@ -270,6 +271,13 @@ public class DatesServiceImpl implements DatesService {
 	// ========================= METODOS PRIVADOS
 	
 	
+	private MetonDTO getVAUMeton (List<MetonsEntity> metons) {
+		
+		MetonDTO meton = new MetonDTO();
+		meton.setNumberOfMeton(metons.size()-1);
+		meton.setYearOfTheMeton(metons.get(0).getYear());		
+		return meton;
+	}
 
 	private String getVAUYear(LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMeton) {
 		
@@ -314,9 +322,9 @@ public class DatesServiceImpl implements DatesService {
 	
 	
 	
-	private String getVAUMonth(LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente) {
+	private MonthDTO getVAUMonth (LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente) {
 		
-		String vauMonthName = "-";
+		MonthDTO month = new MonthDTO();
 		
 		// Lo primero es coger los solsticios y equinoccios mas cercanos a la fecha a consultar
 		SolsticiosYEquinocciosEntity lastSOE = null;
@@ -451,13 +459,12 @@ public class DatesServiceImpl implements DatesService {
 				
 			if (caeEnLunaNueva) {
 				
-				vauMonthName = "No pertenece a ningún mes, es el día de la luna nueva de " +vauMonth.getName() + ".";
+				month.setLunaNueva(true);
+				month.setName("No pertenece a ningún mes, es el día de la luna nueva de " +vauMonth.getName() + ".");
 			}
 			else {
-				vauMonthName = vauMonth.getName();
-			}
-			
-			
+				month.setName(vauMonth.getName());
+			}		
 		}
 		else {
 			
@@ -465,7 +472,7 @@ public class DatesServiceImpl implements DatesService {
 		}
 		
 
-		return vauMonthName;
+		return month;
 	}
 	
 	
