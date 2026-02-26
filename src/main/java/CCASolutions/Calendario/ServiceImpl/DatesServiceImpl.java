@@ -15,7 +15,7 @@ import CCASolutions.Calendario.DTOs.DateDTOFromDB;
 import CCASolutions.Calendario.DTOs.EclipenoDTO;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
-import CCASolutions.Calendario.DTOs.SolilunioDTO;
+import CCASolutions.Calendario.DTOs.SoliluniosDTO;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
 import CCASolutions.Calendario.DTOs.YearDTO;
 import CCASolutions.Calendario.Entities.DaysEntity;
@@ -273,7 +273,7 @@ public class DatesServiceImpl implements DatesService {
 					dateVAU.setEclipeno(this.getVAUEclipeno(lastEclipenoIN, date));
 					
 					// Indicamos el solilunio
-					dateVAU.setSolilunio(this.getVAUSolilunio(lastEclipenoIN, date));
+					dateVAU.setSolilunios(this.getVAUSolilunio(lastEclipenoIN, date, metonsIN.get(0)));
 					
 					// Y finalmente, indicamos si hay algun tipo de evento reseñable
 					dateVAU.setEventoReseñable(this.getEventoResenyable(date));
@@ -297,14 +297,26 @@ public class DatesServiceImpl implements DatesService {
 	
 	// ========================= METODOS PRIVADOS
 	
-	private SolilunioDTO getVAUSolilunio(EclipenosEntity lastEclipenoIN, LocalDate date) {
+	private SoliluniosDTO getVAUSolilunio(EclipenosEntity lastEclipenoIN, LocalDate date, MetonsEntity lastMetonIN) {
 		
-		SolilunioDTO solilunio = new SolilunioDTO ();
+		SoliluniosDTO solilunio = new SoliluniosDTO ();
 		LocalDateTime startOfDay = date.atStartOfDay();
 		
 		List<EclipsesEntity> eclipsesDeSolNoParcialesDesdeLastEclipenoIN = this.eclipsesRepository.findByDateBetweenAndDeSolIsTrueAndEsParcialIsFalse(lastEclipenoIN.getDate(), startOfDay);
 		
-		solilunio.setNumber(eclipsesDeSolNoParcialesDesdeLastEclipenoIN.size()-1);
+		solilunio.setTotales(eclipsesDeSolNoParcialesDesdeLastEclipenoIN.size()-1);
+		
+		int desdeElUltimoMetono =-1; // -1 porque trae el eclipse del eclipeno		
+		for (EclipsesEntity eclipse : eclipsesDeSolNoParcialesDesdeLastEclipenoIN){
+			
+			if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate())) {
+				
+				desdeElUltimoMetono = desdeElUltimoMetono+1;
+			}
+			
+		}
+		
+		solilunio.setDesdeElUltimoMetonoIN(desdeElUltimoMetono);
 		
 		return solilunio;
 	}
