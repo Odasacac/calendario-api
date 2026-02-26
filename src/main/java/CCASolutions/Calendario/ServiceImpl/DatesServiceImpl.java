@@ -154,7 +154,7 @@ public class DatesServiceImpl implements DatesService {
 					dateVAU.setDay(vauWeekAndDay.getDay());
 					
 					// Indicamos el metono
-					dateVAU.setMeton(String.valueOf(metons.size()-1));
+					dateVAU.setMeton(String.valueOf(metons.size()-1) + " ("+ metons.get(0).getYear() + ")");
 					
 					// E indicamos el eclipeno
 					dateVAU.setEclipeno(String.valueOf(lastEclipeno.getYear()));
@@ -302,7 +302,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		if(caeEnSolsticioDeInvierno) {
 			
-			vauYear = "No pertenece a ningún año, es el día del solsticio de invierno.";
+			vauYear = "No pertenece a ningún año, es el día del solsticio de invierno del año " + Integer.valueOf(year)+1 + ".";
 		}
 		else {
 			vauYear = String.valueOf(year);
@@ -364,15 +364,16 @@ public class DatesServiceImpl implements DatesService {
 			
 			List<LunasEntity> lunasNuevasEntreLastSOEYNextSOE = new ArrayList<>();
 			
-			boolean caeEnLunaNueva = false;				
-			for(int i = 0; i<lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.size() && !caeEnLunaNueva; i++) {
+			boolean caeEnLunaNueva = false;
+			for(int i = 0; i<lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.size(); i++) {
 				
 				LunasEntity luna = lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.get(i);
 				
 	
 				if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
 						
-					caeEnLunaNueva = true;
+					caeEnLunaNueva = true;	
+					
 				}
 				else if(luna.getDate().toLocalDate().isAfter(lastSOE.getDate().toLocalDate()) || luna.getDate().toLocalDate().isEqual(lastSOE.getDate().toLocalDate())) {
 						
@@ -383,79 +384,80 @@ public class DatesServiceImpl implements DatesService {
 				}
 			}
 			
-			// Si cae en luna nueva, no pertenece a ningun mes.
-			if(caeEnLunaNueva) {
-				
-				vauMonthName = "No pertenece a ningún mes, es el día de luna nueva.";
+			MonthsEntity vauMonth = new MonthsEntity();
+			
+			
+			// Si cae en soe, pertenece al mes hibrido de ese soe.
+			if(caeEnSOE) {
+
+				vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), 0, false);
+
 			}
 			else {
-				
-				MonthsEntity vauMonth = new MonthsEntity();
-				
-				// Si cae en soe, pertenece al mes hibrido de ese soe.
-				if(caeEnSOE) {
-
-					vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), 0, false);
 					
-				}
-				else {
+				// Si no, hay que calcular cuantas lunas nuevas han pasado desde el lastSOE hasta la fecha a consultar
 					
-					// Si no, hay que calcular cuantas lunas nuevas han pasado desde el lastSOE hasta la fecha a consultar
+				int lunasNuevasPasadasDesdeLastSOEHastaDateO = 0;
+				long diasMinimosDeDiferenciaLunaNuevaConNextSOE = Long.MAX_VALUE;
+				LunasEntity lastLNBeforeNextSOE = null;
 					
-					int lunasNuevasPasadasDesdeLastSOEHastaDateO = 0;
-					long diasMinimosDeDiferenciaLunaNuevaConNextSOE = Long.MAX_VALUE;
-					LunasEntity lastLNBeforeNextSOE = null;
-					
-					for(LunasEntity luna : lunasNuevasEntreLastSOEYNextSOE) {
+				for(LunasEntity luna : lunasNuevasEntreLastSOEYNextSOE) {
 						
-						long diasDeDiferenciaEntreNextSOEYLN = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), nextSOE.getDate().toLocalDate());
+					long diasDeDiferenciaEntreNextSOEYLN = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), nextSOE.getDate().toLocalDate());
 						
-						if(diasDeDiferenciaEntreNextSOEYLN < diasMinimosDeDiferenciaLunaNuevaConNextSOE) {
+					if(diasDeDiferenciaEntreNextSOEYLN < diasMinimosDeDiferenciaLunaNuevaConNextSOE) {
 							
-							lastLNBeforeNextSOE=luna;
-							diasMinimosDeDiferenciaLunaNuevaConNextSOE = diasDeDiferenciaEntreNextSOEYLN;
+						lastLNBeforeNextSOE=luna;
+						diasMinimosDeDiferenciaLunaNuevaConNextSOE = diasDeDiferenciaEntreNextSOEYLN;
 							
-						}
-						
-						if(dateO.toLocalDate().isAfter(luna.getDate().toLocalDate())) {
-							
-							lunasNuevasPasadasDesdeLastSOEHastaDateO = lunasNuevasPasadasDesdeLastSOEHastaDateO+1;						
-						}
 					}
-					
-					// Si la fecha a consultar esta entre la ultima luna y el nextSOE, pertenece al mes hibrido de ese soe.
-					
-					if(lastLNBeforeNextSOE != null) {
 						
-						if(dateO.toLocalDate().isAfter(lastLNBeforeNextSOE.getDate().toLocalDate()) && dateO.toLocalDate().isBefore(nextSOE.getDate().toLocalDate())) {
+					if(dateO.toLocalDate().isAfter(luna.getDate().toLocalDate())) {
+							
+						lunasNuevasPasadasDesdeLastSOEHastaDateO = lunasNuevasPasadasDesdeLastSOEHastaDateO+1;						
+					}
+				}
+					
+				// Si la fecha a consultar esta entre la ultima luna y el nextSOE, pertenece al mes hibrido de ese soe.
+					
+				if(lastLNBeforeNextSOE != null) {
+						
+					if(dateO.toLocalDate().isAfter(lastLNBeforeNextSOE.getDate().toLocalDate()) && dateO.toLocalDate().isBefore(nextSOE.getDate().toLocalDate())) {
 		
-							vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(nextSOE.getStartingSeason(), 0, false);
+						vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(nextSOE.getStartingSeason(), 0, false);
 
-						}
-						else {
-							
-							//Si el lastSOE es solsticio de invierno y no ha pasado ninguna luna nueva, es Oterno Liminal
-							
-							if(lunasNuevasPasadasDesdeLastSOEHastaDateO == 0 && lastSOE.isSolsticioInvierno()) {
-								
-								vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), lunasNuevasPasadasDesdeLastSOEHastaDateO, true);								
-							}
-							else {
-								
-								vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), lunasNuevasPasadasDesdeLastSOEHastaDateO, false);
-							}
-							
-							
-						}	
 					}
 					else {
-						System.out.println("Error, no hay lastLNBeforeNextSOE.");
-					}
-									
+							
+						//Si el lastSOE es solsticio de invierno y no ha pasado ninguna luna nueva, es Oterno Liminal
+							
+						if(lunasNuevasPasadasDesdeLastSOEHastaDateO == 0 && lastSOE.isSolsticioInvierno()) {
+								
+							vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), lunasNuevasPasadasDesdeLastSOEHastaDateO, true);								
+						}
+						else {
+								
+							vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), lunasNuevasPasadasDesdeLastSOEHastaDateO, false);
+						}
+							
+							
+					}	
 				}
+				else {
+					System.out.println("Error, no hay lastLNBeforeNextSOE.");
+				}
+									
+			}
 				
+			if (caeEnLunaNueva) {
+				
+				vauMonthName = "No pertenece a ningún mes, es el día de la luna nueva de " +vauMonth.getName() + ".";
+			}
+			else {
 				vauMonthName = vauMonth.getName();
 			}
+			
+			
 		}
 		else {
 			
@@ -500,21 +502,11 @@ public class DatesServiceImpl implements DatesService {
 			}
 		}
 			
-		if(caeEnLunaNueva) {
-			
-			weekVauString = "Es el día de luna nueva, no pertenece a ninguna semana.";
-			dayVauString = "Es el día de luna nueva, no pertenece a ningún día.";
-		}
-		else if (lastLN != null) {
+		if(!caeEnLunaNueva && lastLN != null) {
 			
 			// Con la luna llena más reciente y con los días que los separan, ya lo tenemos
 			
-			if (diasDesdeLaLunaNueva == 0) {
-				
-				weekVauString = "Es el día de luna nueva, no pertenece a ninguna semana.";
-				dayVauString = "Es el día de luna nueva, no pertenece a ningún día.";
-			}
-			else if (diasDesdeLaLunaNueva <= 7) {
+			if (diasDesdeLaLunaNueva <= 7) {
 				
 				weekVauString = this.weeksRepository.findByWeekOfMonth("1").getName();
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva).getName();
