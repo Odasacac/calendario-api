@@ -310,7 +310,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		if(caeEnSolsticioDeInvierno) {
 			
-			vauYear = "No pertenece a ningún año, es el día del solsticio de invierno del año " + Integer.valueOf(year)+1 + ".";
+			vauYear = "No pertenece a ningún año, es el día del solsticio de invierno del año " + (year+1) + ".";
 		}
 		else {
 			vauYear = String.valueOf(year);
