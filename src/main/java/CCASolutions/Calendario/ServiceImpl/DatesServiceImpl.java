@@ -14,6 +14,7 @@ import CCASolutions.Calendario.DTOs.DateDTOFromDB;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
+import CCASolutions.Calendario.DTOs.YearDTO;
 import CCASolutions.Calendario.Entities.DaysEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
@@ -198,9 +199,9 @@ public class DatesServiceImpl implements DatesService {
 						
 						MetonsEntity nextMeton = this.metonsRepository.findFirstByYearGreaterThanAndInicialIsTrueAndNuevoIsTrueOrderByYearAsc(meton.getYear());
 						
-						if(nextMeton != null && (nextMeton.getYear() - meton.getYear() >= Integer.valueOf(dateVAU.getYear()))) {
+						if(nextMeton != null && (nextMeton.getYear() - meton.getYear() >= dateVAU.getYear().getYear())) {
 							
-							dateVAUDTOFromDB.setYear(Integer.valueOf(dateVAU.getYear()));
+							dateVAUDTOFromDB.setYear(dateVAU.getYear().getYear());
 							MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth().getName()); 
 							
 							if(vauMonth != null) {
@@ -279,9 +280,9 @@ public class DatesServiceImpl implements DatesService {
 		return meton;
 	}
 
-	private String getVAUYear(LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMeton) {
+	private YearDTO getVAUYear(LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMeton) {
 		
-		String vauYear = "-";
+		YearDTO vauYear = new YearDTO();
 		
 		boolean caeEnSolsticioDeInvierno=false;
 		
@@ -308,14 +309,11 @@ public class DatesServiceImpl implements DatesService {
 			
 		}
 		
-		if(caeEnSolsticioDeInvierno) {
-			
-			vauYear = "No pertenece a ningún año, es el día del solsticio de invierno del año " + (year+1) + ".";
-		}
-		else {
-			vauYear = String.valueOf(year);
-		}
 		
+		vauYear.setEsSolsticioDeInvierno(caeEnSolsticioDeInvierno);
+	
+		vauYear.setYear(year);
+	
 		return vauYear;
 		
 	}
@@ -455,16 +453,11 @@ public class DatesServiceImpl implements DatesService {
 					System.out.println("Error, no hay lastLNBeforeNextSOE.");
 				}
 									
-			}
+			}			
+
+			month.setLunaNueva(caeEnLunaNueva);	
+			month.setName(vauMonth.getName());
 				
-			if (caeEnLunaNueva) {
-				
-				month.setLunaNueva(true);
-				month.setName("No pertenece a ningún mes, es el día de la luna nueva de " +vauMonth.getName() + ".");
-			}
-			else {
-				month.setName(vauMonth.getName());
-			}		
 		}
 		else {
 			
@@ -480,8 +473,8 @@ public class DatesServiceImpl implements DatesService {
 	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente) {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
-		String weekVauString = "-";
-		String dayVauString = "-";
+		String weekVauString = "0";
+		String dayVauString = "0";
 		
 		// Lo primero es seleccionar la luna nueva mas reciente, si cae en luna llena, no hay dias ni semanas
 		
@@ -496,6 +489,7 @@ public class DatesServiceImpl implements DatesService {
 			if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
 					
 				caeEnLunaNueva = true;
+				diasDesdeLaLunaNueva=0;
 			}
 			else if (luna.getDate().toLocalDate().isBefore(dateO.toLocalDate())) {
 					
@@ -509,13 +503,20 @@ public class DatesServiceImpl implements DatesService {
 			}
 		}
 			
-		if(!caeEnLunaNueva && lastLN != null) {
+		if(lastLN != null) {
 			
 			// Con la luna llena más reciente y con los días que los separan, ya lo tenemos
 			
 			if (diasDesdeLaLunaNueva <= 7) {
 				
-				weekVauString = this.weeksRepository.findByWeekOfMonth("1").getName();
+				if(caeEnLunaNueva) {
+								
+					weekVauString = this.weeksRepository.findByWeekOfMonth("0").getName();
+				}
+				else {
+					
+					weekVauString = this.weeksRepository.findByWeekOfMonth("1").getName();
+				}
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva).getName();
 				
 			} else if (diasDesdeLaLunaNueva <= 14) {
