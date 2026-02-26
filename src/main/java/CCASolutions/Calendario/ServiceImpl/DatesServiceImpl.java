@@ -212,18 +212,24 @@ public class DatesServiceImpl implements DatesService {
 								
 								if(vauWeek != null) {
 									
-									dateVAUDTOFromDB.setWeek(vauWeek);
-									DaysEntity vauDay = this.daysRepository.findByName(dateVAU.getDay());
-									
-									if(vauDay != null) {
+									if(vauWeek.getWeekOfMonth() != 5) {
 										
-										dateVAUDTOFromDB.setDay(vauDay);							
-										dateVAUDTOFromDB.setValid(true);									
+										dateVAUDTOFromDB.setWeek(vauWeek);
+										DaysEntity vauDay = this.daysRepository.findByName(dateVAU.getDay());
+										
+										if(vauDay != null) {
+											
+											dateVAUDTOFromDB.setDay(vauDay);							
+											dateVAUDTOFromDB.setValid(true);									
+										}
+										else {
+											
+											dateVAUDTOFromDB.setComentarios("No se ha encontrado el día " + dateVAU.getDay() + " en la base de datos.");
+										}
 									}
 									else {
-										
-										dateVAUDTOFromDB.setComentarios("No se ha encontrado el día " + dateVAU.getDay() + " en la base de datos.");
-									}
+										System.out.println("La búsqueda por días liminales no está implementada.");
+									}									
 								}
 								else {
 									
@@ -232,22 +238,22 @@ public class DatesServiceImpl implements DatesService {
 							}
 							else {
 								
-								dateVAUDTOFromDB.setComentarios("No se ha encontrado el mes " + dateVAU.getMonth() + " en la base de datos.");
+								dateVAUDTOFromDB.setComentarios("No se ha encontrado el mes " + dateVAU.getMonth().getName() + " en la base de datos.");
 							}	
 						}						
 						else {
 							
-							dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getYear() + " está fuera del rango para este métono.");
+							dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getYear().getYear() + " está fuera del rango para este métono.");
 						}						
 					}
 					else {
 						
-						dateVAUDTOFromDB.setComentarios("No se tienen registros de métonos a parti del año " + Integer.valueOf(dateVAU.getEclipeno() + "."));
+						dateVAUDTOFromDB.setComentarios("No se tienen registros de métonos a partir del año " + Integer.valueOf(dateVAU.getEclipeno() + "."));
 					}
 				}
 				else {
 					
-					dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getMeton() + " para un metono no es válido.");
+					dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getMeton().getYearOfTheMeton() + " para un metono no es válido.");
 				}
 			}
 			else {
