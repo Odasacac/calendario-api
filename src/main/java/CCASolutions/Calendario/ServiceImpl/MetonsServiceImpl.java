@@ -33,134 +33,125 @@ public class MetonsServiceImpl implements MetonsService {
 	@Autowired
 	private LunasService lunasService;
 	
-	public String checkMetonosSinceToViaAPI(int since, int to) {
+	public String checkMetonosSinceToViaAPI() {
 		
 		String resultado = "Metonos checkeados sin problema.";
-		
-		if(since > to) {
-			
-			resultado = "Since (" + since + ") es mayor que to (" + to + ").";
-		}
-		else {
-			
-			System.out.println("Iniciando evaluacion de metonos desde el anyo " + since + " hasta el anyo " + to + ".");
-			List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList("ASYEF", "YLP"));	
-			
-			String apiGetLunasUrl = "";
-			String apiGetSYEUrl = "";
-			
-			for (DatosEntity url : urls) 
-			{
-				switch (url.getConcepto()) {
-				
-					case "ASYEF":					
-						apiGetSYEUrl = url.getValor();
-						break;
 					
-					case "YLP":					
-						apiGetLunasUrl = url.getValor();
-						break;					
-				}
+		System.out.println("Iniciando evaluacion de metonos.");
+		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList("ASYEF", "YLP"));	
+			
+		String apiGetLunasUrl = "";
+		String apiGetSYEUrl = "";
+			
+		for (DatosEntity url : urls) 
+		{
+			switch (url.getConcepto()) {
+				
+				case "ASYEF":					
+					apiGetSYEUrl = url.getValor();
+					break;
+					
+				case "YLP":					
+					apiGetLunasUrl = url.getValor();
+					break;					
 			}
+		}
 			
-			try {
+		try {
 				
-				for(int anyoCheckeado = since; anyoCheckeado<=to; anyoCheckeado++) {
+			for(int anyoCheckeado = 0; anyoCheckeado<=2100; anyoCheckeado++) {
 					
-					System.out.println("Evaluando metonos en el anyo " + anyoCheckeado);
-					List<FenomenoDTO> solsticiosYEquinocciosDelAnyo = this.solsticiosYEquinocciosService.getSolsticiosYEquinocciosDelAnyoViaAPI(String.valueOf(anyoCheckeado), apiGetSYEUrl);
-					List<LunarPhaseDTO> fasesLunaresDelAnyo = this.lunasService.getFasesLunaresDelAnyoViaAPI(String.valueOf(anyoCheckeado), apiGetLunasUrl);
+				System.out.println("Evaluando metonos en el anyo " + anyoCheckeado);
+				List<FenomenoDTO> solsticiosYEquinocciosDelAnyo = this.solsticiosYEquinocciosService.getSolsticiosYEquinocciosDelAnyoViaAPI(String.valueOf(anyoCheckeado), apiGetSYEUrl);
+				List<LunarPhaseDTO> fasesLunaresDelAnyo = this.lunasService.getFasesLunaresDelAnyoViaAPI(String.valueOf(anyoCheckeado), apiGetLunasUrl);
 					
-					for(LunarPhaseDTO luna : fasesLunaresDelAnyo) {
+				for(LunarPhaseDTO luna : fasesLunaresDelAnyo) {
 						
-						if (luna.getMoonPhase().equals("NewMoon") || luna.getMoonPhase().equals("FullMoon")){
+					if (luna.getMoonPhase().equals("NewMoon") || luna.getMoonPhase().equals("FullMoon")){
 							
-							LocalDateTime fechaLuna = luna.getDate();
+						LocalDateTime fechaLuna = luna.getDate();
 							
-							for(FenomenoDTO soe : solsticiosYEquinocciosDelAnyo) {
+						for(FenomenoDTO soe : solsticiosYEquinocciosDelAnyo) {
 								
-								LocalDateTime fechaSoe = soe.getDate();
+							LocalDateTime fechaSoe = soe.getDate();
 								
-								long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(fechaLuna, fechaSoe));
+							long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(fechaLuna, fechaSoe));
 								
-								if(segundosDeDiferencia <= 86164) {
+							if(segundosDeDiferencia <= 86164) {
 									
-									MetonsEntity nuevoMetono = new MetonsEntity();
+								MetonsEntity nuevoMetono = new MetonsEntity();
 									
-									nuevoMetono.setDate(fechaSoe);
-									nuevoMetono.setYear(fechaSoe.getYear());
+								nuevoMetono.setDate(fechaSoe);
+								nuevoMetono.setYear(fechaSoe.getYear());
 									
-									if(luna.getMoonPhase().equals("NewMoon")) {
-										nuevoMetono.setNuevo(true);
-									}
-									else {
-										nuevoMetono.setLleno(true);
-									}
+								if(luna.getMoonPhase().equals("NewMoon")) {
+									nuevoMetono.setNuevo(true);
+								}
+								else {
+									nuevoMetono.setLleno(true);
+								}
 									
-									switch (soe.getPhenomena()) {
+								switch (soe.getPhenomena()) {
 									
-										case "WinterSolstice":
-											nuevoMetono.setInicial(true);
-											nuevoMetono.setSolsticial(true);
-											break;
+									case "WinterSolstice":
+										nuevoMetono.setInicial(true);
+										nuevoMetono.setSolsticial(true);
+										break;
 											
-										case "VernalEquinox":
-											nuevoMetono.setCuartal(true);
-											nuevoMetono.setEquinoccial(true);
-											break;
+									case "VernalEquinox":
+										nuevoMetono.setCuartal(true);
+										nuevoMetono.setEquinoccial(true);
+										break;
 											
-										case "SummerSolstice":
-											nuevoMetono.setBicuartal(true);
-											nuevoMetono.setSolsticial(true);
-											break;
+									case "SummerSolstice":
+										nuevoMetono.setBicuartal(true);
+										nuevoMetono.setSolsticial(true);
+										break;
 											
-										case "AutumnalEquinox":
-											nuevoMetono.setTricuartal(true);
-											nuevoMetono.setEquinoccial(true);
-											break;
+									case "AutumnalEquinox":
+										nuevoMetono.setTricuartal(true);
+										nuevoMetono.setEquinoccial(true);
+										break;
 									
-									}
+								}
 									
-									List<MetonsEntity> metonosDelAnyo = this.metonsRepository.findByYear(fechaSoe.getYear());
+								List<MetonsEntity> metonosDelAnyo = this.metonsRepository.findByYear(fechaSoe.getYear());
 									
-									if(metonosDelAnyo.isEmpty()) {
+								if(metonosDelAnyo.isEmpty()) {
 										
-										this.metonsRepository.save(nuevoMetono);
-										System.out.println("Nuevo metono encontrado.");
-									}
-									else {
+									this.metonsRepository.save(nuevoMetono);
+									System.out.println("Nuevo metono encontrado.");
+								}
+								else {
 										
-										boolean metonoYaExiste = false;
-										for(int i = 0; i<metonosDelAnyo.size(); i++) {
-											
-											if(metonosDelAnyo.get(i).getDate().isEqual(nuevoMetono.getDate())){
-												
-												metonoYaExiste=true;																			
-											}									
-										}
+									boolean metonoYaExiste = false;
+									for(int i = 0; i<metonosDelAnyo.size(); i++) {
 										
-										if(!metonoYaExiste) {
+										if(metonosDelAnyo.get(i).getDate().isEqual(nuevoMetono.getDate())){
 											
-											this.metonsRepository.save(nuevoMetono);
-											System.out.println("Nuevo metono encontrado.");	
+											metonoYaExiste=true;																			
 										}									
 									}
+										
+									if(!metonoYaExiste) {
 											
-								}
-								
-							}
-							
+										this.metonsRepository.save(nuevoMetono);
+										System.out.println("Nuevo metono encontrado.");	
+									}									
+								}		
+							}					
 						}
+							
 					}
-					
-					System.out.println("Fin de la evaluacion de metonos del anyo " + anyoCheckeado);
 				}
+					
+				System.out.println("Fin de la evaluacion de metonos del anyo " + anyoCheckeado);
 			}
-			catch(Exception e) {
+		}
+		catch(Exception e) {
 				
-				System.out.println("Error al evaluar los metonos: " + e);
-				resultado = "Error al evaluar los metonos, revisar logs";
-			}
+			System.out.println("Error al evaluar los metonos: " + e);
+			resultado = "Error al evaluar los metonos, revisar logs";
 		}		
 		
 		return resultado;
