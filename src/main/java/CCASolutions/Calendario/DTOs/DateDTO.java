@@ -2,23 +2,23 @@ package CCASolutions.Calendario.DTOs;
 
 public class DateDTO {
 
-	private EclipenoDTO eclipeno;
-	private MetonDTO meton;
+	private EclipenoDTO eclipenoIN;
+	private MetonDTO metonoIN;
 	private YearDTO year;
 	private MonthDTO month;
 	private String week;
 	private String day;
 	private String eventoReseñable;
-	private SoliluniosDTO solilunio;
+	private SoliluniosDTO solilunios;
 	
 	
 	
 	public SoliluniosDTO getSolilunios() {
-		return solilunio;
+		return solilunios;
 	}
 
 	public void setSolilunios(SoliluniosDTO solilunio) {
-		this.solilunio = solilunio;
+		this.solilunios = solilunio;
 	}
 
 	public String getEventoReseñable() {
@@ -27,22 +27,22 @@ public class DateDTO {
 
 	public void setEventoReseñable(String eventoReseñable) {
 		this.eventoReseñable = eventoReseñable;
+	}	
+	
+	public EclipenoDTO getEclipenoIN() {
+		return eclipenoIN;
 	}
 
-	public EclipenoDTO getEclipeno() {
-		return eclipeno;
+	public void setEclipenoIN(EclipenoDTO eclipenoIN) {
+		this.eclipenoIN = eclipenoIN;
 	}
 
-	public void setEclipeno(EclipenoDTO eclipeno) {
-		this.eclipeno = eclipeno;
+	public MetonDTO getMetonoIN() {
+		return metonoIN;
 	}
 
-	public MetonDTO getMeton() {
-		return meton;
-	}
-
-	public void setMeton(MetonDTO meton) {
-		this.meton = meton;
+	public void setMetonoIN(MetonDTO metonoIN) {
+		this.metonoIN = metonoIN;
 	}
 
 	public YearDTO getYear() {
