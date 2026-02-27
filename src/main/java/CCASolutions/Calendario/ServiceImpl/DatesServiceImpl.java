@@ -247,7 +247,7 @@ public class DatesServiceImpl implements DatesService {
 				List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHastaElAnyoSiguiente = this.lunasRepository.findByDateBetweenAndNuevaTrue(dateO.minusYears(1), dateO.plusYears(1));
 				
 				// Y todos los eclipses totales desde el lastEclipenoIN
-				List<EclipsesEntity> eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN = this.eclipsesRepository.findByDateBetweenAndEsParcialIsFalseAndEsPenumbralIsFalse(lastEclipenoIN.getDate(), dateO);
+				List<EclipsesEntity> eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN = this.eclipsesRepository.findByDateBetweenAndEsParcialIsFalseAndEsPenumbralIsFalse(lastEclipenoIN.getDate().toLocalDate().atStartOfDay(), dateO);
 			
 				
 				if(soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.isEmpty() || lunasNuevasDesdeElAnyoAnteriorHastaElAnyoSiguiente.isEmpty()) {
@@ -317,7 +317,7 @@ public class DatesServiceImpl implements DatesService {
 				
 				eclipsesSolaresNoParcialesDesdeLastEclipenoIN.add(eclipse);
 				
-				if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate())) {
+				if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
 					
 					solaresDesdeElUltimoMetono = solaresDesdeElUltimoMetono+1;					
 				}
@@ -327,7 +327,7 @@ public class DatesServiceImpl implements DatesService {
 				
 				eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoIN.add(eclipse);
 				
-				if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate())) {
+				if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
 					
 					lunaresDesdeElUltimoMetono = lunaresDesdeElUltimoMetono+1;				
 				}			
@@ -340,6 +340,7 @@ public class DatesServiceImpl implements DatesService {
 		solilunio.setTotalesLunares(eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoIN.size());
 		solilunio.setLunaresDesdeElUltimoMetonoIN(lunaresDesdeElUltimoMetono);
 		
+		solilunio.setTotales(eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN.size()-1);
 		return solilunio;
 	}
 
