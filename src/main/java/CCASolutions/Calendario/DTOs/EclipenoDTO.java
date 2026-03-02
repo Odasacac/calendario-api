@@ -3,7 +3,7 @@ package CCASolutions.Calendario.DTOs;
 public class EclipenoDTO {
 
 	private boolean esEclipeno;
-	private int year;
+	private int yearOfTheActualEclipenoIN;
 	
 	public boolean isEsEclipeno() {
 		return esEclipeno;
@@ -11,11 +11,11 @@ public class EclipenoDTO {
 	public void setEsEclipeno(boolean esEclipeno) {
 		this.esEclipeno = esEclipeno;
 	}
-	public int getYear() {
-		return year;
+	public int getYearOfTheActualEclipenoIN() {
+		return yearOfTheActualEclipenoIN;
 	}
-	public void setYear(int year) {
-		this.year = year;
+	public void setYearOfTheActualEclipenoIN(int year) {
+		this.yearOfTheActualEclipenoIN = year;
 	}
 	
 	

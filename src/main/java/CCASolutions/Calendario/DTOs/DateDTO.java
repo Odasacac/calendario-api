@@ -8,7 +8,7 @@ public class DateDTO {
 	private MonthDTO month;
 	private String week;
 	private String day;
-	private String eventoReseñable;
+	private String eventoResenyable;
 	private SoliluniosDTO solilunios;
 	
 	
@@ -21,12 +21,12 @@ public class DateDTO {
 		this.solilunios = solilunio;
 	}
 
-	public String getEventoReseñable() {
-		return eventoReseñable;
+	public String getEventoResenyable() {
+		return eventoResenyable;
 	}
 
-	public void setEventoReseñable(String eventoReseñable) {
-		this.eventoReseñable = eventoReseñable;
+	public void setEventoResenyable(String eventoReseñable) {
+		this.eventoResenyable = eventoReseñable;
 	}	
 	
 	public EclipenoDTO getEclipenoIN() {

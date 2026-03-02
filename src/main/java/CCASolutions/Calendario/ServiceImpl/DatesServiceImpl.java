@@ -74,31 +74,31 @@ public class DatesServiceImpl implements DatesService {
 
 		DateDTOFromDB dateVAUDTOFromDB = new DateDTOFromDB();
 		
-		if(dateVAU.getEclipenoIN().getYear() >= 0) {
+		if(dateVAU.getEclipenoIN().getYearOfTheActualEclipenoIN() >= 0) {
 			
-			EclipenosEntity eclipeno = this.eclipenosRepository.findTopByYearAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrYearAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrue(dateVAU.getEclipenoIN().getYear(), dateVAU.getEclipenoIN().getYear());
+			EclipenosEntity eclipeno = this.eclipenosRepository.findTopByYearAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrYearAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrue(dateVAU.getEclipenoIN().getYearOfTheActualEclipenoIN(), dateVAU.getEclipenoIN().getYearOfTheActualEclipenoIN());
 			
 			if(eclipeno != null) {
 				
 				dateVAUDTOFromDB.setEclipeno(eclipeno);
 				dateVAUDTOFromDB.setEsEclipeno(dateVAU.getEclipenoIN().isEsEclipeno());
 				
-				if(dateVAU.getMetonoIN().getNumberOfMeton() >= 0) {
+				if(dateVAU.getMetonoIN().getMetonosINPasadosDesdeLastEclipenoIN() >= 0) {
 					
 					List<MetonsEntity> metons = this.metonsRepository.findByYearGreaterThanEqualAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getYear());			
 													
 					if(metons != null) {						
 	
-						MetonsEntity meton = metons.get(Integer.valueOf(dateVAU.getMetonoIN().getNumberOfMeton()));
+						MetonsEntity meton = metons.get(Integer.valueOf(dateVAU.getMetonoIN().getMetonosINPasadosDesdeLastEclipenoIN()));
 						
 						dateVAUDTOFromDB.setMeton(meton);
-						dateVAUDTOFromDB.setEsMetono(dateVAU.getMetonoIN().isEsMetono());
+						dateVAUDTOFromDB.setEsMetono(dateVAU.getMetonoIN().isEsMetonoIN());
 						
 						MetonsEntity nextMeton = this.metonsRepository.findFirstByYearGreaterThanAndInicialIsTrueAndNuevoIsTrueOrderByYearAsc(meton.getYear());
 						
-						if(nextMeton != null && (nextMeton.getYear() - meton.getYear() >= dateVAU.getYear().getYear())) {
+						if(nextMeton != null && (nextMeton.getYear() - meton.getYear() >= dateVAU.getYear().getSolsticiosDeInviernoPasadosDesdeLastMetonIN())) {
 							
-							dateVAUDTOFromDB.setYear(dateVAU.getYear().getYear());
+							dateVAUDTOFromDB.setYear(dateVAU.getYear().getSolsticiosDeInviernoPasadosDesdeLastMetonIN());
 							MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth().getName()); 
 							
 							if(vauMonth != null) {
@@ -140,7 +140,7 @@ public class DatesServiceImpl implements DatesService {
 						}						
 						else {
 							
-							dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getYear().getYear() + " está fuera del rango para este métono.");
+							dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getYear().getSolsticiosDeInviernoPasadosDesdeLastMetonIN() + " está fuera del rango para este métono.");
 						}						
 					}
 					else {
@@ -150,7 +150,7 @@ public class DatesServiceImpl implements DatesService {
 				}
 				else {
 					
-					dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getMetonoIN().getYearOfTheMeton() + " para un metono no es válido.");
+					dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getMetonoIN().getYearOfTheActualMetonIN() + " para un metono no es válido.");
 				}
 			}
 			else {
@@ -279,7 +279,7 @@ public class DatesServiceImpl implements DatesService {
 					dateVAU.setSolilunios(this.getVAUSolilunio(eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN, date, metonsIN.get(0)));
 					
 					// Y finalmente, indicamos si hay algun tipo de evento reseñable
-					dateVAU.setEventoReseñable(this.getEventoResenyable(date));
+					dateVAU.setEventoResenyable(this.getEventoResenyable(date));
 				}
 				
 			}
@@ -308,8 +308,8 @@ public class DatesServiceImpl implements DatesService {
 		List<EclipsesEntity> eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoIN = new ArrayList<>();
 		
 		
-		int solaresDesdeElUltimoMetono =-1; // -1 porque trae el eclipse del eclipeno
-		int lunaresDesdeElUltimoMetono =0;
+		int solaresDesdeElUltimoMetonoIN =-1; // -1 porque trae el eclipse del eclipeno
+		int lunaresDesdeElUltimoMetonoIN =0;
 		
 		for (EclipsesEntity eclipse : eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN){
 			
@@ -319,7 +319,7 @@ public class DatesServiceImpl implements DatesService {
 				
 				if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
 					
-					solaresDesdeElUltimoMetono = solaresDesdeElUltimoMetono+1;					
+					solaresDesdeElUltimoMetonoIN = solaresDesdeElUltimoMetonoIN+1;					
 				}
 				
 			}
@@ -329,25 +329,27 @@ public class DatesServiceImpl implements DatesService {
 				
 				if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
 					
-					lunaresDesdeElUltimoMetono = lunaresDesdeElUltimoMetono+1;				
+					lunaresDesdeElUltimoMetonoIN = lunaresDesdeElUltimoMetonoIN+1;				
 				}			
 			}						
 		}
 		
-		solilunio.setTotalesSolares(eclipsesSolaresNoParcialesDesdeLastEclipenoIN.size()-1);
-		solilunio.setSolaresDesdeElUltimoMetonoIN(solaresDesdeElUltimoMetono);
+		solilunio.setSolaresPasadosDesdeElUltimoEclipenoIN(eclipsesSolaresNoParcialesDesdeLastEclipenoIN.size()-1);
+		solilunio.setSolaresPasadosDesdeElUltimoMetonoIN(solaresDesdeElUltimoMetonoIN);
 		
-		solilunio.setTotalesLunares(eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoIN.size());
-		solilunio.setLunaresDesdeElUltimoMetonoIN(lunaresDesdeElUltimoMetono);
+		solilunio.setLunaresPasadosDesdeElUltimoEclipenoIN(eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoIN.size());
+		solilunio.setLunaresPasadosDesdeElUltimoMetonoIN(lunaresDesdeElUltimoMetonoIN);
 		
-		solilunio.setTotales(eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN.size()-1);
+		solilunio.setPasadosDesdeElUltimoEclipenoIN(eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN.size()-1);
+		solilunio.setPasadosDesdeElUltimoMetonoIN(lunaresDesdeElUltimoMetonoIN+solaresDesdeElUltimoMetonoIN);
+		
 		return solilunio;
 	}
 
 	private EclipenoDTO getVAUEclipeno(EclipenosEntity lastEclipenoIN, LocalDate date) {
 		
 		EclipenoDTO eclipeno = new EclipenoDTO();
-		eclipeno.setYear(lastEclipenoIN.getYear());
+		eclipeno.setYearOfTheActualEclipenoIN(lastEclipenoIN.getYear());
 		eclipeno.setEsEclipeno(lastEclipenoIN.getDate().toLocalDate().isEqual(date));
 		
 		return eclipeno;
@@ -356,9 +358,9 @@ public class DatesServiceImpl implements DatesService {
 	private MetonDTO getVAUMeton (List<MetonsEntity> metonsIN, LocalDate dateO) {
 		
 		MetonDTO meton = new MetonDTO();
-		meton.setNumberOfMeton(metonsIN.size()-1);
-		meton.setYearOfTheMeton(metonsIN.get(0).getYear());
-		meton.setEsMetono(metonsIN.get(0).getDate().toLocalDate().isEqual(dateO));
+		meton.setMetonosINPasadosDesdeLastEclipenoIN(metonsIN.size()-1);
+		meton.setYearOfTheActualMetonIN(metonsIN.get(0).getYear());
+		meton.setEsMetonoIN(metonsIN.get(0).getDate().toLocalDate().isEqual(dateO));
 		return meton;
 	}
 
@@ -394,7 +396,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		vauYear.setEsSolsticioDeInvierno(caeEnSolsticioDeInvierno);
 	
-		vauYear.setYear(year);
+		vauYear.setSolsticiosDeInviernoPasadosDesdeLastMetonIN(year);
 	
 		return vauYear;
 		

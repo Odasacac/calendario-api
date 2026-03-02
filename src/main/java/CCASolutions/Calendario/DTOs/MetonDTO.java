@@ -2,29 +2,29 @@ package CCASolutions.Calendario.DTOs;
 
 public class MetonDTO {
 
-	private boolean esMetono;
-	private int numberOfMeton;
-	private int yearOfTheMeton;
+	private boolean esMetonoIN;
+	private int metonosINPasadosDesdeLastEclipenoIN;
+	private int yearOfTheActualMetonIN;
 	
 	
-	public boolean isEsMetono() {
-		return esMetono;
-	}
-	public void setEsMetono(boolean esMetono) {
-		this.esMetono = esMetono;
-	}
-	public int getNumberOfMeton() {
-		return numberOfMeton;
-	}
-	public void setNumberOfMeton(int numberOfMeton) {
-		this.numberOfMeton = numberOfMeton;
-	}
-	public int getYearOfTheMeton() {
-		return yearOfTheMeton;
-	}
-	public void setYearOfTheMeton(int yearOfTheMeton) {
-		this.yearOfTheMeton = yearOfTheMeton;
-	}
 	
-	
+	public int getMetonosINPasadosDesdeLastEclipenoIN() {
+		return metonosINPasadosDesdeLastEclipenoIN;
+	}
+	public void setMetonosINPasadosDesdeLastEclipenoIN(int metonosINPasadosDesdeLastEclipenoIN) {
+		this.metonosINPasadosDesdeLastEclipenoIN = metonosINPasadosDesdeLastEclipenoIN;
+	}
+	public boolean isEsMetonoIN() {
+		return esMetonoIN;
+	}
+	public void setEsMetonoIN(boolean esMetono) {
+		this.esMetonoIN = esMetono;
+	}
+	public int getYearOfTheActualMetonIN() {
+		return yearOfTheActualMetonIN;
+	}
+	public void setYearOfTheActualMetonIN(int yearOfTheActualMetonIN) {
+		this.yearOfTheActualMetonIN = yearOfTheActualMetonIN;
+	}
+
 }
