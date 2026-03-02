@@ -8,27 +8,27 @@ public class DateDTO {
 	private MonthDTO month;
 	private String week;
 	private String day;
-	private String eventoResenyable;
-	private SoliluniosDTO solilunios;
+	private String notableEvent;
+	private AbsoluteEclipsesDTO absoluteEclipses;
 	
 	
 	
-	public SoliluniosDTO getSolilunios() {
-		return solilunios;
+	public AbsoluteEclipsesDTO getAbsoluteEclipses() {
+		return absoluteEclipses;
 	}
 
-	public void setSolilunios(SoliluniosDTO solilunio) {
-		this.solilunios = solilunio;
+	public void setAbsoluteEclipses(AbsoluteEclipsesDTO absoluteEclipse) {
+		this.absoluteEclipses = absoluteEclipse;
 	}
 
-	public String getEventoResenyable() {
-		return eventoResenyable;
+	public String getNotableEvent() {
+		return notableEvent;
 	}
 
-	public void setEventoResenyable(String eventoReseñable) {
-		this.eventoResenyable = eventoReseñable;
-	}	
-	
+	public void setNotableEvent(String notableEvent) {
+		this.notableEvent = notableEvent;
+	}
+
 	public EclipenoDTO getEclipenoIN() {
 		return eclipenoIN;
 	}

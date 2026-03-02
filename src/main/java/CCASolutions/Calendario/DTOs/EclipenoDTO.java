@@ -2,21 +2,22 @@ package CCASolutions.Calendario.DTOs;
 
 public class EclipenoDTO {
 
-	private boolean esEclipeno;
-	private int yearOfTheActualEclipenoIN;
+	private boolean eclipenoINDay;
+	private int yearOfCurrentEclipenoIN;
 	
-	public boolean isEsEclipeno() {
-		return esEclipeno;
+
+	public boolean isEclipenoINDay() {
+		return eclipenoINDay;
 	}
-	public void setEsEclipeno(boolean esEclipeno) {
-		this.esEclipeno = esEclipeno;
+	public void setEclipenoINDay(boolean eclipenoINDay) {
+		this.eclipenoINDay = eclipenoINDay;
 	}
-	public int getYearOfTheActualEclipenoIN() {
-		return yearOfTheActualEclipenoIN;
+	public int getYearOfCurrentEclipenoIN() {
+		return yearOfCurrentEclipenoIN;
 	}
-	public void setYearOfTheActualEclipenoIN(int year) {
-		this.yearOfTheActualEclipenoIN = year;
+	public void setYearOfCurrentEclipenoIN(int yearOfCurrentEclipenoIN) {
+		this.yearOfCurrentEclipenoIN = yearOfCurrentEclipenoIN;
 	}
-	
+
 	
 }

@@ -2,29 +2,30 @@ package CCASolutions.Calendario.DTOs;
 
 public class MetonDTO {
 
-	private boolean esMetonoIN;
-	private int metonosINPasadosDesdeLastEclipenoIN;
-	private int yearOfTheActualMetonIN;
+	private boolean metonoINDay;
+	private int metonosINSinceLastEclipenoIN;
+	private int yearOfCurrentMetonIN;
 	
 	
-	
-	public int getMetonosINPasadosDesdeLastEclipenoIN() {
-		return metonosINPasadosDesdeLastEclipenoIN;
+
+	public int getMetonosINSinceLastEclipenoIN() {
+		return metonosINSinceLastEclipenoIN;
 	}
-	public void setMetonosINPasadosDesdeLastEclipenoIN(int metonosINPasadosDesdeLastEclipenoIN) {
-		this.metonosINPasadosDesdeLastEclipenoIN = metonosINPasadosDesdeLastEclipenoIN;
+	public void setMetonosINSinceLastEclipenoIN(int metonosINSinceLastEclipenoIN) {
+		this.metonosINSinceLastEclipenoIN = metonosINSinceLastEclipenoIN;
 	}
-	public boolean isEsMetonoIN() {
-		return esMetonoIN;
+	public boolean isMetonoINDay() {
+		return metonoINDay;
 	}
-	public void setEsMetonoIN(boolean esMetono) {
-		this.esMetonoIN = esMetono;
+	public void setMetonoINDay(boolean metonoINDay) {
+		this.metonoINDay = metonoINDay;
 	}
-	public int getYearOfTheActualMetonIN() {
-		return yearOfTheActualMetonIN;
+	public int getYearOfCurrentMetonIN() {
+		return yearOfCurrentMetonIN;
 	}
-	public void setYearOfTheActualMetonIN(int yearOfTheActualMetonIN) {
-		this.yearOfTheActualMetonIN = yearOfTheActualMetonIN;
+	public void setYearOfCurrentMetonIN(int yearOfCurrentMetonIN) {
+		this.yearOfCurrentMetonIN = yearOfCurrentMetonIN;
 	}
+
 
 }

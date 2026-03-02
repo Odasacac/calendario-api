@@ -2,14 +2,15 @@ package CCASolutions.Calendario.DTOs;
 
 public class MonthDTO {
 
-	private boolean lunaNueva;
+	private boolean newMoon;
 	private String name;
 	
-	public boolean isLunaNueva() {
-		return lunaNueva;
+
+	public boolean isNewMoon() {
+		return newMoon;
 	}
-	public void setLunaNueva(boolean lunaNueva) {
-		this.lunaNueva = lunaNueva;
+	public void setNewMoon(boolean newMoon) {
+		this.newMoon = newMoon;
 	}
 	public String getName() {
 		return name;
