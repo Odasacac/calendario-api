@@ -9,6 +9,8 @@ import CCASolutions.Calendario.Entities.LunasEntity;
 
 public interface LunasRepository extends JpaRepository <LunasEntity, Long> {
 	
+	public abstract LunasEntity findTopByDateGreaterThanEqualAndNuevaIsTrueOrderByDateAsc(LocalDateTime date);
+	
 	public abstract LunasEntity findByDateBetween(LocalDateTime inicio, LocalDateTime fin);
 	
 	public abstract LunasEntity findTopByOrderByDateDesc();
