@@ -81,7 +81,7 @@ public class DatesServiceImpl implements DatesService {
 			if(eclipeno != null) {
 				
 				dateVAUDTOFromDB.setEclipeno(eclipeno);
-				dateVAUDTOFromDB.setEsEclipeno(dateVAU.getEclipenoIN().isEclipenoINDay());
+				dateVAUDTOFromDB.setEsEclipeno(dateVAU.getEclipenoIN().isEclipenoINDay()); //Esto deberia calcularse, no obtenerse del DTO
 				
 				if(dateVAU.getMetonoIN().getMetonosINSinceLastEclipenoIN() >= 0) {
 					
@@ -90,14 +90,14 @@ public class DatesServiceImpl implements DatesService {
 					if(metons != null) {						
 	
 						int numeroDeMetono = Integer.valueOf(dateVAU.getMetonoIN().getMetonosINSinceLastEclipenoIN());
-						if(dateVAU.getMetonoIN().isMetonoINDay() && !dateVAU.getEclipenoIN().isEclipenoINDay()) {
+						if(dateVAU.getMetonoIN().isMetonoINDay() && !dateVAU.getEclipenoIN().isEclipenoINDay()) { //Esto deberia calcularse, no obtenerse del DTO
 							numeroDeMetono = numeroDeMetono+1;
 						}
 
 						MetonsEntity meton = metons.get(numeroDeMetono);
 						
 						dateVAUDTOFromDB.setMeton(meton);
-						dateVAUDTOFromDB.setEsMetono(dateVAU.getMetonoIN().isMetonoINDay());
+						dateVAUDTOFromDB.setEsMetono(dateVAU.getMetonoIN().isMetonoINDay()); //Esto deberia calcularse, no obtenerse del DTO
 						
 						MetonsEntity nextMeton = this.metonsRepository.findFirstByYearGreaterThanAndInicialIsTrueAndNuevoIsTrueOrderByYearAsc(meton.getYear());
 						
@@ -200,18 +200,28 @@ public class DatesServiceImpl implements DatesService {
 			
 			LunasEntity lunaCorrespondiente = new LunasEntity();
 
-			if(dateVAU.getMonth().getHibrid()) {
+			if(dateVAU.isEsMetono()) {
 				
-				// Si es hibrido, hay que coger la luna nueva anterior al soe y contar desde ahi
-				// Pero si ha sido metono, hay que coger la luna nueva del metono
-				if(dateVAU.isEsMetono() && !dateVAU.isEsEclipeno()) {
-					
-					lunaCorrespondiente = lunasRepository.findTopByDateGreaterThanEqualAndNuevaIsTrueOrderByDateAsc(soe.getDate().minusDays(1));
-				}
-				else {
-					
+				// Si ha sido metono, hay que coger la luna nueva del metono
+				LunasEntity lunaDelMetono = this.lunasRepository.findByDateBetweenAndNuevaTrue(soe.getDate().minusDays(1), soe.getDate().plusDays(1)).get(0);
+				
+				
+				if(lunaDelMetono.getDate().toLocalDate().isAfter(soe.getDate().toLocalDate())) {
+					//Si la luna del metono es despues del solsticio, la luna correspondiente es la de Oterno
 					lunaCorrespondiente = lunasRepository.findTopByDateLessThanAndNuevaIsTrueOrderByDateDesc(soe.getDate());
 				}
+				else {
+					// Si la luna del metono es antes del solsticio, es esa luna
+					lunaCorrespondiente = lunaDelMetono;
+				}
+				
+				
+
+			}
+			else if (dateVAU.getMonth().getHibrid()) {
+				
+				// Si es hibrido, hay que coger la luna nueva anterior al soe y contar desde ahi
+				lunaCorrespondiente = lunasRepository.findTopByDateLessThanAndNuevaIsTrueOrderByDateDesc(soe.getDate());
 								
 			}
 			else {		
