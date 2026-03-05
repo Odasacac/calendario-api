@@ -5,9 +5,16 @@ public class MetonDTO {
 	private boolean metonoINDay;
 	private int metonosINSinceLastEclipenoIN;
 	private int yearOfCurrentMetonIN;
+	private int numberOfMeton;
 	
 	
 
+	public int getNumberOfMeton() {
+		return numberOfMeton;
+	}
+	public void setNumberOfMeton(int numberOfMeton) {
+		this.numberOfMeton = numberOfMeton;
+	}
 	public int getMetonosINSinceLastEclipenoIN() {
 		return metonosINSinceLastEclipenoIN;
 	}

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.DateDTOFromDB;
+import CCASolutions.Calendario.DTOs.DateVAUDTO;
 import CCASolutions.Calendario.DTOs.EclipenoDTO;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
@@ -70,104 +71,89 @@ public class DatesServiceImpl implements DatesService {
 	
 	// METODOS PUBLICOS 
 
-	public DateDTOFromDB getDateDTOFromDB(DateDTO dateVAU) {
+	public DateDTOFromDB getDateDTOFromDB(DateVAUDTO dateVAU) {
 
 		DateDTOFromDB dateVAUDTOFromDB = new DateDTOFromDB();
 		
-		if(dateVAU.getEclipenoIN().getYearOfCurrentEclipenoIN() >= 0) {
+		if(dateVAU.getEclipenoIN() >= 0) {
 			
-			EclipenosEntity eclipeno = this.eclipenosRepository.findTopByYearAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrYearAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrue(dateVAU.getEclipenoIN().getYearOfCurrentEclipenoIN(), dateVAU.getEclipenoIN().getYearOfCurrentEclipenoIN());
+			EclipenosEntity eclipeno = this.eclipenosRepository.findTopByYearAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrYearAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrue(dateVAU.getEclipenoIN(), dateVAU.getEclipenoIN());
 			
 			if(eclipeno != null) {
 				
 				dateVAUDTOFromDB.setEclipeno(eclipeno);
-				dateVAUDTOFromDB.setEsEclipeno(dateVAU.getEclipenoIN().isEclipenoINDay()); //Esto deberia calcularse, no obtenerse del DTO
 				
-				if(dateVAU.getMetonoIN().getMetonosINSinceLastEclipenoIN() >= 0) {
+				if(dateVAU.getMetonoIN() >= 0) {
 					
-					List<MetonsEntity> metons = this.metonsRepository.findByYearGreaterThanEqualAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getYear());			
-													
-					if(metons != null) {						
-	
-						int numeroDeMetono = Integer.valueOf(dateVAU.getMetonoIN().getMetonosINSinceLastEclipenoIN());
-						if(dateVAU.getMetonoIN().isMetonoINDay() && !dateVAU.getEclipenoIN().isEclipenoINDay()) { //Esto deberia calcularse, no obtenerse del DTO
-							numeroDeMetono = numeroDeMetono+1;
-						}
-
-						MetonsEntity meton = metons.get(numeroDeMetono);
+					MetonsEntity meton = new MetonsEntity();
+					meton.setInicial(true);
+					meton.setNuevo(true);
+					//meton.set
 						
-						dateVAUDTOFromDB.setMeton(meton);
-						dateVAUDTOFromDB.setEsMetono(dateVAU.getMetonoIN().isMetonoINDay()); //Esto deberia calcularse, no obtenerse del DTO
+					dateVAUDTOFromDB.setMeton(meton);						
+					
+					
+					if(dateVAU.getYear() >= 0) {	
 						
-						MetonsEntity nextMeton = this.metonsRepository.findFirstByYearGreaterThanAndInicialIsTrueAndNuevoIsTrueOrderByYearAsc(meton.getYear());
-						
-						if(nextMeton != null && (nextMeton.getYear() - meton.getYear() >= dateVAU.getYear().getSolsticiosDeInviernoSinceLastMetonIN())) {
+						meton.setYear(dateVAU.getYear());
+						MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth()); 
 							
-							dateVAUDTOFromDB.setYear(dateVAU.getYear().getSolsticiosDeInviernoSinceLastMetonIN());
-							MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth().getName()); 
-							
-							if(vauMonth != null) {
+						if(vauMonth != null) {
 								
-								dateVAUDTOFromDB.setMonth(vauMonth);
+							dateVAUDTOFromDB.setMonth(vauMonth);
 								
-								WeeksEntity vauWeek = this.weeksRepository.findByName(dateVAU.getWeek());
+							WeeksEntity vauWeek = this.weeksRepository.findByName(dateVAU.getWeek());
 								
-								if(vauWeek != null) {
+							if(vauWeek != null) {
 									
-									if(vauWeek.getWeekOfMonth() != 5) {
+								if(vauWeek.getWeekOfMonth() != 5) {
 										
-										dateVAUDTOFromDB.setWeek(vauWeek);
-										DaysEntity vauDay = this.daysRepository.findByName(dateVAU.getDay());
+									dateVAUDTOFromDB.setWeek(vauWeek);
+									DaysEntity vauDay = this.daysRepository.findByName(dateVAU.getDay());
 										
-										if(vauDay != null) {
+									if(vauDay != null) {
 											
-											dateVAUDTOFromDB.setDay(vauDay);							
-											dateVAUDTOFromDB.setValid(true);									
-										}
-										else {
-											
-											dateVAUDTOFromDB.setComentarios("No se ha encontrado el día " + dateVAU.getDay() + " en la base de datos.");
-										}
+										dateVAUDTOFromDB.setDay(vauDay);							
+										dateVAUDTOFromDB.setValid(true);									
 									}
 									else {
-										dateVAUDTOFromDB.setComentarios("La búsqueda por días liminales no está implementada.");
-									}									
+											
+										dateVAUDTOFromDB.setComentarios("No se ha encontrado el día " + dateVAU.getDay() + " en la base de datos.");
+									}
 								}
 								else {
-									
-									dateVAUDTOFromDB.setComentarios("No se ha encontrado la semana " + dateVAU.getWeek() + " en la base de datos.");
-								}
+									dateVAUDTOFromDB.setComentarios("La búsqueda por días liminales no está implementada.");
+								}									
 							}
 							else {
-								
-								dateVAUDTOFromDB.setComentarios("No se ha encontrado el mes " + dateVAU.getMonth().getName() + " en la base de datos.");
-							}	
-						}						
+									
+								dateVAUDTOFromDB.setComentarios("No se ha encontrado la semana " + dateVAU.getWeek() + " en la base de datos.");
+							}
+						}
 						else {
-							
-							dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getYear().getSolsticiosDeInviernoSinceLastMetonIN() + " está fuera del rango para este métono.");
-						}						
-					}
+								
+							dateVAUDTOFromDB.setComentarios("No se ha encontrado el mes " + dateVAU.getMonth() + " en la base de datos.");
+						}	
+					}						
 					else {
-						
-						dateVAUDTOFromDB.setComentarios("No se tienen registros de métonos a partir del año " + Integer.valueOf(dateVAU.getEclipenoIN() + "."));
-					}
+							
+						dateVAUDTOFromDB.setComentarios("El número de años no puede ser negativo.");
+					}						
 				}
 				else {
-					
-					dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getMetonoIN().getYearOfCurrentMetonIN() + " para un metono no es válido.");
+						
+					dateVAUDTOFromDB.setComentarios("El número de métonos no puede ser negativo");
 				}
 			}
 			else {
-				
-				dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getEclipenoIN() + " para un eclipeno no es válido.");
+					
+				dateVAUDTOFromDB.setComentarios("No se ha encontrado ningún eclípeno para el año " + dateVAU.getEclipenoIN() + ".");
 			}
-			
-			
 		}
 		else {
+				
 			dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getEclipenoIN() + " para un eclipeno no es válido.");
-		}
+		}	
 	
 		
 				
@@ -282,7 +268,7 @@ public class DatesServiceImpl implements DatesService {
 					dateVAU = new DateDTO();
 					
 					// Lo primero es obtener el añoVAU				
-					dateVAU.setYear(this.getVAUYear(dateO, soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, metonsIN.get(0)));
+					dateVAU.setYear(this.getVAUYear(lastEclipenoIN, dateO, soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, metonsIN.get(0)));
 					
 					// Luego el mesVau
 					dateVAU.setMonth(this.getVAUMonth(dateO, soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHastaElAnyoSiguiente));
@@ -293,7 +279,7 @@ public class DatesServiceImpl implements DatesService {
 					dateVAU.setDay(vauWeekAndDay.getDay());
 					
 					// Indicamos el metono
-					dateVAU.setMetonoIN(getVAUMeton(metonsIN, date));
+					dateVAU.setMetonoIN(getVAUMeton(lastEclipenoIN, metonsIN, date));
 					
 					// Indicamos el eclipeno
 					dateVAU.setEclipenoIN(this.getVAUEclipeno(lastEclipenoIN, date));
@@ -407,7 +393,7 @@ public class DatesServiceImpl implements DatesService {
 		return eclipeno;
 	}
 	
-	private MetonDTO getVAUMeton (List<MetonsEntity> metonsIN, LocalDate dateO) {
+	private MetonDTO getVAUMeton (EclipenosEntity lastEclipenoIN, List<MetonsEntity> metonsIN, LocalDate dateO) {
 		
 		MetonDTO meton = new MetonDTO();
 		meton.setYearOfCurrentMetonIN(metonsIN.get(0).getYear());
@@ -415,17 +401,25 @@ public class DatesServiceImpl implements DatesService {
 		
 		int metonosDesdeElLastEclipen = (metonsIN.size()-1); // -1 porque incluye el del eclipeno
 		
-		// Si es el dia del metono, pero no el día del eclipeno, hay que restarle 1 porque no se cuenta el metono hasta que se ha pasado
-		if(meton.isMetonoINDay() && metonsIN.size()>1) {
+		// No se suma un metono hasta que pase el dia del metono, pero si es el dia de eclipeno no se resta, que se ha restado antes
+		
+		if(meton.isMetonoINDay() && !lastEclipenoIN.getDate().toLocalDate().isEqual(dateO)) {
+			
 			metonosDesdeElLastEclipen = metonosDesdeElLastEclipen-1;
 		}
 		
 		meton.setMetonosINSinceLastEclipenoIN(metonosDesdeElLastEclipen);
+		int yearOfTheMeton = metonosDesdeElLastEclipen +1;
+		
+		if(lastEclipenoIN.getDate().toLocalDate().isEqual(dateO)) { //Si es el dia del eclipeno, no estamos en ningun metono
+			yearOfTheMeton= yearOfTheMeton-1;
+		}
+		meton.setNumberOfMeton(yearOfTheMeton);
 		
 		return meton;
 	}
 
-	private YearDTO getVAUYear(LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMetonIN) {
+	private YearDTO getVAUYear(EclipenosEntity lastEclipenoIN, LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMetonIN) {
 		
 		YearDTO vauYear = new YearDTO();
 		
@@ -455,9 +449,15 @@ public class DatesServiceImpl implements DatesService {
 		}
 		
 		
-		vauYear.setEsSolsticioDeInvierno(caeEnSolsticioDeInvierno);
-	
-		vauYear.setSolsticiosDeInviernoSinceLastMetonIN(year);
+		vauYear.setEsSolsticioDeInvierno(caeEnSolsticioDeInvierno);	
+		vauYear.setSolsticiosDeInviernoSinceLastMetonIN(year);	
+		
+		int numberOfYear = year +1;
+		if(lastEclipenoIN.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
+			
+			numberOfYear = numberOfYear-1;
+		}
+		vauYear.setNumberOfYear(numberOfYear);
 	
 		return vauYear;
 		

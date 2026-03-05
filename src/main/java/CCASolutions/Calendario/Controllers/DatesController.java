@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.DateDTOFromDB;
+import CCASolutions.Calendario.DTOs.DateVAUDTO;
 import CCASolutions.Calendario.Responses.FromDateVAUToDateOResponse;
 import CCASolutions.Calendario.Services.DatesService;
 
@@ -57,7 +58,7 @@ public class DatesController {
 	}
 
 	@PostMapping("/conversiontoofficial")
-	public ResponseEntity<FromDateVAUToDateOResponse> getDateO(@RequestBody DateDTO dateVAU) {
+	public ResponseEntity<FromDateVAUToDateOResponse> getDateO(@RequestBody DateVAUDTO dateVAU) {
 		HttpStatus status = HttpStatus.OK;
 		FromDateVAUToDateOResponse body = new FromDateVAUToDateOResponse();
 
