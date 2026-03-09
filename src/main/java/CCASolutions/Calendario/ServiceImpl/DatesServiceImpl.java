@@ -70,101 +70,10 @@ public class DatesServiceImpl implements DatesService {
 	private EclipsesRepository eclipsesRepository;
 	
 	// METODOS PUBLICOS 
-
-	public DateDTOFromDB getDateDTOFromDB(DateVAUDTO dateVAU) {
-
-		DateDTOFromDB dateVAUDTOFromDB = new DateDTOFromDB();
-		
-		if(dateVAU.getEclipenoIN() >= 0) {
-			
-			EclipenosEntity eclipeno = this.eclipenosRepository.findTopByYearAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrYearAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrue(dateVAU.getEclipenoIN(), dateVAU.getEclipenoIN());
-			
-			if(eclipeno != null) {
-				
-				dateVAUDTOFromDB.setEclipeno(eclipeno);
-				
-				if(dateVAU.getMetonoIN() >= 0) {
-					
-					MetonsEntity meton = new MetonsEntity();
-					meton.setInicial(true);
-					meton.setNuevo(true);
-					//meton.set
-						
-					dateVAUDTOFromDB.setMeton(meton);						
-					
-					
-					if(dateVAU.getYear() >= 0) {	
-						
-						meton.setYear(dateVAU.getYear());
-						MonthsEntity vauMonth = this.monthsRepository.findByName(dateVAU.getMonth()); 
-							
-						if(vauMonth != null) {
-								
-							dateVAUDTOFromDB.setMonth(vauMonth);
-								
-							WeeksEntity vauWeek = this.weeksRepository.findByName(dateVAU.getWeek());
-								
-							if(vauWeek != null) {
-									
-								if(vauWeek.getWeekOfMonth() != 5) {
-										
-									dateVAUDTOFromDB.setWeek(vauWeek);
-									DaysEntity vauDay = this.daysRepository.findByName(dateVAU.getDay());
-										
-									if(vauDay != null) {
-											
-										dateVAUDTOFromDB.setDay(vauDay);							
-										dateVAUDTOFromDB.setValid(true);									
-									}
-									else {
-											
-										dateVAUDTOFromDB.setComentarios("No se ha encontrado el día " + dateVAU.getDay() + " en la base de datos.");
-									}
-								}
-								else {
-									dateVAUDTOFromDB.setComentarios("La búsqueda por días liminales no está implementada.");
-								}									
-							}
-							else {
-									
-								dateVAUDTOFromDB.setComentarios("No se ha encontrado la semana " + dateVAU.getWeek() + " en la base de datos.");
-							}
-						}
-						else {
-								
-							dateVAUDTOFromDB.setComentarios("No se ha encontrado el mes " + dateVAU.getMonth() + " en la base de datos.");
-						}	
-					}						
-					else {
-							
-						dateVAUDTOFromDB.setComentarios("El número de años no puede ser negativo.");
-					}						
-				}
-				else {
-						
-					dateVAUDTOFromDB.setComentarios("El número de métonos no puede ser negativo");
-				}
-			}
-			else {
-					
-				dateVAUDTOFromDB.setComentarios("No se ha encontrado ningún eclípeno para el año " + dateVAU.getEclipenoIN() + ".");
-			}
-		}
-		else {
-				
-			dateVAUDTOFromDB.setComentarios("El año " + dateVAU.getEclipenoIN() + " para un eclipeno no es válido.");
-		}	
-	
-		
-				
-		return dateVAUDTOFromDB;
-	}
-
-
 	
 	
 	
-	public FromDateVAUToDateOResponse getDateOFromDateVAU(DateDTOFromDB dateVAU) {
+	public FromDateVAUToDateOResponse getDateOFromDateVAU(DateVAUDTO dateVAU) {
 
 		FromDateVAUToDateOResponse fromDateVAUToDateOResponse = new FromDateVAUToDateOResponse();
 		LocalDate dateO = null;
@@ -173,6 +82,7 @@ public class DatesServiceImpl implements DatesService {
 		// Lo primero es obtener el soe correspondiente a ese mes
 		// Para ello necesitamos el año y el monthOfSeason, que basicamente es el numero de LN que han pasado		
 		
+		/*
 		int anyoDelSoe = dateVAU.getMeton().getYear() + dateVAU.getYear()+1;
 		
 		if(dateVAU.getMonth().isLiminal() || (dateVAU.getMonth().getSeason() == 1 && dateVAU.getMonth().getMonthOfSeason() != 0) || dateVAU.isEsMetono() || dateVAU.isEsEclipeno()) {
@@ -228,7 +138,10 @@ public class DatesServiceImpl implements DatesService {
 		fromDateVAUToDateOResponse.setDateO(dateO);
 		fromDateVAUToDateOResponse.setComentarios(response);
 		
+		*/
+		
 		return fromDateVAUToDateOResponse;
+	
 	}
 
 	

@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
-import CCASolutions.Calendario.DTOs.DateDTOFromDB;
 import CCASolutions.Calendario.DTOs.DateVAUDTO;
 import CCASolutions.Calendario.Responses.FromDateVAUToDateOResponse;
 import CCASolutions.Calendario.Services.DatesService;
@@ -62,29 +61,22 @@ public class DatesController {
 		HttpStatus status = HttpStatus.OK;
 		FromDateVAUToDateOResponse body = new FromDateVAUToDateOResponse();
 
-		DateDTOFromDB dateDTOFromDB = this.datesService.getDateDTOFromDB(dateVAU);
 		
-		if(dateDTOFromDB.isValid()) {
-			
-			try {			
+		try {			
 
-				body = this.datesService.getDateOFromDateVAU(dateDTOFromDB);
+			body = this.datesService.getDateOFromDateVAU(dateVAU);
 				
-				if(body.getDateO() == null) {
+			if(body.getDateO() == null) {
 					
-					status = HttpStatus.BAD_REQUEST;
-				}
+				status = HttpStatus.BAD_REQUEST;
+			}
 					
-			} catch (Exception e) {
+		} catch (Exception e) {
 					
-				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				System.out.println(e);
-			}	
-		}		
-		else {
-			status = HttpStatus.BAD_REQUEST;
-			body.setComentarios(dateDTOFromDB.getComentarios());
-		}
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			System.out.println(e);
+		}	
+			
 		
 		return new ResponseEntity<FromDateVAUToDateOResponse>(body, status);
 	}
