@@ -1,6 +1,7 @@
 package CCASolutions.Calendario.Repositories;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -13,4 +14,5 @@ public interface EclipenosRepository extends JpaRepository <EclipenosEntity, Lon
 	EclipenosEntity findByDateBetween(LocalDateTime inicio, LocalDateTime fin);
 	EclipenosEntity findTopByDateLessThanEqualAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrDateLessThanEqualAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrueOrderByDateDesc(@Param("dateO") LocalDateTime dateO, @Param("dateOO") LocalDateTime dateOO);
 	EclipenosEntity findTopByYearAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrYearAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrue(@Param("yearUno") int yearUno, @Param("yearDos") int yearDos);
+	List<EclipenosEntity> findTop2ByYearGreaterThanEqualAndNuevoIsTrueAndInicialIsTrueOrderByYearAsc(int year);
 }

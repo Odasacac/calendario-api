@@ -8,7 +8,6 @@ public class DateVAUDTO {
 	private String month;
 	private String week;
 	private String day;
-	
 	public int getEclipenoIN() {
 		return eclipenoIN;
 	}
@@ -45,7 +44,6 @@ public class DateVAUDTO {
 	public void setDay(String day) {
 		this.day = day;
 	}
-	
 	
 	
 	
