@@ -16,4 +16,5 @@ INSERT INTO calendar_db.months (name,hibrid,month_of_season,season,liminal) VALU
 	 ('Primano',1,0,3,0),
 	 ('Verdor',1,0,4,0),
 	 ('Oterno',1,0,1,0),
-	 ('Oterno liminal',1,0,1,1);
+	 ('Oterno liminal',1,0,1,1),
+	 ('Nomon',0,0,0,0);
