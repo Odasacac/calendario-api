@@ -438,7 +438,6 @@ public class DatesServiceImpl implements DatesService {
 			// Si cae en Luna nueva, ya tenemos el mes
 			
 			List<LunasEntity> lunasNuevasEntreLastSOEYNextSOE = new ArrayList<>();
-			MonthsEntity vauMonth = new MonthsEntity();
 			boolean caeEnLunaNueva = false;
 			for(int i = 0; i<lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente.size(); i++) {
 				
@@ -447,7 +446,7 @@ public class DatesServiceImpl implements DatesService {
 	
 				if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
 						
-					vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(0, 0, false);
+					lunasNuevasEntreLastSOEYNextSOE.add(luna);	
 					caeEnLunaNueva = true;	
 					
 				}
@@ -460,18 +459,24 @@ public class DatesServiceImpl implements DatesService {
 				}
 			}
 			
-			
+			MonthsEntity vauMonth = new MonthsEntity();
 			// Si cae en soe, pertenece al mes hibrido de ese soe.
 			if(caeEnSOE) {
 
 				vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), 0, false);
 
 			}
-			else if (!caeEnLunaNueva){
+			else{
 					
 				// Si no, hay que calcular cuantas lunas nuevas han pasado desde el lastSOE hasta la fecha a consultar
 					
 				int lunasNuevasPasadasDesdeLastSOEHastaDateO = 0;
+				
+				// Si es luna nueva, para que sea la luna correspondiente al mes siguiente, empieza en uno mas
+				if(caeEnLunaNueva) {
+					lunasNuevasPasadasDesdeLastSOEHastaDateO=1;
+				}
+				
 				long diasMinimosDeDiferenciaLunaNuevaConNextSOE = Long.MAX_VALUE;
 				LunasEntity lastLNBeforeNextSOE = null;
 					
