@@ -18,4 +18,5 @@ public interface MetonsRepository extends JpaRepository <MetonsEntity, Long> {
 	List<MetonsEntity> findByYearGreaterThanEqualAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(int year);
 	List<MetonsEntity> findAllByInicialIsTrueAndNuevoIsTrue();
 	List<MetonsEntity> findByYearBetweenAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(int yearInicio, int yearFin);
+	MetonsEntity findFirstByDateAfterOrderByDateAsc(LocalDateTime date);
 }

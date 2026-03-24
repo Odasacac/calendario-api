@@ -3,6 +3,7 @@ package CCASolutions.Calendario.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import CCASolutions.Calendario.Services.CasalerosService;
 import CCASolutions.Calendario.Services.DBService;
 import CCASolutions.Calendario.Services.EclipenosService;
 import CCASolutions.Calendario.Services.EclipsesService;
@@ -27,7 +28,11 @@ public class DBServiceImpl implements DBService {
 	
 	@Autowired
 	private EclipenosService eclipenosService;
-
+	
+	@Autowired
+	private CasalerosService casalerosService;
+	
+	
 	public String poblateDB() {
 		
 		String resultado = "Error al actualizar la base de datos, revisar logs.";
@@ -39,6 +44,7 @@ public class DBServiceImpl implements DBService {
 			System.out.println(metonsService.checkMetonosSinceToViaAPI());			
 			System.out.println(eclipsesService.poblateEclipses());			
 			System.out.println(eclipenosService.poblateEclipenos());
+			System.out.println(casalerosService.poblateCasaleros());
 			resultado = "Base de datos actualizada correctamente";
 		}
 		catch(Exception e) {

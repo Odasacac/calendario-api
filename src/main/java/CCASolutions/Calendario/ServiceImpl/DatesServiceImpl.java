@@ -16,14 +16,17 @@ import CCASolutions.Calendario.DTOs.EclipenoDTO;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.AbsoluteEclipsesDTO;
+import CCASolutions.Calendario.DTOs.CasaleroDTO;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
 import CCASolutions.Calendario.DTOs.YearDTO;
+import CCASolutions.Calendario.Entities.CasalerosEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
+import CCASolutions.Calendario.Repositories.CasalerosRepository;
 import CCASolutions.Calendario.Repositories.DaysRepository;
 import CCASolutions.Calendario.Repositories.EclipenosRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
@@ -65,6 +68,9 @@ public class DatesServiceImpl implements DatesService {
 	
 	@Autowired
 	private EclipsesRepository eclipsesRepository;
+	
+	@Autowired
+	private CasalerosRepository casalerosRepository;
 	
 	// METODOS PUBLICOS 
 	
@@ -211,6 +217,8 @@ public class DatesServiceImpl implements DatesService {
 					// Indicamos los eclipses totales/anulares ocurridos
 					dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN, date, metonsIN.get(0)));
 					
+					// Incluimos Casalero si lo hay
+					dateVAU.setCasalero(this.getCasalero(lastEclipenoIN.getId()));
 					// Y finalmente, indicamos si hay algun tipo de evento reseñable
 					dateVAU.setNotableEvent(this.getNotableEvent(date));
 				}
@@ -232,6 +240,52 @@ public class DatesServiceImpl implements DatesService {
 
 	
 	// ========================= METODOS PRIVADOS
+	
+	private CasaleroDTO getCasalero(Long lastEclipenoINId) {
+		
+		CasaleroDTO casalero = null;
+		
+		try {
+			
+			CasalerosEntity casaleroEntity = casalerosRepository.findByEclipenoId(lastEclipenoINId);
+			
+			if(casaleroEntity != null) {
+				
+				casalero = new CasaleroDTO();
+				casalero.setDateO(casaleroEntity.getDate().toLocalDate());
+				
+				String tipo = "";
+				if(casaleroEntity.isMetonico()) {
+					
+					tipo="Metónico";
+					
+					casalero.setLleno(casaleroEntity.isMetonicoLleno());
+					casalero.setNuevo(casaleroEntity.isMetonicoNuevo());
+					casalero.setInicial(casaleroEntity.isMetonicoInicial());
+					casalero.setBicuartal(casaleroEntity.isMetonicoInicial());	
+					casalero.setCuartal(casaleroEntity.isMetonicoCuartal());
+					casalero.setTricuartal(casaleroEntity.isMetonicoTricuartal());
+					casalero.setNuevo(true);
+					
+				}
+				else if (casaleroEntity.isEclipelar()){
+					
+					tipo="Eclipelar";
+					casalero.setDeSol(casaleroEntity.isEclipelarDeSol());
+					casalero.setDeLuna(casaleroEntity.isEclipelarDeLuna());
+				}
+				
+				casalero.setTipo(tipo);
+							
+			}	
+		}
+		catch(Exception e) {
+			
+			System.out.println("Error al obtener el casalero: " + e.getMessage());
+		}
+		
+		return casalero;		
+	}
 	
 	private AbsoluteEclipsesDTO getVAUAbsoluteEclipses(DateDTO dateVAU, List<EclipsesEntity> eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN, LocalDate date, MetonsEntity lastMetonIN) {
 		

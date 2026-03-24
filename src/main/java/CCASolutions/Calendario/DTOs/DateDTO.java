@@ -10,9 +10,19 @@ public class DateDTO {
 	private String day;
 	private String notableEvent;
 	private AbsoluteEclipsesDTO absoluteEclipses;
+	private CasaleroDTO casalero;
 	
 	
 	
+
+	public CasaleroDTO getCasalero() {
+		return casalero;
+	}
+
+	public void setCasalero(CasaleroDTO casalero) {
+		this.casalero = casalero;
+	}
+
 	public AbsoluteEclipsesDTO getAbsoluteEclipses() {
 		return absoluteEclipses;
 	}
