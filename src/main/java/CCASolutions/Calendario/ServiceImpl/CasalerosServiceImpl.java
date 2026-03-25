@@ -90,12 +90,14 @@ public class CasalerosServiceImpl implements CasalerosService {
 							
 						if(metono.getDate().isBefore(eclipseAbsoluto.getDate())) {
 								
-							casaleroParaDB = this.createCasaleroMetonico(metono);
+							casaleroParaDB.setMetonoId(metono.getId());
+							casaleroParaDB.setDate(metono.getDate());
 
 						}
 						else if(eclipseAbsoluto.getDate().isBefore(metono.getDate())){
 								
-							casaleroParaDB = this.createCasaleroEclipelar(eclipseAbsoluto);
+							casaleroParaDB.setEclipseId(eclipseAbsoluto.getId());
+							casaleroParaDB.setDate(eclipseAbsoluto.getDate());
 						}													
 					}
 					
@@ -103,7 +105,8 @@ public class CasalerosServiceImpl implements CasalerosService {
 						
 						if(metono != null && eclipseAbsoluto == null) {
 								
-							casaleroParaDB = this.createCasaleroMetonico(metono);								
+							casaleroParaDB.setMetonoId(metono.getId());	
+							casaleroParaDB.setDate(metono.getDate());
 						}
 						else if (eclipseAbsoluto != null && metono == null) {
 	
@@ -113,18 +116,13 @@ public class CasalerosServiceImpl implements CasalerosService {
 								
 								eclipseAbsoluto = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseOrderByDateAsc(eclipenoDate.plusSeconds(86164));
 							}
-							casaleroParaDB = this.createCasaleroEclipelar(eclipseAbsoluto);
+							casaleroParaDB.setEclipseId(eclipseAbsoluto.getId());
+							casaleroParaDB.setDate(eclipseAbsoluto.getDate());
 						}
 					}
 												
-					casaleroParaDB.setEclipenDate(eclipeno.getDate());
-					casaleroParaDB.setEclipenYear(eclipeno.getYear());
+					casaleroParaDB.setYear(casaleroParaDB.getDate().getYear());
 					casaleroParaDB.setEclipenoId(eclipeno.getId());
-					
-					if(Boolean.TRUE.equals(eclipeno.getInicial()) && Boolean.TRUE.equals(eclipeno.getNuevo())) {
-
-						casaleroParaDB.setEclipenoInicialNuevo(true);
-					}
 					
 					casalerosRepository.save(casaleroParaDB);
 					System.out.println("Casalero almacenado, año: " + casaleroParaDB.getYear());
@@ -149,49 +147,5 @@ public class CasalerosServiceImpl implements CasalerosService {
 			
 			
 		return resultado;
-	}
-		
-		
-	private CasalerosEntity createCasaleroMetonico (MetonsEntity metono) {
-		
-		CasalerosEntity casalero = new CasalerosEntity();
-		
-		casalero.setDate(metono.getDate());
-		casalero.setYear(metono.getYear());		
-
-		casalero.setMetonicoInicial(Boolean.TRUE.equals(metono.getInicial()));
-		casalero.setMetonicoBicuartal(Boolean.TRUE.equals(metono.getBicuartal()));
-		casalero.setMetonicoNuevo(Boolean.TRUE.equals(metono.getNuevo()));
-		casalero.setMetonicoLleno(Boolean.TRUE.equals(metono.getLleno()));	
-		casalero.setMetonicoCuartal(Boolean.TRUE.equals(metono.getCuartal()));
-		casalero.setMetonicoTricuartal(Boolean.TRUE.equals(metono.getTricuartal()));
-		
-		casalero.setMetonico(true);
-		casalero.setMetonoId(metono.getId());
-					
-		return casalero;		
-	}
-	
-	private CasalerosEntity createCasaleroEclipelar (EclipsesEntity eclipse) {
-		
-		CasalerosEntity casalero = new CasalerosEntity();		
-		
-		casalero.setDate(eclipse.getDate());
-		casalero.setYear(eclipse.getYear());
-		
-		if(eclipse.isDeSol()) {
-			casalero.setEclipelarDeSol(true);
-			
-		}
-		else if(eclipse.isDeLuna()) {
-			casalero.setEclipelarDeLuna(true);
-		}
-		
-		
-		casalero.setEclipelar(true);
-		casalero.setEclipseId(eclipse.getId());
-		
-		return casalero;
-		
 	}
 }

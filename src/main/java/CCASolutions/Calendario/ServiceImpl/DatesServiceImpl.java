@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -219,6 +220,7 @@ public class DatesServiceImpl implements DatesService {
 					
 					// Incluimos Casalero si lo hay
 					dateVAU.setCasalero(this.getCasalero(lastEclipenoIN.getId()));
+					
 					// Y finalmente, indicamos si hay algun tipo de evento reseñable
 					dateVAU.setNotableEvent(this.getNotableEvent(date));
 				}
@@ -243,7 +245,7 @@ public class DatesServiceImpl implements DatesService {
 	
 	private CasaleroDTO getCasalero(Long lastEclipenoINId) {
 		
-		CasaleroDTO casalero = null;
+		CasaleroDTO casaleroDTO = null;
 		
 		try {
 			
@@ -251,31 +253,44 @@ public class DatesServiceImpl implements DatesService {
 			
 			if(casaleroEntity != null) {
 				
-				casalero = new CasaleroDTO();
-				casalero.setDateO(casaleroEntity.getDate().toLocalDate());
+				casaleroDTO = new CasaleroDTO();
+				casaleroDTO.setDateO(casaleroEntity.getDate().toLocalDate());
 				
 				String tipo = "";
-				if(casaleroEntity.isMetonico()) {
+				if(casaleroEntity.getMetonoId() != null) {
 					
-					tipo="Metónico";
+					Optional<MetonsEntity> metonoOpt = this.metonsRepository.findById(casaleroEntity.getMetonoId());
 					
-					casalero.setLleno(casaleroEntity.isMetonicoLleno());
-					casalero.setNuevo(casaleroEntity.isMetonicoNuevo());
-					casalero.setInicial(casaleroEntity.isMetonicoInicial());
-					casalero.setBicuartal(casaleroEntity.isMetonicoInicial());	
-					casalero.setCuartal(casaleroEntity.isMetonicoCuartal());
-					casalero.setTricuartal(casaleroEntity.isMetonicoTricuartal());
-					casalero.setNuevo(true);
-					
+					if(metonoOpt.isPresent()) {
+						
+						MetonsEntity metono = metonoOpt.get();
+						
+						tipo="Metónico";
+						
+						casaleroDTO.setLleno(Boolean.TRUE.equals(metono.getLleno()));
+						casaleroDTO.setNuevo(Boolean.TRUE.equals(metono.getNuevo()));
+						casaleroDTO.setInicial(Boolean.TRUE.equals(metono.getInicial()));
+						casaleroDTO.setBicuartal(Boolean.TRUE.equals(metono.getInicial()));	
+						casaleroDTO.setCuartal(Boolean.TRUE.equals(metono.getCuartal()));
+						casaleroDTO.setTricuartal(Boolean.TRUE.equals(metono.getTricuartal()));
+						casaleroDTO.setNuevo(true);
+					}								
 				}
-				else if (casaleroEntity.isEclipelar()){
+				else if (casaleroEntity.getEclipseId() != null){
 					
-					tipo="Eclipelar";
-					casalero.setDeSol(casaleroEntity.isEclipelarDeSol());
-					casalero.setDeLuna(casaleroEntity.isEclipelarDeLuna());
+					Optional<EclipsesEntity> eclipseOpt = this.eclipsesRepository.findById(casaleroEntity.getEclipseId());
+					
+					if(eclipseOpt.isPresent()) {
+						
+						EclipsesEntity eclipse = eclipseOpt.get();
+						
+						tipo="Eclipelar";
+						casaleroDTO.setDeSol(Boolean.TRUE.equals(eclipse.isDeSol()));
+						casaleroDTO.setDeLuna(Boolean.TRUE.equals(eclipse.isDeLuna()));
+					}				
 				}
 				
-				casalero.setTipo(tipo);
+				casaleroDTO.setTipo(tipo);
 							
 			}	
 		}
@@ -284,7 +299,7 @@ public class DatesServiceImpl implements DatesService {
 			System.out.println("Error al obtener el casalero: " + e.getMessage());
 		}
 		
-		return casalero;		
+		return casaleroDTO;		
 	}
 	
 	private AbsoluteEclipsesDTO getVAUAbsoluteEclipses(DateDTO dateVAU, List<EclipsesEntity> eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN, LocalDate date, MetonsEntity lastMetonIN) {
