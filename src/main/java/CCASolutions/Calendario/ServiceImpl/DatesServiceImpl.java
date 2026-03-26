@@ -746,56 +746,56 @@ public class DatesServiceImpl implements DatesService {
 				
 				if (eclipeno.getInicial()) {
 					
-					evento = evento + "Starting ";
+					evento = evento + "Eclípeno inicial ";
 				}
 				else if(eclipeno.getCuartal()) {
 					
-					evento = evento + "Quarter ";
+					evento = evento + "Eclípeno cuartal ";
 				}
 				else if (eclipeno.getBicuartal()) {
 					
-					evento = evento + "Biquarter ";
+					evento = evento + "Eclípeno bicuartal ";
 				}
 				else if (eclipeno.getTricuartal()) {
 					
-					evento = evento + "Triquarter ";
+					evento = evento + "Eclípeno tricuartal ";
 				}
 				
 				if(eclipeno.getNuevo()) {
 					
-					evento = evento + "new eclipen";
+					evento = evento + "nuevo";
 				}
 				else if(eclipeno.getLleno()) {
 					
-					evento = evento + "full eclipen";
+					evento = evento + "lleno";
 				}
 			}
 			else if (meton != null) {
 				
 				if (meton.getInicial()) {
 					
-					evento = evento + "Starting ";
+					evento = evento + "Métono inicial ";
 				}
 				else if(meton.getCuartal()) {
 					
-					evento = evento + "Quarter ";
+					evento = evento + "Métono cuartal ";
 				}
 				else if (meton.getBicuartal()) {
 					
-					evento = evento + "Biquarter ";
+					evento = evento + "Métono bicuartal ";
 				}
 				else if (meton.getTricuartal()) {
 					
-					evento = evento + "Triquarter ";
+					evento = evento + "Métono tricuartal ";
 				}
 				
 				if(meton.getNuevo()) {
 					
-					evento = evento + "new meton";
+					evento = evento + "nuevo";
 				}
 				else if(meton.getLleno()) {
 					
-					evento = evento + "full meton";
+					evento = evento + "lleno";
 				}
 				
 			}
@@ -803,19 +803,19 @@ public class DatesServiceImpl implements DatesService {
 				
 				if(soe.isSolsticioInvierno()) {
 					
-					evento = evento + "Winter Solstice";
+					evento = evento + "Solsticio de invierno";
 				}
 				else if(soe.isEquinoccioPrimavera()) {
 					
-					evento = evento + "Spring Equinox";
+					evento = evento + "Equinoccio de primavera";
 				}
 				else if(soe.isSolsticioVerano()) {
 					
-					evento = evento + "Summer Solstice";
+					evento = evento + "Solsticio de verano";
 				}
 				else if (soe.isEquinoccioOtonyo()) {
 					
-					evento = evento + "Autumn Equinox";
+					evento = evento + "Equinoccio de otoño";
 				}
 			}
 			else if (eclipse != null) {				
@@ -823,45 +823,45 @@ public class DatesServiceImpl implements DatesService {
 				String tipo = "";
 				if(eclipse.isDeLuna()) {
 					
-					tipo =  "lunar eclipse";
+					tipo =  "Eclipse de luna";
 				}
 				else if (eclipse.isDeSol()) {
 					
-					tipo = "solar eclipse";
+					tipo = "Eclipse de sol";
 				}
 				
 				String fase = "";
 				if(eclipse.isEsAnular()) {
-					fase = "Annular ";
+					fase = " anular";
 				}
 				else if (eclipse.isEsHibrido()) {
-					fase = "Hybrid ";
+					fase = " híbrido";
 				}
 				else if (eclipse.isEsParcial()) {
-					fase = "Partial ";
+					fase = " parcial";
 				}
 				else if (eclipse.isEsPenumbral()) {
-					fase = "Penumbral ";
+					fase = " penumbral";
 				}
 				else if (eclipse.isEsTotal()) {
-					fase = "Total ";
+					fase = " total";
 				}		
 				
-				evento = evento + fase + tipo;
+				evento = evento + tipo + fase;
 			}			
 			else if (luna != null) {
 
 			    if (luna.isNueva()) {
-			        evento = evento + "New Moon";
+			        evento = evento + "Luna nueva";
 			    } 
 			    else if (luna.isCuartoCreciente()) {
-			        evento = evento + "First Quarter Moon";
+			        evento = evento + "Cuarto creciente";
 			    } 
 			    else if (luna.isLlena()) {
-			        evento = evento + "Full Moon";
+			        evento = evento + "Luna llena";
 			    } 
 			    else if (luna.isCuartoMenguante()) {
-			        evento = evento + "Last Quarter Moon";
+			        evento = evento + "Cuarto menguante";
 			    }
 			}
 		}
