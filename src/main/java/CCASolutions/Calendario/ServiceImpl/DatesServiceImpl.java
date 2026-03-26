@@ -855,13 +855,13 @@ public class DatesServiceImpl implements DatesService {
 			        evento = evento + "Luna nueva";
 			    } 
 			    else if (luna.isCuartoCreciente()) {
-			        evento = evento + "Cuarto creciente";
+			        evento = evento + "Luna cuarto creciente";
 			    } 
 			    else if (luna.isLlena()) {
 			        evento = evento + "Luna llena";
 			    } 
 			    else if (luna.isCuartoMenguante()) {
-			        evento = evento + "Cuarto menguante";
+			        evento = evento + "Luna cuarto menguante";
 			    }
 			}
 		}
