@@ -654,8 +654,8 @@ public class DatesServiceImpl implements DatesService {
 	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente) {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
-		String weekVauString = "0";
-		String dayVauString = "0";
+		String weekVauString = null;
+		String dayVauString = null;
 		
 		// Lo primero es seleccionar la luna nueva mas reciente, si cae en luna llena, no hay dias ni semanas
 		
@@ -690,12 +690,8 @@ public class DatesServiceImpl implements DatesService {
 			
 			if (diasDesdeLaLunaNueva <= 7) {
 				
-				if(caeEnLunaNueva) {
-								
-					weekVauString = this.weeksRepository.findByWeekOfMonth("0").getName();
-				}
-				else {
-					
+				if(!caeEnLunaNueva) {							
+							
 					weekVauString = this.weeksRepository.findByWeekOfMonth("1").getName();
 				}
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva).getName();
