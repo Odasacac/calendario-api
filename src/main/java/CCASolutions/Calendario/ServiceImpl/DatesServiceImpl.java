@@ -270,7 +270,7 @@ public class DatesServiceImpl implements DatesService {
 						casaleroDTO.setLleno(Boolean.TRUE.equals(metono.getLleno()));
 						casaleroDTO.setNuevo(Boolean.TRUE.equals(metono.getNuevo()));
 						casaleroDTO.setInicial(Boolean.TRUE.equals(metono.getInicial()));
-						casaleroDTO.setBicuartal(Boolean.TRUE.equals(metono.getInicial()));	
+						casaleroDTO.setBicuartal(Boolean.TRUE.equals(metono.getBicuartal()));	
 						casaleroDTO.setCuartal(Boolean.TRUE.equals(metono.getCuartal()));
 						casaleroDTO.setTricuartal(Boolean.TRUE.equals(metono.getTricuartal()));
 						casaleroDTO.setNuevo(true);

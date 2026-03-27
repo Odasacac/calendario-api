@@ -150,12 +150,7 @@ public class CasalerosServiceImpl implements CasalerosService {
 		
 		EclipsesEntity eclipse = null;
 		
-		if(Boolean.TRUE.equals(eclipeno.getLleno())) {
-			eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeLunaIsTrueOrderByDateAsc(eclipeno.getDate());
-		}
-		else if (Boolean.TRUE.equals(eclipeno.getNuevo())) {
-			eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeSolIsTrueOrderByDateAsc(eclipeno.getDate());
-		}		
+		eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseOrderByDateAsc(eclipeno.getDate());		
 		
 		return eclipse;
 		
@@ -164,13 +159,8 @@ public class CasalerosServiceImpl implements CasalerosService {
 	private EclipsesEntity getEclipseParaCasaleroConFecha(EclipenosEntity eclipeno, LocalDateTime fecha) {
 		
 		EclipsesEntity eclipse = null;
-		
-		if(Boolean.TRUE.equals(eclipeno.getLleno())) {
-			eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeLunaIsTrueOrderByDateAsc(fecha);
-		}
-		else if (Boolean.TRUE.equals(eclipeno.getNuevo())) {
-			eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeSolIsTrueOrderByDateAsc(fecha);
-		}		
+
+		eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseOrderByDateAsc(fecha);
 		
 		return eclipse;
 		
@@ -181,44 +171,7 @@ public class CasalerosServiceImpl implements CasalerosService {
 		
 		MetonsEntity metono = null;
 		
-		if(Boolean.TRUE.equals(eclipeno.getInicial())) {
-			
-			if(Boolean.TRUE.equals(eclipeno.getNuevo())) {
-				metono = this.metonsRepository.findFirstByDateAfterAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getDate());			
-			}
-			else if(Boolean.TRUE.equals(eclipeno.getLleno())) {
-				metono = this.metonsRepository.findFirstByDateAfterAndInicialIsTrueAndLlenoIsTrueOrderByDateAsc(eclipeno.getDate());			
-			}
-		}
-		else if(Boolean.TRUE.equals(eclipeno.getCuartal())) {
-			
-			if(Boolean.TRUE.equals(eclipeno.getNuevo())) {
-				metono = this.metonsRepository.findFirstByDateAfterAndCuartalIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getDate());			
-			}
-			else if(Boolean.TRUE.equals(eclipeno.getLleno())) {
-				metono = this.metonsRepository.findFirstByDateAfterAndCuartalIsTrueAndLlenoIsTrueOrderByDateAsc(eclipeno.getDate());			
-			}
-		}
-		else if(Boolean.TRUE.equals(eclipeno.getBicuartal())) {
-			
-			if(Boolean.TRUE.equals(eclipeno.getNuevo())) {
-				metono = this.metonsRepository.findFirstByDateAfterAndBicuartalIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getDate());			
-			}
-			else if(Boolean.TRUE.equals(eclipeno.getLleno())) {
-				metono = this.metonsRepository.findFirstByDateAfterAndBicuartalIsTrueAndLlenoIsTrueOrderByDateAsc(eclipeno.getDate());			
-			}
-		}
-		
-		else if(Boolean.TRUE.equals(eclipeno.getTricuartal())) {
-			
-			if(Boolean.TRUE.equals(eclipeno.getNuevo())) {
-				metono = this.metonsRepository.findFirstByDateAfterAndTricuartalIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getDate());			
-			}
-			else if(Boolean.TRUE.equals(eclipeno.getLleno())) {
-				metono = this.metonsRepository.findFirstByDateAfterAndTricuartalIsTrueAndLlenoIsTrueOrderByDateAsc(eclipeno.getDate());			
-			}
-		}
-		
+		metono = this.metonsRepository.findFirstByDateAfterOrderByDateAsc(eclipeno.getDate());			
 		
 		return metono;
 	}

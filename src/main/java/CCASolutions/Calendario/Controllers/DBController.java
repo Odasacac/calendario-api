@@ -29,7 +29,6 @@ public class DBController {
 	@Autowired
 	private DatosRepository datosRepository;
 
-
 	@PostMapping("/poblatedb")
 	public ResponseEntity<String> poblateDB(@RequestBody PoblateDBDTO poblateDBDTO) {
 		HttpStatus status = HttpStatus.OK;
