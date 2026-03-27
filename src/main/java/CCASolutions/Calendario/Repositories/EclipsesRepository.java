@@ -13,4 +13,7 @@ public interface EclipsesRepository extends JpaRepository <EclipsesEntity, Long>
 	public abstract List<EclipsesEntity> findByYear(int year);
 	List<EclipsesEntity> findByDateBetweenAndEsParcialIsFalseAndEsPenumbralIsFalse(LocalDateTime inicio, LocalDateTime fin);
 	EclipsesEntity findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseOrderByDateAsc(LocalDateTime date);
+	
+	EclipsesEntity findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeLunaIsTrueOrderByDateAsc(LocalDateTime date);
+	EclipsesEntity findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeSolIsTrueOrderByDateAsc(LocalDateTime date);
 }

@@ -56,17 +56,9 @@ public class CasalerosServiceImpl implements CasalerosService {
 				
 		try {
 				
-
-			/*
-			 Lo primero es coger todos los eclípenos
-			 */
 			List<EclipenosEntity> eclipenos = this.eclipenosRepository.findAll();
 					
 			if(!eclipenos.isEmpty()) {
-					
-				/*
-				 	Para cada uno de ellos, vamos a coger el evento que ocurrió primero despues de su fecha
-					*/
 					
 				for(EclipenosEntity eclipeno : eclipenos) {
 						
@@ -75,9 +67,10 @@ public class CasalerosServiceImpl implements CasalerosService {
 					CasalerosEntity casaleroParaDB = new CasalerosEntity();
 						
 					LocalDateTime eclipenoDate = eclipeno.getDate();
-						
-					MetonsEntity metono = this.metonsRepository.findFirstByDateAfterOrderByDateAsc(eclipenoDate);						
-					EclipsesEntity eclipseAbsoluto = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseOrderByDateAsc(eclipenoDate);
+					
+					MetonsEntity metono = this.getMetonoParaCasalero(eclipeno);	
+					
+					EclipsesEntity eclipseAbsoluto = this.getEclipseParaCasalero(eclipeno);
 
 					if(metono != null && eclipseAbsoluto != null) {
 						
@@ -85,7 +78,8 @@ public class CasalerosServiceImpl implements CasalerosService {
 						
 						if(segundosDeDiferencia <= 86164) {
 							
-							eclipseAbsoluto = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseOrderByDateAsc(eclipenoDate.plusSeconds(86164));
+							LocalDateTime nuevaFecha = eclipenoDate.plusSeconds(86164);
+							eclipseAbsoluto = this.getEclipseParaCasaleroConFecha(eclipeno, nuevaFecha);
 						}
 							
 						if(metono.getDate().isBefore(eclipseAbsoluto.getDate())) {
@@ -114,19 +108,22 @@ public class CasalerosServiceImpl implements CasalerosService {
 							
 							if(segundosDeDiferencia <= 86164) {
 								
-								eclipseAbsoluto = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseOrderByDateAsc(eclipenoDate.plusSeconds(86164));
+								LocalDateTime nuevaFecha = eclipenoDate.plusSeconds(86164);
+								eclipseAbsoluto = this.getEclipseParaCasaleroConFecha(eclipeno, nuevaFecha);
 							}
 							casaleroParaDB.setEclipseId(eclipseAbsoluto.getId());
 							casaleroParaDB.setDate(eclipseAbsoluto.getDate());
 						}
 					}
-												
-					casaleroParaDB.setYear(casaleroParaDB.getDate().getYear());
-					casaleroParaDB.setEclipenoId(eclipeno.getId());
-					
-					casalerosRepository.save(casaleroParaDB);
-					System.out.println("Casalero almacenado, año: " + casaleroParaDB.getYear());
+								
+					if(casaleroParaDB.getDate() != null) {
 						
+						casaleroParaDB.setYear(casaleroParaDB.getDate().getYear());
+						casaleroParaDB.setEclipenoId(eclipeno.getId());
+						
+						casalerosRepository.save(casaleroParaDB);
+						System.out.println("Casalero almacenado, año: " + casaleroParaDB.getYear());
+					}								
 				}
 				
 				resultado = "Casaleros poblados correctamente";
@@ -147,5 +144,82 @@ public class CasalerosServiceImpl implements CasalerosService {
 			
 			
 		return resultado;
+	}
+	
+	private EclipsesEntity getEclipseParaCasalero(EclipenosEntity eclipeno) {
+		
+		EclipsesEntity eclipse = null;
+		
+		if(Boolean.TRUE.equals(eclipeno.getLleno())) {
+			eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeLunaIsTrueOrderByDateAsc(eclipeno.getDate());
+		}
+		else if (Boolean.TRUE.equals(eclipeno.getNuevo())) {
+			eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeSolIsTrueOrderByDateAsc(eclipeno.getDate());
+		}		
+		
+		return eclipse;
+		
+	}
+	
+	private EclipsesEntity getEclipseParaCasaleroConFecha(EclipenosEntity eclipeno, LocalDateTime fecha) {
+		
+		EclipsesEntity eclipse = null;
+		
+		if(Boolean.TRUE.equals(eclipeno.getLleno())) {
+			eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeLunaIsTrueOrderByDateAsc(fecha);
+		}
+		else if (Boolean.TRUE.equals(eclipeno.getNuevo())) {
+			eclipse = this.eclipsesRepository.findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeSolIsTrueOrderByDateAsc(fecha);
+		}		
+		
+		return eclipse;
+		
+	}
+	
+	
+	private MetonsEntity getMetonoParaCasalero(EclipenosEntity eclipeno) {
+		
+		MetonsEntity metono = null;
+		
+		if(Boolean.TRUE.equals(eclipeno.getInicial())) {
+			
+			if(Boolean.TRUE.equals(eclipeno.getNuevo())) {
+				metono = this.metonsRepository.findFirstByDateAfterAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getDate());			
+			}
+			else if(Boolean.TRUE.equals(eclipeno.getLleno())) {
+				metono = this.metonsRepository.findFirstByDateAfterAndInicialIsTrueAndLlenoIsTrueOrderByDateAsc(eclipeno.getDate());			
+			}
+		}
+		else if(Boolean.TRUE.equals(eclipeno.getCuartal())) {
+			
+			if(Boolean.TRUE.equals(eclipeno.getNuevo())) {
+				metono = this.metonsRepository.findFirstByDateAfterAndCuartalIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getDate());			
+			}
+			else if(Boolean.TRUE.equals(eclipeno.getLleno())) {
+				metono = this.metonsRepository.findFirstByDateAfterAndCuartalIsTrueAndLlenoIsTrueOrderByDateAsc(eclipeno.getDate());			
+			}
+		}
+		else if(Boolean.TRUE.equals(eclipeno.getBicuartal())) {
+			
+			if(Boolean.TRUE.equals(eclipeno.getNuevo())) {
+				metono = this.metonsRepository.findFirstByDateAfterAndBicuartalIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getDate());			
+			}
+			else if(Boolean.TRUE.equals(eclipeno.getLleno())) {
+				metono = this.metonsRepository.findFirstByDateAfterAndBicuartalIsTrueAndLlenoIsTrueOrderByDateAsc(eclipeno.getDate());			
+			}
+		}
+		
+		else if(Boolean.TRUE.equals(eclipeno.getTricuartal())) {
+			
+			if(Boolean.TRUE.equals(eclipeno.getNuevo())) {
+				metono = this.metonsRepository.findFirstByDateAfterAndTricuartalIsTrueAndNuevoIsTrueOrderByDateAsc(eclipeno.getDate());			
+			}
+			else if(Boolean.TRUE.equals(eclipeno.getLleno())) {
+				metono = this.metonsRepository.findFirstByDateAfterAndTricuartalIsTrueAndLlenoIsTrueOrderByDateAsc(eclipeno.getDate());			
+			}
+		}
+		
+		
+		return metono;
 	}
 }

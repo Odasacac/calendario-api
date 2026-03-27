@@ -5,7 +5,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.RestController;
 import CCASolutions.Calendario.DTOs.PoblateDBDTO;
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Repositories.DatosRepository;
-import CCASolutions.Calendario.Services.CasalerosService;
 import CCASolutions.Calendario.Services.DBService;
 
 @RestController
@@ -30,22 +28,7 @@ public class DBController {
 	
 	@Autowired
 	private DatosRepository datosRepository;
-	
-	@Autowired
-	private CasalerosService casalerosService;
-	
-	
-	@GetMapping("/poblatedb")
-	public ResponseEntity<String> poblateDB(){
-		
-		HttpStatus status = HttpStatus.OK;
-		String body = "Error al actualizar la base de datos.";
-		
-		body = this.casalerosService.poblateCasaleros();
-		
-		return new ResponseEntity<String>(body, status);
-		
-	}
+
 
 	@PostMapping("/poblatedb")
 	public ResponseEntity<String> poblateDB(@RequestBody PoblateDBDTO poblateDBDTO) {

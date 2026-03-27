@@ -19,4 +19,13 @@ public interface MetonsRepository extends JpaRepository <MetonsEntity, Long> {
 	List<MetonsEntity> findAllByInicialIsTrueAndNuevoIsTrue();
 	List<MetonsEntity> findByYearBetweenAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(int yearInicio, int yearFin);
 	MetonsEntity findFirstByDateAfterOrderByDateAsc(LocalDateTime date);
+	
+	MetonsEntity findFirstByDateAfterAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndInicialIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndCuartalIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndCuartalIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndBicuartalIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndBicuartalIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndTricuartalIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndTricuartalIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
 }
