@@ -7,15 +7,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
-import CCASolutions.Calendario.DTOs.DateVAUDTO;
-import CCASolutions.Calendario.Responses.FromDateVAUToDateOResponse;
 import CCASolutions.Calendario.Services.DatesService;
 
 @RestController
@@ -56,50 +52,4 @@ public class DatesController {
 		return new ResponseEntity<DateDTO>(body, status);
 	}
 
-	@PostMapping("/conversiontoofficial")
-	public ResponseEntity<FromDateVAUToDateOResponse> getDateO(@RequestBody DateVAUDTO dateVAU) {
-		HttpStatus status = HttpStatus.OK;
-		FromDateVAUToDateOResponse body = new FromDateVAUToDateOResponse();
-
-		
-		try {			
-
-			body = this.datesService.getDateOFromDateVAU(dateVAU);
-				
-			if(body.getDateO() == null) {
-					
-				status = HttpStatus.BAD_REQUEST;
-			}
-					
-		} catch (Exception e) {
-					
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-			System.out.println(e);
-		}	
-			
-		
-		return new ResponseEntity<FromDateVAUToDateOResponse>(body, status);
-	}
-	
-	
-	
-	@GetMapping("/nowtovau")
-	public ResponseEntity<DateDTO> getTodayVAU() {
-		HttpStatus status = HttpStatus.OK;
-		DateDTO body = new DateDTO();
-
-		LocalDate dateO = LocalDate.now();
-
-		try {
-			
-			body = this.datesService.getDateVAUFromDateO(dateO);			
-		} 
-		catch (Exception e) {
-			
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-			System.out.println(e);
-		}
-
-		return new ResponseEntity<DateDTO>(body, status);
-	}
 }

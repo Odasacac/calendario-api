@@ -16,4 +16,7 @@ public interface EclipsesRepository extends JpaRepository <EclipsesEntity, Long>
 	
 	EclipsesEntity findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeLunaIsTrueOrderByDateAsc(LocalDateTime date);
 	EclipsesEntity findFirstByDateAfterAndEsParcialIsFalseAndEsPenumbralIsFalseAndDeSolIsTrueOrderByDateAsc(LocalDateTime date);
+	
+	EclipsesEntity findFirstByDateAfterOrderByDateAsc(LocalDateTime date);
+	EclipsesEntity findFirstByDateBeforeOrderByDateDesc(LocalDateTime date);
 }

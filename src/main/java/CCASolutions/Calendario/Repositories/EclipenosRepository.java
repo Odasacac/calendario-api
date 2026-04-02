@@ -15,4 +15,7 @@ public interface EclipenosRepository extends JpaRepository <EclipenosEntity, Lon
 	EclipenosEntity findTopByDateLessThanEqualAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrDateLessThanEqualAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrueOrderByDateDesc(@Param("dateO") LocalDateTime dateO, @Param("dateOO") LocalDateTime dateOO);
 	EclipenosEntity findTopByYearAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrYearAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrue(@Param("yearUno") int yearUno, @Param("yearDos") int yearDos);
 	List<EclipenosEntity> findTop2ByYearGreaterThanEqualAndNuevoIsTrueAndInicialIsTrueOrderByYearAsc(int year);
+	
+	EclipenosEntity findFirstByDateAfterOrderByDateAsc(LocalDateTime date);
+	EclipenosEntity findFirstByDateBeforeOrderByDateDesc(LocalDateTime date);
 }

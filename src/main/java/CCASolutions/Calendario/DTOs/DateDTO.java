@@ -8,7 +8,7 @@ public class DateDTO {
 	private MonthDTO month;
 	private String week;
 	private String day;
-	private String notableEvent;
+	private NotableEventDTO notableEvent;
 	private AbsoluteEclipsesDTO absoluteEclipses;
 	private CasaleroDTO casalero;
 	
@@ -31,11 +31,12 @@ public class DateDTO {
 		this.absoluteEclipses = absoluteEclipse;
 	}
 
-	public String getNotableEvent() {
+
+	public NotableEventDTO getNotableEvent() {
 		return notableEvent;
 	}
 
-	public void setNotableEvent(String notableEvent) {
+	public void setNotableEvent(NotableEventDTO notableEvent) {
 		this.notableEvent = notableEvent;
 	}
 

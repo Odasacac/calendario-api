@@ -22,5 +22,8 @@ public interface SolsticiosYEquinocciosRepository extends JpaRepository <Solstic
 
 	public abstract SolsticiosYEquinocciosEntity findTopByOrderByDateDesc();
 	
+	public abstract SolsticiosYEquinocciosEntity findFirstByDateAfterOrderByDateAsc(LocalDateTime date);
+	public abstract SolsticiosYEquinocciosEntity findFirstByDateBeforeOrderByDateDesc(LocalDateTime date);
+	
 
 }
