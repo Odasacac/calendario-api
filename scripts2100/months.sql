@@ -8,9 +8,9 @@ INSERT INTO calendar_db.months (name,hibrid,month_of_season,season,liminal) VALU
 	 ('Prano',0,1,3,0),
 	 ('Segano',0,2,3,0),
 	 ('Tano',0,3,3,0),
-	 ('Pror',0,1,4,0);
+	 ('Pridor',0,1,4,0);
 INSERT INTO calendar_db.months (name,hibrid,month_of_season,season,liminal) VALUES
-	 ('Sor',0,2,4,0),
+	 ('Sedor',0,2,4,0),
 	 ('Tor',0,3,4,0),
 	 ('Invera',1,0,2,0),
 	 ('Primano',1,0,3,0),
