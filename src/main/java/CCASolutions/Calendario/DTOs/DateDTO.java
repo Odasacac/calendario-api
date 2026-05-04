@@ -11,9 +11,18 @@ public class DateDTO {
 	private NotableEventDTO notableEvent;
 	private AbsoluteEclipsesDTO absoluteEclipses;
 	private CasaleroDTO casalero;
+	private FestividadesDTO festividades;
 	
 	
 	
+
+	public FestividadesDTO getFestividades() {
+		return festividades;
+	}
+
+	public void setFestividades(FestividadesDTO festividad) {
+		this.festividades = festividad;
+	}
 
 	public CasaleroDTO getCasalero() {
 		return casalero;

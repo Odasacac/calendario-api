@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.EclipenoDTO;
+import CCASolutions.Calendario.DTOs.FestividadDTO;
+import CCASolutions.Calendario.DTOs.FestividadesDTO;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.NotableEventDTO;
@@ -28,10 +30,12 @@ import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
+import CCASolutions.Calendario.Entities.FestividadesEntity;
 import CCASolutions.Calendario.Repositories.CasalerosRepository;
 import CCASolutions.Calendario.Repositories.DaysRepository;
 import CCASolutions.Calendario.Repositories.EclipenosRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
+import CCASolutions.Calendario.Repositories.FestividadesRepository;
 import CCASolutions.Calendario.Repositories.LunasRepository;
 import CCASolutions.Calendario.Repositories.MetonsRepository;
 import CCASolutions.Calendario.Repositories.MonthsRepository;
@@ -68,6 +72,9 @@ public class DatesServiceImpl implements DatesService {
 	
 	@Autowired
 	private CasalerosRepository casalerosRepository;
+	
+	@Autowired
+	private FestividadesRepository festividadesRepository;
 	
 	// METODOS PUBLICOS 
 	
@@ -130,8 +137,11 @@ public class DatesServiceImpl implements DatesService {
 					// Incluimos Casalero si lo hay
 					dateVAU.setCasalero(this.getCasalero(lastEclipenoIN.getId()));
 					
-					// Y finalmente, indicamos si hay algun tipo de evento reseñable
+					//Indicamos si hay algun tipo de evento reseñable
 					dateVAU.setNotableEvent(this.getNotableEvent(date));
+					
+					// Indicamos las festividades
+					dateVAU.setFestividades(this.getFestividades(date));
 				}
 				
 			}
@@ -151,6 +161,25 @@ public class DatesServiceImpl implements DatesService {
 
 	
 	// ========================= METODOS PRIVADOS
+	
+	private FestividadesDTO getFestividades(LocalDate dateO) {
+
+		FestividadesDTO festividadesDTO = new FestividadesDTO();
+		
+		List<FestividadesEntity> festividadesBD = this.festividadesRepository.findAll();
+		
+		
+		FestividadDTO festividadProxima = new FestividadDTO();
+		FestividadDTO festividadAnterior = new FestividadDTO();
+		
+		
+		
+		
+		festividadesDTO.setFestividadProxima(festividadProxima);
+		festividadesDTO.setFestividadAnterior(festividadAnterior);		
+		
+		return festividadesDTO;
+	}
 	
 	private CasaleroDTO getCasalero(Long lastEclipenoINId) {
 		
