@@ -198,7 +198,8 @@ public class DatesServiceImpl implements DatesService {
 		LocalDateTime startOfDay = dateO.atStartOfDay();
 		LocalDateTime endOfDay = dateO.plusDays(1).atStartOfDay();
 					
-		LunasEntity luna = this.lunasRepository.findByDateBetween(startOfDay, endOfDay);		
+		LunasEntity luna = this.lunasRepository.findByDateBetween(startOfDay, endOfDay);
+		LunasEntity lunaFestividades = this.lunasRepository.findByDateBetweenAndNuevaIsTrueAndLlenaIsTrue(startOfDay, endOfDay);
 		SolsticiosYEquinocciosEntity soe = this.solsticiosYEquinocciosRepository.findByDateBetween(startOfDay, endOfDay);
 		SolsticiosYEquinocciosEntity soePast = this.solsticiosYEquinocciosRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
 		MetonsEntity meton = this.metonsRepository.findByDateBetween(startOfDay, endOfDay);
@@ -209,7 +210,7 @@ public class DatesServiceImpl implements DatesService {
 		notableEventHoy.setToday(this.getNotableEventName(luna, soe, meton, eclipse, eclipeno));		
 		eventoYFestividadHoy.setNotableEvents(notableEventHoy);
 		
-		FestividadesDTO festividadHoy = this.getFestividadActual(luna, soe, soePast, meton, eclipse, eclipeno);
+		FestividadesDTO festividadHoy = this.getFestividadActual(lunaFestividades, soe, soePast, meton, eclipse, eclipeno);
 		
 		eventoYFestividadHoy.setFestividades(festividadHoy);
 		
