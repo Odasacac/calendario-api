@@ -337,7 +337,7 @@ public class DatesServiceImpl implements DatesService {
 		Long diasEntreLunaNuevaYDate = ChronoUnit.DAYS.between(dateO, lunaNueva.getDate().toLocalDate());
 	    Long diasEntreSOEFuturoYDate = ChronoUnit.DAYS.between(dateO, soeFuturo.getDate().toLocalDate());
 	    Long diasEntreMetonYDate = ChronoUnit.DAYS.between(dateO, meton.getDate().toLocalDate());
-	    Long diasEntreEclipseYDate = ChronoUnit.DAYS.between(dateO, eclipse.getDate().toLocalDate());
+	    //Long diasEntreEclipseYDate = ChronoUnit.DAYS.between(dateO, eclipse.getDate().toLocalDate());
 	    Long diasEntreEclipenoYDate = ChronoUnit.DAYS.between(dateO, eclipeno.getDate().toLocalDate());	
 	    
 	    long minDiasConLuna = Math.min(diasEntreLunaLlenaYDate, Math.min(diasEntreLunaNuevaYDate, Math.min(diasEntreSOEFuturoYDate, Math.min(diasEntreMetonYDate, diasEntreEclipenoYDate))));
@@ -418,7 +418,7 @@ public class DatesServiceImpl implements DatesService {
 		Long diasEntreLunaNuevaYDate = ChronoUnit.DAYS.between(lunaNueva.getDate().toLocalDate(), dateO);
 		Long diasEntreSOEYDate = ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), dateO);
 		Long diasEntreMetonYDate = ChronoUnit.DAYS.between(meton.getDate().toLocalDate(), dateO);
-		Long diasEntreEclipseYDate = ChronoUnit.DAYS.between(eclipse.getDate().toLocalDate(), dateO);
+		//Long diasEntreEclipseYDate = ChronoUnit.DAYS.between(eclipse.getDate().toLocalDate(), dateO);
 		Long diasEntreEclipenoYDate = ChronoUnit.DAYS.between(eclipeno.getDate().toLocalDate(), dateO);	   
 		
 		long minDiasConLuna = Math.min(diasEntreLunaNuevaYDate, Math.min(diasEntreLunaLlenaYDate, Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, diasEntreEclipenoYDate))));
