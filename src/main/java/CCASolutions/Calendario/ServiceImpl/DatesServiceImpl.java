@@ -391,9 +391,9 @@ public class DatesServiceImpl implements DatesService {
 		    
 		    lunaParaMetodo = null;
 			soeParaMetodo = diasEntreSOEFuturoYDate == minDiasSinLuna ? soeFuturo : null;
-			metonParaMetodo = diasEntreMetonYDate == minDiasSinLuna ? meton : metonParaMetodo;
+			metonParaMetodo = diasEntreMetonYDate == minDiasSinLuna ? metonParaMetodo : null;
 			eclipseParaMetodo = null; // Aun no hay festividades con solo eclipses
-			eclipenoParaMetodo = diasEntreEclipenoYDate == minDiasSinLuna ? eclipeno : eclipenoParaMetodo;
+			eclipenoParaMetodo = diasEntreEclipenoYDate == minDiasSinLuna ? eclipenoParaMetodo : null;
 		}
 	    	
 	     
