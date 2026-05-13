@@ -3,25 +3,36 @@ package CCASolutions.Calendario.DTOs;
 
 public class FestividadesDTO {
 	
-	private FestividadDTO festividadProxima;
+	private String festividadActual;
 	
-	private FestividadDTO festividadAnterior;
+	private String festividadProxima;
+	
+	private String festividadAnterior;
 
-	
-	public FestividadDTO getFestividadProxima() {
+	public String getFestividadActual() {
+		return festividadActual;
+	}
+
+	public void setFestividadActual(String festividadActual) {
+		this.festividadActual = festividadActual;
+	}
+
+	public String getFestividadProxima() {
 		return festividadProxima;
 	}
 
-	public void setFestividadProxima(FestividadDTO festividadProxima) {
+	public void setFestividadProxima(String festividadProxima) {
 		this.festividadProxima = festividadProxima;
 	}
 
-	public FestividadDTO getFestividadAnterior() {
+	public String getFestividadAnterior() {
 		return festividadAnterior;
 	}
 
-	public void setFestividadAnterior(FestividadDTO festividadAnterior) {
+	public void setFestividadAnterior(String festividadAnterior) {
 		this.festividadAnterior = festividadAnterior;
-	}	
+	}
 
+	
+	
 }

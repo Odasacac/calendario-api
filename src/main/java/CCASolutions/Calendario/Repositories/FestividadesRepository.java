@@ -6,4 +6,6 @@ import CCASolutions.Calendario.Entities.FestividadesEntity;
 
 public interface FestividadesRepository extends JpaRepository <FestividadesEntity, Long>{
 
+	FestividadesEntity findByCode(String code);
+	
 }

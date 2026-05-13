@@ -22,6 +22,8 @@ public class FestividadesEntity implements Serializable {
 	
 	private String descripcion;
 	
+	private String code;
+	
 	private boolean esSolsticioVerano;
 	
 	private boolean esSolsticioInvierno;
@@ -35,6 +37,36 @@ public class FestividadesEntity implements Serializable {
 	private boolean esMetono;
 	
 	private boolean esEclipeno;
+	
+	private int previousSOE;
+	
+	private int nextSOE;
+	
+	
+
+	public int getPreviousSOE() {
+		return previousSOE;
+	}
+
+	public void setPreviousSOE(int previousSOE) {
+		this.previousSOE = previousSOE;
+	}
+
+	public int getNextSOE() {
+		return nextSOE;
+	}
+
+	public void setNextSOE(int nextSOE) {
+		this.nextSOE = nextSOE;
+	}
+
+	public String getCode() {
+		return code;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
 
 	public Long getId() {
 		return id;
