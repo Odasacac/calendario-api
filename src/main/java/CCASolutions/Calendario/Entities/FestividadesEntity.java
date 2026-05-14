@@ -34,6 +34,12 @@ public class FestividadesEntity implements Serializable {
 	
 	private boolean esLunaNueva;
 	
+	private boolean esLunaLlena;
+	
+	private boolean hayEclipseDeLuna;
+	
+	private boolean hayEclipseDeSol;
+	
 	private boolean esMetono;
 	
 	private boolean esEclipeno;
@@ -43,6 +49,33 @@ public class FestividadesEntity implements Serializable {
 	private int nextSOE;
 	
 	
+	
+	
+	
+
+	public boolean isEsLunaLlena() {
+		return esLunaLlena;
+	}
+
+	public void setEsLunaLlena(boolean esLunaLlena) {
+		this.esLunaLlena = esLunaLlena;
+	}
+
+	public boolean isHayEclipseDeLuna() {
+		return hayEclipseDeLuna;
+	}
+
+	public void setHayEclipseDeLuna(boolean hayEclipseDeLuna) {
+		this.hayEclipseDeLuna = hayEclipseDeLuna;
+	}
+
+	public boolean isHayEclipseDeSol() {
+		return hayEclipseDeSol;
+	}
+
+	public void setHayEclipseDeSol(boolean hayEclipseDeSol) {
+		this.hayEclipseDeSol = hayEclipseDeSol;
+	}
 
 	public int getPreviousSOE() {
 		return previousSOE;
