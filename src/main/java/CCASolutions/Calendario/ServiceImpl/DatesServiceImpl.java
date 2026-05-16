@@ -30,6 +30,7 @@ import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
+import CCASolutions.Calendario.Entities.FestividadesEntity;
 import CCASolutions.Calendario.Repositories.CasalerosRepository;
 import CCASolutions.Calendario.Repositories.DaysRepository;
 import CCASolutions.Calendario.Repositories.EclipenosRepository;
@@ -1150,51 +1151,63 @@ public class DatesServiceImpl implements DatesService {
 	private String getFestividadName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno) {
 		
 		String festividad = "";
-
+		
+		boolean esLunaNueva = false;
+		boolean esLunaLlena = false;
+		boolean esSolsticioInvierno = false;
+		boolean esSolsticioVerano = false;
+		boolean esEquinoccioPrimavera = false;
+		boolean esEquinoccioOtonyo = false;
+		boolean esEclipeno = false;
+		boolean esMetono = false;
+		int soeSeason = 0;
+		
+		if(soe != null) {
+			
+			esSolsticioInvierno = soe.isSolsticioInvierno();
+			esSolsticioVerano = soe.isSolsticioVerano();
+			esEquinoccioPrimavera = soe.isEquinoccioPrimavera();
+			esEquinoccioOtonyo = soe.isEquinoccioOtonyo();
+		}
 		
 		if(luna != null) {
-			if(luna.isNueva() && soe.isSolsticioInvierno()) {
-				festividad = this.festividadesRepository.findByCode("PM").getName();
-			}
-		}
-		else if (eclipeno != null) {
 			
-			if(eclipeno.getInicial() && eclipeno.getNuevo()) {
-				festividad = this.festividadesRepository.findByCode("CE").getName();
-			}
-		}
-		else if(meton != null) {
-				
-			if(meton.getInicial() && meton.getNuevo()) {
-				festividad = this.festividadesRepository.findByCode("CM").getName();
-			}
-				
-		}
-		else if (soe != null){
-				
-			switch (soe.getStartingSeason()) {
-				
-				case 1:
-					festividad = this.festividadesRepository.findByCode("CA").getName();
-					break;
-					
-				case 2:
-					festividad = this.festividadesRepository.findByCode("BP").getName();
-					break;
-					
-				case 3:
-					festividad = this.festividadesRepository.findByCode("MA").getName();
-					break;
-					
-				case 4:
-					festividad = this.festividadesRepository.findByCode("BO").getName();
-					break;
+			esLunaNueva = luna.isNueva();
+			esLunaLlena = luna.isLlena();	
 			
+			if(soe!= null){
+				soeSeason = soe.getStartingSeason();
 			}
-		}		
+		}
 		
+		if(meton != null) {
+			
+			esMetono = true;
+		}
+		
+		if(eclipeno != null) {
+			
+			esEclipeno = true;
+		}
+		
+		FestividadesEntity festividadEntity = this.festividadesRepository.buscarFestividad(
+				esLunaNueva, 
+				esLunaLlena, 
+				esSolsticioInvierno,
+				esSolsticioVerano,
+				esEquinoccioPrimavera,
+				esEquinoccioOtonyo,
+				esEclipeno,
+				esMetono,
+				soeSeason);
+		
+		if(festividadEntity != null) {
+			festividad = festividadEntity.getName();
+		}
+
 		return festividad;
 	}
+	
 	
 }
 
