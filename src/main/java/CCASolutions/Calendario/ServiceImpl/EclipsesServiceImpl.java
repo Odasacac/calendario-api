@@ -33,47 +33,56 @@ public class EclipsesServiceImpl implements EclipsesService{
 		String resultado = "Eclipses actualizados sin problema.";
 		
 		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList("LEPY", "SEPY"));	
+		List<EclipsesEntity> allEclipses = this.eclipsesRepository.findAll();
 		
 		String apiEclipsesLunares = "";
 		String apiEclipsesSolares = "";
 		
-		for (DatosEntity url : urls) 
-		{
-			switch (url.getConcepto()) {
-			
-				case "LEPY":					
-					apiEclipsesLunares = url.getValor();
-					break;
+		if(allEclipses.isEmpty()) {
+			for (DatosEntity url : urls) 
+			{
+				switch (url.getConcepto()) {
 				
-				case "SEPY":					
-					apiEclipsesSolares = url.getValor();
-					break;					
-			}
-		}
-		
-		if(apiEclipsesLunares != null && apiEclipsesSolares != null) {
-			
-			try {
-				
-				for (int i = 0; i <= 2100; i++) {
-														
-					this.actualizarEclipsesLunaresDelAnyo(String.valueOf(i), apiEclipsesLunares);
+					case "LEPY":					
+						apiEclipsesLunares = url.getValor();
+						break;
 					
-					this.actualizarEclipsesSolaresDelAnyo(String.valueOf(i), apiEclipsesSolares);				
-				
+					case "SEPY":					
+						apiEclipsesSolares = url.getValor();
+						break;					
 				}
 			}
-			catch (Exception e)
-			{
-				System.out.println("Error al evaluar los eclipses: " + e);
-				resultado = "Error al evaluar los eclipses, revisar logs";
-			}
 			
+			if(apiEclipsesLunares != null && apiEclipsesSolares != null) {
+				
+				try {
+					
+					for (int i = 0; i <= 2100; i++) {
+															
+						this.actualizarEclipsesLunaresDelAnyo(String.valueOf(i), apiEclipsesLunares);
+						
+						this.actualizarEclipsesSolaresDelAnyo(String.valueOf(i), apiEclipsesSolares);				
+					
+					}
+				}
+				catch (Exception e)
+				{
+					System.out.println("Error al evaluar los eclipses: " + e);
+					resultado = "Error al evaluar los eclipses, revisar logs";
+				}
+				
+			}
+			else {
+				
+				System.out.println("La URL de la API para obtener los eclipses es nula.");
+			}
 		}
 		else {
-			
-			System.out.println("La URL de la API para obtener los eclipses es nula.");
+			System.out.println("Ya hay eclipses en la base de datos.");
+			resultado = "Error al actualizar los eclipses, checkear logs.";
 		}
+			
+		
 		
 		return resultado;
 
@@ -85,35 +94,43 @@ public class EclipsesServiceImpl implements EclipsesService{
 		
 		System.out.println("Actualizando los eclipses solares del anyo: " + anyo);
 		
-		List<LunarEclipseDTO> eclipsesLunaresDelAnyo = this.getEclipsesLunaresDelAnyoViaAPI(anyo, url);
-		
-		if(!eclipsesLunaresDelAnyo.isEmpty()) {
+		try {
 			
-			for(LunarEclipseDTO eclipse : eclipsesLunaresDelAnyo) {
+			List<LunarEclipseDTO> eclipsesLunaresDelAnyo = this.getEclipsesLunaresDelAnyoViaAPI(anyo, url);
+			
+			if(!eclipsesLunaresDelAnyo.isEmpty()) {
 				
-				EclipsesEntity eclipseParaBD = new EclipsesEntity();
-				eclipseParaBD.setDeLuna(true);
-				eclipseParaBD.setDate(eclipse.getDate());
-				eclipseParaBD.setYear(Integer.valueOf(anyo));
-				
-				switch(eclipse.getType()) {
-				
-					case "TotalEclipse":
-						eclipseParaBD.setEsTotal(true);
-						break;
-						
-					case "PartialEclipse":
-						eclipseParaBD.setEsParcial(true);
-						break;
-						
-					case "PenumbralEclipse":
-						eclipseParaBD.setEsPenumbral(true);
-						break;
+				for(LunarEclipseDTO eclipse : eclipsesLunaresDelAnyo) {
+					
+					EclipsesEntity eclipseParaBD = new EclipsesEntity();
+					eclipseParaBD.setDeLuna(true);
+					eclipseParaBD.setDate(eclipse.getDate());
+					eclipseParaBD.setYear(Integer.valueOf(anyo));
+					
+					switch(eclipse.getType()) {
+					
+						case "TotalEclipse":
+							eclipseParaBD.setEsTotal(true);
+							break;
+							
+						case "PartialEclipse":
+							eclipseParaBD.setEsParcial(true);
+							break;
+							
+						case "PenumbralEclipse":
+							eclipseParaBD.setEsPenumbral(true);
+							break;
+					}
+											
+					this.eclipsesRepository.save(eclipseParaBD);
 				}
-										
-				this.eclipsesRepository.save(eclipseParaBD);
 			}
 		}
+		catch (Exception e) {
+			
+			System.out.println("Error al actualizar los eclipses lunares del anyo " + anyo  +": "+ e);
+		}
+		
 		
 		
 		System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
@@ -128,34 +145,40 @@ public class EclipsesServiceImpl implements EclipsesService{
 		
 		System.out.println("Actualizando los eclipses solares del anyo: " + anyo);
 		
-		List<SolarEclipseDTO> eclipsesSolaresDelAnyo = this.getEclipsesSolaresDelAnyoViaAPI(anyo, url);
-		
-		for(SolarEclipseDTO eclipse : eclipsesSolaresDelAnyo) {
+		try {
+			List<SolarEclipseDTO> eclipsesSolaresDelAnyo = this.getEclipsesSolaresDelAnyoViaAPI(anyo, url);
 			
-			EclipsesEntity eclipseParaBD = new EclipsesEntity();
-			eclipseParaBD.setDeSol(true);
-			eclipseParaBD.setDate(eclipse.getDate());
-			eclipseParaBD.setYear(Integer.valueOf(anyo));
-			
-			switch(eclipse.getType()) {
-			
-				case "NonCentralPartialEclipse":
-					eclipseParaBD.setEsParcial(true);
-					break;
+			for(SolarEclipseDTO eclipse : eclipsesSolaresDelAnyo) {
 				
-				case "CentralAnnularEclipse":
-					eclipseParaBD.setEsAnular(true);
-					break;
+				EclipsesEntity eclipseParaBD = new EclipsesEntity();
+				eclipseParaBD.setDeSol(true);
+				eclipseParaBD.setDate(eclipse.getDate());
+				eclipseParaBD.setYear(Integer.valueOf(anyo));
+				
+				switch(eclipse.getType()) {
+				
+					case "NonCentralPartialEclipse":
+						eclipseParaBD.setEsParcial(true);
+						break;
 					
-				case "CentralTotalEclipse":
-					eclipseParaBD.setEsTotal(true);
-					break;
-			}
+					case "CentralAnnularEclipse":
+						eclipseParaBD.setEsAnular(true);
+						break;
+						
+					case "CentralTotalEclipse":
+						eclipseParaBD.setEsTotal(true);
+						break;
+				}
 
+			
+				this.eclipsesRepository.save(eclipseParaBD);
 		
-			this.eclipsesRepository.save(eclipseParaBD);
-	
+			}
 		}
+		catch (Exception e) {
+			System.out.println("Error al actualizar los eclipses solares del anyo " + anyo  +": "+ e);
+		}
+		
 		
 		System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
 	}

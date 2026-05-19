@@ -39,120 +39,139 @@ public class MetonsServiceImpl implements MetonsService {
 					
 		System.out.println("Iniciando evaluacion de metonos.");
 		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList("ASYEF", "YLP"));	
-			
+		List<MetonsEntity> allMetons = this.metonsRepository.findAll();
+		
 		String apiGetLunasUrl = "";
 		String apiGetSYEUrl = "";
+		
+		if(allMetons.isEmpty()) {
 			
-		for (DatosEntity url : urls) 
-		{
-			switch (url.getConcepto()) {
-				
-				case "ASYEF":					
-					apiGetSYEUrl = url.getValor();
-					break;
+			for (DatosEntity url : urls) 
+			{
+				switch (url.getConcepto()) {
 					
-				case "YLP":					
-					apiGetLunasUrl = url.getValor();
-					break;					
-			}
-		}
-			
-		try {
-				
-			for(int anyoCheckeado = 0; anyoCheckeado<=2100; anyoCheckeado++) {
-					
-				System.out.println("Evaluando metonos en el anyo " + anyoCheckeado);
-				List<FenomenoDTO> solsticiosYEquinocciosDelAnyo = this.solsticiosYEquinocciosService.getSolsticiosYEquinocciosDelAnyoViaAPI(String.valueOf(anyoCheckeado), apiGetSYEUrl);
-				List<LunarPhaseDTO> fasesLunaresDelAnyo = this.lunasService.getFasesLunaresDelAnyoViaAPI(String.valueOf(anyoCheckeado), apiGetLunasUrl);
-					
-				for(LunarPhaseDTO luna : fasesLunaresDelAnyo) {
+					case "ASYEF":					
+						apiGetSYEUrl = url.getValor();
+						break;
 						
-					if (luna.getMoonPhase().equals("NewMoon") || luna.getMoonPhase().equals("FullMoon")){
-							
-						LocalDateTime fechaLuna = luna.getDate();
-							
-						for(FenomenoDTO soe : solsticiosYEquinocciosDelAnyo) {
-								
-							LocalDateTime fechaSoe = soe.getDate();
-								
-							long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(fechaLuna, fechaSoe));
-								
-							if(segundosDeDiferencia <= 86164) {
-									
-								MetonsEntity nuevoMetono = new MetonsEntity();
-									
-								nuevoMetono.setDate(fechaSoe);
-								nuevoMetono.setYear(fechaSoe.getYear());
-									
-								if(luna.getMoonPhase().equals("NewMoon")) {
-									nuevoMetono.setNuevo(true);
-								}
-								else {
-									nuevoMetono.setLleno(true);
-								}
-									
-								switch (soe.getPhenomena()) {
-									
-									case "WinterSolstice":
-										nuevoMetono.setInicial(true);
-										nuevoMetono.setSolsticial(true);
-										break;
-											
-									case "VernalEquinox":
-										nuevoMetono.setCuartal(true);
-										nuevoMetono.setEquinoccial(true);
-										break;
-											
-									case "SummerSolstice":
-										nuevoMetono.setBicuartal(true);
-										nuevoMetono.setSolsticial(true);
-										break;
-											
-									case "AutumnalEquinox":
-										nuevoMetono.setTricuartal(true);
-										nuevoMetono.setEquinoccial(true);
-										break;
-									
-								}
-									
-								List<MetonsEntity> metonosDelAnyo = this.metonsRepository.findByYear(fechaSoe.getYear());
-									
-								if(metonosDelAnyo.isEmpty()) {
-										
-									this.metonsRepository.save(nuevoMetono);
-									System.out.println("Nuevo metono encontrado.");
-								}
-								else {
-										
-									boolean metonoYaExiste = false;
-									for(int i = 0; i<metonosDelAnyo.size(); i++) {
-										
-										if(metonosDelAnyo.get(i).getDate().isEqual(nuevoMetono.getDate())){
-											
-											metonoYaExiste=true;																			
-										}									
-									}
-										
-									if(!metonoYaExiste) {
-											
-										this.metonsRepository.save(nuevoMetono);
-										System.out.println("Nuevo metono encontrado.");	
-									}									
-								}		
-							}					
-						}
-							
-					}
+					case "YLP":					
+						apiGetLunasUrl = url.getValor();
+						break;					
 				}
-					
-				System.out.println("Fin de la evaluacion de metonos del anyo " + anyoCheckeado);
 			}
-		}
-		catch(Exception e) {
 				
-			System.out.println("Error al evaluar los metonos: " + e);
-			resultado = "Error al evaluar los metonos, revisar logs";
-		}		
+			try {
+					
+				for(int anyoCheckeado = 0; anyoCheckeado<=2100; anyoCheckeado++) {
+						
+					System.out.println("Evaluando metonos en el anyo " + anyoCheckeado);
+					
+					try {
+						List<FenomenoDTO> solsticiosYEquinocciosDelAnyo = this.solsticiosYEquinocciosService.getSolsticiosYEquinocciosDelAnyoViaAPI(String.valueOf(anyoCheckeado), apiGetSYEUrl);
+						List<LunarPhaseDTO> fasesLunaresDelAnyo = this.lunasService.getFasesLunaresDelAnyoViaAPI(String.valueOf(anyoCheckeado), apiGetLunasUrl);
+							
+						for(LunarPhaseDTO luna : fasesLunaresDelAnyo) {
+								
+							if (luna.getMoonPhase().equals("NewMoon") || luna.getMoonPhase().equals("FullMoon")){
+									
+								LocalDateTime fechaLuna = luna.getDate();
+									
+								for(FenomenoDTO soe : solsticiosYEquinocciosDelAnyo) {
+										
+									LocalDateTime fechaSoe = soe.getDate();
+										
+									long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(fechaLuna, fechaSoe));
+										
+									if(segundosDeDiferencia <= 86164) {
+											
+										MetonsEntity nuevoMetono = new MetonsEntity();
+											
+										nuevoMetono.setDate(fechaSoe);
+										nuevoMetono.setYear(fechaSoe.getYear());
+											
+										if(luna.getMoonPhase().equals("NewMoon")) {
+											nuevoMetono.setNuevo(true);
+										}
+										else {
+											nuevoMetono.setLleno(true);
+										}
+											
+										switch (soe.getPhenomena()) {
+											
+											case "WinterSolstice":
+												nuevoMetono.setInicial(true);
+												nuevoMetono.setSolsticial(true);
+												break;
+													
+											case "VernalEquinox":
+												nuevoMetono.setCuartal(true);
+												nuevoMetono.setEquinoccial(true);
+												break;
+													
+											case "SummerSolstice":
+												nuevoMetono.setBicuartal(true);
+												nuevoMetono.setSolsticial(true);
+												break;
+													
+											case "AutumnalEquinox":
+												nuevoMetono.setTricuartal(true);
+												nuevoMetono.setEquinoccial(true);
+												break;
+											
+										}
+											
+										List<MetonsEntity> metonosDelAnyo = this.metonsRepository.findByYear(fechaSoe.getYear());
+											
+										if(metonosDelAnyo.isEmpty()) {
+												
+											this.metonsRepository.save(nuevoMetono);
+											System.out.println("Nuevo metono encontrado.");
+										}
+										else {
+												
+											boolean metonoYaExiste = false;
+											for(int i = 0; i<metonosDelAnyo.size(); i++) {
+												
+												if(metonosDelAnyo.get(i).getDate().isEqual(nuevoMetono.getDate())){
+													
+													metonoYaExiste=true;																			
+												}									
+											}
+												
+											if(!metonoYaExiste) {
+													
+												this.metonsRepository.save(nuevoMetono);
+												System.out.println("Nuevo metono encontrado.");	
+											}									
+										}		
+									}					
+								}
+									
+							}
+						}
+					}
+					
+					catch(Exception e) {
+						
+						System.out.println("Error evaluando los metonos del anyo " + anyoCheckeado + ": " + e);
+					}
+					
+						
+					System.out.println("Fin de la evaluacion de metonos del anyo " + anyoCheckeado);
+				}
+			}
+			catch(Exception e) {
+					
+				System.out.println("Error al evaluar los metonos: " + e);
+				resultado = "Error al evaluar los metonos, revisar logs";
+			}	
+		}
+		else {
+			System.out.println("Ya hay métonos en la base de datos");
+			resultado = "Error al actualizar los métonos, checkear logs.";
+		}
+			
+			
 		
 		return resultado;
 	}

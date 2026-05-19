@@ -83,70 +83,84 @@ public class LunasServiceImpl implements LunasService {
 		
 		DatosEntity apiGetLunasUrl = datosRepository.findByConcepto("YLP");
 		
-		if(apiGetLunasUrl != null) {	
-
-			int anyoDeLaUltimaLunaGuardada = this.lunasRepository.findTopByOrderByDateDesc().getYear();
+		List<LunasEntity> allLunas = this.lunasRepository.findAll();
+		
+		if(apiGetLunasUrl != null && allLunas.isEmpty()) {	
+				
 			
-			int anyoParaLaApi = anyoDeLaUltimaLunaGuardada+1;		
-			
-			for (int i = anyoParaLaApi; i <= 2100; i++) {
+			for (int i = 0; i < 2100; i++) {
 				
 				System.out.println("Actualizando lunas del anyo: " + i);
 				
-				List<LunarPhaseDTO> fasesLunaresDelAnyo = this.getFasesLunaresDelAnyoViaAPI(String.valueOf(i), apiGetLunasUrl.getValor());
-				
-				if(!fasesLunaresDelAnyo.isEmpty()) {
+				try {
+					List<LunarPhaseDTO> fasesLunaresDelAnyo = this.getFasesLunaresDelAnyoViaAPI(String.valueOf(i), apiGetLunasUrl.getValor());
 					
-					for(LunarPhaseDTO faseLunarAPI : fasesLunaresDelAnyo) {
-									
-							LunasEntity lunaParaDB = new LunasEntity();
-							
-							switch (faseLunarAPI.getMoonPhase()){
-							
-								case "NewMoon":
-									lunaParaDB.setNueva(true);
-									break;
-									
-								case "FirstQuarter":
-									lunaParaDB.setCuartoCreciente(true);
-									break;
-									
-								case "FullMoon":
-									lunaParaDB.setLlena(true);
-									break;
-									
-								case "LastQuarter":
-									lunaParaDB.setCuartoMenguante(true);
-									break;
-							}
-							
-							lunaParaDB.setYear(faseLunarAPI.getDate().getYear());
-							lunaParaDB.setDate(faseLunarAPI.getDate());					
-
-							try {
+					if(!fasesLunaresDelAnyo.isEmpty()) {
+						
+						for(LunarPhaseDTO faseLunarAPI : fasesLunaresDelAnyo) {
+										
+								LunasEntity lunaParaDB = new LunasEntity();
 								
-								this.lunasRepository.save(lunaParaDB);
-							}
-							catch (Exception e)	{
+								switch (faseLunarAPI.getMoonPhase()){
+								
+									case "NewMoon":
+										lunaParaDB.setNueva(true);
+										break;
+										
+									case "FirstQuarter":
+										lunaParaDB.setCuartoCreciente(true);
+										break;
+										
+									case "FullMoon":
+										lunaParaDB.setLlena(true);
+										break;
+										
+									case "LastQuarter":
+										lunaParaDB.setCuartoMenguante(true);
+										break;
+								}
+								
+								lunaParaDB.setYear(faseLunarAPI.getDate().getYear());
+								lunaParaDB.setDate(faseLunarAPI.getDate());					
+
+								try {
 									
-								System.out.println("Error al almacenar luna: " + e);
-								resultado = "Error al actualizar lunas, checkear logs.";
-							}		
-					}
+									this.lunasRepository.save(lunaParaDB);
+								}
+								catch (Exception e)	{
+										
+									System.out.println("Error al almacenar luna: " + e);
+									resultado = "Error al actualizar lunas, checkear logs.";
+								}		
+						}
+						
+						System.out.println("Actualizadas las lunas del anyo: " + i);
+					}					
+					else {
 					
-					System.out.println("Actualizadas las lunas del anyo: " + i);
-				}					
-				else {
-				
-					System.out.println("No se han obtenido lunas de la API.");
+						System.out.println("No se han obtenido lunas de la API.");
+						resultado = "Error al actualizar lunas, checkear logs.";
+					}					
+				}
+				catch(Exception e) {
+					System.out.println("Error al actualizar lunas del anyo " + i  +": "+ e);
 					resultado = "Error al actualizar lunas, checkear logs.";
-				}					
+				}
+				
 			}
 		}	
 		
 		else {
 			
-			System.out.println("La URL de la API para obtener las lunas es nula.");
+			if(apiGetLunasUrl == null) {
+				
+				System.out.println("La URL de la API para obtener las lunas es nula.");
+			}
+			else if(!allLunas.isEmpty()) {
+				
+				System.out.println("Ya hay lunas en la base de datos.");
+			}
+			
 			resultado = "Error al actualizar lunas, checkear logs.";
 		}
 		

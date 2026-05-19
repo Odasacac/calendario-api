@@ -1,5 +1,8 @@
 package CCASolutions.Calendario.ServiceImpl;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +21,40 @@ public class DaysServiceImpl implements DaysService{
 	
 	@Autowired
 	private DaysRepository daysRepository;
+	
+	public String poblateDays() {
+		
+		System.out.println("Actualizando los Días.");
+		
+		String resultado = "Días actualizados correctamente.";
+		
+		List<DaysEntity> allDays = this.daysRepository.findAll();
+		
+		if(allDays.isEmpty()) {
+			
+			List<DaysEntity> daysParaBD = new ArrayList<>();
+			
+			daysParaBD.add(this.createDay(0, "Terra"));
+			daysParaBD.add(this.createDay(1, "Luno"));
+			daysParaBD.add(this.createDay(2, "Sole"));
+			daysParaBD.add(this.createDay(3, "Merco"));
+			daysParaBD.add(this.createDay(4, "Venuro"));
+			daysParaBD.add(this.createDay(5, "Marto"));
+			daysParaBD.add(this.createDay(6, "Júpeno"));
+			daysParaBD.add(this.createDay(7, "Saturino"));
+			daysParaBD.add(this.createDay(8, "Liminol"));
+			daysParaBD.add(this.createDay(9, "Caelumbra"));
+			
+			this.daysRepository.saveAll(daysParaBD);
+		}
+		else {
+			System.out.println("Ya hay días en la base de datos.");
+			resultado = "Error al actualizar los días, checkear logs.";
+		}
+		System.out.println("Days actualizados");
+		return resultado;
+		
+	}
 	
 	public long getDiasASumarALaLunaNueva(DateVAUDTO dateVAU) {
 		
@@ -54,5 +91,14 @@ public class DaysServiceImpl implements DaysService{
 		}
 					
 		return diasASumarleALaLunaNueva;
+	}
+	
+	private DaysEntity createDay(int dayOfWeek, String name) {
+		
+		DaysEntity newDato = new DaysEntity();
+		newDato.setDayOfWeek(dayOfWeek);
+		newDato.setName(name);
+		
+		return newDato;
 	}
 }

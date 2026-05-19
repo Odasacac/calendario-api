@@ -50,64 +50,64 @@ public class CasalerosServiceImpl implements CasalerosService {
 			
 		*/
 			
-		System.out.println("Iniciando poblar Casaderos.");
+		System.out.println("Iniciando poblar Casaleros.");
 			
-		String resultado = "Todo ha salido mal";			
-				
-		try {
-				
-			List<EclipenosEntity> eclipenos = this.eclipenosRepository.findAll();
-					
-			if(!eclipenos.isEmpty()) {
-					
+		String resultado = "Todo ha salido mal";	
+		
+		List<CasalerosEntity> allCasaleros = this.casalerosRepository.findAll();
+		List<EclipenosEntity> eclipenos = this.eclipenosRepository.findAll();
+		
+		if(allCasaleros.isEmpty() && !eclipenos.isEmpty()) {
+			try {				
+												
 				for(EclipenosEntity eclipeno : eclipenos) {
-						
+							
 					System.out.println("Evaluando eclipeno año: " + eclipeno.getYear());
-						
+							
 					CasalerosEntity casaleroParaDB = new CasalerosEntity();
-						
+							
 					LocalDateTime eclipenoDate = eclipeno.getDate();
-					
+						
 					MetonsEntity metono = this.getMetonoParaCasalero(eclipeno);	
-					
+						
 					EclipsesEntity eclipseAbsoluto = this.getEclipseParaCasalero(eclipeno);
 
 					if(metono != null && eclipseAbsoluto != null) {
-						
-						long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(eclipeno.getDate(), eclipseAbsoluto.getDate()));
-						
-						if(segundosDeDiferencia <= 86164) {
 							
+						long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(eclipeno.getDate(), eclipseAbsoluto.getDate()));
+							
+						if(segundosDeDiferencia <= 86164) {
+								
 							LocalDateTime nuevaFecha = eclipenoDate.plusSeconds(86164);
 							eclipseAbsoluto = this.getEclipseParaCasaleroConFecha(eclipeno, nuevaFecha);
 						}
-							
-						if(metono.getDate().isBefore(eclipseAbsoluto.getDate())) {
 								
+						if(metono.getDate().isBefore(eclipseAbsoluto.getDate())) {
+									
 							casaleroParaDB.setMetonoId(metono.getId());
-							casaleroParaDB.setDate(metono.getDate());
+								casaleroParaDB.setDate(metono.getDate());
 
 						}
 						else if(eclipseAbsoluto.getDate().isBefore(metono.getDate())){
-								
+									
 							casaleroParaDB.setEclipseId(eclipseAbsoluto.getId());
 							casaleroParaDB.setDate(eclipseAbsoluto.getDate());
 						}													
 					}
-					
-					else {
 						
+					else {
+							
 						if(metono != null && eclipseAbsoluto == null) {
-								
+									
 							casaleroParaDB.setMetonoId(metono.getId());	
 							casaleroParaDB.setDate(metono.getDate());
 						}
 						else if (eclipseAbsoluto != null && metono == null) {
-	
+		
 							long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(eclipeno.getDate(), eclipseAbsoluto.getDate()));
-							
-							if(segundosDeDiferencia <= 86164) {
 								
+							if(segundosDeDiferencia <= 86164) {
+									
 								LocalDateTime nuevaFecha = eclipenoDate.plusSeconds(86164);
 								eclipseAbsoluto = this.getEclipseParaCasaleroConFecha(eclipeno, nuevaFecha);
 							}
@@ -115,29 +115,39 @@ public class CasalerosServiceImpl implements CasalerosService {
 							casaleroParaDB.setDate(eclipseAbsoluto.getDate());
 						}
 					}
-								
+									
 					if(casaleroParaDB.getDate() != null) {
-						
+							
 						casaleroParaDB.setYear(casaleroParaDB.getDate().getYear());
 						casaleroParaDB.setEclipenoId(eclipeno.getId());
-						
+							
 						casalerosRepository.save(casaleroParaDB);
 						System.out.println("Casalero almacenado, año: " + casaleroParaDB.getYear());
 					}								
 				}
-				
-				resultado = "Casaleros poblados correctamente";
-						
+					
+				resultado = "Casaleros poblados correctamente.";
+							
+			}			
+			catch(Exception e) {					
+				resultado = "Error al acceder a la base de datos a recoger los eclipenos: " + e.getMessage();
 			}
-			else {
-				resultado = "Eclípenos is empty";
+		}
+		else {
+			
+			if(!allCasaleros.isEmpty()) {
+				
+				System.out.println("Ya hay casaleros en la base de datos.");
 			}
+			else if(eclipenos.isEmpty()){
 				
+				System.out.println("No hay eclípenos en la base de datos.");
+			}
+			
+			resultado = "Error al actualizar los casaleros, checkear logs.";
 		}
-		catch(Exception e) {
 				
-			resultado = "Error al acceder a la base de datos a recoger los eclipenos: " + e.getMessage();;
-		}
+		
 			
 		
 		System.out.println("Poblate casaleros finalizado.");

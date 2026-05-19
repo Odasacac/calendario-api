@@ -34,79 +34,88 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		
 		DatosEntity apiGetSYEUrl = datosRepository.findByConcepto("ASYEF");
 		
-		if(apiGetSYEUrl != null) {	
-			
-			int anyoDelUltimoSOEGuardado = this.solsticiosYEquinocciosRepository.findTopByOrderByDateDesc().getYear();
-			
-			int anyoParaLaApi = anyoDelUltimoSOEGuardado+1;
-			
-			
-			
-			for (int i = anyoParaLaApi; i <= 2100; i++) {
+		List<SolsticiosYEquinocciosEntity> allSoes = this.solsticiosYEquinocciosRepository.findAll();
+		
+		if(apiGetSYEUrl != null && allSoes.isEmpty()) {	
+						
+			for (int i = 0; i < 2100; i++) {
 				
 				System.out.println("Actualizando los solsticios y equinoccios del anyo: " + i);
 				
-				List<FenomenoDTO> solsticiosYEquinocciosDelAnyo = this.getSolsticiosYEquinocciosDelAnyoViaAPI(String.valueOf(i), apiGetSYEUrl.getValor());
-				
-				if(!solsticiosYEquinocciosDelAnyo.isEmpty()) {
+				try {
+					List<FenomenoDTO> solsticiosYEquinocciosDelAnyo = this.getSolsticiosYEquinocciosDelAnyoViaAPI(String.valueOf(i), apiGetSYEUrl.getValor());
 					
-					for(FenomenoDTO soeAPI : solsticiosYEquinocciosDelAnyo) {
+					if(!solsticiosYEquinocciosDelAnyo.isEmpty()) {
 						
-						SolsticiosYEquinocciosEntity soeParaDB = new SolsticiosYEquinocciosEntity();
-						
-						switch (soeAPI.getPhenomena()) {
-						
-							case "WinterSolstice":
-								soeParaDB.setSolsticioInvierno(true);
-								soeParaDB.setStartingSeason(1);
-								break;
-								
-							case "VernalEquinox":
-								soeParaDB.setEquinoccioPrimavera(true);
-								soeParaDB.setStartingSeason(2);
-								break;
-								
-							case "SummerSolstice":
-								soeParaDB.setSolsticioVerano(true);
-								soeParaDB.setStartingSeason(3);
-								break;
-								
-							case "AutumnalEquinox":
-								soeParaDB.setEquinoccioOtonyo(true);
-								soeParaDB.setStartingSeason(4);
-								break;
-						}
-						
-						soeParaDB.setYear(soeAPI.getDate().getYear());
-						soeParaDB.setDate(soeAPI.getDate());
-						
-						try {
+						for(FenomenoDTO soeAPI : solsticiosYEquinocciosDelAnyo) {
 							
-							this.solsticiosYEquinocciosRepository.save(soeParaDB);
+							SolsticiosYEquinocciosEntity soeParaDB = new SolsticiosYEquinocciosEntity();
+							
+							switch (soeAPI.getPhenomena()) {
+							
+								case "WinterSolstice":
+									soeParaDB.setSolsticioInvierno(true);
+									soeParaDB.setStartingSeason(1);
+									break;
+									
+								case "VernalEquinox":
+									soeParaDB.setEquinoccioPrimavera(true);
+									soeParaDB.setStartingSeason(2);
+									break;
+									
+								case "SummerSolstice":
+									soeParaDB.setSolsticioVerano(true);
+									soeParaDB.setStartingSeason(3);
+									break;
+									
+								case "AutumnalEquinox":
+									soeParaDB.setEquinoccioOtonyo(true);
+									soeParaDB.setStartingSeason(4);
+									break;
+							}
+							
+							soeParaDB.setYear(soeAPI.getDate().getYear());
+							soeParaDB.setDate(soeAPI.getDate());
+							
+							try {
+								
+								this.solsticiosYEquinocciosRepository.save(soeParaDB);
+								
+							}
+							catch (Exception e)	{
+									
+								System.out.println("Error al almacenar solsticio o equinoccio: " + e);
+								resultado = "Error al actualizar solsticios y equinoccios, checkear logs.";
+							}
 							
 						}
-						catch (Exception e)	{
-								
-							System.out.println("Error al almacenar solsticio o equinoccio: " + e);
-							resultado = "Error al actualizar solsticios y equinoccios, checkear logs.";
-						}
 						
+						System.out.println("Actualizados los solsticios y equinoccios del anyo: " + i);
+													
 					}
-					
-					System.out.println("Actualizados los solsticios y equinoccios del anyo: " + i);
-												
+					else {
+						
+						System.out.println("No se han obtenido solsticios ni equinoccios de la API.");
+						resultado = "Error al actualizar solsticios y equinoccios, checkear logs.";
+					}	
 				}
-				else {
-					
-					System.out.println("No se han obtenido solsticios ni equinoccios de la API.");
+				catch (Exception e) {
+					System.out.println("Error al actualizar solsticios y equinoccios del anyo " + i  +": "+ e);
 					resultado = "Error al actualizar solsticios y equinoccios, checkear logs.";
-				}	
+				}
+				
 				
 			}				
 		}
 		else {
 			
-			System.out.println("La URL de la API para obtener los solsticios y equinoccios es nula.");
+			if(apiGetSYEUrl == null) {
+				System.out.println("La URL de la API para obtener los soes es nula.");
+			}
+			else if(!allSoes.isEmpty()) {
+				System.out.println("Ya hay soes en la base de datos.");
+			}
+			resultado = "Error al actualizar los solsticios y equinoccios, checkear logs.";
 		}
 		
 		return resultado;

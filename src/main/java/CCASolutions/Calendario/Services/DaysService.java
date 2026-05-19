@@ -5,4 +5,5 @@ import CCASolutions.Calendario.DTOs.DateVAUDTO;
 public interface DaysService {
 	
 	public abstract long getDiasASumarALaLunaNueva(DateVAUDTO dateVAU);
+	public abstract String poblateDays();
 }

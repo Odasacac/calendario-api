@@ -44,7 +44,7 @@ public class DBController {
 					
 					try {
 						
-						body = this.dbService.poblateDB();
+						body = this.dbService.poblateDB(); //Tarda 3 horas
 					}
 					catch(Exception e) {
 						
@@ -54,7 +54,7 @@ public class DBController {
 				}
 				else {
 					
-					body = "No tienes permisos para realizar esta acción";
+					body = "No tienes permisos para realizar esta acción.";
 					status = HttpStatus.UNAUTHORIZED;
 				}
 				
