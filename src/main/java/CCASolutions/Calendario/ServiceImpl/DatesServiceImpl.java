@@ -200,7 +200,13 @@ public class DatesServiceImpl implements DatesService {
 		LocalDateTime endOfDay = dateO.plusDays(1).atStartOfDay();
 					
 		LunasEntity luna = this.lunasRepository.findByDateBetween(startOfDay, endOfDay);
-		LunasEntity lunaFestividades = this.lunasRepository.findByDateBetweenAndNuevaIsTrueAndLlenaIsTrue(startOfDay, endOfDay);
+		List<LunasEntity> lunaFestividades = this.lunasRepository.findLunasNuevasOLlenasEntreFechas(startOfDay, endOfDay);
+		LunasEntity lunaParaFestividades = null;
+		
+		if(!lunaFestividades.isEmpty()) {
+			lunaParaFestividades=lunaFestividades.get(0);
+		}
+		
 		SolsticiosYEquinocciosEntity soe = this.solsticiosYEquinocciosRepository.findByDateBetween(startOfDay, endOfDay);
 		SolsticiosYEquinocciosEntity soePast = this.solsticiosYEquinocciosRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
 		MetonsEntity meton = this.metonsRepository.findByDateBetween(startOfDay, endOfDay);
@@ -211,7 +217,7 @@ public class DatesServiceImpl implements DatesService {
 		notableEventHoy.setToday(this.getNotableEventName(luna, soe, meton, eclipse, eclipeno));		
 		eventoYFestividadHoy.setNotableEvents(notableEventHoy);
 		
-		FestividadesDTO festividadHoy = this.getFestividadActual(lunaFestividades, soe, soePast, meton, eclipse, eclipeno);
+		FestividadesDTO festividadHoy = this.getFestividadActual(lunaParaFestividades, soe, soePast, meton, eclipse, eclipeno);
 		
 		eventoYFestividadHoy.setFestividades(festividadHoy);
 		
@@ -225,8 +231,8 @@ public class DatesServiceImpl implements DatesService {
 		LocalDateTime startOfDay = dateO.atStartOfDay();
 		
 		LunasEntity luna = this.lunasRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
-		LunasEntity lunaLlena = this.lunasRepository.findFirstByDateBeforeAndLlenaIsTrue(startOfDay);
-		LunasEntity lunaNueva = this.lunasRepository.findFirstByDateBeforeAndNuevaIsTrue(startOfDay);
+		LunasEntity lunaLlena = this.lunasRepository.findFirstByDateBeforeAndLlenaIsTrueOrderByDateDesc(startOfDay);
+		LunasEntity lunaNueva = this.lunasRepository.findFirstByDateBeforeAndNuevaIsTrueOrderByDateDesc(startOfDay);
 		SolsticiosYEquinocciosEntity soe = this.solsticiosYEquinocciosRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
 		MetonsEntity meton = this.metonsRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
 		EclipsesEntity eclipse = this.eclipsesRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
@@ -251,7 +257,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		LunasEntity luna = this.lunasRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
 		LunasEntity lunaLlena = this.lunasRepository.findFirstByDateAfterAndLlenaIsTrue(endOfDay);
-		LunasEntity lunaNueva = this.lunasRepository.findFirstByDateAfterAndLlenaIsTrue(endOfDay);
+		LunasEntity lunaNueva = this.lunasRepository.findFirstByDateAfterAndNuevaIsTrue(endOfDay);
 	    SolsticiosYEquinocciosEntity soeFuturo = this.solsticiosYEquinocciosRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
 	    SolsticiosYEquinocciosEntity soePasado = this.solsticiosYEquinocciosRepository.findFirstByDateBeforeOrderByDateDesc(endOfDay);
 	    MetonsEntity meton = this.metonsRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
@@ -491,16 +497,20 @@ public class DatesServiceImpl implements DatesService {
 		
 		LunasEntity lunaParaMetodo = null;	
 		SolsticiosYEquinocciosEntity soeParaMetodo = soe;
+		
+	
+		
 		if(luna != null) {
 			
 			if(luna.isLlena() || luna.isNueva()) {
 				lunaParaMetodo=luna;
 			}
 			
-			if (luna.isNueva() && soePast.isSolsticioInvierno()) {
+			if (luna.isNueva() && soePast.isSolsticioInvierno() && soe== null) {
 				soeParaMetodo=soePast;
 			}
 		}
+		
 	
 		//Aun no hay festividades con Eclipses
 		EclipsesEntity eclipseParaMetodo = null;
@@ -1160,7 +1170,7 @@ public class DatesServiceImpl implements DatesService {
 		boolean esEquinoccioOtonyo = false;
 		boolean esEclipeno = false;
 		boolean esMetono = false;
-		int soeSeason = 0;
+		int startedSeason = 0;
 		
 		if(soe != null) {
 			
@@ -1170,13 +1180,24 @@ public class DatesServiceImpl implements DatesService {
 			esEquinoccioOtonyo = soe.isEquinoccioOtonyo();
 		}
 		
-		if(luna != null) {
+		if(luna != null && this.esLaPrimeraLunaDelMes(luna, soe)) {
+			
 			
 			esLunaNueva = luna.isNueva();
 			esLunaLlena = luna.isLlena();	
 			
+			
 			if(soe!= null){
-				soeSeason = soe.getStartingSeason();
+						
+			
+				switch (soe.getStartingSeason()) {
+					case 1:
+						
+						esSolsticioInvierno = false;
+						break;
+				}
+				
+
 			}
 		}
 		
@@ -1199,13 +1220,29 @@ public class DatesServiceImpl implements DatesService {
 				esEquinoccioOtonyo,
 				esEclipeno,
 				esMetono,
-				soeSeason);
+				startedSeason);
 		
 		if(festividadEntity != null) {
 			festividad = festividadEntity.getName();
 		}
 
 		return festividad;
+	}
+	
+	private boolean esLaPrimeraLunaDelMes(LunasEntity luna, SolsticiosYEquinocciosEntity soe) {
+		boolean esPrimeraLuna = false;
+		
+		if(luna != null && soe != null) {
+			List<LunasEntity> lunas = this.lunasRepository.findByDateBetweenAndNuevaTrueOrderByDateAsc(soe.getDate(), luna.getDate());
+			
+			if(!lunas.isEmpty() && luna.getDate().isEqual(lunas.get(0).getDate())) {
+				esPrimeraLuna = true;
+			}
+			
+		}
+		
+		
+		return esPrimeraLuna;
 	}
 	
 	
