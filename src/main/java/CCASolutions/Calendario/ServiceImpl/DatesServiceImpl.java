@@ -14,8 +14,6 @@ import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.EclipenoDTO;
-import CCASolutions.Calendario.DTOs.EventosResAndFestividadesDTO;
-import CCASolutions.Calendario.DTOs.FestividadesDTO;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.NotableEventDTO;
@@ -30,12 +28,10 @@ import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
-import CCASolutions.Calendario.Entities.FestividadesEntity;
 import CCASolutions.Calendario.Repositories.CasalerosRepository;
 import CCASolutions.Calendario.Repositories.DaysRepository;
 import CCASolutions.Calendario.Repositories.EclipenosRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
-import CCASolutions.Calendario.Repositories.FestividadesRepository;
 import CCASolutions.Calendario.Repositories.LunasRepository;
 import CCASolutions.Calendario.Repositories.MetonsRepository;
 import CCASolutions.Calendario.Repositories.MonthsRepository;
@@ -72,9 +68,6 @@ public class DatesServiceImpl implements DatesService {
 	
 	@Autowired
 	private CasalerosRepository casalerosRepository;
-	
-	@Autowired
-	private FestividadesRepository festividadesRepository;
 	
 	// METODOS PUBLICOS 
 	
@@ -137,13 +130,9 @@ public class DatesServiceImpl implements DatesService {
 					// Incluimos Casalero si lo hay
 					dateVAU.setCasalero(this.getCasalero(lastEclipenoIN.getId()));
 					
-					EventosResAndFestividadesDTO eventosResAndFestividades = this.getEventosResAndFestividades(date);
-					
 					//Indicamos si hay algun tipo de evento reseñable
-					dateVAU.setNotableEvent(eventosResAndFestividades.getNotableEvents());
-					
-					// Indicamos las festividades
-					dateVAU.setFestividades(eventosResAndFestividades.getFestividades());
+					dateVAU.setNotableEvent(this.getNotableEvents(date));
+		
 				}
 				
 			}
@@ -164,119 +153,48 @@ public class DatesServiceImpl implements DatesService {
 	
 	// ========================= METODOS PRIVADOS
 	
-	private EventosResAndFestividadesDTO getEventosResAndFestividades(LocalDate dateO) {
+	private NotableEventDTO getNotableEvents(LocalDate dateO) {
 		
-		EventosResAndFestividadesDTO eventosResAndFestividadesDTO = new EventosResAndFestividadesDTO();
 		NotableEventDTO notableEventDTO = new NotableEventDTO();
-		FestividadesDTO festividadesDTO = new FestividadesDTO();		
-		
-		// HOY
-		EventosResAndFestividadesDTO eventoYFestividadHoy = this.getEventoYFestividadHoy(dateO);
-		notableEventDTO.setToday(eventoYFestividadHoy.getNotableEvents().getToday());
-		festividadesDTO.setFestividadActual(eventoYFestividadHoy.getFestividades().getFestividadActual());
-		
-		// Anteriores
-		EventosResAndFestividadesDTO eventoYFestividadPast = this.getEventoYFestividadPrevious(dateO);
-		notableEventDTO.setPrevious(eventoYFestividadPast.getNotableEvents().getPrevious());
-		festividadesDTO.setFestividadAnterior(eventoYFestividadPast.getFestividades().getFestividadAnterior());
-		
-		//Proximos
-		EventosResAndFestividadesDTO eventoYFestividadNext = this.getEventoYFestividadNext(dateO);
-		notableEventDTO.setNext(eventoYFestividadNext.getNotableEvents().getNext());
-		festividadesDTO.setFestividadProxima(eventoYFestividadNext.getFestividades().getFestividadProxima());
-	    
-		
-	    eventosResAndFestividadesDTO.setNotableEvents(notableEventDTO);
-	    eventosResAndFestividadesDTO.setFestividades(festividadesDTO);
 
-		return eventosResAndFestividadesDTO;
+		notableEventDTO.setToday(this.getEventoActual(dateO));
+		notableEventDTO.setPrevious(this.getEventoPasado(dateO));
+		notableEventDTO.setNext(this.getEventoProximo(dateO));
+
+		return notableEventDTO;
 	}
 	
-	private EventosResAndFestividadesDTO getEventoYFestividadHoy(LocalDate dateO) {
+	private String getEventoActual(LocalDate dateO) {
 		
-		EventosResAndFestividadesDTO eventoYFestividadHoy = new EventosResAndFestividadesDTO();
+		String eventoActual = "";
 		
 		LocalDateTime startOfDay = dateO.atStartOfDay();
-		LocalDateTime endOfDay = dateO.plusDays(1).atStartOfDay();
-					
-		LunasEntity luna = this.lunasRepository.findByDateBetween(startOfDay, endOfDay);
-		List<LunasEntity> lunaFestividades = this.lunasRepository.findLunasNuevasOLlenasEntreFechas(startOfDay, endOfDay);
-		LunasEntity lunaParaFestividades = null;
-		
-		if(!lunaFestividades.isEmpty()) {
-			lunaParaFestividades=lunaFestividades.get(0);
-		}
-		
+		LocalDateTime endOfDay = dateO.plusDays(1).atStartOfDay();					
+		LunasEntity luna = this.lunasRepository.findByDateBetween(startOfDay, endOfDay);		
 		SolsticiosYEquinocciosEntity soe = this.solsticiosYEquinocciosRepository.findByDateBetween(startOfDay, endOfDay);
-		SolsticiosYEquinocciosEntity soePast = this.solsticiosYEquinocciosRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
 		MetonsEntity meton = this.metonsRepository.findByDateBetween(startOfDay, endOfDay);
 		EclipsesEntity eclipse = this.eclipsesRepository.findByDateBetween(startOfDay, endOfDay);
 		EclipenosEntity eclipeno = this.eclipenosRepository.findByDateBetween(startOfDay, endOfDay);
 		
-		NotableEventDTO notableEventHoy = new NotableEventDTO();		
-		notableEventHoy.setToday(this.getNotableEventName(luna, soe, meton, eclipse, eclipeno));		
-		eventoYFestividadHoy.setNotableEvents(notableEventHoy);
+	
+		eventoActual = this.getNotableEventName(luna, soe, meton, eclipse, eclipeno);		
+	
 		
-		FestividadesDTO festividadHoy = this.getFestividadActual(lunaParaFestividades, soe, soePast, meton, eclipse, eclipeno);
-		
-		eventoYFestividadHoy.setFestividades(festividadHoy);
-		
-		return eventoYFestividadHoy;
+		return eventoActual;
 	}
 	
-	private EventosResAndFestividadesDTO getEventoYFestividadPrevious(LocalDate dateO) {
+	private String getEventoPasado(LocalDate dateO) {
 		
-		EventosResAndFestividadesDTO eventoYFestividadPrevious = new EventosResAndFestividadesDTO();
+		String eventoPasado = "";
 		
 		LocalDateTime startOfDay = dateO.atStartOfDay();
 		
 		LunasEntity luna = this.lunasRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
-		LunasEntity lunaLlena = this.lunasRepository.findFirstByDateBeforeAndLlenaIsTrueOrderByDateDesc(startOfDay);
-		LunasEntity lunaNueva = this.lunasRepository.findFirstByDateBeforeAndNuevaIsTrueOrderByDateDesc(startOfDay);
 		SolsticiosYEquinocciosEntity soe = this.solsticiosYEquinocciosRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
 		MetonsEntity meton = this.metonsRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
 		EclipsesEntity eclipse = this.eclipsesRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);
 		EclipenosEntity eclipeno = this.eclipenosRepository.findFirstByDateBeforeOrderByDateDesc(startOfDay);	
 		
-		
-		NotableEventDTO notableEventPrevious = this.getNotableEventPrevious(dateO, luna, soe, meton, eclipse, eclipeno);	
-		FestividadesDTO festividadPrevious = this.getFestividadAnterior(dateO, lunaLlena, lunaNueva, soe, meton, eclipse, eclipeno);
-			
-		eventoYFestividadPrevious.setNotableEvents(notableEventPrevious);		
-		eventoYFestividadPrevious.setFestividades(festividadPrevious);
-		   
-		return eventoYFestividadPrevious;
-	}
-	
-	
-	private EventosResAndFestividadesDTO getEventoYFestividadNext(LocalDate dateO) {
-		
-		EventosResAndFestividadesDTO eventoYFestividadNext = new EventosResAndFestividadesDTO();
-		
-		LocalDateTime endOfDay = dateO.plusDays(1).atStartOfDay();
-		
-		LunasEntity luna = this.lunasRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
-		LunasEntity lunaLlena = this.lunasRepository.findFirstByDateAfterAndLlenaIsTrue(endOfDay);
-		LunasEntity lunaNueva = this.lunasRepository.findFirstByDateAfterAndNuevaIsTrue(endOfDay);
-	    SolsticiosYEquinocciosEntity soeFuturo = this.solsticiosYEquinocciosRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
-	    SolsticiosYEquinocciosEntity soePasado = this.solsticiosYEquinocciosRepository.findFirstByDateBeforeOrderByDateDesc(endOfDay);
-	    MetonsEntity meton = this.metonsRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
-	    EclipsesEntity eclipse = this.eclipsesRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
-	    EclipenosEntity eclipeno = this.eclipenosRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
-
-	    
-	    NotableEventDTO notableEventNext = this.getNotableEventNext(dateO, luna, soeFuturo, meton, eclipse, eclipeno);	
-		FestividadesDTO festividadProxima = this.getFestividadProxima(dateO, lunaLlena, lunaNueva, soePasado, soeFuturo, meton, eclipse, eclipeno);
-			
-		eventoYFestividadNext.setNotableEvents(notableEventNext);		
-		eventoYFestividadNext.setFestividades(festividadProxima);
-		   
-		return eventoYFestividadNext;
-	}
-	
-	private NotableEventDTO getNotableEventPrevious(LocalDate dateO, LunasEntity luna, SolsticiosYEquinocciosEntity soe, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno) {
-		
-		NotableEventDTO notableEventPrevious = new NotableEventDTO();
 		
 		Long diasEntreLunaYDate = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), dateO);
 		Long diasEntreSOEYDate = ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), dateO);
@@ -292,26 +210,36 @@ public class DatesServiceImpl implements DatesService {
 		EclipsesEntity eclipseParaMetodo = diasEntreEclipseYDate == minDias ? eclipse : null;
 		EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? eclipeno : null;
 		    
-		String evento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo);
+		String nombreDelEvento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo);
 		    
 		String dias = " días.";
 		if(minDias == 1) {
 		  dias = " día.";
 		 }
 		
-		notableEventPrevious.setPrevious(evento+" hace "+ minDias + dias);
+		eventoPasado = nombreDelEvento +" hace "+ minDias + dias;
 		
-		return notableEventPrevious;
+
+		return eventoPasado;
 	}
 	
 	
-	
-	private NotableEventDTO getNotableEventNext(LocalDate dateO, LunasEntity luna, SolsticiosYEquinocciosEntity soe, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno) {
+	private String getEventoProximo (LocalDate dateO) {
 		
-		NotableEventDTO notableEventNext = new NotableEventDTO();
-	
+		String eventoFuturo = "";
+		
+		LocalDateTime endOfDay = dateO.plusDays(1).atStartOfDay();
+		
+		LunasEntity luna = this.lunasRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
+	    SolsticiosYEquinocciosEntity soeFuturo = this.solsticiosYEquinocciosRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
+	    MetonsEntity meton = this.metonsRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
+	    EclipsesEntity eclipse = this.eclipsesRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
+	    EclipenosEntity eclipeno = this.eclipenosRepository.findFirstByDateAfterOrderByDateAsc(endOfDay);
+
+	    
+		
 		Long diasEntreLunaYDate = ChronoUnit.DAYS.between(dateO, luna.getDate().toLocalDate());
-	    Long diasEntreSOEYDate = ChronoUnit.DAYS.between(dateO, soe.getDate().toLocalDate());
+	    Long diasEntreSOEYDate = ChronoUnit.DAYS.between(dateO, soeFuturo.getDate().toLocalDate());
 	    Long diasEntreMetonYDate = ChronoUnit.DAYS.between(dateO, meton.getDate().toLocalDate());
 	    Long diasEntreEclipseYDate = ChronoUnit.DAYS.between(dateO, eclipse.getDate().toLocalDate());
 	    Long diasEntreEclipenoYDate = ChronoUnit.DAYS.between(dateO, eclipeno.getDate().toLocalDate());	    
@@ -319,222 +247,22 @@ public class DatesServiceImpl implements DatesService {
 	    long minDias = Math.min(diasEntreLunaYDate, Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, Math.min(diasEntreEclipseYDate, diasEntreEclipenoYDate))));
 	    
 	    LunasEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? luna : null;
-	    SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? soe : null;
+	    SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? soeFuturo : null;
 	    MetonsEntity metonParaMetodo = diasEntreMetonYDate == minDias ? meton : null;
 	    EclipsesEntity eclipseParaMetodo = null;
 	    EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? eclipeno : null;
 	    
-	    String evento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo);
+	    String nombreDelEvento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo);
 	    
 	    String dias = " días.";
 	    if(minDias == 1) {
 	    	dias = " día.";
 	    }
 	    	
-	    notableEventNext.setNext(evento+" dentro de "+ minDias + dias);
-			
-		
-		return notableEventNext;
+	    eventoFuturo = nombreDelEvento+" dentro de "+ minDias + dias;
+		   
+		return eventoFuturo;
 	}
-	
-	private FestividadesDTO getFestividadProxima(LocalDate dateO, LunasEntity lunaLlena, LunasEntity lunaNueva, SolsticiosYEquinocciosEntity soePasado, SolsticiosYEquinocciosEntity soeFuturo, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno) {
-		
-		FestividadesDTO festividadProximaDTO = new FestividadesDTO();	
-		
-		Long diasEntreLunaLlenaYDate = ChronoUnit.DAYS.between(dateO, lunaLlena.getDate().toLocalDate());
-		Long diasEntreLunaNuevaYDate = ChronoUnit.DAYS.between(dateO, lunaNueva.getDate().toLocalDate());
-	    Long diasEntreSOEFuturoYDate = ChronoUnit.DAYS.between(dateO, soeFuturo.getDate().toLocalDate());
-	    Long diasEntreMetonYDate = ChronoUnit.DAYS.between(dateO, meton.getDate().toLocalDate());
-	    //Long diasEntreEclipseYDate = ChronoUnit.DAYS.between(dateO, eclipse.getDate().toLocalDate());
-	    Long diasEntreEclipenoYDate = ChronoUnit.DAYS.between(dateO, eclipeno.getDate().toLocalDate());	
-	    
-	    long minDiasConLuna = Math.min(diasEntreLunaLlenaYDate, Math.min(diasEntreLunaNuevaYDate, Math.min(diasEntreSOEFuturoYDate, Math.min(diasEntreMetonYDate, diasEntreEclipenoYDate))));
-	    long minDiasSinLuna = Math.min(diasEntreSOEFuturoYDate, Math.min(diasEntreMetonYDate, diasEntreEclipenoYDate));
-	    
-	    LunasEntity lunaParaMetodo = null;
-	    SolsticiosYEquinocciosEntity soeParaMetodo = null;
-	    MetonsEntity metonParaMetodo = null;
-	    EclipsesEntity eclipseParaMetodo = null;
-	    EclipenosEntity eclipenoParaMetodo = null;
-	    
-	    String dias = " días.";
-	    long minDias = 0;   
-	    
-	    if(Boolean.TRUE.equals(meton.getInicial()) && Boolean.TRUE.equals(meton.getNuevo())) {
-			metonParaMetodo = meton;
-		}
-		
-		if(Boolean.TRUE.equals(eclipeno.getInicial()) && Boolean.TRUE.equals(eclipeno.getNuevo())) {
-			eclipenoParaMetodo = eclipeno;
-		}
-	    
-	    
-	    if(metonParaMetodo==null && (minDiasSinLuna > minDiasConLuna) && (diasEntreLunaLlenaYDate > diasEntreLunaNuevaYDate) && (soePasado.isSolsticioInvierno() || soeFuturo.isSolsticioInvierno())) {
-	    	
-	    	if(minDiasConLuna == 1) {
-	    		dias = " día.";
-	    	}
-			    	
-	    	minDias=minDiasConLuna;
-			    
-	    	lunaParaMetodo = lunaNueva;
-	    		
-	    	if(soePasado.getStartingSeason()==1) {
-	    		
-	    		soeParaMetodo=soePasado;
-	    	}
-	    	else if (soeFuturo.getStartingSeason()==1){
-	    		
-	    		soeParaMetodo = soeFuturo;
-	    	}
-	  
-	    }
-	    else {
-		    	
-		    if(minDiasSinLuna == 1) {
-		  	    dias = " día.";
-		  	   }
-		    	
-		    minDias=minDiasSinLuna;
-		    
-		    lunaParaMetodo = null;
-			soeParaMetodo = diasEntreSOEFuturoYDate == minDiasSinLuna ? soeFuturo : null;
-			metonParaMetodo = diasEntreMetonYDate == minDiasSinLuna ? metonParaMetodo : null;
-			eclipseParaMetodo = null; // Aun no hay festividades con solo eclipses
-			eclipenoParaMetodo = diasEntreEclipenoYDate == minDiasSinLuna ? eclipenoParaMetodo : null;
-		}
-	    	
-	     
-	    
-	    String festividad = this.getFestividadName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo);
-	  
-	    	
-	    festividadProximaDTO.setFestividadProxima(festividad+" dentro de "+ minDias + dias);
-	    
-	
-	    
-	    return festividadProximaDTO;
-		
-	}
-	
-	
-	private FestividadesDTO getFestividadAnterior(LocalDate dateO, LunasEntity lunaLlena, LunasEntity lunaNueva, SolsticiosYEquinocciosEntity soe, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno) {
-		
-		FestividadesDTO festividadAnterior = new FestividadesDTO();
-		
-		Long diasEntreLunaLlenaYDate = ChronoUnit.DAYS.between(lunaLlena.getDate().toLocalDate(), dateO);
-		Long diasEntreLunaNuevaYDate = ChronoUnit.DAYS.between(lunaNueva.getDate().toLocalDate(), dateO);
-		Long diasEntreSOEYDate = ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), dateO);
-		Long diasEntreMetonYDate = ChronoUnit.DAYS.between(meton.getDate().toLocalDate(), dateO);
-		//Long diasEntreEclipseYDate = ChronoUnit.DAYS.between(eclipse.getDate().toLocalDate(), dateO);
-		Long diasEntreEclipenoYDate = ChronoUnit.DAYS.between(eclipeno.getDate().toLocalDate(), dateO);	   
-		
-		long minDiasConLuna = Math.min(diasEntreLunaNuevaYDate, Math.min(diasEntreLunaLlenaYDate, Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, diasEntreEclipenoYDate))));
-	    long minDiasSinLuna = Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, diasEntreEclipenoYDate));
-		
-	    LunasEntity lunaParaMetodo = null;
-	    SolsticiosYEquinocciosEntity soeParaMetodo = null;
-	    MetonsEntity metonParaMetodo = null;
-	    EclipsesEntity eclipseParaMetodo = null;
-	    EclipenosEntity eclipenoParaMetodo = null;
-	    
-	    String dias = " días.";
-	    long minDias = 0;
-	    
-		
-		if(Boolean.TRUE.equals(meton.getInicial()) && Boolean.TRUE.equals(meton.getNuevo())) {
-			metonParaMetodo = meton;
-		}
-		
-		if(Boolean.TRUE.equals(eclipeno.getInicial()) && Boolean.TRUE.equals(eclipeno.getNuevo())) {
-			eclipenoParaMetodo = eclipeno;
-		}
-	    
-	    if(eclipenoParaMetodo == null && metonParaMetodo==null && (minDiasSinLuna > minDiasConLuna) && (diasEntreLunaLlenaYDate > diasEntreLunaNuevaYDate) && (soe.isSolsticioInvierno())) {
-	    	
-	    	if(minDiasConLuna == 1) {
-	    		dias = " día.";
-	    	}
-			    	
-	    	minDias=minDiasConLuna;
-			    
-	    	lunaParaMetodo = lunaNueva;	  
-	    	soeParaMetodo = soe;
-	  
-	    }
-	    else {
-		    	
-		    if(minDiasSinLuna == 1) {
-		  	    dias = " día.";
-		  	   }
-		    	
-		    minDias=minDiasSinLuna;
-		    	  
-		    lunaParaMetodo = null;
-			soeParaMetodo = diasEntreSOEYDate == minDiasSinLuna ? soe : null;
-			metonParaMetodo = diasEntreMetonYDate == minDiasSinLuna ? metonParaMetodo : null;		
-			eclipseParaMetodo = null; // Aun no hay festividades con solo eclipses
-			eclipenoParaMetodo = diasEntreEclipenoYDate == minDiasSinLuna ? eclipenoParaMetodo : null;
-				
-		}
-	    
-	   
-	    
-	    String festividad = this.getFestividadName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo);
-	  
-	    	
-	    festividadAnterior.setFestividadAnterior(festividad+" hace "+ minDias + dias);
-	    
-	
-	    
-	    return festividadAnterior;
-		
-	}
-
-	private FestividadesDTO getFestividadActual(LunasEntity luna, SolsticiosYEquinocciosEntity soe, SolsticiosYEquinocciosEntity soePast, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno) {
-		
-		FestividadesDTO festividadActual = new FestividadesDTO();
-		
-		LunasEntity lunaParaMetodo = null;	
-		SolsticiosYEquinocciosEntity soeParaMetodo = soe;
-		
-	
-		
-		if(luna != null) {
-			
-			if(luna.isLlena() || luna.isNueva()) {
-				lunaParaMetodo=luna;
-			}
-			
-			if (luna.isNueva() && soePast.isSolsticioInvierno() && soe== null) {
-				soeParaMetodo=soePast;
-			}
-		}
-		
-	
-		//Aun no hay festividades con Eclipses
-		EclipsesEntity eclipseParaMetodo = null;
-		
-		MetonsEntity metonoParaMetodo = null;
-		if(meton != null) {
-			if(Boolean.TRUE.equals(meton.getInicial()) && Boolean.TRUE.equals(meton.getNuevo())) {
-				metonoParaMetodo = meton;
-			}			
-		}
-		
-		EclipenosEntity eclipenoParaMetodo = null;
-		if(eclipeno!= null) {
-			if(Boolean.TRUE.equals(eclipeno.getInicial()) && Boolean.TRUE.equals(eclipeno.getNuevo())) {
-				eclipenoParaMetodo = eclipeno;
-			}	
-		}
-
-		festividadActual.setFestividadActual(this.getFestividadName(lunaParaMetodo, soeParaMetodo, metonoParaMetodo, eclipseParaMetodo, eclipenoParaMetodo));
-		
-		return festividadActual;
-		
-	}
-
 	
 	
 	private CasaleroDTO getCasalero(Long lastEclipenoINId) {
@@ -1156,95 +884,6 @@ public class DatesServiceImpl implements DatesService {
 
 		return evento;
 	}
-	
-	
-	private String getFestividadName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno) {
-		
-		String festividad = "";
-		
-		boolean esLunaNueva = false;
-		boolean esLunaLlena = false;
-		boolean esSolsticioInvierno = false;
-		boolean esSolsticioVerano = false;
-		boolean esEquinoccioPrimavera = false;
-		boolean esEquinoccioOtonyo = false;
-		boolean esEclipeno = false;
-		boolean esMetono = false;
-		int startedSeason = 0;
-		
-		if(soe != null) {
-			
-			esSolsticioInvierno = soe.isSolsticioInvierno();
-			esSolsticioVerano = soe.isSolsticioVerano();
-			esEquinoccioPrimavera = soe.isEquinoccioPrimavera();
-			esEquinoccioOtonyo = soe.isEquinoccioOtonyo();
-		}
-		
-		if(luna != null && this.esLaPrimeraLunaDelMes(luna, soe)) {
-			
-			
-			esLunaNueva = luna.isNueva();
-			esLunaLlena = luna.isLlena();	
-			
-			
-			if(soe!= null){
-						
-			
-				switch (soe.getStartingSeason()) {
-					case 1:
-						
-						esSolsticioInvierno = false;
-						break;
-				}
-				
-
-			}
-		}
-		
-		if(meton != null) {
-			
-			esMetono = true;
-		}
-		
-		if(eclipeno != null) {
-			
-			esEclipeno = true;
-		}
-		
-		FestividadesEntity festividadEntity = this.festividadesRepository.buscarFestividad(
-				esLunaNueva, 
-				esLunaLlena, 
-				esSolsticioInvierno,
-				esSolsticioVerano,
-				esEquinoccioPrimavera,
-				esEquinoccioOtonyo,
-				esEclipeno,
-				esMetono,
-				startedSeason);
-		
-		if(festividadEntity != null) {
-			festividad = festividadEntity.getName();
-		}
-
-		return festividad;
-	}
-	
-	private boolean esLaPrimeraLunaDelMes(LunasEntity luna, SolsticiosYEquinocciosEntity soe) {
-		boolean esPrimeraLuna = false;
-		
-		if(luna != null && soe != null) {
-			List<LunasEntity> lunas = this.lunasRepository.findByDateBetweenAndNuevaTrueOrderByDateAsc(soe.getDate(), luna.getDate());
-			
-			if(!lunas.isEmpty() && luna.getDate().isEqual(lunas.get(0).getDate())) {
-				esPrimeraLuna = true;
-			}
-			
-		}
-		
-		
-		return esPrimeraLuna;
-	}
-	
 	
 }
 
