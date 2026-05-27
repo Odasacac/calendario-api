@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.EclipenoDTO;
+import CCASolutions.Calendario.DTOs.EstadoLunaDTO;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.NotableEventDTO;
@@ -21,6 +22,7 @@ import CCASolutions.Calendario.DTOs.AbsoluteEclipsesDTO;
 import CCASolutions.Calendario.DTOs.CasaleroDTO;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
 import CCASolutions.Calendario.DTOs.YearDTO;
+import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
 import CCASolutions.Calendario.Entities.CasalerosEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
@@ -28,6 +30,7 @@ import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
+import CCASolutions.Calendario.Repositories.ApogeosYPerigeosLunaRepository;
 import CCASolutions.Calendario.Repositories.CasalerosRepository;
 import CCASolutions.Calendario.Repositories.DaysRepository;
 import CCASolutions.Calendario.Repositories.EclipenosRepository;
@@ -68,6 +71,9 @@ public class DatesServiceImpl implements DatesService {
 	
 	@Autowired
 	private CasalerosRepository casalerosRepository;
+	
+	@Autowired
+	private ApogeosYPerigeosLunaRepository apogeosYPerigeosLunaRepository;
 	
 	// METODOS PUBLICOS 
 	
@@ -119,6 +125,7 @@ public class DatesServiceImpl implements DatesService {
 					dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN, date, metonsIN.get(0)));
 					dateVAU.setCasalero(this.getCasalero(lastEclipenoIN.getId()));
 					dateVAU.setNotableEvent(this.getNotableEvents(date));
+					dateVAU.setEstadoLuna(this.getEstadoLuna(date));
 		
 				}
 				
@@ -139,6 +146,7 @@ public class DatesServiceImpl implements DatesService {
 
 	
 	// ========================= METODOS PRIVADOS
+	
 	
 	private NotableEventDTO getNotableEvents(LocalDate dateO) {
 		
@@ -251,6 +259,42 @@ public class DatesServiceImpl implements DatesService {
 		return eventoFuturo;
 	}
 	
+	private EstadoLunaDTO getEstadoLuna(LocalDate date) {
+		
+		EstadoLunaDTO estadoLuna = new EstadoLunaDTO();
+		
+		estadoLuna.setDireccion(this.getLunaDireccion(date));		
+		
+		return estadoLuna;
+	}
+	
+	private String getLunaDireccion(LocalDate date) {
+		
+		String direccion = "";
+		
+		ApogeosYPerigeosLunaEntity apoperiMasCercanoADate = this.apogeosYPerigeosLunaRepository.findTopByDateLessThanEqualOrderByDateDesc(date.atTime(LocalTime.MAX));
+		
+		if(apoperiMasCercanoADate != null) {
+			
+			if(apoperiMasCercanoADate.getDate().toLocalDate().isEqual(date)) {
+				
+				if(apoperiMasCercanoADate.isEsApogeo()) {
+					direccion = "Durmiente";
+				}
+				else if(apoperiMasCercanoADate.isEsPerigeo()){
+					direccion = "Presente";
+				}
+			}
+			else if(apoperiMasCercanoADate.isEsApogeo()) {
+				direccion = "Acercándose";
+			}
+			else if(apoperiMasCercanoADate.isEsPerigeo()) {
+				direccion = "Alejándose";
+			}	
+		}		
+		
+		return direccion;
+	}
 	
 	private CasaleroDTO getCasalero(Long lastEclipenoINId) {
 		

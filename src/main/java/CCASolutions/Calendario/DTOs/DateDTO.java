@@ -11,8 +11,17 @@ public class DateDTO {
 	private NotableEventDTO notableEvent;
 	private AbsoluteEclipsesDTO absoluteEclipses;
 	private CasaleroDTO casalero;
+	private EstadoLunaDTO estadoLuna;
 	
 	
+	public EstadoLunaDTO getEstadoLuna() {
+		return estadoLuna;
+	}
+
+	public void setEstadoLuna(EstadoLunaDTO estadoLuna) {
+		this.estadoLuna = estadoLuna;
+	}
+
 	public CasaleroDTO getCasalero() {
 		return casalero;
 	}
