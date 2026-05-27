@@ -15,10 +15,9 @@ public class CasalerosEntity implements Serializable {
 	
 	/*
 	 
-	 ¿Qué fenómeno ocurrirá primero después de un eclípeno inicial nuevo?
+	 ¿Qué fenómeno ocurrirá primero después de un eclípeno?
 	 
 	 	¿Un métono o un eclipse absoluto? Eso es un Casalero
-	 	
 			
 	 */
 	

@@ -106,7 +106,7 @@ public class DBServiceImpl implements DBService {
 		}
 		
 		
-		return resultado + "\n" + resultadoDatos + "\n" + resultadoDias + "\n" + resultadoWeeks + "\n" + resultadoMonths + "\n" + resultadoFestividades + "\n" + resultadoLunas + "\n" + resultadoApogeos + "\n" + resultadoSoes + "\n" + resultadoMetonos + "\n" + resultadoEclipses + "\n" + resultadoEclipenos + "\n" + resultadoCasaleros;
+		return resultado + "\n - DATOS: " + resultadoDatos + "\n - DÍAS: " + resultadoDias + "\n - SEMANAS: " + resultadoWeeks + "\n - MESES: " + resultadoMonths + "\n - FESTIVIDADES: " + resultadoFestividades + "\n - LUNAS: " + resultadoLunas + "\n - APOPERI LUNARES: " + resultadoApogeos + "\n - SOES: " + resultadoSoes + "\n - METONOS: " + resultadoMetonos + "\n - ECLIPSES: " + resultadoEclipses + "\n - ECLIPENOS: " + resultadoEclipenos + "\n - CASALEROS:" + resultadoCasaleros;
 	}
 
 }

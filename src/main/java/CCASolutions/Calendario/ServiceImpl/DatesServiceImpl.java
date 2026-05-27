@@ -106,31 +106,18 @@ public class DatesServiceImpl implements DatesService {
 				else {
 					
 					dateVAU = new DateDTO();
-					
-					// Lo primero es obtener el añoVAU				
-					dateVAU.setYear(this.getVAUYear(lastEclipenoIN, dateO, soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, metonsIN.get(0)));
-					
-					// Luego el mesVau
+							
+					dateVAU.setYear(this.getVAUYear(lastEclipenoIN, dateO, soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, metonsIN.get(0)));					
 					dateVAU.setMonth(this.getVAUMonth(dateO, soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHastaElAnyoSiguiente));
 					
-					// Despues, la semana y el dia				
 					VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(dateO, lunasNuevasDesdeElAnyoAnteriorHastaElAnyoSiguiente);
 					dateVAU.setWeek(vauWeekAndDay.getWeek());
-					dateVAU.setDay(vauWeekAndDay.getDay());
-					
-					// Indicamos el metono
+					dateVAU.setDay(vauWeekAndDay.getDay());					
+
 					dateVAU.setMetonoIN(getVAUMeton(lastEclipenoIN, metonsIN, date));
-					
-					// Indicamos el eclipeno
-					dateVAU.setEclipenoIN(this.getVAUEclipeno(lastEclipenoIN, date));
-					
-					// Indicamos los eclipses totales/anulares ocurridos
+					dateVAU.setEclipenoIN(this.getVAUEclipeno(lastEclipenoIN, date));			
 					dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN, date, metonsIN.get(0)));
-					
-					// Incluimos Casalero si lo hay
 					dateVAU.setCasalero(this.getCasalero(lastEclipenoIN.getId()));
-					
-					//Indicamos si hay algun tipo de evento reseñable
 					dateVAU.setNotableEvent(this.getNotableEvents(date));
 		
 				}
