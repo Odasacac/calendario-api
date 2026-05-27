@@ -39,7 +39,59 @@ public class MetonsEntity implements Serializable {
 	
 	private Boolean lleno;
 	
+	private Boolean selecto;
 	
+	private Boolean transicionado;
+	
+	private Boolean hibrido;
+	
+	private long lunaId;
+	
+	private long soeId;
+	
+	
+	
+	
+
+	public long getLunaId() {
+		return lunaId;
+	}
+
+	public void setLunaId(long lunaId) {
+		this.lunaId = lunaId;
+	}
+
+	public long getSoeId() {
+		return soeId;
+	}
+
+	public void setSoeId(long soeId) {
+		this.soeId = soeId;
+	}
+
+	public Boolean getSelecto() {
+		return selecto;
+	}
+
+	public void setSelecto(Boolean selecto) {
+		this.selecto = selecto;
+	}
+
+	public Boolean getTransicionado() {
+		return transicionado;
+	}
+
+	public void setTransicionado(Boolean transicionado) {
+		this.transicionado = transicionado;
+	}
+
+	public Boolean getHibrido() {
+		return hibrido;
+	}
+
+	public void setHibrido(Boolean hibrido) {
+		this.hibrido = hibrido;
+	}
 
 	public int getYear() {
 		return year;

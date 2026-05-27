@@ -61,7 +61,13 @@ public class EclipenosServiceImpl implements EclipenosService{
 							eclipeno.setEsParcial(eclipse.isEsParcial());
 							eclipeno.setEsTotal(eclipse.isEsTotal());
 							eclipeno.setEsPenumbral(eclipse.isEsPenumbral());
-							eclipeno.setEsHibrido(eclipse.isEsHibrido());				
+							eclipeno.setEsHibrido(eclipse.isEsHibrido());	
+							
+							eclipeno.setEclipseId(eclipse.getId());
+							eclipeno.setMetonoId(meton.getId());
+							eclipeno.setHibrido(meton.getHibrido());
+							eclipeno.setTransicionado(meton.getTransicionado());
+							eclipeno.setSelecto(meton.getSelecto());
 													
 							this.eclipenosRepository.save(eclipeno);
 						}

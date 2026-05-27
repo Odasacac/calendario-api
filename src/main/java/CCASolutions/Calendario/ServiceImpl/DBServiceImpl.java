@@ -3,6 +3,7 @@ package CCASolutions.Calendario.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import CCASolutions.Calendario.Services.ApogeosYPerigeosLunaService;
 import CCASolutions.Calendario.Services.CasalerosService;
 import CCASolutions.Calendario.Services.DBService;
 import CCASolutions.Calendario.Services.DatosService;
@@ -52,6 +53,9 @@ public class DBServiceImpl implements DBService {
 	@Autowired
 	private FestividadesService festividadesService;
 	
+	@Autowired
+	private ApogeosYPerigeosLunaService apogeosYPerigeosLunaService;
+	
 	
 	public String poblateDB() {
 		
@@ -67,6 +71,7 @@ public class DBServiceImpl implements DBService {
 		String resultadoEclipenos="";
 		String resultadoCasaleros="";
 		String resultadoFestividades="";
+		String resultadoApogeos="";
 		
 		try {
 			
@@ -80,11 +85,13 @@ public class DBServiceImpl implements DBService {
 			
 			resultadoFestividades= this.festividadesService.poblateFestividades();
 			
-			resultadoLunas = this.lunasService.poblateLunas();		
+			resultadoLunas = this.lunasService.poblateLunas();
+			
+			resultadoApogeos = this.apogeosYPerigeosLunaService.poblateApogeos();
 						
 			resultadoSoes = this.solsticiosYEquinocciosService.poblateSolsticiosYEquinoccios();		
 					
-			resultadoMetonos = this.metonsService.checkMetonosSinceToViaAPI();				
+			resultadoMetonos = this.metonsService.checkMetonosViaDB();				
 						
 			resultadoEclipses = this.eclipsesService.poblateEclipses();			
 							
@@ -99,7 +106,7 @@ public class DBServiceImpl implements DBService {
 		}
 		
 		
-		return resultado + "\n" + resultadoDatos + "\n" + resultadoDias + "\n" + resultadoWeeks + "\n" + resultadoMonths + "\n" + resultadoFestividades + "\n" + resultadoLunas + "\n" + resultadoSoes + "\n" + resultadoMetonos + "\n" + resultadoEclipses + "\n" + resultadoEclipenos + "\n" + resultadoCasaleros;
+		return resultado + "\n" + resultadoDatos + "\n" + resultadoDias + "\n" + resultadoWeeks + "\n" + resultadoMonths + "\n" + resultadoFestividades + "\n" + resultadoLunas + "\n" + resultadoApogeos + "\n" + resultadoSoes + "\n" + resultadoMetonos + "\n" + resultadoEclipses + "\n" + resultadoEclipenos + "\n" + resultadoCasaleros;
 	}
 
 }

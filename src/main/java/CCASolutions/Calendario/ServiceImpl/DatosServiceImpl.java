@@ -26,14 +26,15 @@ public class DatosServiceImpl implements DatosService {
 		if(allDatos.size()==1 && allDatos.get(0).getConcepto().equals("PW")) // Correspondiente a la contraseña del administrador
 		{
 			
-			List<DatosEntity> datosParaDDB = new ArrayList<>();
+			List<DatosEntity> datosParaDB = new ArrayList<>();
 			
-			datosParaDDB.add(this.createDato("ASYEF", "https://opale.imcce.fr/api/v1/phenomena/equinoxessolstices/399?year={{YYYY}}&nbd={{NNNN}}"));
-			datosParaDDB.add(this.createDato("YLP", "https://opale.imcce.fr/api/v1/phenomena/moonphases?year={{YYYY}}"));
-			datosParaDDB.add(this.createDato("LEPY", "https://opale.imcce.fr/api/v1/phenomena/eclipses/301/{{YYYY}}"));
-			datosParaDDB.add(this.createDato("SEPY", "https://opale.imcce.fr/api/v1/phenomena/eclipses/10/{{YYYY}}"));
+			datosParaDB.add(this.createDato("ASYEF", "https://opale.imcce.fr/api/v1/phenomena/equinoxessolstices/399?year={{YYYY}}&nbd={{NNNN}}"));
+			datosParaDB.add(this.createDato("YLP", "https://opale.imcce.fr/api/v1/phenomena/moonphases?year={{YYYY}}"));
+			datosParaDB.add(this.createDato("LEPY", "https://opale.imcce.fr/api/v1/phenomena/eclipses/301/{{YYYY}}"));
+			datosParaDB.add(this.createDato("SEPY", "https://opale.imcce.fr/api/v1/phenomena/eclipses/10/{{YYYY}}"));
+			datosParaDB.add(this.createDato("APG", "https://opale.imcce.fr/api/v1/phenomena/distances?date={{YYYY-MM-DD}}&nbd={{DDDD}}&bodies=399,301&calendar=gregorian"));
 			
-			this.datosRepository.saveAll(datosParaDDB);
+			this.datosRepository.saveAll(datosParaDB);
 			
 		}
 		else {

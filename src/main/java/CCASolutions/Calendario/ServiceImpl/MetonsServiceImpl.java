@@ -2,6 +2,7 @@ package CCASolutions.Calendario.ServiceImpl;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -11,9 +12,13 @@ import org.springframework.stereotype.Service;
 import CCASolutions.Calendario.DTOs.FenomenoDTO;
 import CCASolutions.Calendario.DTOs.LunarPhaseDTO;
 import CCASolutions.Calendario.Entities.DatosEntity;
+import CCASolutions.Calendario.Entities.LunasEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
+import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.MetonsRepository;
+import CCASolutions.Calendario.Repositories.LunasRepository;
+import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Services.LunasService;
 import CCASolutions.Calendario.Services.MetonsService;
 import CCASolutions.Calendario.Services.SolsticiosYEquinocciosService;
@@ -32,6 +37,84 @@ public class MetonsServiceImpl implements MetonsService {
 	
 	@Autowired
 	private LunasService lunasService;
+	
+	@Autowired
+	private LunasRepository lunasRepository;
+	
+	@Autowired
+	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository;
+	
+	public String checkMetonosViaDB() {
+		
+		String resultado = "Metonos checkeados sin problema.";
+		
+		System.out.println("Iniciando evaluacion de metonos.");
+		
+		List<MetonsEntity> metonosEnBBDD = this.metonsRepository.findAll();
+		
+		if(metonosEnBBDD.isEmpty()) {
+			List<LunasEntity> allLunas = this.lunasRepository.findAll();
+			List<SolsticiosYEquinocciosEntity> allSoes = this.solsticiosYEquinocciosRepository.findAll();
+			
+			if(!allLunas.isEmpty() && ! allSoes.isEmpty()) {
+				
+				List<MetonsEntity> metonosParaDB = new ArrayList<>();
+				for(SolsticiosYEquinocciosEntity soe : allSoes) {
+					
+					for (LunasEntity luna : allLunas) {
+						
+						if((luna.isNueva() || luna.isLlena()) && Math.abs(ChronoUnit.SECONDS.between(luna.getDate(), soe.getDate())) <= 86164) {
+							
+							MetonsEntity nuevoMetono = new MetonsEntity();
+							
+							nuevoMetono.setLunaId(luna.getId());
+							nuevoMetono.setHibrido(luna.isHibrida());
+							nuevoMetono.setSelecto(luna.isSelecta());
+							nuevoMetono.setTransicionado(luna.isTransicionada());
+							nuevoMetono.setNuevo(luna.isNueva());
+							nuevoMetono.setLleno(luna.isLlena());
+							
+							nuevoMetono.setSoeId(soe.getId());
+							nuevoMetono.setYear(soe.getYear());
+							nuevoMetono.setDate(soe.getDate());
+							nuevoMetono.setInicial(soe.isSolsticioInvierno());
+							nuevoMetono.setCuartal(soe.isEquinoccioPrimavera());
+							nuevoMetono.setBicuartal(soe.isSolsticioVerano());
+							nuevoMetono.setTricuartal(soe.isEquinoccioOtonyo());
+							
+							nuevoMetono.setSolsticial(nuevoMetono.getInicial() || nuevoMetono.getBicuartal());
+							nuevoMetono.setEquinoccial(nuevoMetono.getCuartal() || nuevoMetono.getTricuartal());
+										
+							metonosParaDB.add(nuevoMetono);
+							
+							System.out.println("Nuevo métono encontrado: " + nuevoMetono.getDate());
+						}
+					}
+				}
+				this.metonsRepository.saveAll(metonosParaDB);
+				System.out.println("Evaluacion de métonos finalizada.");
+			}
+			else {
+				if(allLunas.isEmpty()) {
+					
+					System.out.println("No hay lunas en la base de datos.");
+					resultado = "Error al chequear metonos, chequear logs,";
+				}
+				else if (allSoes.isEmpty()){
+					
+					System.out.println("No hay soes en la base de datos.");
+					resultado = "Error al chequear metonos, chequear logs,";
+				}
+			}
+		}
+		else {
+			System.out.println("Ya hay metonos en la BBDD");
+			resultado="Error a la hora de actualizar los metonos, chequear logs.";
+		}
+		
+		
+		return resultado;
+	}
 	
 	public String checkMetonosSinceToViaAPI() {
 		

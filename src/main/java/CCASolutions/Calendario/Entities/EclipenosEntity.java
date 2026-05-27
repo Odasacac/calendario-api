@@ -45,6 +45,58 @@ public class EclipenosEntity implements Serializable{
 		
 	private boolean esPenumbral;
 	
+	private Boolean selecto;
+	
+	private Boolean transicionado;
+	
+	private Boolean hibrido;
+	
+	private long metonoId;
+	
+	private long eclipseId;
+	
+	
+	
+	public Boolean getSelecto() {
+		return selecto;
+	}
+
+	public void setSelecto(Boolean selecto) {
+		this.selecto = selecto;
+	}
+
+	public Boolean getTransicionado() {
+		return transicionado;
+	}
+
+	public void setTransicionado(Boolean transicionado) {
+		this.transicionado = transicionado;
+	}
+
+	public Boolean getHibrido() {
+		return hibrido;
+	}
+
+	public void setHibrido(Boolean hibrido) {
+		this.hibrido = hibrido;
+	}
+
+	public long getMetonoId() {
+		return metonoId;
+	}
+
+	public void setMetonoId(long metonoId) {
+		this.metonoId = metonoId;
+	}
+
+	public long getEclipseId() {
+		return eclipseId;
+	}
+
+	public void setEclipseId(long eclipseId) {
+		this.eclipseId = eclipseId;
+	}
+
 	public boolean isEsTotal() {
 		return esTotal;
 	}

@@ -33,6 +33,26 @@ public class LunasServiceImpl implements LunasService {
 	// METODOS PUBLICOS
 	
 
+	public boolean esDateOLunaNueva(LocalDateTime dateO, List<LunasEntity> fasesLunaresDelAnyo) {
+	
+	boolean esLunaNueva = false;
+	
+	for(int i = 0; i < fasesLunaresDelAnyo.size() && !esLunaNueva; i++) {			
+			
+		LunasEntity luna = fasesLunaresDelAnyo.get(i);
+			
+		if(luna.isNueva() && dateO.toLocalDate().isEqual(luna.getDate().toLocalDate())) {
+			
+			esLunaNueva = true;
+		}
+		
+	}
+
+	
+	return esLunaNueva;
+}
+
+
 	public LunasEntity getPrimeraLunaNuevaAnteriorAFecha(List<LunasEntity> lunasNuevasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha) {
 		
 		LunasEntity primeraLunaNuevaAnteriorAFecha = new LunasEntity();
@@ -98,7 +118,7 @@ public class LunasServiceImpl implements LunasService {
 					if(!fasesLunaresDelAnyo.isEmpty()) {
 						
 						for(LunarPhaseDTO faseLunarAPI : fasesLunaresDelAnyo) {
-										
+							
 								LunasEntity lunaParaDB = new LunasEntity();
 								
 								switch (faseLunarAPI.getMoonPhase()){
@@ -121,7 +141,10 @@ public class LunasServiceImpl implements LunasService {
 								}
 								
 								lunaParaDB.setYear(faseLunarAPI.getDate().getYear());
-								lunaParaDB.setDate(faseLunarAPI.getDate());					
+								lunaParaDB.setDate(faseLunarAPI.getDate());									
+								lunaParaDB.setHibrida(false);
+								lunaParaDB.setSelecta(false);
+								lunaParaDB.setTransicionada(false);
 
 								try {
 									
@@ -186,27 +209,6 @@ public class LunasServiceImpl implements LunasService {
 		}
 				
 		return fasesLunaresDelAnyo;
-	}
-	
-	// METODOS PRIVADOS
-	
-	public boolean esDateOLunaNueva(LocalDateTime dateO, List<LunasEntity> fasesLunaresDelAnyo) {
-		
-		boolean esLunaNueva = false;
-		
-		for(int i = 0; i < fasesLunaresDelAnyo.size() && !esLunaNueva; i++) {			
-				
-			LunasEntity luna = fasesLunaresDelAnyo.get(i);
-				
-			if(luna.isNueva() && dateO.toLocalDate().isEqual(luna.getDate().toLocalDate())) {
-				
-				esLunaNueva = true;
-			}
-			
-		}
-
-		
-		return esLunaNueva;
 	}
 	
 

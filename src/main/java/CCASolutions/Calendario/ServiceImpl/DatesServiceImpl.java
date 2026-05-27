@@ -783,6 +783,15 @@ public class DatesServiceImpl implements DatesService {
 							
 					evento = evento + "lleno";
 				}
+				
+				if(Boolean.TRUE.equals(eclipeno.getHibrido())) {
+					if(Boolean.TRUE.equals(eclipeno.getSelecto())) {
+						evento = evento + " selecto";
+					}
+					else if(Boolean.TRUE.equals(eclipeno.getTransicionado())) {
+						evento = evento + " transicionado";
+					}
+				}
 			}
 			else if (meton != null) {
 						
@@ -811,6 +820,15 @@ public class DatesServiceImpl implements DatesService {
 							
 					evento = evento + "lleno";
 				}
+				
+				if(Boolean.TRUE.equals(meton.getHibrido())) {
+					if(Boolean.TRUE.equals(meton.getSelecto())) {
+						evento = evento + " selecto";
+					}
+					else if (Boolean.TRUE.equals(meton.getTransicionado())) {
+						evento = evento + " transicionado";
+					}
+				}
 						
 			}
 			else if(soe != null) {
@@ -831,6 +849,7 @@ public class DatesServiceImpl implements DatesService {
 							
 					evento = evento + "Equinoccio de otoño";
 				}
+				
 			}
 			else if (eclipse != null) {				
 										
@@ -878,7 +897,16 @@ public class DatesServiceImpl implements DatesService {
 				} 
 				else if (Boolean.TRUE.equals(luna.isCuartoMenguante())) {
 					  evento = evento + "Luna cuarto menguante";
-				}	
+				}
+				
+				if(luna.isHibrida()) {
+					if(luna.isSelecta()) {
+						evento = evento + " selecta";
+					}
+					else if(luna.isTransicionada()) {
+						evento = evento + " transicionada";
+					}
+				}
 			}
 		}
 
