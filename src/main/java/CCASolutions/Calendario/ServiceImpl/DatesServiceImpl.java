@@ -180,6 +180,12 @@ public class DatesServiceImpl implements DatesService {
 			}
 		}
 		
+		for(EclipsesEntity eclipse : lunasSolsticiosEclipsesMetonosYEclipenos.getEclipses()) {
+			if(eclipse.getDate().toLocalDate().isEqual(dateO)) {
+				eclipseParaMetodo=eclipse;
+			}
+		}
+		
 		for(EclipenosEntity eclipeno : lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos()) {
 			if(eclipeno.getDate().toLocalDate().isEqual(dateO)) {
 				eclipenoParaMetodo=eclipeno;
@@ -1046,7 +1052,7 @@ public class DatesServiceImpl implements DatesService {
 						evento = evento + " selecto";
 					}
 					else if(Boolean.TRUE.equals(eclipeno.getTransicionado())) {
-						evento = evento + " transicionado";
+						evento = evento + " transicional";
 					}
 				}
 			}
@@ -1083,7 +1089,7 @@ public class DatesServiceImpl implements DatesService {
 						evento = evento + " selecto";
 					}
 					else if (Boolean.TRUE.equals(meton.getTransicionado())) {
-						evento = evento + " transicionado";
+						evento = evento + " transiciol";
 					}
 				}
 						
@@ -1161,7 +1167,7 @@ public class DatesServiceImpl implements DatesService {
 						evento = evento + " selecta";
 					}
 					else if(luna.isTransicionada()) {
-						evento = evento + " transicionada";
+						evento = evento + " transicional";
 					}
 				}
 			}
