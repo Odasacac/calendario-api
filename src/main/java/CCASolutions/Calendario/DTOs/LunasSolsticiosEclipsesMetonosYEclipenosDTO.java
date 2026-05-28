@@ -15,8 +15,23 @@ public class LunasSolsticiosEclipsesMetonosYEclipenosDTO {
 	List<EclipsesEntity> eclipses;
 	List<EclipenosEntity> eclipenos;
 	List<MetonsEntity> metons;
+	EclipenosEntity lastEclipenoIN;
+	MetonsEntity lastMetonIN;
 	
 	
+	
+	public EclipenosEntity getLastEclipenoIN() {
+		return lastEclipenoIN;
+	}
+	public void setLastEclipenoIN(EclipenosEntity lastEclipenoIN) {
+		this.lastEclipenoIN = lastEclipenoIN;
+	}
+	public MetonsEntity getLastMetonIN() {
+		return lastMetonIN;
+	}
+	public void setLastMetonIN(MetonsEntity lastMetonIN) {
+		this.lastMetonIN = lastMetonIN;
+	}
 	public List<EclipenosEntity> getEclipenos() {
 		return eclipenos;
 	}

@@ -89,23 +89,22 @@ public class DatesServiceImpl implements DatesService {
 		if(!allEclipenos.isEmpty()) {
 			LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos = new LunasSolsticiosEclipsesMetonosYEclipenosDTO();
 			lunasSolsticiosEclipsesMetonosYEclipenos.setEclipenos(allEclipenos);
+			lunasSolsticiosEclipsesMetonosYEclipenos.setLastEclipenoIN(this.getLastEclipenoIN(allEclipenos, date));
 			
-			EclipenosEntity lastEclipenoIN = this.getLastEclipenoIN(allEclipenos, date);		
-			
-			if(lastEclipenoIN != null) {
+			if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() != null) {
 				
-				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(lastEclipenoIN.getDate(), dateO.plusYears(1));
+				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN().getDate(), dateO.plusYears(1));
 				
 				if(!allMetons.isEmpty()) {
 					
 					lunasSolsticiosEclipsesMetonosYEclipenos.setMetons(allMetons);
-					MetonsEntity lastMetonINForDate = this.getLastMetonINForDate(allMetons, date);
+					lunasSolsticiosEclipsesMetonosYEclipenos.setLastMetonIN(this.getLastMetonINForDate(allMetons, date));
 					
-					if(lastMetonINForDate != null) {									
+					if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN() != null) {									
 						
 						lunasSolsticiosEclipsesMetonosYEclipenos.setLunas(this.lunasRepository.findByDateBetween(dateO.minusYears(1), dateO.plusYears(1)));
-						lunasSolsticiosEclipsesMetonosYEclipenos.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(lastMetonINForDate.getDate().minusYears(1), dateO.plusYears(1)));
-						lunasSolsticiosEclipsesMetonosYEclipenos.setEclipses(this.eclipsesRepository.findByDateBetweenAndEsParcialIsFalseAndEsPenumbralIsFalse(lastEclipenoIN.getDate().toLocalDate().atStartOfDay(), dateO.plusYears(1)));
+						lunasSolsticiosEclipsesMetonosYEclipenos.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(lunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN().getDate().minusYears(1), dateO.plusYears(1)));
+						lunasSolsticiosEclipsesMetonosYEclipenos.setEclipses(this.eclipsesRepository.findByDateBetweenAndEsParcialIsFalseAndEsPenumbralIsFalse(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(1)));
 						
 						if(lunasSolsticiosEclipsesMetonosYEclipenos.getSoes().isEmpty() || lunasSolsticiosEclipsesMetonosYEclipenos.getLunas().isEmpty() || lunasSolsticiosEclipsesMetonosYEclipenos.getEclipses().isEmpty()) {
 							
@@ -113,21 +112,7 @@ public class DatesServiceImpl implements DatesService {
 						}
 						else {					
 	
-							dateVAU = new DateDTO();
-									
-							dateVAU.setYear(this.getVAUYear(lastEclipenoIN, dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), lastMetonINForDate));					
-							dateVAU.setMonth(this.getVAUMonth(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), lunasSolsticiosEclipsesMetonosYEclipenos.getLunas()));
-							
-							VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getLunas());
-							dateVAU.setWeek(vauWeekAndDay.getWeek());
-							dateVAU.setDay(vauWeekAndDay.getDay());					
-
-							dateVAU.setMetonoIN(getVAUMeton(lastEclipenoIN, allMetons, date));
-							dateVAU.setEclipenoIN(this.getVAUEclipeno(lastEclipenoIN, date));			
-							dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, lunasSolsticiosEclipsesMetonosYEclipenos.getEclipses(), date, lastMetonINForDate));
-							dateVAU.setCasalero(this.getCasalero(lastEclipenoIN.getId()));
-							dateVAU.setNotableEvent(this.getNotableEvents(date, lunasSolsticiosEclipsesMetonosYEclipenos));
-							dateVAU.setEstadoLuna(this.getEstadoLuna(date));				
+							dateVAU = this.getDateVAU(date, lunasSolsticiosEclipsesMetonosYEclipenos);									
 						}
 					}
 					else {
@@ -459,6 +444,27 @@ public class DatesServiceImpl implements DatesService {
 		return eventoFuturo;
 	}
 	
+	private DateDTO getDateVAU(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
+		
+		DateDTO dateVAU= new DateDTO();
+		
+		dateVAU.setYear(this.getVAUYear(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), date, lunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), lunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));					
+		dateVAU.setMonth(this.getVAUMonth(date, lunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), lunasSolsticiosEclipsesMetonosYEclipenos.getLunas()));
+		
+		VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(date, lunasSolsticiosEclipsesMetonosYEclipenos.getLunas());
+		dateVAU.setWeek(vauWeekAndDay.getWeek());
+		dateVAU.setDay(vauWeekAndDay.getDay());					
+
+		dateVAU.setMetonoIN(getVAUMeton(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), lunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
+		dateVAU.setEclipenoIN(this.getVAUEclipeno(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), date));			
+		dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, lunasSolsticiosEclipsesMetonosYEclipenos.getEclipses(), date, lunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));
+		dateVAU.setCasalero(this.getCasalero(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN()));
+		dateVAU.setNotableEvent(this.getNotableEvents(date, lunasSolsticiosEclipsesMetonosYEclipenos));
+		dateVAU.setEstadoLuna(this.getEstadoLuna(date));				
+		
+		return dateVAU;
+	}
+	
 	private EstadoLunaDTO getEstadoLuna(LocalDate date) {
 		
 		EstadoLunaDTO estadoLuna = new EstadoLunaDTO();
@@ -496,13 +502,13 @@ public class DatesServiceImpl implements DatesService {
 		return direccion;
 	}
 	
-	private CasaleroDTO getCasalero(Long lastEclipenoINId) {
+	private CasaleroDTO getCasalero(EclipenosEntity lastEclipenoIN) {
 		
 		CasaleroDTO casaleroDTO = null;
 		
 		try {
 			
-			CasalerosEntity casaleroEntity = casalerosRepository.findByEclipenoId(lastEclipenoINId);
+			CasalerosEntity casaleroEntity = casalerosRepository.findByEclipenoId(lastEclipenoIN.getId());
 			
 			if(casaleroEntity != null) {
 				
@@ -675,7 +681,7 @@ public class DatesServiceImpl implements DatesService {
 		return metonIN;
 	}
 
-	private YearDTO getVAUYear(EclipenosEntity lastEclipenoIN, LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMetonIN) {
+	private YearDTO getVAUYear(EclipenosEntity lastEclipenoIN, LocalDate date, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMetonIN) {
 		
 		YearDTO vauYear = new YearDTO();
 		
@@ -692,11 +698,11 @@ public class DatesServiceImpl implements DatesService {
 			
 			if(soe.isSolsticioInvierno()) {				
 		
-				if(soe.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
+				if(soe.getDate().toLocalDate().isEqual(date)) {
 						
 					caeEnSolsticioDeInvierno=true;
 				}
-				else if (soe.getDate().toLocalDate().isBefore(dateO.toLocalDate()) && soe.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate())){
+				else if (soe.getDate().toLocalDate().isBefore(date) && soe.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate())){
 					
 					year=year+1;
 				}
@@ -709,7 +715,7 @@ public class DatesServiceImpl implements DatesService {
 		vauYear.setSolsticiosDeInviernoSinceLastMetonIN(year);	
 		
 		int numberOfYear = year +1;
-		if(lastEclipenoIN.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
+		if(lastEclipenoIN.getDate().toLocalDate().isEqual(date)) {
 			
 			numberOfYear = numberOfYear-1;
 		}
@@ -721,7 +727,7 @@ public class DatesServiceImpl implements DatesService {
 	
 	
 	
-	private MonthDTO getVAUMonth (LocalDateTime dateO, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, List<LunasEntity> lunasDesdeElAnyoAnteriorHastaElSiguiente) {
+	private MonthDTO getVAUMonth (LocalDate date, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, List<LunasEntity> lunasDesdeElAnyoAnteriorHastaElSiguiente) {
 		
 		MonthDTO month = new MonthDTO();
 		
@@ -747,14 +753,14 @@ public class DatesServiceImpl implements DatesService {
 			
 			SolsticiosYEquinocciosEntity soe = soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.get(i);
 			
-			if(soe.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
+			if(soe.getDate().toLocalDate().isEqual(date)) {
 				caeEnSOE = true;
 				lastSOE = soe;
 				nextSOE = soe;
 			}
-			else if(soe.getDate().toLocalDate().isBefore(dateO.toLocalDate())) {
+			else if(soe.getDate().toLocalDate().isBefore(date)) {
 				
-				long diasDeDiferenciaEntreLastSOEYFecha = ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), dateO.toLocalDate());
+				long diasDeDiferenciaEntreLastSOEYFecha = ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), date);
 				
 				if(diasDeDiferenciaEntreLastSOEYFecha < diasMinimosDeDiferenciaConLastSOE) {
 					diasMinimosDeDiferenciaConLastSOE = diasDeDiferenciaEntreLastSOEYFecha;
@@ -762,9 +768,9 @@ public class DatesServiceImpl implements DatesService {
 				}
 				
 			}
-			else if(soe.getDate().toLocalDate().isAfter(dateO.toLocalDate())) {
+			else if(soe.getDate().toLocalDate().isAfter(date)) {
 				
-				long diasDeDiferenciaEntreNextSOEYFecha = ChronoUnit.DAYS.between(dateO.toLocalDate(), soe.getDate().toLocalDate());
+				long diasDeDiferenciaEntreNextSOEYFecha = ChronoUnit.DAYS.between(date, soe.getDate().toLocalDate());
 				
 				if(diasDeDiferenciaEntreNextSOEYFecha < diasMinimosDeDiferenciaConNextSOE) {
 					diasMinimosDeDiferenciaConNextSOE = diasDeDiferenciaEntreNextSOEYFecha;
@@ -784,7 +790,7 @@ public class DatesServiceImpl implements DatesService {
 				
 				LunasEntity luna = lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente.get(i);
 	
-				if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate() )) {
+				if(luna.getDate().toLocalDate().isEqual(date)) {
 						
 					lunasNuevasEntreLastSOEYNextSOE.add(luna);	
 					caeEnLunaNueva = true;	
@@ -809,7 +815,7 @@ public class DatesServiceImpl implements DatesService {
 				if(caeEnLunaNueva) {
 					
 					// Basicamente si hay un metono (da igual el tipo)
-					MonthDTO monthIfLN = getVAUMonth(dateO.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente);
+					MonthDTO monthIfLN = getVAUMonth(date.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente);
 					vauMonth.setName(monthIfLN.getName());
 					
 				}
@@ -850,7 +856,7 @@ public class DatesServiceImpl implements DatesService {
 							
 					}
 						
-					if(dateO.toLocalDate().isAfter(luna.getDate().toLocalDate())) {
+					if(date.isAfter(luna.getDate().toLocalDate())) {
 							
 						lunasNuevasPasadasDesdeLastSOEHastaDateO = lunasNuevasPasadasDesdeLastSOEHastaDateO+1;						
 					}
@@ -861,7 +867,7 @@ public class DatesServiceImpl implements DatesService {
 				if(lastLNBeforeNextSOE != null || firstLNAfterLastSOE != null) {
 					
 					// Si la fecha a consultar esta entre la ultima luna y el nextSOE, pertenece al mes hibrido de ese soe.
-					if(dateO.toLocalDate().isAfter(lastLNBeforeNextSOE.getDate().toLocalDate()) && dateO.toLocalDate().isBefore(nextSOE.getDate().toLocalDate())) {
+					if(date.isAfter(lastLNBeforeNextSOE.getDate().toLocalDate()) && date.isBefore(nextSOE.getDate().toLocalDate())) {
 		
 						vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(nextSOE.getStartingSeason(), 0, false);
 
@@ -869,7 +875,7 @@ public class DatesServiceImpl implements DatesService {
 					// Si la fecha a consultar esta entre el lastSOE y la primera luna, pertenece al mes hibrido de ese soe.
 					// Pero si el lastSOE es solsticio de invierno y no ha pasado ninguna luna nueva, es Oterno Liminal
 					// A no ser que sea luna nueva, que en ese caso será Prierno
-					else if (dateO.toLocalDate().isBefore(firstLNAfterLastSOE.getDate().toLocalDate()) && dateO.toLocalDate().isAfter(lastSOE.getDate().toLocalDate())) {						
+					else if (date.isBefore(firstLNAfterLastSOE.getDate().toLocalDate()) && date.isAfter(lastSOE.getDate().toLocalDate())) {						
 
 						if(lastSOE.isSolsticioInvierno()) {						
 	
@@ -894,7 +900,7 @@ public class DatesServiceImpl implements DatesService {
 							
 						if (caeEnLunaNueva) {
 							
-							MonthDTO monthIfLN = getVAUMonth(dateO.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente);
+							MonthDTO monthIfLN = getVAUMonth(date.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente);
 							vauMonth.setName(monthIfLN.getName());
 						}
 						else {
@@ -924,7 +930,7 @@ public class DatesServiceImpl implements DatesService {
 	
 	
 	
-	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDateTime dateO, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente) {
+	private VAUWeekAndDayDTO getVauWeekAndDay(LocalDate date, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente) {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
 		String weekVauString = null;
@@ -940,14 +946,14 @@ public class DatesServiceImpl implements DatesService {
 			LunasEntity luna = lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.get(i);
 			
 
-			if(luna.getDate().toLocalDate().isEqual(dateO.toLocalDate())) {
+			if(luna.getDate().toLocalDate().isEqual(date)) {
 					
 				caeEnLunaNueva = true;
 				diasDesdeLaLunaNueva=0;
 			}
-			else if (luna.getDate().toLocalDate().isBefore(dateO.toLocalDate())) {
+			else if (luna.getDate().toLocalDate().isBefore(date)) {
 					
-				long diasDeDiferenciaEntreLNYDateO = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), dateO.toLocalDate());
+				long diasDeDiferenciaEntreLNYDateO = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
 					
 				if(diasDeDiferenciaEntreLNYDateO < diasDesdeLaLunaNueva) {
 						
