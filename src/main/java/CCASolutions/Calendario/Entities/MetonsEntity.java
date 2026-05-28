@@ -41,9 +41,7 @@ public class MetonsEntity implements Serializable {
 	
 	private Boolean selecto;
 	
-	private Boolean transicionado;
-	
-	private Boolean hibrido;
+	private Boolean transicional;
 	
 	private long lunaId;
 	
@@ -77,22 +75,14 @@ public class MetonsEntity implements Serializable {
 		this.selecto = selecto;
 	}
 
-	public Boolean getTransicionado() {
-		return transicionado;
+	public Boolean getTransicional() {
+		return transicional;
 	}
 
-	public void setTransicionado(Boolean transicionado) {
-		this.transicionado = transicionado;
+	public void setTransicional(Boolean transicional) {
+		this.transicional = transicional;
 	}
-
-	public Boolean getHibrido() {
-		return hibrido;
-	}
-
-	public void setHibrido(Boolean hibrido) {
-		this.hibrido = hibrido;
-	}
-
+	
 	public int getYear() {
 		return year;
 	}

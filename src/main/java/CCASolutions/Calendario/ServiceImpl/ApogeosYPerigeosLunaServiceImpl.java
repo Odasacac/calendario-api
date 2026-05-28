@@ -113,13 +113,11 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 							if(luna.isLlena()) {
 									
 								if(apoperi.isEsApogeo()) {
-									luna.setHibrida(true);
-									luna.setTransicionada(true);
+									luna.setTransicional(true);
 									this.lunasRepository.save(luna);
-									System.out.println("Luna transicionada encontrada en " + luna.getDate());
+									System.out.println("Luna transicional encontrada en " + luna.getDate());
 								}
 								else if(apoperi.isEsPerigeo()) {
-									luna.setHibrida(true);
 									luna.setSelecta(true);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna selecta encontrada en " + luna.getDate());
@@ -128,13 +126,11 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 							else if (luna.isNueva()){
 									
 								if(apoperi.isEsPerigeo()) {
-									luna.setHibrida(true);
-									luna.setTransicionada(true);
+									luna.setTransicional(true);
 									this.lunasRepository.save(luna);
-									System.out.println("Luna transicionada encontrada en " + luna.getDate());
+									System.out.println("Luna transicional encontrada en " + luna.getDate());
 								}
 								else if(apoperi.isEsApogeo()) {
-									luna.setHibrida(true);
 									luna.setSelecta(true);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna selecta encontrada en " + luna.getDate());

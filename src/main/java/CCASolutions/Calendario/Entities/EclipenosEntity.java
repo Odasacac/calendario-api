@@ -47,9 +47,7 @@ public class EclipenosEntity implements Serializable{
 	
 	private Boolean selecto;
 	
-	private Boolean transicionado;
-	
-	private Boolean hibrido;
+	private Boolean transicional;
 	
 	private long metonoId;
 	
@@ -65,20 +63,12 @@ public class EclipenosEntity implements Serializable{
 		this.selecto = selecto;
 	}
 
-	public Boolean getTransicionado() {
-		return transicionado;
+	public Boolean getTransicional() {
+		return transicional;
 	}
 
-	public void setTransicionado(Boolean transicionado) {
-		this.transicionado = transicionado;
-	}
-
-	public Boolean getHibrido() {
-		return hibrido;
-	}
-
-	public void setHibrido(Boolean hibrido) {
-		this.hibrido = hibrido;
+	public void setTransicional(Boolean transicional) {
+		this.transicional = transicional;
 	}
 
 	public long getMetonoId() {

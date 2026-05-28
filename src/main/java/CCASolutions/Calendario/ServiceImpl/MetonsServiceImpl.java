@@ -68,9 +68,8 @@ public class MetonsServiceImpl implements MetonsService {
 							MetonsEntity nuevoMetono = new MetonsEntity();
 							
 							nuevoMetono.setLunaId(luna.getId());
-							nuevoMetono.setHibrido(luna.isHibrida());
 							nuevoMetono.setSelecto(luna.isSelecta());
-							nuevoMetono.setTransicionado(luna.isTransicionada());
+							nuevoMetono.setTransicional(luna.isTransicional());
 							nuevoMetono.setNuevo(luna.isNueva());
 							nuevoMetono.setLleno(luna.isLlena());
 							
