@@ -12,8 +12,19 @@ public class DateDTO {
 	private AbsoluteEclipsesDTO absoluteEclipses;
 	private CasaleroDTO casalero;
 	private EstadoLunaDTO estadoLuna;
+	private FestividadesDTO festividades;
 	
 	
+	
+	
+	public FestividadesDTO getFestividades() {
+		return festividades;
+	}
+
+	public void setFestividades(FestividadesDTO festividades) {
+		this.festividades = festividades;
+	}
+
 	public EstadoLunaDTO getEstadoLuna() {
 		return estadoLuna;
 	}
