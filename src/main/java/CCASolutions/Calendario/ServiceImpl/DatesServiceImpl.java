@@ -497,12 +497,27 @@ public class DatesServiceImpl implements DatesService {
 					direccion = "Presente";
 				}
 			}
-			else if(apoperiMasCercanoADate.isEsApogeo()) {
-				direccion = "Acercándose";
+			else {
+				
+				String accion = "";
+				
+				if(apoperiMasCercanoADate.isEsApogeo()){
+					accion ="acercándose";
+				}
+				else if(apoperiMasCercanoADate.isEsPerigeo()) {
+					accion = "alejándose";
+				}
+				
+				long diasEntreDateYApoperi = ChronoUnit.DAYS.between(apoperiMasCercanoADate.getDate().toLocalDate(), date);
+				String dias = "días";
+				
+				if(diasEntreDateYApoperi == 1) {
+					dias = "día";
+				}
+						
+				direccion = "Lleva " + diasEntreDateYApoperi + " " + dias + " " + accion;
 			}
-			else if(apoperiMasCercanoADate.isEsPerigeo()) {
-				direccion = "Alejándose";
-			}	
+				
 		}		
 		
 		return direccion;
