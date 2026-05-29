@@ -8,6 +8,23 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+	/*
+
+ 		Una festividades es un Evento Reseñable en concreto, a la combinacion de dos o mas
+ 		
+ 		Festividades de un año en orden cronológico
+ 		
+ 			0 - Cambio de métono: El día del métono inicial nuevo
+ 			1 - Cambio de año: El día del solsticio de invierno - CA
+ 			2 - Inicio del primer mes del año: El día de la primera luna nueva de Prierno - IA
+ 			3 - Bienvenida a la primavera: Equinoccio de primavera - BP
+ 			4 - Mitad de año: El día del solsticio de verano - MA
+ 			4 - Paso al otoño: El día de la última luna llena antes del equinoccio de otoño - PO
+ 			5 - Despedida del año: El día de la última luna llena antes del solsticio de invierno - DA
+ 
+ 			CAIAP BHMAPODA
+ 			
+	 */
 @Entity
 @Table(name="festividades")
 public class FestividadesEntity implements Serializable {
@@ -18,172 +35,10 @@ public class FestividadesEntity implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 	
-	private String name;
-	
-	private String descripcion;
-	
 	private String code;
 	
-	private boolean esSolsticioVerano;
-	
-	private boolean esSolsticioInvierno;
-	
-	private boolean esEquinoccioPrimavera;
-	
-	private boolean esEquinoccioOtonyo;
-	
-	private boolean esLunaNueva;
-	
-	private boolean esLunaLlena;
-	
-	private boolean hayEclipseDeLuna;
-	
-	private boolean hayEclipseDeSol;
-	
-	private boolean esMetono;
-	
-	private boolean esEclipeno;
-	
-	private int previousSOE;
-	
-	private int nextSOE;
 	
 	
-	
-	
-	
-
-	public boolean isEsLunaLlena() {
-		return esLunaLlena;
-	}
-
-	public void setEsLunaLlena(boolean esLunaLlena) {
-		this.esLunaLlena = esLunaLlena;
-	}
-
-	public boolean isHayEclipseDeLuna() {
-		return hayEclipseDeLuna;
-	}
-
-	public void setHayEclipseDeLuna(boolean hayEclipseDeLuna) {
-		this.hayEclipseDeLuna = hayEclipseDeLuna;
-	}
-
-	public boolean isHayEclipseDeSol() {
-		return hayEclipseDeSol;
-	}
-
-	public void setHayEclipseDeSol(boolean hayEclipseDeSol) {
-		this.hayEclipseDeSol = hayEclipseDeSol;
-	}
-
-	public int getPreviousSOE() {
-		return previousSOE;
-	}
-
-	public void setPreviousSOE(int previousSOE) {
-		this.previousSOE = previousSOE;
-	}
-
-	public int getNextSOE() {
-		return nextSOE;
-	}
-
-	public void setNextSOE(int nextSOE) {
-		this.nextSOE = nextSOE;
-	}
-
-	public String getCode() {
-		return code;
-	}
-
-	public void setCode(String code) {
-		this.code = code;
-	}
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public boolean isEsSolsticioVerano() {
-		return esSolsticioVerano;
-	}
-
-	public void setEsSolsticioVerano(boolean esSolsticioVerano) {
-		this.esSolsticioVerano = esSolsticioVerano;
-	}
-
-	public boolean isEsSolsticioInvierno() {
-		return esSolsticioInvierno;
-	}
-
-	public void setEsSolsticioInvierno(boolean esSolsticioInvierno) {
-		this.esSolsticioInvierno = esSolsticioInvierno;
-	}
-
-	public boolean isEsEquinoccioPrimavera() {
-		return esEquinoccioPrimavera;
-	}
-
-	public void setEsEquinoccioPrimavera(boolean esEquinoccioPrimavera) {
-		this.esEquinoccioPrimavera = esEquinoccioPrimavera;
-	}
-
-	public boolean isEsEquinoccioOtonyo() {
-		return esEquinoccioOtonyo;
-	}
-
-	public void setEsEquinoccioOtonyo(boolean esEquinoccioOtonyo) {
-		this.esEquinoccioOtonyo = esEquinoccioOtonyo;
-	}
-
-	public boolean isEsLunaNueva() {
-		return esLunaNueva;
-	}
-
-	public void setEsLunaNueva(boolean esLunaNueva) {
-		this.esLunaNueva = esLunaNueva;
-	}
-
-	public boolean isEsMetono() {
-		return esMetono;
-	}
-
-	public void setEsMetono(boolean esMetono) {
-		this.esMetono = esMetono;
-	}
-
-	public boolean isEsEclipeno() {
-		return esEclipeno;
-	}
-
-	public void setEsEclipeno(boolean esEclipeno) {
-		this.esEclipeno = esEclipeno;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}	
 	
 	
 	

@@ -6,7 +6,7 @@ import CCASolutions.Calendario.Entities.LunasEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
-public class LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO {
+public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 
 	private LunasEntity lunaActual;
 	private LunasEntity lunaProxima;

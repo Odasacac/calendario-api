@@ -16,8 +16,8 @@ import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.EclipenoDTO;
 import CCASolutions.Calendario.DTOs.EstadoLunaDTO;
 import CCASolutions.Calendario.DTOs.FestividadesDTO;
+import CCASolutions.Calendario.DTOs.LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO;
 import CCASolutions.Calendario.DTOs.LunasSolsticiosEclipsesMetonosYEclipenosDTO;
-import CCASolutions.Calendario.DTOs.LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.NotableEventAndFestividadesDTO;
@@ -143,69 +143,111 @@ public class DatesServiceImpl implements DatesService {
 	
 	// ========================= METODOS PRIVADOS
 	
-	private DateDTO getDateVAU(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
+	private DateDTO getDateVAU(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosDTO allLunasSolsticiosEclipsesMetonosYEclipenos) {
 		
 		DateDTO dateVAU= new DateDTO();
 		
-		dateVAU.setYear(this.getVAUYear(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), date, lunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), lunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));					
-		dateVAU.setMonth(this.getVAUMonth(date, lunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), lunasSolsticiosEclipsesMetonosYEclipenos.getLunas()));
+		dateVAU.setYear(this.getVAUYear(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), date, allLunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));					
+		dateVAU.setMonth(this.getVAUMonth(date, allLunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLunas()));
 		
-		VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(date, lunasSolsticiosEclipsesMetonosYEclipenos.getLunas());
+		VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(date, allLunasSolsticiosEclipsesMetonosYEclipenos.getLunas());
 		dateVAU.setWeek(vauWeekAndDay.getWeek());
 		dateVAU.setDay(vauWeekAndDay.getDay());					
 
-		dateVAU.setMetonoIN(getVAUMeton(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), lunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
-		dateVAU.setEclipenoIN(this.getVAUEclipeno(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), date));			
-		dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, lunasSolsticiosEclipsesMetonosYEclipenos.getEclipses(), date, lunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));
-		dateVAU.setCasalero(this.getCasalero(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN()));
+		dateVAU.setMetonoIN(getVAUMeton(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
+		dateVAU.setEclipenoIN(this.getVAUEclipeno(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), date));			
+		dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipses(), date, allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));
+		dateVAU.setCasalero(this.getCasalero(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN()));
 		dateVAU.setEstadoLuna(this.getEstadoLuna(date));	
 		
-		NotableEventAndFestividadesDTO eventosResYFestividades = this.getEventosResYFestividades(date, lunasSolsticiosEclipsesMetonosYEclipenos);		
+		NotableEventAndFestividadesDTO eventosResYFestividades = this.getEventosResYFestividades(date, allLunasSolsticiosEclipsesMetonosYEclipenos);		
 		dateVAU.setNotableEvent(eventosResYFestividades.getEventosRes());		
 		dateVAU.setFestividades(eventosResYFestividades.getFestividades());
 		
 		return dateVAU;
 	}
 	
-	private NotableEventAndFestividadesDTO getEventosResYFestividades(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
+	private NotableEventAndFestividadesDTO getEventosResYFestividades(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosDTO allLunasSolsticiosEclipsesMetonosYEclipenos) {
 	
 		NotableEventAndFestividadesDTO notableEventAndFestividadesDTO = new NotableEventAndFestividadesDTO();
 		
-		LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO fenomenosPPPFecha = this.getFenomenosPPPFecha(date, lunasSolsticiosEclipsesMetonosYEclipenos);
+		LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosPPPFecha = this.getFenomenosPPPFecha(date, allLunasSolsticiosEclipsesMetonosYEclipenos);
 		
 		notableEventAndFestividadesDTO.setEventosRes(this.getEventosRes(date, fenomenosPPPFecha));
-		notableEventAndFestividadesDTO.setFestividades(this.getFestividades(date, fenomenosPPPFecha, lunasSolsticiosEclipsesMetonosYEclipenos));
+		notableEventAndFestividadesDTO.setFestividades(this.getFestividades(date, fenomenosPPPFecha, allLunasSolsticiosEclipsesMetonosYEclipenos));
 		
 		return notableEventAndFestividadesDTO;		
 	}
 	
-	private NotableEventDTO getEventosRes(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO lunasSolsticiosEclipsesMetonosYEclipenosParaEventos) {
+	
+	private FestividadesDTO getFestividades(LocalDate date, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO lunasSolsticiosEclipsesMetonosYEclipenosParaFestividades, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
+		
+		FestividadesDTO festividades = new FestividadesDTO();
+		
+		festividades.setFestividadActual(this.getFestividadActual(date, lunasSolsticiosEclipsesMetonosYEclipenosParaFestividades, lunasSolsticiosEclipsesMetonosYEclipenos));
+		festividades.setFestividadAnterior(this.getFestividadAnterior(date, lunasSolsticiosEclipsesMetonosYEclipenosParaFestividades, lunasSolsticiosEclipsesMetonosYEclipenos));
+		festividades.setFestividadProxima(this.getFestividadProxima(date, lunasSolsticiosEclipsesMetonosYEclipenosParaFestividades, lunasSolsticiosEclipsesMetonosYEclipenos));		
+		
+		return festividades;		
+	}		
+	
+	
+	private String getFestividadActual(LocalDate date, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas, LunasSolsticiosEclipsesMetonosYEclipenosDTO allLunasSolsticiosEclipsesMetonosYEclipenos) {
+		
+		String festividadActual = "";
+		
+		LunasEntity lunaActual = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getLunaActual();
+		SolsticiosYEquinocciosEntity soeActual = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getSoeActual();
+		MetonsEntity metonActual = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getMetonoActual();
+		EclipsesEntity eclipseActual = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipseActual();
+		EclipenosEntity eclipenoActual = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipenoActual();
+		
+		
+		
+		return festividadActual;
+	}
+	
+	private String getFestividadAnterior(LocalDate date, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas, LunasSolsticiosEclipsesMetonosYEclipenosDTO allLunasSolsticiosEclipsesMetonosYEclipenos) {
+		
+		String festividadAnterior = "";
+		
+		return festividadAnterior;
+	}
+
+	private String getFestividadProxima(LocalDate date, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas, LunasSolsticiosEclipsesMetonosYEclipenosDTO allLunasSolsticiosEclipsesMetonosYEclipenos) {
+	
+		String festividadProxima = "";
+	
+		return festividadProxima;
+	}
+	
+	private NotableEventDTO getEventosRes(LocalDate date, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas) {
 		
 		NotableEventDTO eventosRes = new NotableEventDTO();
 		
-		eventosRes.setToday(this.getEventoActual(date, lunasSolsticiosEclipsesMetonosYEclipenosParaEventos));
-		eventosRes.setPrevious(this.getEventoPasado(date, lunasSolsticiosEclipsesMetonosYEclipenosParaEventos));
-		eventosRes.setNext(this.getEventoProximo(date, lunasSolsticiosEclipsesMetonosYEclipenosParaEventos));
+		eventosRes.setToday(this.getEventoActual(date, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas));
+		eventosRes.setPrevious(this.getEventoPasado(date, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas));
+		eventosRes.setNext(this.getEventoProximo(date, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas));
 		
 		return eventosRes;
 	}
 	
-	private String getEventoActual(LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
+	private String getEventoActual(LocalDate dateO, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas) {
 		
 		String eventoActual = "";	
 		
-		LunasEntity lunaParaMetodo = lunasSolsticiosEclipsesMetonosYEclipenos.getLunaActual();
-		SolsticiosYEquinocciosEntity soeParaMetodo = lunasSolsticiosEclipsesMetonosYEclipenos.getSoeActual();
-		MetonsEntity metonParaMetodo = lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoActual();
-		EclipsesEntity eclipseParaMetodo = lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseActual();
-		EclipenosEntity eclipenoParaMetodo = lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoActual();
+		LunasEntity lunaParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getLunaActual();
+		SolsticiosYEquinocciosEntity soeParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getSoeActual();
+		MetonsEntity metonParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getMetonoActual();
+		EclipsesEntity eclipseParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipseActual();
+		EclipenosEntity eclipenoParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipenoActual();
 	
 		eventoActual = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo);
 		
 		return eventoActual;
 	}
 	
-	private String getEventoPasado(LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
+	private String getEventoPasado(LocalDate dateO, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
 		
 		String eventoPasado = "";		
 		
@@ -257,7 +299,7 @@ public class DatesServiceImpl implements DatesService {
 	}
 	
 	
-	private String getEventoProximo (LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
+	private String getEventoProximo (LocalDate dateO, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
 		
 		String eventoFuturo = "";		
 		
@@ -304,41 +346,6 @@ public class DatesServiceImpl implements DatesService {
 		eventoFuturo = nombreDelEvento +" dentro de "+ minDias + dias;		
 	
 		return eventoFuturo;
-	}
-	
-	
-	private FestividadesDTO getFestividades(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO lunasSolsticiosEclipsesMetonosYEclipenosParaFestividades, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
-		
-		FestividadesDTO festividades = new FestividadesDTO();
-		
-		festividades.setFestividadActual(this.getFestividadActual(date, lunasSolsticiosEclipsesMetonosYEclipenos));
-		festividades.setFestividadAnterior(this.getFestividadAnterior(date, lunasSolsticiosEclipsesMetonosYEclipenos));
-		festividades.setFestividadProxima(this.getFestividadProxima(date, lunasSolsticiosEclipsesMetonosYEclipenos));		
-		
-		return festividades;		
-	}
-		
-	
-	
-	private String getFestividadActual(LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
-		
-		String festividadActual = "";
-		
-		return festividadActual;
-	}
-	
-	private String getFestividadAnterior(LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
-		
-		String festividadAnterior = "";
-		
-		return festividadAnterior;
-	}
-
-	private String getFestividadProxima(LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
-	
-	String festividadProxima = "";
-	
-	return festividadProxima;
 	}
 	
 	
@@ -1107,9 +1114,9 @@ public class DatesServiceImpl implements DatesService {
 		return lastMetonINForDate;
 	}
 	
-private LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO getFenomenosPPPFecha(LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
+private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomenosPPPFecha(LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
 		
-		LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO fenomenosParaFestividadesYEventosDTO = new LunasSolsticiosEclipsesMetonosYEclipenosParaFestividadesYEventosDTO();
+	LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosParaFestividadesYEventosDTO = new LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO();
 		
 		LunasEntity lunaActual = null;
 		SolsticiosYEquinocciosEntity soeActual = null;
