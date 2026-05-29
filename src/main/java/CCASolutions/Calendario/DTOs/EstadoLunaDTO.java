@@ -2,15 +2,15 @@ package CCASolutions.Calendario.DTOs;
 
 public class EstadoLunaDTO {
 
-	private String direccion;
+	private String comportamiento;
 
-	public String getDireccion() {
-		return direccion;
+	public String getComportamiento() {
+		return comportamiento;
 	}
 
-	public void setDireccion(String direccion) {
-		this.direccion = direccion;
+	public void setComportamiento(String comportamiento) {
+		this.comportamiento = comportamiento;
 	}
-	
+
 	
 }

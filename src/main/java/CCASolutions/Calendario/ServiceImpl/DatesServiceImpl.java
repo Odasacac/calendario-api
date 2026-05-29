@@ -475,12 +475,12 @@ public class DatesServiceImpl implements DatesService {
 		
 		EstadoLunaDTO estadoLuna = new EstadoLunaDTO();
 		
-		estadoLuna.setDireccion(this.getLunaDireccion(date));		
+		estadoLuna.setComportamiento(this.getComportamientoLuna(date));		
 		
 		return estadoLuna;
 	}
 	
-	private String getLunaDireccion(LocalDate date) {
+	private String getComportamientoLuna(LocalDate date) {
 		
 		String direccion = "";
 		
