@@ -14,13 +14,13 @@ import jakarta.persistence.Table;
  		
  		Festividades de un año en orden cronológico
  		
- 			0 - Cambio de métono: El día del métono inicial nuevo
- 			1 - Cambio de año: El día del solsticio de invierno - CA
- 			2 - Inicio del primer mes del año: El día de la primera luna nueva de Prierno - IA
- 			3 - Bienvenida a la primavera: Equinoccio de primavera - BP
- 			4 - Mitad de año: El día del solsticio de verano - MA
- 			4 - Paso al otoño: El día de la última luna llena antes del equinoccio de otoño - PO
- 			5 - Despedida del año: El día de la última luna llena antes del solsticio de invierno - DA
+ 			1 - Cambio de métono: El día del métono inicial nuevo - CM
+ 			2 - Cambio de año: El día del solsticio de invierno - CA
+ 			3 - Inicio del primer mes del año: El día de la primera luna nueva de Prierno - IPMA
+ 			4 - Bienvenida a la primavera: Equinoccio de primavera - BP
+ 			5 - Mitad de año: El día del solsticio de verano - MA
+ 			6 - Paso al otoño: El día de la última luna llena antes del equinoccio de otoño - PO
+ 			7 - Despedida del año: El día de la última luna llena antes del solsticio de invierno - DA
  
  			CAIAP BHMAPODA
  			
@@ -36,11 +36,27 @@ public class FestividadesEntity implements Serializable {
 	private Long id;
 	
 	private String code;
+	private String nombre;
 	
-	
-	
-	
-	
-	
-	
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getCode() {
+		return code;
+	}
+	public void setCode(String code) {
+		this.code = code;
+	}
+	public String getNombre() {
+		return nombre;
+	}
+	public void setNombre(String nombre) {
+		this.nombre = nombre;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
 }
