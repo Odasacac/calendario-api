@@ -1328,7 +1328,7 @@ public class DatesServiceImpl implements DatesService {
 					evento = evento + " selecto";
 				}
 				else if (Boolean.TRUE.equals(meton.getTransicional())) {
-					evento = evento + " transiciol";
+					evento = evento + " transicional";
 				}
 				
 						
