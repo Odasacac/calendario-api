@@ -28,13 +28,14 @@ public class FestividadesServiceImpl implements FestividadesService {
 			
 			List<FestividadesEntity> festividadParaDDB = new ArrayList<>();
 			
-			festividadParaDDB.add(this.crearFestividad("CM", "Cambio de métono"));
-			festividadParaDDB.add(this.crearFestividad("CA", "Cambio de año"));
-			festividadParaDDB.add(this.crearFestividad("IA", "Inicio del primer mes del año"));
-			festividadParaDDB.add(this.crearFestividad("BP", "Bienvenida de la primavera"));
-			festividadParaDDB.add(this.crearFestividad("MA", "Mitad de año"));
-			festividadParaDDB.add(this.crearFestividad("PO", "Paso al otoño"));
-			festividadParaDDB.add(this.crearFestividad("DA", "Despedida del año"));
+			festividadParaDDB.add(this.crearFestividad("CE", "Cambio de eclípeno", false));
+			festividadParaDDB.add(this.crearFestividad("CM", "Cambio de métono", false));
+			festividadParaDDB.add(this.crearFestividad("CA", "Cambio de año", false));
+			festividadParaDDB.add(this.crearFestividad("IA", "Inicio del primer mes del año", true));
+			festividadParaDDB.add(this.crearFestividad("BP", "Bienvenida de la primavera", false));
+			festividadParaDDB.add(this.crearFestividad("MA", "Mitad de año", false));
+			festividadParaDDB.add(this.crearFestividad("PO", "Paso al otoño", true));
+			festividadParaDDB.add(this.crearFestividad("DA", "Despedida del año", true));
 
 			
 			this.festividadesRepository.saveAll(festividadParaDDB);
@@ -48,12 +49,13 @@ public class FestividadesServiceImpl implements FestividadesService {
 		return resultado;
 	}
 	
-	private FestividadesEntity crearFestividad(String code, String name) {
+	private FestividadesEntity crearFestividad(String code, String name, boolean lunar) {
 		
 		FestividadesEntity newFestividad = new FestividadesEntity();
 
 		newFestividad.setCode(code);
 		newFestividad.setNombre(name);		
+		newFestividad.setLunar(lunar);
 		
 		return newFestividad;
 	}
