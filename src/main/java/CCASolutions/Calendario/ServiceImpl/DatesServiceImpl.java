@@ -459,7 +459,7 @@ public class DatesServiceImpl implements DatesService {
 		// 3 - Inicio del primer mes del año, paso al otoño y despedida del otoño
 		
 		MinimaFestividadesDTO inicioPrimerMesAnyo = new MinimaFestividadesDTO();
-		inicioPrimerMesAnyo.setCode("IPMA");		
+		inicioPrimerMesAnyo.setCode("IA");		
 		long diasMinimosDeDiferenciaEntreLunaYSI = Long.MAX_VALUE;
 		boolean esHoyIMPA = false;
 

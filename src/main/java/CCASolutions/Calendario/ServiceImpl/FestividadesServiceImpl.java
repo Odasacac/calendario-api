@@ -30,7 +30,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 			
 			festividadParaDDB.add(this.crearFestividad("CM", "Cambio de métono"));
 			festividadParaDDB.add(this.crearFestividad("CA", "Cambio de año"));
-			festividadParaDDB.add(this.crearFestividad("IPMA", "Inicio del primer mes del año"));
+			festividadParaDDB.add(this.crearFestividad("IA", "Inicio del primer mes del año"));
 			festividadParaDDB.add(this.crearFestividad("BP", "Bienvenida de la primavera"));
 			festividadParaDDB.add(this.crearFestividad("MA", "Mitad de año"));
 			festividadParaDDB.add(this.crearFestividad("PO", "Paso al otoño"));
