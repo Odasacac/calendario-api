@@ -395,7 +395,43 @@ public class DatesServiceImpl implements DatesService {
 		List<MinimaFestividadesDTO> festividadesObtenidasDTO = new ArrayList<>();
 
 		
-		// 1 - Cambio de metono
+		// 1 - Cambio de eclipeno
+		MinimaFestividadesDTO cambioDeEclipeno = new MinimaFestividadesDTO();
+		cambioDeEclipeno.setCode("CE");		
+		long diasMinimosDeDiferenciaEntreCEYDate = Long.MAX_VALUE;
+		boolean esHoyCE = false;
+		
+		for(int i = 0; i<allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos().size(); i++) {
+			
+			EclipenosEntity eclipeno = allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos().get(i);
+			
+			if(eclipeno.getInicial() && eclipeno.getNuevo()) {
+				
+				if(eclipeno.getDate().toLocalDate().isEqual(date)) {
+					cambioDeEclipeno.setDate(eclipeno.getDate());
+					cambioDeEclipeno.setDiasDeDiferenciaConDate(0);
+					esHoyCE=true;
+				}
+				else if(!esHoyCE) {
+					
+					long diasDeDiferenciaEntrCEYDate = Math.abs(ChronoUnit.DAYS.between(eclipeno.getDate().toLocalDate(), date));
+					
+					if(diasDeDiferenciaEntrCEYDate < diasMinimosDeDiferenciaEntreCEYDate) {
+						diasMinimosDeDiferenciaEntreCEYDate = diasDeDiferenciaEntrCEYDate;
+						cambioDeEclipeno.setDate(eclipeno.getDate());
+						cambioDeEclipeno.setDiasDeDiferenciaConDate(diasMinimosDeDiferenciaEntreCEYDate);
+					}
+				}
+			}
+		}
+		
+		festividadesObtenidasDTO.add(cambioDeEclipeno);
+		
+		
+		
+		
+		
+		// 2 - Cambio de metono
 		MinimaFestividadesDTO cambioDeMetono = new MinimaFestividadesDTO();
 		cambioDeMetono.setCode("CM");		
 		long diasMinimosDeDiferenciaEntreCMYDate = Long.MAX_VALUE;
@@ -429,7 +465,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		
 		
-		// 2 - Cambio de año, Bienvenida a la Primavera y Mitad de año
+		// 3 - Cambio de año, Bienvenida a la Primavera y Mitad de año
 		MinimaFestividadesDTO cambioDeAnyo = new MinimaFestividadesDTO();
 		cambioDeAnyo.setCode("CA");		
 		long diasMinimosDeDiferenciaEntreCAYDate = Long.MAX_VALUE;
@@ -545,12 +581,12 @@ public class DatesServiceImpl implements DatesService {
 		festividadesObtenidasDTO.add(mitadAnyo);
 		
 		
-		// 3 - Inicio del primer mes del año, paso al otoño y despedida del otoño
+		// 4 - Inicio del primer mes del año, paso al otoño y despedida del otoño
 		
 		MinimaFestividadesDTO inicioPrimerMesAnyo = new MinimaFestividadesDTO();
 		inicioPrimerMesAnyo.setCode("IA");		
 		long diasMinimosDeDiferenciaEntreLunaYSI = Long.MAX_VALUE;
-		boolean esHoyIMPA = false;
+		boolean esHoyIA = false;
 
 		
 		MinimaFestividadesDTO pasoOtonyo = new MinimaFestividadesDTO();
@@ -576,9 +612,9 @@ public class DatesServiceImpl implements DatesService {
 						
 						inicioPrimerMesAnyo.setDate(luna.getDate());
 						inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(0);
-						esHoyIMPA = true;
+						esHoyIA = true;
 					}
-					else if(!esHoyIMPA) {
+					else if(!esHoyIA) {
 						
 						long diasDeDiferenciaEntreLunaYSI = Math.abs(ChronoUnit.DAYS.between(sIMasCercano.getDate().toLocalDate(), luna.getDate().toLocalDate()));
 						
@@ -657,43 +693,17 @@ public class DatesServiceImpl implements DatesService {
 			}
 		}
 		
-	
+		// Si hay un metono (o eclipeno) no hay festividad de inicio de año
+		if(cambioDeMetono.getDiasDeDiferenciaConDate() < 100 || cambioDeEclipeno.getDiasDeDiferenciaConDate() < 100) { 
+			inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+		}
+		
 		
 		festividadesObtenidasDTO.add(inicioPrimerMesAnyo);
 		festividadesObtenidasDTO.add(pasoOtonyo);
 		festividadesObtenidasDTO.add(despedidaAnyo);
 		
-		// 4 - Cambio de eclipeno
-				MinimaFestividadesDTO cambioDeEclipeno = new MinimaFestividadesDTO();
-				cambioDeEclipeno.setCode("CE");		
-				long diasMinimosDeDiferenciaEntreCEYDate = Long.MAX_VALUE;
-				boolean esHoyCE = false;
-				
-				for(int i = 0; i<allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos().size(); i++) {
-					
-					EclipenosEntity eclipeno = allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos().get(i);
-					
-					if(eclipeno.getInicial() && eclipeno.getNuevo()) {
-						
-						if(eclipeno.getDate().toLocalDate().isEqual(date)) {
-							cambioDeEclipeno.setDate(eclipeno.getDate());
-							cambioDeEclipeno.setDiasDeDiferenciaConDate(0);
-							esHoyCE=true;
-						}
-						else if(!esHoyCE) {
-							
-							long diasDeDiferenciaEntrCEYDate = Math.abs(ChronoUnit.DAYS.between(eclipeno.getDate().toLocalDate(), date));
-							
-							if(diasDeDiferenciaEntrCEYDate < diasMinimosDeDiferenciaEntreCEYDate) {
-								diasMinimosDeDiferenciaEntreCEYDate = diasDeDiferenciaEntrCEYDate;
-								cambioDeEclipeno.setDate(eclipeno.getDate());
-								cambioDeEclipeno.setDiasDeDiferenciaConDate(diasMinimosDeDiferenciaEntreCEYDate);
-							}
-						}
-					}
-				}
-				
-				festividadesObtenidasDTO.add(cambioDeEclipeno);
+		
 		
 		
 		return festividadesObtenidasDTO;
