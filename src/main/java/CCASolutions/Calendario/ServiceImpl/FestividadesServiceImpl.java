@@ -33,9 +33,9 @@ public class FestividadesServiceImpl implements FestividadesService {
 			festividadParaDDB.add(this.crearFestividad("CA", "Cambio de año", false));
 			festividadParaDDB.add(this.crearFestividad("IA", "Inicio del primer mes del año", true));
 			festividadParaDDB.add(this.crearFestividad("BP", "Bienvenida de la primavera", false));
-			festividadParaDDB.add(this.crearFestividad("MA", "Mitad de año", false));
+			festividadParaDDB.add(this.crearFestividad("MA", "Mitad del año", false));
 			festividadParaDDB.add(this.crearFestividad("DV", "Despedida del verano", true));
-			festividadParaDDB.add(this.crearFestividad("PO", "Paso al otoño", false));
+			festividadParaDDB.add(this.crearFestividad("PO", "Entrada del otoño", false));
 			festividadParaDDB.add(this.crearFestividad("DA", "Despedida del año", true));
 
 			

@@ -14,15 +14,16 @@ import jakarta.persistence.Table;
  		
  		Festividades de un año en orden cronológico
  		
- 			1 - Cambio de métono: El día del métono inicial nuevo - CM
- 			2 - Cambio de año: El día del solsticio de invierno - CA
- 			3 - Inicio del primer mes del año: El día de la primera luna nueva de Prierno - IPMA
- 			4 - Bienvenida a la primavera: Equinoccio de primavera - BP
- 			5 - Mitad de año: El día del solsticio de verano - MA
- 			6 - Paso al otoño: El día de la última luna llena antes del equinoccio de otoño - PO
- 			7 - Despedida del año: El día de la última luna llena antes del solsticio de invierno - DA
+ 			1 - Cambio de eclípeno: El día del eclípeno inicial nuevo - CE
+ 			2 - Cambio de métono: El día del métono inicial nuevo - CM
+ 			3 - Cambio de año: El día del solsticio de invierno - CA
+ 			4 - Inicio del primer mes del año: El día de la primera luna nueva despues del solsticio de invierno - IA
+ 			5 - Bienvenida a la primavera: El día del equinoccio de primavera - BP
+ 			6 - Mitad de año: El día del solsticio de verano - MA
+ 			7 - Despedida del verano: El dia de la ultima luna llena antes del equinoccio de otoño - DV
+ 			8 - Entrada del otoño: El día del equinoccio de otoño - PO
+ 			9 - Despedida del año: El día de la última luna llena antes del solsticio de invierno - DA
  
- 			CAIAP BHMAPODA
  			
 	 */
 @Entity
