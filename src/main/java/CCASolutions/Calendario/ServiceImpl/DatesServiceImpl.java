@@ -225,14 +225,57 @@ public class DatesServiceImpl implements DatesService {
 		
 		if(!festividadesActuales.isEmpty()) {
 			
-			for(FestividadesEntity entity : festividadesEntities) {
+			if(festividadesActuales.size()==1) {
 				
-				if(entity.getCode().equals(festividadesActuales.get(0).getCode())) {
+				for(FestividadesEntity entity : festividadesEntities) {
 					
-					festividadActual = entity.getNombre();
+					if(entity.getCode().equals(festividadesActuales.get(0).getCode())) {
+					
+						festividadActual = entity.getNombre();
+					}	
 				}
 			}
-		}
+			else {
+				
+				String codeCECMCA = "";
+				
+				for(MinimaFestividadesDTO festividad : festividadesActuales) {
+					
+					switch (festividad.getCode()) {
+					
+						case "CE":
+							
+							codeCECMCA = festividad.getCode();
+							break;
+								
+						case "CM":
+							
+							if(!codeCECMCA.equals("CM")) {
+								
+								codeCECMCA = festividad.getCode();
+							}
+							break;
+						
+						case "CA":
+							
+							if(!codeCECMCA.equals("CE") && !codeCECMCA.equals("CM")) {
+								
+								codeCECMCA = festividad.getCode();
+							}
+							break;
+					}
+				}
+				
+				for(FestividadesEntity entity : festividadesEntities) {
+					
+					if(entity.getCode().equals(codeCECMCA)) {
+					
+						festividadActual = entity.getNombre();
+					}	
+				}
+			}
+		}	
+		
 		
 		
 		return festividadActual;
@@ -245,6 +288,7 @@ public class DatesServiceImpl implements DatesService {
 		MinimaFestividadesDTO festividadMasCercana = new MinimaFestividadesDTO();
 		long diasMinimosEntreDateYFestividad = Long.MAX_VALUE;
 		String dias = "días";
+		String codeCECMCA = "";
 		
 		for(MinimaFestividadesDTO festividad : festividadesPasadas) {
 			
@@ -252,18 +296,63 @@ public class DatesServiceImpl implements DatesService {
 				
 				diasMinimosEntreDateYFestividad = festividad.getDiasDeDiferenciaConDate();
 				festividadMasCercana = festividad;
+				codeCECMCA = "";
+			}
+			else if(festividad.getDiasDeDiferenciaConDate() == diasMinimosEntreDateYFestividad) {
+				
+				festividadMasCercana = festividad;
+				
+				switch (festividad.getCode()) {
+				
+					case "CE":
+					
+						codeCECMCA = festividad.getCode();
+						break;
+						
+					case "CM":
+					
+						if(!codeCECMCA.equals("CM")) {
+						
+							codeCECMCA = festividad.getCode();
+						}
+						break;
+				
+					case "CA":
+					
+						if(!codeCECMCA.equals("CE") && !codeCECMCA.equals("CM")) {
+						
+							codeCECMCA = festividad.getCode();
+						}
+						break;
+				}
 			}
 		}
 		
+		
+		
 		for(FestividadesEntity entity : festividadesEntities) {
 			
-			if(entity.getCode().equals(festividadMasCercana.getCode())) {
+			if(codeCECMCA.equals("")) {
 				
-				if(festividadMasCercana.getDiasDeDiferenciaConDate() == 1) {
-					dias = "día";
+				if(entity.getCode().equals(festividadMasCercana.getCode())) {
+					
+					if(festividadMasCercana.getDiasDeDiferenciaConDate() == 1) {
+						dias = "día";
+					}
+					festividadAnterior = entity.getNombre() + " hace " + festividadMasCercana.getDiasDeDiferenciaConDate() + " " + dias;
 				}
-				festividadAnterior = entity.getNombre() + " hace " + festividadMasCercana.getDiasDeDiferenciaConDate() + " " + dias;
 			}
+			else {
+				
+				if(entity.getCode().equals(codeCECMCA)) {
+					
+					if(festividadMasCercana.getDiasDeDiferenciaConDate() == 1) {
+						dias = "día";
+					}
+					festividadAnterior = entity.getNombre() + " hace " + festividadMasCercana.getDiasDeDiferenciaConDate() + " " + dias;
+				}
+			}
+			
 		}
 		
 		return festividadAnterior;
@@ -276,6 +365,7 @@ public class DatesServiceImpl implements DatesService {
 		MinimaFestividadesDTO festividadMasCercana = new MinimaFestividadesDTO();
 		long diasMinimosEntreDateYFestividad = Long.MAX_VALUE;
 		String dias = "días";
+		String codeCECMCA = "";
 		
 		for(MinimaFestividadesDTO festividad : festividadesFuturas) {
 			
@@ -283,18 +373,59 @@ public class DatesServiceImpl implements DatesService {
 				
 				diasMinimosEntreDateYFestividad = festividad.getDiasDeDiferenciaConDate();
 				festividadMasCercana = festividad;
+				codeCECMCA = "";
+			}
+			else if(festividad.getDiasDeDiferenciaConDate() == diasMinimosEntreDateYFestividad) {
+				
+				festividadMasCercana = festividad;
+				
+				switch (festividad.getCode()) {
+				
+					case "CE":
+					
+						codeCECMCA = festividad.getCode();
+						break;
+						
+					case "CM":
+					
+						if(!codeCECMCA.equals("CM")) {
+						
+							codeCECMCA = festividad.getCode();
+						}
+						break;
+				
+					case "CA":
+					
+						if(!codeCECMCA.equals("CE") && !codeCECMCA.equals("CM")) {
+						
+							codeCECMCA = festividad.getCode();
+						}
+						break;
+				}
 			}
 		}
 		
 		for(FestividadesEntity entity : festividadesEntities) {
 			
-			if(entity.getCode().equals(festividadMasCercana.getCode())) {
+			if(codeCECMCA.equals("")) {
 				
-				if(festividadMasCercana.getDiasDeDiferenciaConDate() == 1) {
-					dias = "día";
+				if(entity.getCode().equals(festividadMasCercana.getCode())) {
+					
+					if(festividadMasCercana.getDiasDeDiferenciaConDate() == 1) {
+						dias = "día";
+					}
+					festividadProxima = entity.getNombre() + " dentro de " + festividadMasCercana.getDiasDeDiferenciaConDate() + " " + dias;
 				}
+			}
+			else {
 				
-				festividadProxima = entity.getNombre() + " dentro de " + festividadMasCercana.getDiasDeDiferenciaConDate() + " " + dias;
+				if(entity.getCode().equals(codeCECMCA)) {
+					
+					if(festividadMasCercana.getDiasDeDiferenciaConDate() == 1) {
+						dias = "día";
+					}
+					festividadProxima = entity.getNombre() + " dentro de " + festividadMasCercana.getDiasDeDiferenciaConDate() + " " + dias;
+				}
 			}
 		}
 		
@@ -571,6 +702,38 @@ public class DatesServiceImpl implements DatesService {
 		festividadesObtenidasDTO.add(inicioPrimerMesAnyo);
 		festividadesObtenidasDTO.add(pasoOtonyo);
 		festividadesObtenidasDTO.add(despedidaAnyo);
+		
+		// 4 - Cambio de eclipeno
+				MinimaFestividadesDTO cambioDeEclipeno = new MinimaFestividadesDTO();
+				cambioDeEclipeno.setCode("CE");		
+				long diasMinimosDeDiferenciaEntreCEYDate = Long.MAX_VALUE;
+				boolean esHoyCE = false;
+				
+				for(int i = 0; i<allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos().size(); i++) {
+					
+					EclipenosEntity eclipeno = allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos().get(i);
+					
+					if(eclipeno.getInicial() && eclipeno.getNuevo()) {
+						
+						if(eclipeno.getDate().toLocalDate().isEqual(date)) {
+							cambioDeEclipeno.setDate(eclipeno.getDate());
+							cambioDeEclipeno.setDiasDeDiferenciaConDate(0);
+							esHoyCE=true;
+						}
+						else if(!esHoyCE) {
+							
+							long diasDeDiferenciaEntrCEYDate = Math.abs(ChronoUnit.DAYS.between(eclipeno.getDate().toLocalDate(), date));
+							
+							if(diasDeDiferenciaEntrCEYDate < diasMinimosDeDiferenciaEntreCEYDate) {
+								diasMinimosDeDiferenciaEntreCEYDate = diasDeDiferenciaEntrCEYDate;
+								cambioDeEclipeno.setDate(eclipeno.getDate());
+								cambioDeEclipeno.setDiasDeDiferenciaConDate(diasMinimosDeDiferenciaEntreCEYDate);
+							}
+						}
+					}
+				}
+				
+				festividadesObtenidasDTO.add(cambioDeEclipeno);
 		
 		
 		return festividadesObtenidasDTO;
