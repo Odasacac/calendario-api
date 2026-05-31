@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.EclipenoDTO;
 import CCASolutions.Calendario.DTOs.EstadoLunaDTO;
-import CCASolutions.Calendario.DTOs.FestividadParaGetNameDTO;
 import CCASolutions.Calendario.DTOs.FestividadesDTO;
 import CCASolutions.Calendario.DTOs.LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO;
 import CCASolutions.Calendario.DTOs.LunasSolsticiosEclipsesMetonosYEclipenosDTO;
@@ -284,7 +283,7 @@ public class DatesServiceImpl implements DatesService {
 	
 	private String getFestividadAnterior(List<FestividadesEntity> festividadesEntities, List<MinimaFestividadesDTO> festividadesPasadas) {
 		
-		FestividadParaGetNameDTO festividadMasCercanaDTO = this.getFestividadParaGetName(festividadesPasadas);
+		MinimaFestividadesDTO festividadMasCercanaDTO = this.getFestividadParaGetName(festividadesPasadas);
 		String festividadAnterior = this.getFestividadName(festividadMasCercanaDTO, festividadesEntities).replace("{{TTTT}}", "hace");		
 		
 		return festividadAnterior;
@@ -292,100 +291,46 @@ public class DatesServiceImpl implements DatesService {
 
 	private String getFestividadProxima(List<FestividadesEntity> festividadesEntities, List<MinimaFestividadesDTO> festividadesFuturas) {
 	
-		FestividadParaGetNameDTO festividadMasCercanaDTO = this.getFestividadParaGetName(festividadesFuturas);
+		MinimaFestividadesDTO festividadMasCercanaDTO = this.getFestividadParaGetName(festividadesFuturas);
 		String festividadProxima = this.getFestividadName(festividadMasCercanaDTO, festividadesEntities).replace("{{TTTT}}", "dentro de");		
 		
 		return festividadProxima;
 	}
 	
-	private String getFestividadName(FestividadParaGetNameDTO festividadMasCercanaDTO, List<FestividadesEntity> festividadesEntities) {
+	private String getFestividadName(MinimaFestividadesDTO festividadMasCercanaDTO, List<FestividadesEntity> festividadesEntities) {
 		
 		String name = "";
 		String dias = "días";
 		
 		for(FestividadesEntity entity : festividadesEntities) {
-			
-			if(festividadMasCercanaDTO.getCodeCECMCA().equals("")) {
 				
-				if(entity.getCode().equals(festividadMasCercanaDTO.getFestividadParaGetName().getCode())) {
+			if(entity.getCode().equals(festividadMasCercanaDTO.getCode())) {
 					
-					if(festividadMasCercanaDTO.getFestividadParaGetName().getDiasDeDiferenciaConDate() == 1) {
-						dias = "día";
-					}
-					name = entity.getNombre() + " {{TTTT}} " + festividadMasCercanaDTO.getFestividadParaGetName().getDiasDeDiferenciaConDate() + " " + dias;
+				if(festividadMasCercanaDTO.getDiasDeDiferenciaConDate() == 1) {
+					dias = "día";
 				}
-			}
-			else {
-				
-				if(entity.getCode().equals(festividadMasCercanaDTO.getCodeCECMCA())) {
-					
-					if(festividadMasCercanaDTO.getFestividadParaGetName().getDiasDeDiferenciaConDate() == 1) {
-						dias = "día";
-					}
-					name = entity.getNombre() + " {{TTTT}} " + festividadMasCercanaDTO.getFestividadParaGetName().getDiasDeDiferenciaConDate() + " " + dias;
-				}
-			}
+				name = entity.getNombre() + " {{TTTT}} " + festividadMasCercanaDTO.getDiasDeDiferenciaConDate() + " " + dias;
+			}		
 		}
 
 		return name;
 	}
 	
-	private FestividadParaGetNameDTO getFestividadParaGetName(List<MinimaFestividadesDTO> festividadesFuturas) {
+	private MinimaFestividadesDTO getFestividadParaGetName(List<MinimaFestividadesDTO> festividadesFuturas) {
 		
-		FestividadParaGetNameDTO festividadParaGetName = new FestividadParaGetNameDTO();
+		MinimaFestividadesDTO festividadParaGetName = new MinimaFestividadesDTO();
 		
 		long diasMinimosEntreDateYFestividad = Long.MAX_VALUE;
-		String codeCECMCA = "";
 		
 		for(MinimaFestividadesDTO festividad : festividadesFuturas) {
 			
 			if(festividad.getDiasDeDiferenciaConDate() < diasMinimosEntreDateYFestividad) {
 				
 				diasMinimosEntreDateYFestividad = festividad.getDiasDeDiferenciaConDate();
-				festividadParaGetName.setFestividadParaGetName(festividad);
+				festividadParaGetName = festividad;				
 				
-				if (festividad.getCode().equals("CE") || festividad.getCode().equals("CM") || festividad.getCode().equals("CA")) {
-				
-					codeCECMCA = festividad.getCode();
-	
-				}
-				else {
-					codeCECMCA = "";
-				}
-				
-			}
-			else if(festividad.getDiasDeDiferenciaConDate() == diasMinimosEntreDateYFestividad) {
-				
-				switch (festividad.getCode()) {
-				
-					case "CE":
-					
-						festividadParaGetName.setFestividadParaGetName(festividad);
-						codeCECMCA = festividad.getCode();
-						break;
-						
-					case "CM":
-					
-						if(!codeCECMCA.equals("CM")) {
-						
-							festividadParaGetName.setFestividadParaGetName(festividad);
-							codeCECMCA = festividad.getCode();
-						}
-						break;
-				
-					case "CA":
-					
-						if(codeCECMCA.equals("")) {
-						
-							festividadParaGetName.setFestividadParaGetName(festividad);
-							codeCECMCA = festividad.getCode();
-						}
-						break;
-				}
 			}
 		}
-		
-		festividadParaGetName.setCodeCECMCA(codeCECMCA);
 		
 		return festividadParaGetName;
 	}
@@ -693,8 +638,15 @@ public class DatesServiceImpl implements DatesService {
 			}
 		}
 		
-		// Si hay un metono (o eclipeno) no hay festividad de inicio de año
-		if(cambioDeMetono.getDiasDeDiferenciaConDate() < 100 || cambioDeEclipeno.getDiasDeDiferenciaConDate() < 100) { 
+		// Si hay un eclipeno no hay festividad de inicio del primer mes ni de cambio de metono
+		// Y si hay un metono, no hay inicio del primer mes
+		if(cambioDeEclipeno.getDiasDeDiferenciaConDate() < 100) { 
+			
+			inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+			cambioDeMetono.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+		}
+		else if(cambioDeMetono.getDiasDeDiferenciaConDate() < 100) {
+			
 			inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
 		}
 		
