@@ -434,9 +434,9 @@ public class DatesServiceImpl implements DatesService {
 		boolean esHoyMA = false;
 		
 		SolsticiosYEquinocciosEntity sIMasCercano = new SolsticiosYEquinocciosEntity();
-		SolsticiosYEquinocciosEntity sVMasCercano = new SolsticiosYEquinocciosEntity();
+		SolsticiosYEquinocciosEntity sVMasCercano = new SolsticiosYEquinocciosEntity(); // Tendra utilidad cuando haya festividades con luna en verano
 		SolsticiosYEquinocciosEntity eOMasCercano = new SolsticiosYEquinocciosEntity();
-		SolsticiosYEquinocciosEntity ePMasCercano = new SolsticiosYEquinocciosEntity();
+		SolsticiosYEquinocciosEntity ePMasCercano = new SolsticiosYEquinocciosEntity(); // Tendra utilidad cuando haya festividades con luna en primavera
 		
 		
 		for(int j = 0; j<allLunasSolsticiosEclipsesMetonosYEclipenos.getSoes().size(); j++) {
@@ -541,20 +541,17 @@ public class DatesServiceImpl implements DatesService {
 		MinimaFestividadesDTO inicioPrimerMesAnyo = new MinimaFestividadesDTO();
 		inicioPrimerMesAnyo.setCode("IA");		
 		long diasMinimosDeDiferenciaEntreLunaYSI = Long.MAX_VALUE;
-		boolean esHoyIA = false;
 
 		
 		MinimaFestividadesDTO despedidaVerano = new MinimaFestividadesDTO();
 		despedidaVerano.setCode("DV");		
 		long diasMinimosDeDiferenciaEntreDVYLuna = Long.MAX_VALUE;
-		boolean esHoyDV = false;
 		
 		
 		MinimaFestividadesDTO despedidaAnyo = new MinimaFestividadesDTO();
 		despedidaAnyo.setCode("DA");		
 		long diasMinimosDeDiferenciaEntreDAYLuna = Long.MAX_VALUE;
-		boolean esHoyDA = false;
-		
+
 		
 		for(LunasEntity luna : allLunasSolsticiosEclipsesMetonosYEclipenos.getLunas()) {
 			
@@ -562,23 +559,15 @@ public class DatesServiceImpl implements DatesService {
 			if(luna.isNueva()) {
 				
 				if(sIMasCercano.getDate().toLocalDate().isBefore(luna.getDate().toLocalDate())) {
-					
-					if(luna.getDate().toLocalDate().isEqual(date)) {
+								
+					long diasDeDiferenciaEntreLunaYSI = Math.abs(ChronoUnit.DAYS.between(sIMasCercano.getDate().toLocalDate(), luna.getDate().toLocalDate()));
 						
-						inicioPrimerMesAnyo.setDate(luna.getDate());
-						inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(0);
-						esHoyIA = true;
-					}
-					else if(!esHoyIA) {
-						
-						long diasDeDiferenciaEntreLunaYSI = Math.abs(ChronoUnit.DAYS.between(sIMasCercano.getDate().toLocalDate(), luna.getDate().toLocalDate()));
-						
-						if(diasDeDiferenciaEntreLunaYSI < diasMinimosDeDiferenciaEntreLunaYSI) {
+					if(diasDeDiferenciaEntreLunaYSI < diasMinimosDeDiferenciaEntreLunaYSI) {
 							
-							diasMinimosDeDiferenciaEntreLunaYSI = diasDeDiferenciaEntreLunaYSI;
-							inicioPrimerMesAnyo.setDate(luna.getDate());
-							inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(date, luna.getDate().toLocalDate())));
-						}
+						diasMinimosDeDiferenciaEntreLunaYSI = diasDeDiferenciaEntreLunaYSI;
+						inicioPrimerMesAnyo.setDate(luna.getDate());
+						inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(date, luna.getDate().toLocalDate())));
+									
 					}
 				}
 				
@@ -602,49 +591,28 @@ public class DatesServiceImpl implements DatesService {
 				
 				if(soeMasCercanoALaLuna.getStartingSeason()==4 && soeMasCercanoALaLuna.getDate().toLocalDate().equals(eOMasCercano.getDate().toLocalDate()) && luna.getDate().toLocalDate().isBefore(eOMasCercano.getDate().toLocalDate())) {
 					
-					if(luna.getDate().toLocalDate().isEqual(date)) {
+					long diasDeDiferenciaEntreDVYLuna = Math.abs(ChronoUnit.DAYS.between(sIMasCercano.getDate().toLocalDate(), luna.getDate().toLocalDate()));
 						
-						despedidaVerano.setDate(luna.getDate());
-						despedidaVerano.setDiasDeDiferenciaConDate(0);
-						esHoyDV = true;
-					}
-					else if(!esHoyDV) {
-						
-						long diasDeDiferenciaEntreDVYLuna = Math.abs(ChronoUnit.DAYS.between(sIMasCercano.getDate().toLocalDate(), luna.getDate().toLocalDate()));
-						
-						if(diasDeDiferenciaEntreDVYLuna < diasMinimosDeDiferenciaEntreDVYLuna) {
+					if(diasDeDiferenciaEntreDVYLuna < diasMinimosDeDiferenciaEntreDVYLuna) {
 							
-							diasMinimosDeDiferenciaEntreDVYLuna = diasDeDiferenciaEntreDVYLuna;
-							despedidaVerano.setDate(luna.getDate());
-							despedidaVerano.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date)));
-						}
-					}
-					
-					
+						diasMinimosDeDiferenciaEntreDVYLuna = diasDeDiferenciaEntreDVYLuna;
+						despedidaVerano.setDate(luna.getDate());
+						despedidaVerano.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date)));		
+					}		
 				}
 				else if(soeMasCercanoALaLuna.getStartingSeason()==1 && soeMasCercanoALaLuna.getDate().toLocalDate().equals(sIMasCercano.getDate().toLocalDate()) && luna.getDate().toLocalDate().isBefore(sIMasCercano.getDate().toLocalDate())) {
 					
-					if(luna.getDate().toLocalDate().isEqual(date)) {
+
+					long diasDeDiferenciaEntreDAYLuna = Math.abs(ChronoUnit.DAYS.between(sIMasCercano.getDate().toLocalDate(), luna.getDate().toLocalDate()));
 						
-						despedidaAnyo.setDate(luna.getDate());
-						despedidaAnyo.setDiasDeDiferenciaConDate(0);
-						esHoyDA = true;
-					}
-					else if(!esHoyDA) {
-						
-						long diasDeDiferenciaEntreDAYLuna = Math.abs(ChronoUnit.DAYS.between(sIMasCercano.getDate().toLocalDate(), luna.getDate().toLocalDate()));
-						
-						if(diasDeDiferenciaEntreDAYLuna < diasMinimosDeDiferenciaEntreDAYLuna) {
+					if(diasDeDiferenciaEntreDAYLuna < diasMinimosDeDiferenciaEntreDAYLuna) {
 							
-							diasMinimosDeDiferenciaEntreDAYLuna = diasDeDiferenciaEntreDAYLuna;
-							despedidaAnyo.setDate(luna.getDate());
-							despedidaAnyo.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date)));
-						}
-					}
-					
-				}
-				
-				
+						diasMinimosDeDiferenciaEntreDAYLuna = diasDeDiferenciaEntreDAYLuna;
+						despedidaAnyo.setDate(luna.getDate());
+						despedidaAnyo.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date)));
+						
+					}			
+				}				
 			}
 		}
 		
@@ -1600,7 +1568,7 @@ public class DatesServiceImpl implements DatesService {
 	
 private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomenosPPPFecha(LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
 		
-	LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosParaFestividadesYEventosDTO = new LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO();
+	LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosParaEventosDTO = new LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO();
 		
 		LunasEntity lunaActual = null;
 		ApogeosYPerigeosLunaEntity apoperiActual = null;
@@ -1790,32 +1758,32 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		}
 		
 		
-		fenomenosParaFestividadesYEventosDTO.setLunaActual(lunaActual);
-		fenomenosParaFestividadesYEventosDTO.setLunaAnterior(lunaPasado);
-		fenomenosParaFestividadesYEventosDTO.setLunaProxima(lunaFuturo);
+		fenomenosParaEventosDTO.setLunaActual(lunaActual);
+		fenomenosParaEventosDTO.setLunaAnterior(lunaPasado);
+		fenomenosParaEventosDTO.setLunaProxima(lunaFuturo);
 		
-		fenomenosParaFestividadesYEventosDTO.setApoperiActual(apoperiActual);
-		fenomenosParaFestividadesYEventosDTO.setApoperiAnterior(apoperiPasado);
-		fenomenosParaFestividadesYEventosDTO.setApoperiProximo(apoperiFuturo);
+		fenomenosParaEventosDTO.setApoperiActual(apoperiActual);
+		fenomenosParaEventosDTO.setApoperiAnterior(apoperiPasado);
+		fenomenosParaEventosDTO.setApoperiProximo(apoperiFuturo);
 		
-		fenomenosParaFestividadesYEventosDTO.setSoeActual(soeActual);
-		fenomenosParaFestividadesYEventosDTO.setSoeAnterior(soePasado);
-		fenomenosParaFestividadesYEventosDTO.setSoeProximo(soeFuturo);
+		fenomenosParaEventosDTO.setSoeActual(soeActual);
+		fenomenosParaEventosDTO.setSoeAnterior(soePasado);
+		fenomenosParaEventosDTO.setSoeProximo(soeFuturo);
 		
-		fenomenosParaFestividadesYEventosDTO.setMetonoActual(metonActual);
-		fenomenosParaFestividadesYEventosDTO.setMetonoAnterior(metonPasado);
-		fenomenosParaFestividadesYEventosDTO.setMetonoProximo(metonFuturo);
+		fenomenosParaEventosDTO.setMetonoActual(metonActual);
+		fenomenosParaEventosDTO.setMetonoAnterior(metonPasado);
+		fenomenosParaEventosDTO.setMetonoProximo(metonFuturo);
 
-		fenomenosParaFestividadesYEventosDTO.setEclipseActual(eclipseActual);
-		fenomenosParaFestividadesYEventosDTO.setEclipseAnterior(eclipsePasado);
-		fenomenosParaFestividadesYEventosDTO.setEclipseProximo(eclipseFuturo);
+		fenomenosParaEventosDTO.setEclipseActual(eclipseActual);
+		fenomenosParaEventosDTO.setEclipseAnterior(eclipsePasado);
+		fenomenosParaEventosDTO.setEclipseProximo(eclipseFuturo);
 
-		fenomenosParaFestividadesYEventosDTO.setEclipenoActual(eclipenoActual);
-		fenomenosParaFestividadesYEventosDTO.setEclipenoAnterior(eclipenoPasado);
-		fenomenosParaFestividadesYEventosDTO.setEclipenoProximo(eclipenoFuturo);
+		fenomenosParaEventosDTO.setEclipenoActual(eclipenoActual);
+		fenomenosParaEventosDTO.setEclipenoAnterior(eclipenoPasado);
+		fenomenosParaEventosDTO.setEclipenoProximo(eclipenoFuturo);
 		
 
-		return fenomenosParaFestividadesYEventosDTO;
+		return fenomenosParaEventosDTO;
 	}
 	
 	
