@@ -1283,20 +1283,22 @@ public class DatesServiceImpl implements DatesService {
 			
 			LunasEntity luna = lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.get(i);
 			
-
-			if(luna.getDate().toLocalDate().isEqual(date)) {
+			if(luna.isNueva()) {
+				
+				if(luna.getDate().toLocalDate().isEqual(date)) {
 					
-				caeEnLunaNueva = true;
-				diasDesdeLaLunaNueva=0;
-			}
-			else if (luna.getDate().toLocalDate().isBefore(date)) {
-					
-				long diasDeDiferenciaEntreLNYDateO = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
-					
-				if(diasDeDiferenciaEntreLNYDateO < diasDesdeLaLunaNueva) {
+					caeEnLunaNueva = true;
+					diasDesdeLaLunaNueva=0;
+				}
+				else if (luna.getDate().toLocalDate().isBefore(date)) {
 						
-					lastLN=luna;
-					diasDesdeLaLunaNueva = diasDeDiferenciaEntreLNYDateO;						
+					long diasDeDiferenciaEntreLNYDateO = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
+						
+					if(diasDeDiferenciaEntreLNYDateO < diasDesdeLaLunaNueva) {
+							
+						lastLN=luna;
+						diasDesdeLaLunaNueva = diasDeDiferenciaEntreLNYDateO;						
+					}
 				}
 			}
 		}
