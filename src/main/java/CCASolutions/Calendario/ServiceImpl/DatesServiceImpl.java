@@ -840,22 +840,28 @@ public class DatesServiceImpl implements DatesService {
 			String accion = "";
 			
 			if(apoperiMasCercanoADate.isEsApogeo()){
-					accion ="acercándose";
-				}
-				else if(apoperiMasCercanoADate.isEsPerigeo()) {
-					accion = "alejándose";
-				}
+				accion ="acercándose";
+			}
+			else if(apoperiMasCercanoADate.isEsPerigeo()) {
+				accion = "alejándose";
+			}
 
-				String dias = "días";
+			String dias = "días";
 					
-				if(diasMinimosEntreDateYApoperi == 1) {
-					dias = "día";
-				}
+			if(diasMinimosEntreDateYApoperi == 1) {
+				dias = "día";
+			}
 							
 			comportamientoLuna.setDireccion("Lleva " + diasMinimosEntreDateYApoperi + " " + dias + " " + accion);
 		}
 		else if(apoperiMasCercanoADate.getDate().toLocalDate().isEqual(date)){
-			comportamientoLuna.setDireccion("Luna límite");
+			
+			if(apoperiMasCercanoADate.isEsApogeo()){
+				comportamientoLuna.setDireccion("Ha alcanzado su punto más lejano");
+			}
+			else if(apoperiMasCercanoADate.isEsPerigeo()) {
+				comportamientoLuna.setDireccion("Ha alcanzado su punto más cercano");
+			}
 			comportamientoLuna.setDate(apoperiMasCercanoADate.getDate());
 		}
 			
