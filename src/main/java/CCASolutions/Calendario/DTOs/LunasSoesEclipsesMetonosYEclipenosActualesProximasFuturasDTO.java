@@ -1,5 +1,6 @@
 package CCASolutions.Calendario.DTOs;
 
+import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
@@ -11,6 +12,10 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	private LunasEntity lunaActual;
 	private LunasEntity lunaProxima;
 	private LunasEntity lunaAnterior;
+	
+	private ApogeosYPerigeosLunaEntity apoperiActual;
+	private ApogeosYPerigeosLunaEntity apoperiProximo;
+	private ApogeosYPerigeosLunaEntity apoperiAnterior;
 	
 	private SolsticiosYEquinocciosEntity soeActual;
 	private SolsticiosYEquinocciosEntity soeProximo;
@@ -28,6 +33,28 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	private EclipenosEntity eclipenoProximo;
 	private EclipenosEntity eclipenoAnterior;
 	
+	
+	
+	
+	
+	public ApogeosYPerigeosLunaEntity getApoperiActual() {
+		return apoperiActual;
+	}
+	public void setApoperiActual(ApogeosYPerigeosLunaEntity apoperiActual) {
+		this.apoperiActual = apoperiActual;
+	}
+	public ApogeosYPerigeosLunaEntity getApoperiProximo() {
+		return apoperiProximo;
+	}
+	public void setApoperiProximo(ApogeosYPerigeosLunaEntity apoperiProximo) {
+		this.apoperiProximo = apoperiProximo;
+	}
+	public ApogeosYPerigeosLunaEntity getApoperiAnterior() {
+		return apoperiAnterior;
+	}
+	public void setApoperiAnterior(ApogeosYPerigeosLunaEntity apoperiAnterior) {
+		this.apoperiAnterior = apoperiAnterior;
+	}
 	public LunasEntity getLunaActual() {
 		return lunaActual;
 	}

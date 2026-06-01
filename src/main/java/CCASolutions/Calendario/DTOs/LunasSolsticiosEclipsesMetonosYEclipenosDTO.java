@@ -2,6 +2,7 @@ package CCASolutions.Calendario.DTOs;
 
 import java.util.List;
 
+import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
@@ -15,11 +16,19 @@ public class LunasSolsticiosEclipsesMetonosYEclipenosDTO {
 	List<EclipsesEntity> eclipses;
 	List<EclipenosEntity> eclipenos;
 	List<MetonsEntity> metons;
+	List<ApogeosYPerigeosLunaEntity> apoperis;
 	EclipenosEntity lastEclipenoIN;
 	MetonsEntity lastMetonIN;
 	
 	
 	
+	
+	public List<ApogeosYPerigeosLunaEntity> getApoperis() {
+		return apoperis;
+	}
+	public void setApoperis(List<ApogeosYPerigeosLunaEntity> apoperis) {
+		this.apoperis = apoperis;
+	}
 	public EclipenosEntity getLastEclipenoIN() {
 		return lastEclipenoIN;
 	}
