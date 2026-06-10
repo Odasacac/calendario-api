@@ -22,4 +22,6 @@ public interface EclipenosRepository extends JpaRepository <EclipenosEntity, Lon
 
     EclipenosEntity findTopByDateLessThanOrderByDateDesc(LocalDateTime date);
     EclipenosEntity findTopByDateGreaterThanOrderByDateAsc(LocalDateTime date);
+    
+    List<EclipenosEntity> findAllByOrderByDateDesc();
 }

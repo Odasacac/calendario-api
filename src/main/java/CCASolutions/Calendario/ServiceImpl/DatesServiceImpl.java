@@ -13,7 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
-import CCASolutions.Calendario.DTOs.EclipenoDTO;
+import CCASolutions.Calendario.DTOs.EclipenoINDTO;
+import CCASolutions.Calendario.DTOs.EclipenoSelectoDTO;
 import CCASolutions.Calendario.DTOs.EstadoLunaDTO;
 import CCASolutions.Calendario.DTOs.FestividadesDTO;
 import CCASolutions.Calendario.DTOs.LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO;
@@ -93,14 +94,15 @@ public class DatesServiceImpl implements DatesService {
 		DateDTO dateVAU = null;
 		LocalDateTime dateO = date.atTime(LocalTime.MAX);	
 		
-		List<EclipenosEntity> allEclipenos = this.eclipenosRepository.findAll();
+		List<EclipenosEntity> allEclipenos = this.eclipenosRepository.findAllByOrderByDateDesc();
 		
 		if(!allEclipenos.isEmpty()) {
 			LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos = new LunasSolsticiosEclipsesMetonosYEclipenosDTO();
 			lunasSolsticiosEclipsesMetonosYEclipenos.setEclipenos(allEclipenos);
 			lunasSolsticiosEclipsesMetonosYEclipenos.setLastEclipenoIN(this.getLastEclipenoIN(allEclipenos, date));
+			lunasSolsticiosEclipsesMetonosYEclipenos.setLastEclipenoINSelecto(this.getLastEclipenoINSelecto(allEclipenos, date));
 			
-			if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() != null) {
+			if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() != null || lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoINSelecto() != null) {
 				
 				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN().getDate(), dateO.plusYears(1));
 				
@@ -134,7 +136,7 @@ public class DatesServiceImpl implements DatesService {
 				}
 			}
 			else {
-				System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno anterior a la fecha proporcionada.");
+				System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno IN o selecto anterior a la fecha proporcionada.");
 			}
 		}
 		else {
@@ -161,8 +163,9 @@ public class DatesServiceImpl implements DatesService {
 		dateVAU.setWeek(vauWeekAndDay.getWeek());
 		dateVAU.setDay(vauWeekAndDay.getDay());					
 
+		dateVAU.setLastEclipenoSelecto(getVAUEclipenoSelecto(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoINSelecto(), date));
 		dateVAU.setMetonoIN(getVAUMeton(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
-		dateVAU.setEclipenoIN(this.getVAUEclipeno(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), date));			
+		dateVAU.setEclipenoIN(this.getVAUEclipeno(allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoINSelecto(), date));			
 		dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipses(), date, allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));
 		dateVAU.setCasalero(this.getCasalero(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN()));
 		dateVAU.setEstadoLuna(this.getEstadoLuna(date, allLunasSolsticiosEclipsesMetonosYEclipenos.getApoperis()));	
@@ -971,14 +974,51 @@ public class DatesServiceImpl implements DatesService {
 		
 		return absoluteEclipses;
 	}
+	
+	private EclipenoSelectoDTO getVAUEclipenoSelecto(EclipenosEntity lastEclipenoSelecto, LocalDate date) {
+		
+		EclipenoSelectoDTO eclipenoSelectoVAU = new EclipenoSelectoDTO();
+		
+		eclipenoSelectoVAU.setYearOfCurrentEclipenoIN(lastEclipenoSelecto.getYear());
+		eclipenoSelectoVAU.setEclipenoINSelectoDay(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date));
+		
+		return eclipenoSelectoVAU;
+	}
 
-	private EclipenoDTO getVAUEclipeno(EclipenosEntity lastEclipenoIN, LocalDate date) {
+	private EclipenoINDTO getVAUEclipeno(List<EclipenosEntity> allEclipenos, EclipenosEntity lastEclipenoSelecto, LocalDate date) {
 		
-		EclipenoDTO eclipeno = new EclipenoDTO();
-		eclipeno.setYearOfCurrentEclipenoIN(lastEclipenoIN.getYear());
-		eclipeno.setEclipenoINDay(lastEclipenoIN.getDate().toLocalDate().isEqual(date));
+		EclipenoINDTO eclipenoVAU = new EclipenoINDTO();
+
+		List<EclipenosEntity> eclipenosIN = new ArrayList<>();
 		
-		return eclipeno;
+		for(EclipenosEntity eclipeno : allEclipenos) {
+			
+			if(eclipeno.getInicial() && eclipeno.getNuevo()) {
+				eclipenosIN.add(eclipeno);
+			}
+		}
+		
+		eclipenoVAU.setYearOfCurrentEclipenoIN(eclipenosIN.get(0).getYear());
+		eclipenoVAU.setEclipenoINDay(eclipenosIN.get(0).getDate().toLocalDate().isEqual(date));
+		
+		int eclipenosDesdeElLastEclipenSelecto = (eclipenosIN.size()-1); // -1 porque incluye el del eclipeno
+		
+		// No se suma un eclipeno hasta que pase el dia del eclipeno, pero si es el dia de eclipeno no se resta, que se ha restado antes
+		
+		if(eclipenoVAU.isEclipenoINDay() && !lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) {
+			
+			eclipenosDesdeElLastEclipenSelecto = eclipenosDesdeElLastEclipenSelecto-1;
+		}
+		
+		eclipenoVAU.setEclipenosINSinceLastEclipenoINSelecto(eclipenosDesdeElLastEclipenSelecto);
+		int yearOfTheEclipeno = eclipenosDesdeElLastEclipenSelecto +1;
+		
+		if(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) { //Si es el dia del eclipeno selecto, no estamos en ningun eclipeno
+			yearOfTheEclipeno= yearOfTheEclipeno-1;
+		}
+		eclipenoVAU.setNumberOfEclipeno(yearOfTheEclipeno);
+		
+		return eclipenoVAU;
 	}
 	
 	private MetonDTO getVAUMeton (EclipenosEntity lastEclipenoIN, List<MetonsEntity> metons, LocalDate dateO) {
@@ -1543,6 +1583,29 @@ public class DatesServiceImpl implements DatesService {
 		
 		return lastEclipenoIN;
 	}
+	
+	private EclipenosEntity getLastEclipenoINSelecto(List<EclipenosEntity> allEclipenos, LocalDate date) {
+		
+		EclipenosEntity lastEclipenoINSelecto = null;
+		
+		long diasMinimosDeDiferenciaEntreEclipenoYDate =Long.MAX_VALUE;		
+		for(EclipenosEntity eclipeno : allEclipenos) {
+					
+			if(!eclipeno.getDate().toLocalDate().isAfter(date) && eclipeno.getInicial() && eclipeno.getNuevo() && (eclipeno.isEsAnular() || eclipeno.isEsTotal() && eclipeno.getSelecto())) {	
+				
+				long diasDeDiferenciaEntreEclipenoYDate = ChronoUnit.DAYS.between(eclipeno.getDate().toLocalDate(), date);
+				
+				if(diasDeDiferenciaEntreEclipenoYDate < diasMinimosDeDiferenciaEntreEclipenoYDate) {
+					lastEclipenoINSelecto = new EclipenosEntity();
+					diasMinimosDeDiferenciaEntreEclipenoYDate = diasDeDiferenciaEntreEclipenoYDate;
+					lastEclipenoINSelecto = eclipeno;
+				}
+			}
+		}
+		
+		return lastEclipenoINSelecto;
+	}
+	
 	
 	private MetonsEntity getLastMetonINForDate(List<MetonsEntity> allMetons, LocalDate date) {
 		

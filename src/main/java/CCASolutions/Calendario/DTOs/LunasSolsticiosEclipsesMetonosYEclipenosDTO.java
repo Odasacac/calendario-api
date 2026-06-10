@@ -18,11 +18,16 @@ public class LunasSolsticiosEclipsesMetonosYEclipenosDTO {
 	List<MetonsEntity> metons;
 	List<ApogeosYPerigeosLunaEntity> apoperis;
 	EclipenosEntity lastEclipenoIN;
+	EclipenosEntity lastEclipenoINSelecto;
 	MetonsEntity lastMetonIN;
 	
 	
-	
-	
+	public EclipenosEntity getLastEclipenoINSelecto() {
+		return lastEclipenoINSelecto;
+	}
+	public void setLastEclipenoINSelecto(EclipenosEntity lastEclipenoINSelecto) {
+		this.lastEclipenoINSelecto = lastEclipenoINSelecto;
+	}
 	public List<ApogeosYPerigeosLunaEntity> getApoperis() {
 		return apoperis;
 	}

@@ -2,7 +2,8 @@ package CCASolutions.Calendario.DTOs;
 
 public class DateDTO {
 
-	private EclipenoDTO eclipenoIN;
+	private EclipenoSelectoDTO lastEclipenoSelecto;
+	private EclipenoINDTO eclipenoIN;
 	private MetonDTO metonoIN;
 	private YearDTO year;
 	private MonthDTO month;
@@ -17,6 +18,16 @@ public class DateDTO {
 	
 	
 	
+
+
+	public EclipenoSelectoDTO getLastEclipenoSelecto() {
+		return lastEclipenoSelecto;
+	}
+
+	public void setLastEclipenoSelecto(EclipenoSelectoDTO lastEclipenoSelecto) {
+		this.lastEclipenoSelecto = lastEclipenoSelecto;
+	}
+
 	public FestividadesDTO getFestividades() {
 		return festividades;
 	}
@@ -57,12 +68,11 @@ public class DateDTO {
 	public void setNotableEvent(NotableEventDTO notableEvent) {
 		this.notableEvent = notableEvent;
 	}
-
-	public EclipenoDTO getEclipenoIN() {
+	public EclipenoINDTO getEclipenoIN() {
 		return eclipenoIN;
 	}
 
-	public void setEclipenoIN(EclipenoDTO eclipenoIN) {
+	public void setEclipenoIN(EclipenoINDTO eclipenoIN) {
 		this.eclipenoIN = eclipenoIN;
 	}
 
