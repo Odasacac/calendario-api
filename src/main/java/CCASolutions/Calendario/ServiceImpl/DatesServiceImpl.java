@@ -999,7 +999,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		for(EclipenosEntity eclipeno : allEclipenos) {
 			
-			if(eclipeno.getInicial() && eclipeno.getNuevo()) {
+			if(eclipeno.getInicial() && eclipeno.getNuevo() && !eclipeno.getDate().isBefore(lastEclipenoSelecto.getDate())) {
 				eclipenosIN.add(eclipeno);
 			}
 		}
