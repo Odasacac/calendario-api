@@ -136,7 +136,13 @@ public class DatesServiceImpl implements DatesService {
 				}
 			}
 			else {
-				System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno IN o selecto anterior a la fecha proporcionada.");
+				if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() == null) {
+					System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno IN anterior a la fecha proporcionada.");
+				}
+				else if (lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoINSelecto() == null) {
+					System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno selecto anterior a la fecha proporcionada.");
+				}
+				
 			}
 		}
 		else {
@@ -979,7 +985,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		EclipenoSelectoDTO eclipenoSelectoVAU = new EclipenoSelectoDTO();
 		
-		eclipenoSelectoVAU.setYearOfCurrentEclipenoIN(lastEclipenoSelecto.getYear());
+		eclipenoSelectoVAU.setYearOfCurrentEclipenoSelectoIN(lastEclipenoSelecto.getYear());
 		eclipenoSelectoVAU.setEclipenoINSelectoDay(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date));
 		
 		return eclipenoSelectoVAU;
