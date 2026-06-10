@@ -985,8 +985,9 @@ public class DatesServiceImpl implements DatesService {
 		
 		EclipenoSelectoDTO eclipenoSelectoVAU = new EclipenoSelectoDTO();
 		
-		eclipenoSelectoVAU.setYearOfCurrentEclipenoSelectoIN(lastEclipenoSelecto.getYear());
+		eclipenoSelectoVAU.setDaysSinceCurrentEclipenoSelectoIN("hace " + ChronoUnit.DAYS.between(lastEclipenoSelecto.getDate().toLocalDate(), date) + " días");
 		eclipenoSelectoVAU.setEclipenoINSelectoDay(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date));
+		
 		
 		return eclipenoSelectoVAU;
 	}

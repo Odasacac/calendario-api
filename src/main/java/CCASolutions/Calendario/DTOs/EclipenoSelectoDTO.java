@@ -3,7 +3,7 @@ package CCASolutions.Calendario.DTOs;
 public class EclipenoSelectoDTO {
 	
 	private boolean eclipenoINSelectoDay;
-	private int yearOfCurrentEclipenoSelectoIN;
+	private String daysSinceCurrentEclipenoSelectoIN;
 	
 
 	
@@ -13,11 +13,11 @@ public class EclipenoSelectoDTO {
 	public void setEclipenoINSelectoDay(boolean eclipenoINSelectoDay) {
 		this.eclipenoINSelectoDay = eclipenoINSelectoDay;
 	}
-	public int getYearOfCurrentEclipenoSelectoIN() {
-		return yearOfCurrentEclipenoSelectoIN;
+	public String getDaysSinceCurrentEclipenoSelectoIN() {
+		return daysSinceCurrentEclipenoSelectoIN;
 	}
-	public void setYearOfCurrentEclipenoSelectoIN(int yearOfCurrentEclipenoSelectoIN) {
-		this.yearOfCurrentEclipenoSelectoIN = yearOfCurrentEclipenoSelectoIN;
+	public void setDaysSinceCurrentEclipenoSelectoIN(String daysSinceCurrentEclipenoSelectoIN) {
+		this.daysSinceCurrentEclipenoSelectoIN = daysSinceCurrentEclipenoSelectoIN;
 	}
 
 
