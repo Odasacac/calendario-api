@@ -28,7 +28,7 @@ public class LunasEntity implements Serializable {
 	private boolean llena;
 	private boolean cuartoMenguante;
 	private boolean selecta;
-	private boolean transicional;
+	private boolean invertida;
 
 	
 	public boolean isSelecta() {
@@ -37,13 +37,13 @@ public class LunasEntity implements Serializable {
 	public void setSelecta(boolean selecta) {
 		this.selecta = selecta;
 	}
-	public boolean isTransicional() {
-		return transicional;
+
+	public boolean isInvertida() {
+		return invertida;
 	}
-	public void setTransicional(boolean transicional) {
-		this.transicional = transicional;
+	public void setInvertida(boolean invertida) {
+		this.invertida = invertida;
 	}
-	
 	public Long getId() {
 		return id;
 	}

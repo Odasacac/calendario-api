@@ -47,7 +47,7 @@ public class EclipenosEntity implements Serializable{
 	
 	private Boolean selecto;
 	
-	private Boolean transicional;
+	private Boolean invertido;
 	
 	private long metonoId;
 	
@@ -63,12 +63,12 @@ public class EclipenosEntity implements Serializable{
 		this.selecto = selecto;
 	}
 
-	public Boolean getTransicional() {
-		return transicional;
+	public Boolean getInvertido() {
+		return invertido;
 	}
 
-	public void setTransicional(Boolean transicional) {
-		this.transicional = transicional;
+	public void setInvertido(Boolean invertido) {
+		this.invertido = invertido;
 	}
 
 	public long getMetonoId() {

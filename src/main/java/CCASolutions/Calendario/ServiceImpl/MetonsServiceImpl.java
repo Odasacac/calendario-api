@@ -69,7 +69,7 @@ public class MetonsServiceImpl implements MetonsService {
 							
 							nuevoMetono.setLunaId(luna.getId());
 							nuevoMetono.setSelecto(luna.isSelecta());
-							nuevoMetono.setTransicional(luna.isTransicional());
+							nuevoMetono.setInvertido(luna.isInvertida());
 							nuevoMetono.setNuevo(luna.isNueva());
 							nuevoMetono.setLleno(luna.isLlena());
 							

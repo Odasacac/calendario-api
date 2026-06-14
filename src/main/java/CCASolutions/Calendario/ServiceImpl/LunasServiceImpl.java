@@ -143,7 +143,7 @@ public class LunasServiceImpl implements LunasService {
 								lunaParaDB.setYear(faseLunarAPI.getDate().getYear());
 								lunaParaDB.setDate(faseLunarAPI.getDate());									
 								lunaParaDB.setSelecta(false);
-								lunaParaDB.setTransicional(false);
+								lunaParaDB.setInvertida(false);
 
 								try {
 									

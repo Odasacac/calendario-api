@@ -65,7 +65,7 @@ public class EclipenosServiceImpl implements EclipenosService{
 							
 							eclipeno.setEclipseId(eclipse.getId());
 							eclipeno.setMetonoId(meton.getId());
-							eclipeno.setTransicional(meton.getTransicional());
+							eclipeno.setInvertido(meton.getInvertido());
 							eclipeno.setSelecto(meton.getSelecto());
 													
 							this.eclipenosRepository.save(eclipeno);

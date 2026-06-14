@@ -113,7 +113,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 							if(luna.isLlena()) {
 									
 								if(apoperi.isEsApogeo()) {
-									luna.setTransicional(true);
+									luna.setInvertida(true);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna transicional encontrada en " + luna.getDate());
 								}
@@ -126,7 +126,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 							else if (luna.isNueva()){
 									
 								if(apoperi.isEsPerigeo()) {
-									luna.setTransicional(true);
+									luna.setInvertida(true);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna transicional encontrada en " + luna.getDate());
 								}

@@ -1430,8 +1430,8 @@ public class DatesServiceImpl implements DatesService {
 				if(Boolean.TRUE.equals(eclipeno.getSelecto())) {
 					evento = evento + " selecto";
 				}
-				else if(Boolean.TRUE.equals(eclipeno.getTransicional())) {
-					evento = evento + " transicional";
+				else if(Boolean.TRUE.equals(eclipeno.getInvertido())) {
+					evento = evento + " invertido";
 				}
 
 			}
@@ -1467,8 +1467,8 @@ public class DatesServiceImpl implements DatesService {
 				if(Boolean.TRUE.equals(meton.getSelecto())) {
 					evento = evento + " selecto";
 				}
-				else if (Boolean.TRUE.equals(meton.getTransicional())) {
-					evento = evento + " transicional";
+				else if (Boolean.TRUE.equals(meton.getInvertido())) {
+					evento = evento + " invertido";
 				}
 				
 						
@@ -1545,8 +1545,8 @@ public class DatesServiceImpl implements DatesService {
 				if(luna.isSelecta()) {
 					evento = evento + " selecta";
 				}
-				else if(luna.isTransicional()) {
-					evento = evento + " transicional";
+				else if(luna.isInvertida()) {
+					evento = evento + " invertida";
 				}
 
 			}
