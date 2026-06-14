@@ -1,4 +1,4 @@
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0001-06-22 22:45:50',0,0,1,24,0,0,2,1,0,0,1),
 	 (0,0,'0002-09-23 15:23:20',1,0,0,86,1,0,7,0,0,1,2),
 	 (0,0,'0002-12-21 08:02:33',0,1,0,98,1,0,8,1,0,0,2),
@@ -9,7 +9,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0010-09-23 14:06:55',1,0,0,482,1,0,39,0,0,1,10),
 	 (0,1,'0011-03-21 09:57:27',1,0,0,506,1,0,41,0,0,0,11),
 	 (0,0,'0017-09-23 06:37:54',1,0,1,828,0,0,67,0,0,1,17);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0020-06-22 12:56:21',0,0,1,964,0,0,78,1,0,0,20),
 	 (0,0,'0021-09-23 05:59:11',1,0,0,1026,1,0,83,0,0,1,21),
 	 (0,0,'0021-12-20 22:54:54',0,1,0,1038,1,0,84,1,0,0,21),
@@ -20,7 +20,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0034-03-20 23:36:37',1,0,1,1644,0,0,133,0,0,0,34),
 	 (0,0,'0036-09-22 21:15:39',1,0,1,1768,0,0,143,0,0,1,36),
 	 (0,0,'0036-12-20 14:11:45',0,1,1,1780,0,0,144,1,0,0,36);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0039-06-23 03:09:16',0,0,1,1904,0,0,154,1,0,0,39),
 	 (0,0,'0040-09-22 20:38:55',1,0,0,1966,1,0,159,0,0,1,40),
 	 (0,0,'0040-12-20 13:42:07',0,1,0,1978,1,0,160,1,0,0,40),
@@ -31,7 +31,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0054-06-22 18:08:20',0,0,0,2646,1,0,214,1,0,0,54),
 	 (0,0,'0055-09-23 11:51:36',1,0,1,2708,0,0,219,0,0,1,55),
 	 (0,0,'0055-12-21 05:02:25',0,1,1,2720,0,0,220,1,0,0,55);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0058-06-22 17:30:38',0,0,1,2844,0,0,230,1,0,0,58),
 	 (0,0,'0059-09-23 11:11:32',1,0,0,2906,1,0,235,0,0,1,59),
 	 (0,0,'0059-12-21 04:24:18',0,1,0,2918,1,0,236,1,0,0,59),
@@ -42,7 +42,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0073-06-22 08:31:02',0,0,0,3586,1,0,290,1,0,0,73),
 	 (0,0,'0074-12-20 19:46:25',0,1,1,3660,0,0,296,1,0,0,74),
 	 (1,0,'0077-06-22 07:42:35',0,0,1,3784,0,0,306,1,0,0,77);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0078-09-23 01:45:14',1,0,0,3846,1,0,311,0,0,1,78),
 	 (0,0,'0078-12-20 19:17:53',0,1,0,3858,1,0,312,1,0,0,78),
 	 (0,0,'0082-09-23 01:04:55',1,0,1,4044,0,0,327,0,0,1,82),
@@ -53,7 +53,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0096-06-21 21:57:26',0,0,1,4724,0,0,382,1,0,0,96),
 	 (0,0,'0097-09-22 16:18:53',1,0,0,4786,1,0,387,0,0,1,97),
 	 (0,0,'0097-12-20 09:55:08',0,1,0,4798,1,0,388,1,0,0,97);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0098-03-20 11:29:28',1,0,0,4810,1,0,389,0,0,0,98),
 	 (0,0,'0101-09-23 15:46:18',1,0,1,4984,0,0,403,0,0,1,101),
 	 (0,1,'0102-03-21 10:55:14',1,0,1,5008,0,0,405,0,0,0,102),
@@ -64,7 +64,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0115-06-23 12:05:39',0,0,1,5664,0,0,458,1,0,0,115),
 	 (0,0,'0116-09-23 06:53:12',1,0,0,5726,1,0,463,0,0,1,116),
 	 (0,0,'0116-12-21 00:43:27',0,1,0,5738,1,0,464,1,0,0,116);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0117-03-21 02:00:59',1,0,0,5750,1,0,465,0,0,0,117),
 	 (0,0,'0120-09-23 06:25:07',1,0,1,5924,0,0,479,0,0,1,120),
 	 (0,0,'0120-12-21 00:06:15',0,1,1,5936,0,0,480,1,0,0,120),
@@ -75,7 +75,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0131-12-21 16:01:51',0,1,1,6480,0,0,524,1,0,0,131),
 	 (1,0,'0134-06-23 02:19:07',0,0,1,6604,0,0,534,1,0,0,134),
 	 (0,0,'0135-09-23 21:33:32',1,0,0,6666,1,0,539,0,0,1,135);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0135-12-21 15:32:37',0,1,0,6678,1,0,540,1,0,0,135),
 	 (0,0,'0139-09-23 20:57:32',1,0,1,6864,0,0,555,0,0,1,139),
 	 (0,0,'0139-12-21 14:58:13',0,1,1,6876,0,0,556,1,0,0,139),
@@ -86,7 +86,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0150-09-23 12:42:43',1,0,1,7408,0,0,599,0,0,1,150),
 	 (0,0,'0150-12-21 06:55:26',0,1,1,7420,0,0,600,1,0,0,150),
 	 (1,0,'0153-06-22 16:40:57',0,0,1,7544,0,0,610,1,0,0,153);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0154-09-23 12:04:50',1,0,0,7606,1,0,615,0,0,1,154),
 	 (0,0,'0154-12-21 06:13:25',0,1,0,7618,1,0,616,1,0,0,154),
 	 (1,0,'0157-06-22 16:01:55',0,0,0,7742,1,0,626,1,0,0,157),
@@ -97,7 +97,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0165-09-23 03:58:34',1,0,0,8150,1,0,659,0,0,1,165),
 	 (0,0,'0165-12-20 22:18:19',0,1,0,8162,1,0,660,1,0,0,165),
 	 (1,0,'0168-06-22 07:39:08',0,0,0,8286,1,0,670,1,0,0,168);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0169-09-23 03:17:15',1,0,1,8348,0,0,675,0,0,1,169),
 	 (0,0,'0169-12-20 21:37:02',0,1,1,8360,0,0,676,1,0,0,169),
 	 (1,0,'0172-06-22 06:50:15',0,0,1,8484,0,0,686,1,0,0,172),
@@ -108,7 +108,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0183-06-22 22:37:55',0,0,1,9028,0,0,730,1,0,0,183),
 	 (0,0,'0184-12-20 13:06:07',0,1,0,9102,1,0,736,1,0,0,184),
 	 (1,0,'0187-06-22 21:46:57',0,0,0,9226,1,0,746,1,0,0,187);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0188-09-22 17:45:52',1,0,1,9288,0,0,751,0,0,1,188),
 	 (0,0,'0188-12-20 12:20:11',0,1,1,9300,0,0,752,1,0,0,188),
 	 (1,0,'0191-06-22 21:04:29',0,0,1,9424,0,0,762,1,0,0,191),
@@ -119,7 +119,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0201-03-21 10:10:55',1,0,0,9906,1,0,801,0,0,0,201),
 	 (1,0,'0202-06-23 12:52:26',0,0,1,9968,0,0,806,1,0,0,202),
 	 (0,0,'0203-12-22 03:43:08',0,1,0,10042,1,0,812,1,0,0,203);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0206-06-23 11:52:27',0,0,0,10166,1,0,822,1,0,0,206),
 	 (0,0,'0207-09-24 08:23:03',1,0,1,10228,0,0,827,0,0,1,207),
 	 (0,0,'0207-12-22 03:08:52',0,1,1,10240,0,0,828,1,0,0,207),
@@ -130,7 +130,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0221-06-23 03:02:28',0,0,1,10908,0,0,882,1,0,0,221),
 	 (1,0,'0225-06-23 02:12:57',0,0,0,11106,1,0,898,1,0,0,225),
 	 (0,0,'0226-09-23 22:55:47',1,0,1,11168,0,0,903,0,0,1,226);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0226-12-21 17:46:42',0,1,1,11180,0,0,904,1,0,0,226),
 	 (0,0,'0230-09-23 22:24:15',1,0,0,11366,1,0,919,0,0,1,230),
 	 (0,0,'0230-12-21 17:26:36',0,1,0,11378,1,0,920,1,0,0,230),
@@ -141,7 +141,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0244-06-22 16:26:15',0,0,0,12046,1,0,974,1,0,0,244),
 	 (0,0,'0245-09-23 13:29:53',1,0,1,12108,0,0,979,0,0,1,245),
 	 (0,0,'0245-12-21 08:39:43',0,1,1,12120,0,0,980,1,0,0,245);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0248-06-22 15:55:25',0,0,1,12244,0,0,990,1,0,0,248),
 	 (0,0,'0249-09-23 12:53:49',1,0,0,12306,1,0,995,0,0,1,249),
 	 (0,0,'0249-12-21 08:05:44',0,1,0,12318,1,0,996,1,0,0,249),
@@ -152,7 +152,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0260-12-20 23:58:15',0,1,0,12862,1,0,1040,1,0,0,260),
 	 (1,0,'0263-06-23 06:42:23',0,0,0,12986,1,0,1050,1,0,0,263),
 	 (0,0,'0264-09-23 04:11:26',1,0,1,13048,0,0,1055,0,0,1,264);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0264-12-20 23:25:04',0,1,1,13060,0,0,1056,1,0,0,264),
 	 (1,0,'0267-06-23 05:57:40',0,0,1,13184,0,0,1066,1,0,0,267),
 	 (0,0,'0268-09-23 03:26:57',1,0,0,13246,1,0,1071,0,0,1,268),
@@ -163,7 +163,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0279-09-23 19:19:41',1,0,0,13790,1,0,1115,0,0,1,279),
 	 (0,0,'0279-12-21 14:46:40',0,1,0,13802,1,0,1116,1,0,0,279),
 	 (1,0,'0282-06-22 20:51:47',0,0,0,13926,1,0,1126,1,0,0,282);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0283-09-23 18:39:27',1,0,1,13988,0,0,1131,0,0,1,283),
 	 (0,0,'0283-12-21 14:10:57',0,1,1,14000,0,0,1132,1,0,0,283),
 	 (1,0,'0286-06-22 20:10:47',0,0,1,14124,0,0,1142,1,0,0,286),
@@ -174,7 +174,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0296-03-20 10:13:57',1,0,0,14606,1,0,1181,0,0,0,296),
 	 (1,0,'0297-06-22 11:53:30',0,0,1,14668,0,0,1186,1,0,0,297),
 	 (0,0,'0298-09-23 09:53:39',1,0,0,14730,1,0,1191,0,0,1,298);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0298-12-21 05:25:59',0,1,0,14742,1,0,1192,1,0,0,298),
 	 (1,0,'0301-06-23 11:05:18',0,0,0,14866,1,0,1202,1,0,0,301),
 	 (0,0,'0302-09-24 09:13:19',1,0,1,14928,0,0,1207,0,0,1,302),
@@ -185,7 +185,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0315-03-22 00:35:04',1,0,0,15546,1,0,1257,0,0,0,315),
 	 (1,0,'0316-06-23 02:02:23',0,0,1,15608,0,0,1262,1,0,0,316),
 	 (0,0,'0317-09-24 00:19:58',1,0,0,15670,1,0,1267,0,0,1,317);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0317-12-21 20:18:30',0,1,0,15682,1,0,1268,1,0,0,317),
 	 (1,0,'0320-06-23 01:29:32',0,0,0,15806,1,0,1278,1,0,0,320),
 	 (0,0,'0321-09-23 23:45:17',1,0,1,15868,0,0,1283,0,0,1,321),
@@ -196,7 +196,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0331-06-23 17:16:17',0,0,0,16350,1,0,1322,1,0,0,331),
 	 (1,0,'0335-06-23 16:19:40',0,0,1,16548,0,0,1338,1,0,0,335),
 	 (0,0,'0336-09-23 14:59:49',1,0,0,16610,1,0,1343,0,0,1,336);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0336-12-21 11:06:38',0,1,0,16622,1,0,1344,1,0,0,336),
 	 (0,0,'0340-09-23 14:17:25',1,0,1,16808,0,0,1359,0,0,1,340),
 	 (0,0,'0340-12-21 10:30:10',0,1,1,16820,0,0,1360,1,0,0,340),
@@ -207,7 +207,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0354-06-23 06:32:17',0,0,1,17488,0,0,1414,1,0,0,354),
 	 (0,0,'0355-09-24 05:30:44',1,0,0,17550,1,0,1419,0,0,1,355),
 	 (0,0,'0355-12-22 01:47:07',0,1,0,17562,1,0,1420,1,0,0,355);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0358-06-23 05:49:37',0,0,0,17686,1,0,1430,1,0,0,358),
 	 (0,0,'0359-09-24 04:58:22',1,0,1,17748,0,0,1435,0,0,1,359),
 	 (0,0,'0359-12-22 01:13:17',0,1,1,17760,0,0,1436,1,0,0,359),
@@ -218,7 +218,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0373-06-22 20:42:29',0,0,1,18428,0,0,1490,1,0,0,373),
 	 (0,0,'0374-09-23 20:06:37',1,0,0,18490,1,0,1495,0,0,1,374),
 	 (0,0,'0374-12-21 16:37:01',0,1,0,18502,1,0,1496,1,0,0,374);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0377-06-22 19:59:03',0,0,0,18626,1,0,1506,1,0,0,377),
 	 (0,0,'0378-09-23 19:24:59',1,0,1,18688,0,0,1511,0,0,1,378),
 	 (0,0,'0378-12-21 15:59:49',0,1,1,18700,0,0,1512,1,0,0,378),
@@ -229,7 +229,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0389-09-23 11:17:27',1,0,1,19232,0,0,1555,0,0,1,389),
 	 (1,0,'0392-06-22 11:04:23',0,0,1,19368,0,0,1566,1,0,0,392),
 	 (0,0,'0393-09-23 10:38:20',1,0,0,19430,1,0,1571,0,0,1,393);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0393-12-21 07:19:15',0,1,0,19442,1,0,1572,1,0,0,393),
 	 (1,0,'0396-06-22 10:12:19',0,0,0,19566,1,0,1582,1,0,0,396),
 	 (0,0,'0397-09-23 09:56:28',1,0,1,19628,0,0,1587,0,0,1,397),
@@ -240,7 +240,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0406-03-21 01:29:00',1,0,1,20048,0,0,1621,0,0,0,406),
 	 (1,0,'0407-06-23 02:01:21',0,0,0,20110,1,0,1626,1,0,0,407),
 	 (0,0,'0408-09-23 01:52:48',1,0,1,20172,0,0,1631,0,0,1,408);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0408-12-20 22:51:12',0,1,1,20184,0,0,1632,1,0,0,408),
 	 (1,0,'0411-06-23 01:09:11',0,0,1,20308,0,0,1642,1,0,0,411),
 	 (0,0,'0412-09-23 01:01:55',1,0,0,20370,1,0,1647,0,0,1,412),
@@ -251,7 +251,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0421-03-20 16:56:38',1,0,0,20790,1,0,1681,0,0,0,421),
 	 (1,0,'0422-06-22 17:06:19',0,0,1,20852,0,0,1686,1,0,0,422),
 	 (0,1,'0425-03-20 15:59:56',1,0,1,20988,0,0,1697,0,0,0,425);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0426-06-22 16:11:33',0,0,0,21050,1,0,1702,1,0,0,426),
 	 (0,0,'0427-09-23 16:23:03',1,0,1,21112,0,0,1707,0,0,1,427),
 	 (0,0,'0427-12-21 13:26:02',0,1,1,21124,0,0,1708,1,0,0,427),
@@ -262,7 +262,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0436-03-20 08:11:53',1,0,1,21532,0,0,1741,0,0,0,436),
 	 (0,1,'0440-03-20 07:21:51',1,0,0,21730,1,0,1757,0,0,0,440),
 	 (1,0,'0441-06-22 07:14:44',0,0,1,21792,0,0,1762,1,0,0,441);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0444-03-20 06:24:43',1,0,1,21928,0,0,1773,0,0,0,444),
 	 (1,0,'0445-06-22 06:17:20',0,0,0,21990,1,0,1778,1,0,0,445),
 	 (0,0,'0446-12-21 04:14:28',0,1,1,22064,0,0,1784,1,0,0,446),
@@ -273,7 +273,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0454-09-23 05:43:19',1,0,1,22448,0,0,1815,0,0,1,454),
 	 (0,1,'0455-03-20 22:25:31',1,0,1,22472,0,0,1817,0,0,0,455),
 	 (0,1,'0459-03-20 21:47:57',1,0,0,22670,1,0,1833,0,0,0,459);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0460-06-21 21:28:42',0,0,1,22732,0,0,1838,1,0,0,460),
 	 (1,0,'0464-06-21 20:38:52',0,0,0,22930,1,0,1854,1,0,0,464),
 	 (1,0,'0468-06-21 19:43:07',0,0,1,23128,0,0,1870,1,0,0,468),
@@ -284,7 +284,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0473-12-20 17:49:40',0,1,1,23400,0,0,1892,1,0,0,473),
 	 (0,1,'0474-03-20 12:55:59',1,0,1,23412,0,0,1893,0,0,0,474),
 	 (0,1,'0478-03-20 12:03:52',1,0,0,23610,1,0,1909,0,0,0,478);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0483-06-22 10:51:52',0,0,0,23870,1,0,1930,1,0,0,483),
 	 (0,0,'0484-09-22 11:52:32',1,0,1,23932,0,0,1935,0,0,1,484),
 	 (1,0,'0487-06-22 10:03:59',0,0,1,24068,0,0,1946,1,0,0,487),
@@ -295,7 +295,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0492-12-20 08:39:02',0,1,1,24340,0,0,1968,1,0,0,492),
 	 (0,1,'0493-03-20 03:28:40',1,0,1,24352,0,0,1969,0,0,0,493),
 	 (0,1,'0497-03-20 02:35:50',1,0,0,24550,1,0,1985,0,0,0,497);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0499-09-23 03:18:58',1,0,0,24674,1,0,1995,0,0,1,499),
 	 (1,0,'0502-06-23 00:58:03',0,0,0,24810,1,0,2006,1,0,0,502),
 	 (0,0,'0503-09-24 02:24:56',1,0,1,24872,0,0,2011,0,0,1,503),
@@ -306,7 +306,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0511-12-21 23:11:34',0,1,1,25280,0,0,2044,1,0,0,511),
 	 (0,1,'0512-03-20 17:54:32',1,0,1,25292,0,0,2045,0,0,0,512),
 	 (0,1,'0516-03-20 17:03:43',1,0,0,25490,1,0,2061,0,0,0,516);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0517-06-22 16:01:38',0,0,1,25552,0,0,2066,1,0,0,517),
 	 (0,0,'0518-09-23 17:49:59',1,0,0,25614,1,0,2071,0,0,1,518),
 	 (1,0,'0521-06-22 15:07:09',0,0,0,25750,1,0,2082,1,0,0,521),
@@ -317,7 +317,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0526-12-21 14:41:22',0,1,0,26022,1,0,2104,1,0,0,526),
 	 (0,0,'0530-12-21 14:01:23',0,1,1,26220,0,0,2120,1,0,0,530),
 	 (0,1,'0531-03-21 08:23:30',1,0,1,26232,0,0,2121,0,0,0,531);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0535-03-21 07:29:08',1,0,0,26430,1,0,2137,0,0,0,535),
 	 (1,0,'0536-06-22 06:16:54',0,0,1,26492,0,0,2142,1,0,0,536),
 	 (0,0,'0537-12-21 06:42:16',0,1,0,26566,1,0,2148,1,0,0,537),
@@ -328,7 +328,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0545-09-23 06:54:58',1,0,0,26950,1,0,2179,0,0,1,545),
 	 (0,0,'0545-12-21 05:23:39',0,1,0,26962,1,0,2180,1,0,0,545),
 	 (0,1,'0546-03-20 23:23:33',1,0,0,26974,1,0,2181,0,0,0,546);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0550-03-20 22:37:00',1,0,1,27172,0,0,2197,0,0,0,550),
 	 (1,0,'0551-06-22 21:21:12',0,0,0,27234,1,0,2202,1,0,0,551),
 	 (0,1,'0554-03-20 21:56:38',1,0,0,27370,1,0,2213,0,0,0,554),
@@ -339,7 +339,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0560-12-20 20:40:15',0,1,1,27704,0,0,2240,1,0,0,560),
 	 (0,0,'0564-09-22 21:27:10',1,0,0,27890,1,0,2255,0,0,1,564),
 	 (0,0,'0564-12-20 20:16:50',0,1,0,27902,1,0,2256,1,0,0,564);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0565-03-20 13:57:53',1,0,0,27914,1,0,2257,0,0,0,565),
 	 (0,1,'0569-03-20 13:08:44',1,0,1,28112,0,0,2273,0,0,0,569),
 	 (0,1,'0573-03-20 12:18:03',1,0,0,28310,1,0,2289,0,0,0,573),
@@ -350,7 +350,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0580-03-20 04:59:54',1,0,1,28656,0,0,2317,0,0,0,580),
 	 (0,0,'0583-09-23 11:56:46',1,0,0,28830,1,0,2331,0,0,1,583),
 	 (0,0,'0583-12-21 10:53:00',0,1,0,28842,1,0,2332,1,0,0,583);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0584-03-20 04:21:06',1,0,0,28854,1,0,2333,0,0,0,584),
 	 (0,1,'0588-03-20 03:41:50',1,0,1,29052,0,0,2349,0,0,0,588),
 	 (1,0,'0593-06-22 00:53:39',0,0,1,29312,0,0,2370,1,0,0,593),
@@ -361,7 +361,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0602-12-22 01:40:08',0,1,0,29781,1,0,2408,1,0,0,602),
 	 (0,1,'0603-03-21 18:53:25',1,0,0,29793,1,0,2409,0,0,0,603),
 	 (0,1,'0607-03-21 18:06:20',1,0,1,29991,0,0,2425,0,0,0,607);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0612-06-22 14:57:06',0,0,1,30251,0,0,2446,1,0,0,612),
 	 (0,0,'0613-09-23 18:20:59',1,0,0,30313,1,0,2451,0,0,1,613),
 	 (1,0,'0616-06-22 14:13:14',0,0,0,30449,1,0,2462,1,0,0,616),
@@ -372,7 +372,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0622-03-21 09:11:46',1,0,0,30733,1,0,2485,0,0,0,622),
 	 (0,1,'0626-03-21 08:34:11',1,0,1,30931,0,0,2501,0,0,0,626),
 	 (1,0,'0631-06-23 05:12:21',0,0,1,31191,0,0,2522,1,0,0,631);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0632-09-23 08:48:52',1,0,0,31253,1,0,2527,0,0,1,632),
 	 (1,0,'0635-06-23 04:25:53',0,0,0,31389,1,0,2538,1,0,0,635),
 	 (0,0,'0636-09-23 08:06:51',1,0,1,31451,0,0,2543,0,0,1,636),
@@ -383,7 +383,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0646-06-22 20:20:34',0,0,0,31933,1,0,2582,1,0,0,646),
 	 (1,0,'0650-06-22 19:28:16',0,0,1,32131,0,0,2598,1,0,0,650),
 	 (0,0,'0651-09-23 23:15:24',1,0,0,32193,1,0,2603,0,0,1,651);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0651-12-21 23:06:43',0,1,0,32205,1,0,2604,1,0,0,651),
 	 (1,0,'0654-06-22 18:42:47',0,0,0,32329,1,0,2614,1,0,0,654),
 	 (0,0,'0655-09-23 22:37:50',1,0,1,32391,0,0,2619,0,0,1,655),
@@ -394,7 +394,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0665-06-22 10:31:31',0,0,0,32873,1,0,2658,1,0,0,665),
 	 (0,1,'0668-03-20 12:24:40',1,0,0,33009,1,0,2669,0,0,0,668),
 	 (1,0,'0669-06-22 09:32:41',0,0,1,33071,0,0,2674,1,0,0,669);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0670-09-23 13:50:43',1,0,0,33133,1,0,2679,0,0,1,670),
 	 (0,0,'0670-12-21 13:54:14',0,1,0,33145,1,0,2680,1,0,0,670),
 	 (1,0,'0673-06-22 08:50:24',0,0,0,33269,1,0,2690,1,0,0,673),
@@ -405,7 +405,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0683-03-21 03:56:01',1,0,1,33751,0,0,2729,0,0,0,683),
 	 (1,0,'0684-06-22 00:37:24',0,0,0,33813,1,0,2734,1,0,0,684),
 	 (1,0,'0688-06-21 23:49:03',0,0,1,34011,0,0,2750,1,0,0,688);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0689-09-23 04:22:52',1,0,0,34073,1,0,2755,0,0,1,689),
 	 (0,0,'0689-12-21 04:30:11',0,1,0,34085,1,0,2756,1,0,0,689),
 	 (0,0,'0693-09-23 03:41:15',1,0,1,34271,0,0,2771,0,0,1,693),
@@ -416,7 +416,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0703-06-23 14:50:54',0,0,0,34753,1,0,2810,1,0,0,703),
 	 (1,0,'0707-06-23 13:59:16',0,0,1,34951,0,0,2826,1,0,0,707),
 	 (0,0,'0708-09-23 18:48:42',1,0,0,35013,1,0,2831,0,0,1,708);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0708-12-21 19:22:30',0,1,0,35025,1,0,2832,1,0,0,708),
 	 (0,0,'0712-09-23 18:08:00',1,0,1,35211,0,0,2847,0,0,1,712),
 	 (0,0,'0712-12-21 18:39:20',0,1,1,35223,0,0,2848,1,0,0,712),
@@ -427,7 +427,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0726-06-23 04:11:36',0,0,1,35891,0,0,2902,1,0,0,726),
 	 (0,0,'0727-09-24 09:16:24',1,0,0,35953,1,0,2907,0,0,1,727),
 	 (0,0,'0727-12-22 10:07:24',0,1,0,35965,1,0,2908,1,0,0,727);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0731-09-24 08:38:27',1,0,1,36151,0,0,2923,0,0,1,731),
 	 (0,0,'0731-12-22 09:31:05',0,1,1,36163,0,0,2924,1,0,0,731),
 	 (0,1,'0732-03-21 00:40:13',1,0,1,36175,0,0,2925,0,0,0,732),
@@ -438,7 +438,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0742-09-24 00:37:06',1,0,1,36695,0,0,2967,0,0,1,742),
 	 (1,0,'0745-06-22 18:23:11',0,0,1,36831,0,0,2978,1,0,0,745),
 	 (0,0,'0746-09-23 23:42:07',1,0,0,36893,1,0,2983,0,0,1,746);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0746-12-22 00:45:32',0,1,0,36905,1,0,2984,1,0,0,746),
 	 (1,0,'0749-06-22 17:41:51',0,0,0,37029,1,0,2994,1,0,0,749),
 	 (0,0,'0750-09-23 23:17:36',1,0,1,37091,0,0,2999,0,0,1,750),
@@ -449,7 +449,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0760-06-22 09:23:29',0,0,0,37573,1,0,3038,1,0,0,760),
 	 (0,0,'0761-09-23 15:08:34',1,0,1,37635,0,0,3043,0,0,1,761),
 	 (1,0,'0764-06-22 08:27:55',0,0,1,37771,0,0,3054,1,0,0,764);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0765-09-23 14:19:11',1,0,0,37833,1,0,3059,0,0,1,765),
 	 (0,0,'0765-12-21 15:33:54',0,1,0,37845,1,0,3060,1,0,0,765),
 	 (1,0,'0768-06-22 07:52:18',0,0,0,37969,1,0,3070,1,0,0,768),
@@ -460,7 +460,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0774-03-21 04:50:10',1,0,0,38253,1,0,3093,0,0,0,774),
 	 (1,0,'0775-06-23 00:28:08',0,0,1,38315,0,0,3098,1,0,0,775),
 	 (0,1,'0778-03-21 04:06:03',1,0,1,38451,0,0,3109,0,0,0,778);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'0779-06-22 23:37:52',0,0,0,38513,1,0,3114,1,0,0,779),
 	 (0,0,'0780-09-23 05:33:40',1,0,1,38575,0,0,3119,0,0,1,780),
 	 (0,0,'0780-12-21 07:02:26',0,1,1,38587,0,0,3120,1,0,0,780),
@@ -471,7 +471,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0789-03-20 20:01:38',1,0,1,38995,0,0,3153,0,0,0,789),
 	 (0,1,'0793-03-20 19:20:54',1,0,0,39193,1,0,3169,0,0,0,793),
 	 (1,0,'0794-06-22 14:49:37',0,0,1,39255,0,0,3174,1,0,0,794);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0797-03-20 18:24:51',1,0,1,39391,0,0,3185,0,0,0,797),
 	 (1,0,'0798-06-22 13:54:06',0,0,0,39453,1,0,3190,1,0,0,798),
 	 (0,0,'0799-09-23 20:03:14',1,0,1,39515,0,0,3195,0,0,1,799),
@@ -482,7 +482,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0804-03-20 11:06:30',1,0,0,39737,1,0,3213,0,0,0,804),
 	 (0,0,'0807-09-23 18:40:53',1,0,1,39911,0,0,3227,0,0,1,807),
 	 (0,0,'0807-12-21 20:30:39',0,1,1,39923,0,0,3228,1,0,0,807);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0808-03-20 10:32:57',1,0,1,39935,0,0,3229,0,0,0,808),
 	 (0,1,'0812-03-20 09:42:27',1,0,0,40133,1,0,3245,0,0,0,812),
 	 (1,0,'0813-06-22 04:56:38',0,0,1,40195,0,0,3250,1,0,0,813),
@@ -493,7 +493,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0823-03-21 01:32:33',1,0,0,40677,1,0,3289,0,0,0,823),
 	 (0,0,'0826-09-23 09:09:14',1,0,1,40851,0,0,3303,0,0,1,826),
 	 (0,0,'0826-12-21 11:17:29',0,1,1,40863,0,0,3304,1,0,0,826);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0827-03-21 01:09:14',1,0,1,40875,0,0,3305,0,0,0,827),
 	 (0,1,'0831-03-21 00:17:36',1,0,0,41073,1,0,3321,0,0,0,831),
 	 (1,0,'0832-06-21 19:08:12',0,0,1,41135,0,0,3326,1,0,0,832),
@@ -504,7 +504,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0842-03-20 16:08:44',1,0,0,41617,1,0,3365,0,0,0,842),
 	 (0,0,'0845-09-22 23:46:26',1,0,1,41791,0,0,3379,0,0,1,845),
 	 (0,0,'0845-12-21 01:58:20',0,1,1,41803,0,0,3380,1,0,0,845);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0846-03-20 15:26:14',1,0,1,41815,0,0,3381,0,0,0,846),
 	 (1,0,'0851-06-22 09:18:13',0,0,1,42075,0,0,3402,1,0,0,851),
 	 (1,0,'0855-06-22 08:18:54',0,0,0,42273,1,0,3418,1,0,0,855),
@@ -515,7 +515,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0861-03-20 06:35:52',1,0,0,42557,1,0,3441,0,0,0,861),
 	 (0,0,'0864-09-22 14:13:04',1,0,1,42731,0,0,3455,0,0,1,864),
 	 (0,0,'0864-12-20 16:45:14',0,1,1,42743,0,0,3456,1,0,0,864);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0865-03-20 05:56:19',1,0,1,42755,0,0,3457,0,0,0,865),
 	 (0,1,'0869-03-20 05:03:45',1,0,0,42953,1,0,3473,0,0,0,869),
 	 (1,0,'0870-06-21 23:31:05',0,0,1,43015,0,0,3478,1,0,0,870),
@@ -526,7 +526,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'0878-06-21 21:54:55',0,0,1,43411,0,0,3510,1,0,0,878),
 	 (0,0,'0879-09-23 05:21:51',1,0,0,43473,1,0,3515,0,0,1,879),
 	 (0,0,'0879-12-21 08:04:08',0,1,0,43485,1,0,3516,1,0,0,879);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0883-12-21 07:33:54',0,1,1,43683,0,0,3532,1,0,0,883),
 	 (0,1,'0884-03-19 20:20:21',1,0,1,43695,0,0,3533,0,0,0,884),
 	 (0,1,'0888-03-19 19:39:03',1,0,0,43893,1,0,3549,0,0,0,888),
@@ -537,7 +537,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0894-12-20 23:29:22',0,1,1,44227,0,0,3576,1,0,0,894),
 	 (1,0,'0897-06-21 12:00:25',0,0,1,44351,0,0,3586,1,0,0,897),
 	 (0,0,'0898-09-22 19:44:59',1,0,0,44413,1,0,3591,0,0,1,898);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0898-12-20 22:52:31',0,1,0,44425,1,0,3592,1,0,0,898),
 	 (0,0,'0902-12-21 22:11:11',0,1,1,44623,0,0,3608,1,0,0,902),
 	 (0,1,'0903-03-21 10:49:56',1,0,1,44635,0,0,3609,0,0,0,903),
@@ -548,7 +548,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0913-09-23 10:58:09',1,0,1,45155,0,0,3651,0,0,1,913),
 	 (0,0,'0913-12-21 14:06:31',0,1,1,45167,0,0,3652,1,0,0,913),
 	 (0,0,'0917-09-23 10:16:36',1,0,0,45353,1,0,3667,0,0,1,917);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0917-12-21 13:34:26',0,1,0,45365,1,0,3668,1,0,0,917),
 	 (0,1,'0918-03-21 01:57:15',1,0,0,45377,1,0,3669,0,0,0,918),
 	 (0,1,'0922-03-21 01:27:20',1,0,1,45575,0,0,3685,0,0,0,922),
@@ -559,7 +559,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0932-09-23 01:25:31',1,0,1,46095,0,0,3727,0,0,1,932),
 	 (0,0,'0932-12-21 04:54:25',0,1,1,46107,0,0,3728,1,0,0,932),
 	 (0,0,'0936-09-23 00:45:16',1,0,0,46293,1,0,3743,0,0,1,936);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0936-12-21 04:15:56',0,1,0,46305,1,0,3744,1,0,0,936),
 	 (0,1,'0937-03-20 16:27:59',1,0,0,46317,1,0,3745,0,0,0,937),
 	 (0,1,'0941-03-20 15:42:10',1,0,1,46515,0,0,3761,0,0,0,941),
@@ -570,7 +570,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'0952-03-20 07:27:58',1,0,1,47059,0,0,3805,0,0,0,952),
 	 (0,0,'0955-09-23 15:15:09',1,0,0,47233,1,0,3819,0,0,1,955),
 	 (0,0,'0955-12-21 19:04:34',0,1,0,47245,1,0,3820,1,0,0,955);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'0956-03-20 06:56:05',1,0,0,47257,1,0,3821,0,0,0,956),
 	 (0,1,'0960-03-20 06:13:32',1,0,1,47455,0,0,3837,0,0,0,960),
 	 (1,0,'0965-06-21 22:19:16',0,0,1,47715,0,0,3858,1,0,0,965),
@@ -581,7 +581,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0974-09-23 05:46:51',1,0,0,48173,1,0,3895,0,0,1,974),
 	 (0,0,'0974-12-21 09:45:03',0,1,0,48185,1,0,3896,1,0,0,974),
 	 (0,1,'0975-03-20 21:19:10',1,0,0,48197,1,0,3897,0,0,0,975);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0978-12-21 09:16:33',0,1,1,48383,0,0,3912,1,0,0,978),
 	 (0,1,'0979-03-20 20:45:41',1,0,1,48395,0,0,3913,0,0,0,979),
 	 (1,0,'0984-06-21 12:35:14',0,0,1,48655,0,0,3934,1,0,0,984),
@@ -592,7 +592,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'0993-09-22 20:15:58',1,0,0,49113,1,0,3971,0,0,1,993),
 	 (0,0,'0993-12-21 00:36:32',0,1,0,49125,1,0,3972,1,0,0,993),
 	 (0,1,'0994-03-20 11:58:05',1,0,0,49137,1,0,3973,0,0,0,994);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'0997-12-20 23:47:34',0,1,1,49323,0,0,3988,1,0,0,997),
 	 (0,1,'0998-03-20 11:13:05',1,0,1,49335,0,0,3989,0,0,0,998),
 	 (1,0,'0999-06-22 03:33:48',0,0,0,49397,1,0,3994,1,0,0,999),
@@ -603,7 +603,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1008-12-21 15:47:13',0,1,1,49867,0,1,4032,1,0,0,1008),
 	 (0,0,'1012-12-21 15:21:01',0,1,0,50065,1,0,4048,1,0,0,1012),
 	 (0,1,'1013-03-21 02:19:41',1,0,0,50077,1,0,4049,0,0,0,1013);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1017-03-21 01:43:08',1,0,1,50275,0,0,4065,0,0,0,1017),
 	 (1,0,'1018-06-22 17:49:53',0,0,0,50337,1,0,4070,1,1,0,1018),
 	 (1,0,'1022-06-22 16:55:33',0,0,1,50535,0,1,4086,1,0,0,1022),
@@ -614,7 +614,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1027-12-22 06:35:41',0,1,1,50807,0,0,4108,1,0,0,1027),
 	 (0,0,'1031-12-22 06:03:35',0,1,0,51005,1,0,4124,1,1,0,1031),
 	 (0,1,'1032-03-20 16:51:31',1,0,0,51017,1,0,4125,0,0,0,1032);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1033-06-22 09:01:33',0,0,1,51079,0,0,4130,1,0,0,1033),
 	 (0,1,'1036-03-20 15:59:25',1,0,1,51215,0,0,4141,0,0,0,1036),
 	 (1,0,'1037-06-22 08:01:04',0,0,0,51277,1,0,4146,1,0,0,1037),
@@ -625,7 +625,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1046-12-21 21:17:44',0,1,1,51747,0,0,4184,1,0,0,1046),
 	 (0,1,'1047-03-21 07:50:30',1,0,1,51759,0,1,4185,0,0,0,1047),
 	 (0,1,'1051-03-21 07:26:31',1,0,0,51957,1,0,4201,0,1,0,1051);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1052-06-21 23:08:14',0,0,1,52019,0,0,4206,1,0,0,1052),
 	 (0,1,'1055-03-21 06:30:55',1,0,1,52155,0,1,4217,0,0,0,1055),
 	 (1,0,'1056-06-21 22:15:01',0,0,0,52217,1,0,4222,1,0,0,1056),
@@ -636,7 +636,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1065-12-21 12:08:09',0,1,1,52687,0,0,4260,1,0,0,1065),
 	 (0,1,'1066-03-20 22:31:06',1,0,1,52699,0,0,4261,0,0,0,1066),
 	 (0,0,'1069-09-23 06:09:14',1,0,0,52873,1,0,4275,0,0,1,1069);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1070-03-20 21:51:21',1,0,0,52897,1,0,4277,0,0,0,1070),
 	 (1,0,'1075-06-22 12:16:49',0,0,0,53157,1,1,4298,1,0,0,1075),
 	 (1,0,'1079-06-22 11:27:01',0,0,1,53355,0,0,4314,1,0,0,1079),
@@ -647,7 +647,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1088-09-22 20:35:50',1,0,0,53813,1,0,4351,0,0,1,1088),
 	 (0,0,'1088-12-21 02:16:08',0,1,0,53825,1,1,4352,1,0,0,1088),
 	 (0,1,'1089-03-20 12:22:46',1,0,0,53837,1,0,4353,0,0,0,1089);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1094-06-22 02:31:54',0,0,0,54097,1,0,4374,1,0,0,1094),
 	 (0,0,'1095-09-23 13:13:23',1,0,1,54159,0,1,4379,0,0,1,1095),
 	 (1,0,'1098-06-22 01:32:06',0,0,1,54295,0,0,4390,1,0,0,1098),
@@ -658,7 +658,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1107-12-22 17:02:19',0,1,0,54765,1,0,4428,1,0,0,1107),
 	 (0,1,'1108-03-21 02:41:50',1,0,0,54777,1,0,4429,0,0,0,1108),
 	 (1,0,'1113-06-22 16:50:42',0,0,0,55037,1,0,4450,1,0,0,1113);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1114-09-24 03:34:11',1,0,1,55099,0,0,4455,0,0,1,1114),
 	 (1,0,'1117-06-22 15:49:26',0,0,1,55235,0,0,4466,1,0,0,1117),
 	 (0,0,'1118-09-24 02:49:51',1,0,0,55297,1,0,4471,0,0,1,1118),
@@ -669,7 +669,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1126-12-22 07:41:32',0,1,0,55705,1,0,4504,1,0,0,1126),
 	 (0,1,'1127-03-21 17:13:29',1,0,0,55717,1,0,4505,0,0,0,1127),
 	 (1,0,'1128-06-22 07:55:07',0,0,1,55779,0,1,4510,1,0,0,1128);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1132-06-22 06:55:18',0,0,0,55977,1,0,4526,1,1,0,1132),
 	 (0,0,'1133-09-23 17:59:58',1,0,1,56039,0,0,4531,0,0,1,1133),
 	 (1,0,'1136-06-22 06:01:21',0,0,1,56175,0,0,4542,1,0,0,1136),
@@ -680,7 +680,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1145-12-21 22:30:27',0,1,0,56645,1,0,4580,1,1,0,1145),
 	 (0,1,'1146-03-21 07:46:54',1,0,0,56657,1,0,4581,0,0,0,1146),
 	 (1,0,'1147-06-22 22:00:07',0,0,1,56719,0,0,4586,1,0,0,1147);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1150-03-21 06:56:30',1,0,1,56855,0,0,4597,0,0,0,1150),
 	 (1,0,'1151-06-22 21:03:22',0,0,0,56917,1,0,4602,1,1,0,1151),
 	 (0,0,'1152-09-23 08:28:24',1,0,1,56979,0,0,4607,0,0,1,1152),
@@ -691,7 +691,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1161-03-20 22:59:17',1,0,1,57399,0,1,4641,0,0,0,1161),
 	 (1,0,'1162-06-22 12:59:03',0,0,0,57461,1,0,4646,1,0,0,1162),
 	 (0,1,'1165-03-20 22:11:26',1,0,0,57597,1,0,4657,0,0,0,1165);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1166-06-22 12:06:57',0,0,1,57659,0,0,4662,1,0,0,1166),
 	 (0,1,'1169-03-20 21:24:22',1,0,1,57795,0,0,4673,0,0,0,1169),
 	 (1,0,'1170-06-22 11:06:06',0,0,0,57857,1,0,4678,1,0,0,1170),
@@ -702,7 +702,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1176-03-20 13:57:28',1,0,0,58141,1,0,4701,0,0,0,1176),
 	 (0,0,'1179-09-23 21:36:07',1,0,1,58315,0,0,4715,0,1,1,1179),
 	 (0,0,'1179-12-22 04:35:33',0,1,1,58327,0,0,4716,1,0,0,1179);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1180-03-20 13:21:13',1,0,1,58339,0,1,4717,0,0,0,1180),
 	 (0,1,'1184-03-20 12:42:47',1,0,0,58537,1,0,4733,0,1,0,1184),
 	 (1,0,'1185-06-22 02:25:36',0,0,1,58599,0,0,4738,1,0,0,1185),
@@ -713,7 +713,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1195-03-21 04:30:09',1,0,0,59081,1,0,4777,0,0,0,1195),
 	 (0,0,'1198-09-23 12:00:07',1,0,1,59255,0,0,4791,0,0,1,1198),
 	 (0,0,'1198-12-21 19:13:39',0,1,1,59267,0,0,4792,1,0,0,1198);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1199-03-21 03:48:12',1,0,1,59279,0,0,4793,0,0,0,1199),
 	 (0,1,'1203-03-21 03:04:30',1,0,0,59477,1,0,4809,0,0,0,1203),
 	 (1,0,'1204-06-21 16:32:14',0,0,1,59539,0,0,4814,1,0,0,1204),
@@ -724,7 +724,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1214-03-20 18:55:29',1,0,0,60021,1,0,4853,0,0,0,1214),
 	 (0,0,'1217-09-23 02:25:14',1,0,1,60195,0,0,4867,0,0,1,1217),
 	 (0,0,'1217-12-21 10:02:09',0,1,1,60207,0,0,4868,1,0,0,1217);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1218-03-20 18:23:31',1,0,1,60219,0,0,4869,0,0,0,1218),
 	 (1,0,'1223-06-22 06:44:21',0,0,1,60479,0,0,4890,1,0,0,1223),
 	 (0,0,'1224-09-22 19:05:29',1,0,0,60541,1,0,4895,0,0,1,1224),
@@ -735,7 +735,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1233-03-20 09:32:17',1,0,0,60961,1,0,4929,0,0,0,1233),
 	 (0,0,'1236-12-21 00:44:43',0,1,1,61147,0,0,4944,1,0,0,1236),
 	 (0,1,'1237-03-20 08:50:19',1,0,1,61159,0,0,4945,0,1,0,1237);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1241-03-20 08:14:34',1,0,0,61357,1,0,4961,0,0,0,1241),
 	 (1,0,'1242-06-21 20:50:20',0,0,1,61419,0,0,4966,1,0,0,1242),
 	 (0,0,'1243-09-23 09:32:04',1,0,0,61481,1,0,4971,0,0,1,1243),
@@ -746,7 +746,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1251-12-21 16:04:32',0,1,0,61889,1,0,5004,1,1,0,1251),
 	 (0,0,'1255-12-21 15:31:18',0,1,1,62087,0,0,5020,1,0,0,1255),
 	 (0,1,'1256-03-19 23:24:47',1,0,1,62099,0,0,5021,0,0,0,1256);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1257-06-21 12:02:14',0,0,0,62161,1,0,5026,1,1,0,1257),
 	 (0,1,'1260-03-19 22:31:23',1,0,0,62297,1,0,5037,0,0,0,1260),
 	 (1,0,'1261-06-21 10:57:24',0,0,1,62359,0,1,5042,1,0,0,1261),
@@ -757,7 +757,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1270-09-22 22:30:05',1,0,0,62817,1,0,5079,0,0,1,1270),
 	 (0,0,'1270-12-21 06:43:27',0,1,0,62829,1,0,5080,1,0,0,1270),
 	 (0,1,'1271-03-20 14:24:41',1,0,0,62841,1,0,5081,0,0,0,1271);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1274-12-21 06:20:08',0,1,1,63027,0,1,5096,1,0,0,1274),
 	 (0,1,'1275-03-20 13:49:06',1,0,1,63039,0,0,5097,0,0,0,1275),
 	 (1,0,'1276-06-21 02:10:40',0,0,0,63101,1,0,5102,1,0,0,1276),
@@ -768,7 +768,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1289-09-22 12:54:01',1,0,0,63757,1,0,5155,0,0,1,1289),
 	 (0,0,'1289-12-20 21:34:41',0,1,0,63769,1,0,5156,1,0,0,1289),
 	 (0,1,'1290-03-20 04:58:58',1,0,0,63781,1,0,5157,0,1,0,1290);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1294-03-20 04:21:00',1,0,1,63979,0,1,5173,0,0,0,1294),
 	 (1,0,'1295-06-21 16:19:56',0,0,0,64041,1,0,5178,1,0,0,1295),
 	 (0,1,'1298-03-20 03:25:59',1,0,0,64177,1,0,5189,0,0,0,1298),
@@ -779,7 +779,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1308-09-23 03:28:07',1,0,0,64697,1,0,5231,0,0,1,1308),
 	 (0,0,'1308-12-21 12:20:20',0,1,0,64709,1,0,5232,1,0,0,1308),
 	 (0,1,'1309-03-20 19:24:06',1,0,0,64721,1,0,5233,0,0,0,1309);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1313-03-20 18:58:07',1,0,1,64919,0,0,5249,0,0,0,1313),
 	 (1,0,'1314-06-22 06:29:06',0,0,0,64981,1,1,5254,1,0,0,1314),
 	 (1,0,'1318-06-22 05:34:03',0,0,1,65179,0,0,5270,1,0,0,1318),
@@ -790,7 +790,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1327-12-22 03:02:44',0,1,0,65649,1,1,5308,1,0,0,1327),
 	 (0,1,'1328-03-20 10:03:39',1,0,0,65661,1,0,5309,0,0,0,1328),
 	 (0,1,'1332-03-20 09:17:16',1,0,1,65859,0,0,5325,0,0,0,1332);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1333-06-21 20:36:04',0,0,0,65921,1,0,5330,1,0,0,1333),
 	 (1,0,'1337-06-21 19:46:49',0,0,1,66119,0,0,5346,1,0,0,1337),
 	 (0,0,'1338-09-23 09:41:16',1,0,0,66181,1,0,5351,0,1,1,1338),
@@ -801,7 +801,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1347-03-21 00:31:51',1,0,0,66601,1,0,5385,0,0,0,1347),
 	 (0,0,'1350-12-21 17:07:32',0,1,1,66787,0,0,5400,1,0,0,1350),
 	 (0,1,'1351-03-20 23:48:33',1,0,1,66799,0,0,5401,0,0,0,1351);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1352-06-21 10:55:27',0,0,0,66861,1,0,5406,1,0,0,1352),
 	 (1,0,'1356-06-21 09:56:55',0,0,1,67059,0,0,5422,1,0,0,1356),
 	 (0,0,'1357-09-23 00:03:03',1,0,0,67121,1,0,5427,0,0,1,1357),
@@ -812,7 +812,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1366-03-20 14:58:43',1,0,0,67541,1,0,5461,0,0,0,1366),
 	 (0,0,'1369-12-21 07:55:17',0,1,1,67727,0,0,5476,1,0,0,1369),
 	 (0,1,'1370-03-20 14:13:04',1,0,1,67739,0,0,5477,0,0,0,1370);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1371-06-22 01:01:30',0,0,0,67801,1,0,5482,1,1,0,1371),
 	 (0,0,'1372-09-22 15:23:12',1,0,1,67863,0,0,5487,0,0,1,1372),
 	 (1,0,'1375-06-22 00:09:34',0,0,1,67999,0,0,5498,1,0,0,1375),
@@ -823,7 +823,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1385-03-20 05:36:42',1,0,0,68481,1,0,5537,0,0,0,1385),
 	 (1,0,'1386-06-21 16:05:52',0,0,1,68543,0,0,5542,1,0,0,1386),
 	 (0,1,'1389-03-20 04:44:31',1,0,1,68679,0,0,5553,0,0,0,1389);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1390-06-21 15:09:10',0,0,0,68741,1,0,5558,1,0,0,1390),
 	 (1,0,'1394-06-21 14:10:43',0,0,1,68939,0,1,5574,1,0,0,1394),
 	 (0,0,'1395-09-23 04:53:02',1,0,0,69001,1,0,5579,0,0,1,1395),
@@ -834,7 +834,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1403-12-22 13:58:30',0,1,0,69409,1,0,5612,1,0,0,1403),
 	 (0,1,'1404-03-20 19:57:19',1,0,0,69421,1,0,5613,0,0,0,1404),
 	 (1,0,'1405-06-22 06:04:53',0,0,1,69483,0,0,5618,1,0,0,1405);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1408-03-20 19:22:19',1,0,1,69619,0,0,5629,0,0,0,1408),
 	 (1,0,'1409-06-22 05:22:49',0,0,0,69681,1,0,5634,1,0,0,1409),
 	 (0,0,'1414-09-23 19:25:03',1,0,0,69941,1,0,5655,0,0,1,1414),
@@ -845,7 +845,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1422-12-22 04:39:11',0,1,0,70349,1,0,5688,1,0,0,1422),
 	 (0,1,'1423-03-21 10:30:27',1,0,0,70361,1,0,5689,0,1,0,1423),
 	 (1,0,'1424-06-21 20:26:06',0,0,1,70423,0,0,5694,1,0,0,1424);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1427-03-21 09:39:11',1,0,1,70559,0,1,5705,0,0,0,1427),
 	 (1,0,'1428-06-21 19:34:44',0,0,0,70621,1,0,5710,1,0,0,1428),
 	 (0,0,'1433-09-23 09:43:28',1,0,0,70881,1,0,5731,0,0,1,1433),
@@ -856,7 +856,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1441-12-21 19:27:13',0,1,0,71289,1,0,5764,1,0,0,1441),
 	 (0,1,'1442-03-21 01:00:40',1,0,0,71301,1,0,5765,0,0,0,1442),
 	 (1,0,'1443-06-22 10:39:11',0,0,1,71363,0,0,5770,1,0,0,1443);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1447-06-22 09:51:24',0,0,0,71561,1,0,5786,1,0,0,1447),
 	 (1,0,'1451-06-22 08:46:00',0,0,1,71759,0,0,5802,1,1,0,1451),
 	 (0,0,'1452-09-23 00:07:06',1,0,0,71821,1,0,5807,0,0,1,1452),
@@ -867,7 +867,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1461-03-20 15:26:05',1,0,0,72241,1,0,5841,0,0,0,1461),
 	 (1,0,'1462-06-22 00:48:33',0,0,1,72303,0,0,5846,1,0,0,1462),
 	 (1,0,'1466-06-21 23:49:48',0,0,0,72501,1,0,5862,1,0,0,1466);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1467-09-23 15:21:42',1,0,1,72563,0,1,5867,0,0,1,1467),
 	 (1,0,'1470-06-21 22:59:33',0,0,1,72699,0,0,5878,1,0,0,1470),
 	 (0,0,'1471-09-23 14:37:48',1,0,0,72761,1,0,5883,0,1,1,1471),
@@ -878,7 +878,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1480-03-20 06:06:38',1,0,0,73181,1,1,5917,0,0,0,1480),
 	 (1,0,'1481-06-21 15:00:42',0,0,1,73243,0,0,5922,1,0,0,1481),
 	 (1,0,'1485-06-21 13:58:24',0,0,0,73441,1,0,5938,1,0,0,1485);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1486-09-23 05:52:55',1,0,1,73503,0,0,5943,0,0,1,1486),
 	 (1,0,'1489-06-21 13:03:21',0,0,1,73639,0,0,5954,1,0,0,1489),
 	 (0,0,'1490-09-23 05:04:41',1,0,0,73701,1,0,5959,0,0,1,1490),
@@ -889,7 +889,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1499-03-20 20:26:36',1,0,0,74121,1,0,5993,0,0,0,1499),
 	 (1,0,'1500-06-22 05:07:30',0,0,1,74183,0,1,5998,1,0,0,1500),
 	 (0,1,'1503-03-21 19:46:06',1,0,1,74319,0,0,6009,0,0,0,1503);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1504-06-22 04:14:17',0,0,0,74381,1,0,6014,1,1,0,1504),
 	 (0,0,'1505-09-23 20:13:08',1,0,1,74443,0,0,6019,0,0,1,1505),
 	 (0,0,'1509-09-23 19:32:45',1,0,0,74641,1,0,6035,0,0,1,1509),
@@ -900,7 +900,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1517-12-22 06:20:51',0,1,0,75049,1,0,6068,1,1,0,1517),
 	 (0,1,'1518-03-21 11:00:58',1,0,0,75061,1,0,6069,0,0,0,1518),
 	 (1,0,'1519-06-22 19:27:57',0,0,1,75123,0,0,6074,1,0,0,1519);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1522-03-21 10:03:36',1,0,1,75259,0,0,6085,0,0,0,1522),
 	 (1,0,'1523-06-22 18:25:16',0,0,0,75321,1,0,6090,1,0,0,1523),
 	 (0,0,'1524-09-23 10:37:24',1,0,1,75383,0,0,6095,0,1,1,1524),
@@ -911,7 +911,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1533-03-21 02:05:16',1,0,1,75803,0,1,6129,0,0,0,1533),
 	 (1,0,'1534-06-22 10:19:45',0,0,0,75865,1,0,6134,1,0,0,1534),
 	 (0,1,'1537-03-21 01:37:55',1,0,0,76001,1,0,6145,0,1,0,1537);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1538-06-22 09:34:26',0,0,1,76063,0,0,6150,1,0,0,1538),
 	 (0,0,'1543-09-24 01:09:38',1,0,1,76323,0,0,6171,0,0,1,1543),
 	 (0,0,'1547-09-24 00:13:09',1,0,0,76521,1,0,6187,0,0,1,1547),
@@ -922,7 +922,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1552-03-20 16:46:58',1,0,1,76743,0,0,6205,0,0,0,1552),
 	 (1,0,'1553-06-22 00:33:06',0,0,0,76805,1,1,6210,1,0,0,1553),
 	 (0,1,'1556-03-20 16:04:03',1,0,0,76941,1,0,6221,0,1,0,1556);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1557-06-21 23:40:03',0,0,1,77003,0,0,6226,1,0,0,1557),
 	 (1,0,'1561-06-21 22:41:07',0,0,0,77201,1,0,6242,1,0,0,1561),
 	 (0,0,'1562-09-23 15:30:35',1,0,1,77263,0,0,6247,0,0,1,1562),
@@ -933,7 +933,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1570-12-22 03:11:54',0,1,1,77671,0,0,6280,1,1,0,1570),
 	 (0,1,'1571-03-21 07:14:48',1,0,1,77683,0,0,6281,0,0,0,1571),
 	 (1,0,'1576-06-21 13:52:43',0,0,1,77943,0,0,6302,1,0,0,1576);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1580-06-21 12:54:16',0,0,0,78141,1,0,6318,1,0,0,1580),
 	 (0,0,'1581-09-23 05:55:09',1,0,1,78203,0,1,6323,0,0,1,1581),
 	 (0,0,'1585-09-23 05:09:20',1,0,0,78401,1,0,6339,0,0,1,1585),
@@ -944,7 +944,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1590-03-20 21:44:11',1,0,1,78623,0,0,6357,0,0,0,1590),
 	 (0,0,'1593-12-21 17:12:59',0,1,0,78809,1,0,6372,1,0,0,1593),
 	 (1,0,'1595-06-22 03:58:34',0,0,1,78883,0,0,6378,1,0,0,1595);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1596-09-22 21:04:24',1,0,0,78945,1,0,6383,0,0,1,1596),
 	 (1,0,'1599-06-22 03:14:31',0,0,0,79081,1,0,6394,1,0,0,1599),
 	 (0,0,'1600-09-22 20:13:14',1,0,1,79143,0,0,6399,0,0,1,1600),
@@ -955,7 +955,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1609-03-20 12:20:13',1,0,1,79563,0,0,6433,0,0,0,1609),
 	 (1,0,'1610-06-21 19:07:45',0,0,0,79625,1,0,6438,1,1,0,1610),
 	 (0,0,'1612-12-21 07:50:38',0,1,0,79749,1,0,6448,1,0,0,1612);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1613-03-20 11:28:28',1,0,0,79761,1,1,6449,0,0,0,1613),
 	 (1,0,'1614-06-21 18:17:03',0,0,1,79823,0,0,6454,1,0,0,1614),
 	 (0,0,'1615-09-23 11:33:28',1,0,0,79885,1,0,6459,0,0,1,1615),
@@ -966,7 +966,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1623-12-21 23:52:55',0,1,0,80293,1,0,6492,1,1,0,1623),
 	 (0,1,'1624-03-20 03:22:31',1,0,0,80305,1,0,6493,0,0,0,1624),
 	 (1,0,'1625-06-21 09:59:27',0,0,1,80367,0,0,6498,1,0,0,1625);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1627-12-21 23:14:59',0,1,1,80491,0,1,6508,1,0,0,1627),
 	 (0,1,'1628-03-20 02:46:12',1,0,1,80503,0,0,6509,0,0,0,1628),
 	 (1,0,'1629-06-21 09:13:04',0,0,0,80565,1,0,6514,1,0,0,1629),
@@ -977,7 +977,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1638-12-21 15:05:01',0,1,1,81035,0,0,6552,1,0,0,1638),
 	 (0,0,'1642-12-21 14:38:36',0,1,0,81233,1,0,6568,1,0,0,1642),
 	 (0,1,'1643-03-20 17:56:54',1,0,0,81245,1,0,6569,0,0,0,1643);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1644-06-21 00:06:38',0,0,1,81307,0,0,6574,1,0,0,1644),
 	 (0,0,'1646-12-21 13:57:40',0,1,1,81431,0,1,6584,1,0,0,1646),
 	 (0,1,'1647-03-20 17:22:08',1,0,1,81443,0,0,6585,0,0,0,1647),
@@ -988,7 +988,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1657-12-21 05:52:52',0,1,1,81975,0,0,6628,1,0,0,1657),
 	 (0,1,'1658-03-20 09:04:41',1,0,1,81987,0,0,6629,0,0,0,1658),
 	 (0,0,'1661-09-22 14:50:50',1,0,0,82161,1,1,6643,0,0,1,1661);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1661-12-21 05:14:08',0,1,0,82173,1,0,6644,1,0,0,1661),
 	 (0,1,'1662-03-20 08:23:54',1,0,0,82185,1,0,6645,0,1,0,1662),
 	 (1,0,'1663-06-21 14:27:14',0,0,1,82247,0,0,6650,1,0,0,1663),
@@ -999,7 +999,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1676-12-20 20:36:52',0,1,1,82915,0,0,6704,1,0,0,1676),
 	 (0,1,'1677-03-19 23:25:55',1,0,1,82927,0,0,6705,0,0,0,1677),
 	 (0,0,'1680-09-22 05:12:23',1,0,0,83101,1,0,6719,0,0,1,1680);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1680-12-20 20:04:39',0,1,0,83113,1,0,6720,1,0,0,1680),
 	 (0,1,'1681-03-19 22:59:57',1,0,0,83125,1,0,6721,0,0,0,1681),
 	 (0,1,'1685-03-19 22:14:37',1,0,1,83323,0,0,6737,0,0,0,1685),
@@ -1010,7 +1010,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1696-03-19 14:03:05',1,0,1,83867,0,0,6781,0,0,0,1696),
 	 (0,0,'1699-09-22 19:38:04',1,0,0,84041,1,0,6795,0,0,1,1699),
 	 (0,0,'1699-12-21 10:47:06',0,1,0,84053,1,0,6796,1,0,0,1699);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1700-03-20 13:26:08',1,0,0,84065,1,0,6797,0,0,0,1700),
 	 (0,0,'1703-12-22 10:09:15',0,1,1,84251,0,0,6812,1,1,0,1703),
 	 (0,1,'1704-03-20 12:48:54',1,0,1,84263,0,0,6813,0,0,0,1704),
@@ -1021,7 +1021,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1718-09-23 09:58:49',1,0,0,84981,1,0,6871,0,1,1,1718),
 	 (0,0,'1718-12-22 01:26:14',0,1,0,84993,1,0,6872,1,0,0,1718),
 	 (0,1,'1719-03-21 04:03:23',1,0,0,85005,1,1,6873,0,0,0,1719);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1722-12-22 00:49:05',0,1,1,85191,0,0,6888,1,0,0,1722),
 	 (0,1,'1723-03-21 03:17:18',1,0,1,85203,0,0,6889,0,0,0,1723),
 	 (1,0,'1724-06-21 08:06:15',0,0,0,85265,1,0,6894,1,0,0,1724),
@@ -1032,7 +1032,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1733-12-21 16:42:39',0,1,1,85735,0,0,6932,1,0,0,1733),
 	 (0,0,'1737-12-21 16:13:02',0,1,0,85933,1,0,6948,1,0,0,1737),
 	 (0,1,'1738-03-20 18:33:18',1,0,0,85945,1,0,6949,0,0,0,1738);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1739-06-21 23:05:57',0,0,1,86007,0,1,6954,1,0,0,1739),
 	 (0,0,'1741-12-21 15:34:48',0,1,1,86131,0,0,6964,1,0,0,1741),
 	 (0,1,'1742-03-20 17:54:04',1,0,1,86143,0,0,6965,0,0,0,1742),
@@ -1043,7 +1043,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1752-09-22 15:27:00',1,0,1,86663,0,0,7007,0,0,1,1752),
 	 (0,0,'1752-12-21 07:32:00',0,1,1,86675,0,1,7008,1,0,0,1752),
 	 (1,0,'1754-06-21 14:09:10',0,0,0,86749,1,0,7014,1,0,0,1754);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1756-12-21 06:50:39',0,1,0,86873,1,0,7024,1,1,0,1756),
 	 (0,1,'1757-03-20 09:00:04',1,0,0,86885,1,0,7025,0,0,0,1757),
 	 (1,0,'1758-06-21 13:24:20',0,0,1,86947,0,0,7030,1,0,0,1758),
@@ -1054,7 +1054,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1771-09-23 05:50:15',1,0,1,87603,0,0,7083,0,0,1,1771),
 	 (0,0,'1771-12-21 22:17:29',0,1,1,87615,0,0,7084,1,0,0,1771),
 	 (0,1,'1772-03-20 00:09:52',1,0,1,87627,0,1,7085,0,0,0,1772);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1775-12-21 21:39:18',0,1,0,87813,1,0,7100,1,0,0,1775),
 	 (0,1,'1776-03-19 23:36:26',1,0,0,87825,1,0,7101,0,1,0,1776),
 	 (1,0,'1777-06-21 03:40:42',0,0,1,87887,0,0,7106,1,0,0,1777),
@@ -1065,7 +1065,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1790-09-22 20:11:10',1,0,1,88543,0,0,7159,0,0,1,1790),
 	 (0,0,'1790-12-21 12:52:07',0,1,1,88555,0,0,7160,1,0,0,1790),
 	 (0,1,'1791-03-20 14:48:11',1,0,1,88567,0,0,7161,0,0,0,1791);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1794-12-21 12:23:32',0,1,0,88753,1,0,7176,1,0,0,1794),
 	 (0,1,'1795-03-20 14:03:31',1,0,0,88765,1,0,7177,0,0,0,1795),
 	 (1,0,'1796-06-20 17:41:47',0,0,1,88827,0,0,7182,1,1,0,1796),
@@ -1076,7 +1076,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1809-12-22 03:37:18',0,1,1,89495,0,0,7236,1,1,0,1809),
 	 (0,1,'1810-03-21 05:20:05',1,0,1,89507,0,0,7237,0,0,0,1810),
 	 (0,0,'1813-12-22 03:06:56',0,1,0,89693,1,0,7252,1,0,0,1813);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1814-03-21 04:42:21',1,0,0,89705,1,0,7253,0,0,0,1814),
 	 (1,0,'1815-06-22 07:57:47',0,0,1,89767,0,0,7258,1,0,0,1815),
 	 (1,0,'1819-06-22 06:57:20',0,0,0,89965,1,0,7274,1,0,0,1819),
@@ -1087,7 +1087,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1829-03-20 19:41:29',1,0,1,90447,0,0,7313,0,0,0,1829),
 	 (0,0,'1832-12-21 17:51:07',0,1,0,90633,1,0,7328,1,0,0,1832),
 	 (0,1,'1833-03-20 19:11:16',1,0,0,90645,1,0,7329,0,0,0,1833);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1834-06-21 22:11:01',0,0,1,90707,0,0,7334,1,0,0,1834),
 	 (1,0,'1838-06-21 21:18:00',0,0,0,90905,1,0,7350,1,0,0,1838),
 	 (0,0,'1839-09-23 16:58:29',1,0,1,90967,0,0,7355,0,0,1,1839),
@@ -1098,7 +1098,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'1849-06-21 13:06:24',0,0,0,91449,1,0,7394,1,1,0,1849),
 	 (0,0,'1851-12-22 08:28:02',0,1,0,91573,1,0,7404,1,0,0,1851),
 	 (0,1,'1852-03-20 09:40:36',1,0,0,91585,1,0,7405,0,0,0,1852);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1853-06-21 12:21:33',0,0,1,91647,0,0,7410,1,0,0,1853),
 	 (1,0,'1857-06-21 11:24:23',0,0,0,91845,1,0,7426,1,0,0,1857),
 	 (0,0,'1858-09-23 07:21:27',1,0,1,91907,0,0,7431,0,0,1,1858),
@@ -1109,7 +1109,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'1868-06-21 03:09:18',0,0,0,92389,1,0,7470,1,0,0,1868),
 	 (0,0,'1870-12-21 23:12:30',0,1,0,92513,1,0,7480,1,0,0,1870),
 	 (0,1,'1871-03-21 00:19:06',1,0,0,92525,1,0,7481,0,0,0,1871);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1872-06-21 02:31:14',0,0,1,92587,0,1,7486,1,0,0,1872),
 	 (0,1,'1875-03-20 23:20:35',1,0,1,92723,0,0,7497,0,0,0,1875),
 	 (1,0,'1876-06-21 01:31:33',0,0,0,92785,1,0,7502,1,1,0,1876),
@@ -1120,7 +1120,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1886-03-20 15:25:46',1,0,1,93267,0,0,7541,0,0,0,1886),
 	 (1,0,'1887-06-21 17:26:44',0,0,0,93329,1,0,7546,1,0,0,1887),
 	 (0,0,'1889-12-21 13:51:19',0,1,0,93453,1,0,7556,1,1,0,1889);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1890-03-20 14:40:26',1,0,0,93465,1,0,7557,0,0,0,1890),
 	 (1,0,'1891-06-21 16:31:59',0,0,1,93527,0,0,7562,1,0,0,1891),
 	 (0,1,'1894-03-20 13:58:43',1,0,1,93663,0,0,7573,0,0,0,1894),
@@ -1131,7 +1131,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1904-12-22 06:13:27',0,1,1,94195,0,0,7616,1,0,0,1904),
 	 (0,1,'1905-03-21 06:57:02',1,0,1,94207,0,1,7617,0,0,0,1905),
 	 (1,0,'1906-06-22 08:41:21',0,0,0,94269,1,0,7622,1,0,0,1906);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1909-03-21 06:12:33',1,0,0,94405,1,0,7633,0,1,0,1909),
 	 (1,0,'1910-06-22 07:48:19',0,0,1,94467,0,0,7638,1,0,0,1910),
 	 (0,0,'1915-09-24 03:23:30',1,0,1,94727,0,0,7659,0,0,1,1915),
@@ -1142,7 +1142,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1923-12-22 20:53:04',0,1,1,95135,0,0,7692,1,0,0,1923),
 	 (0,1,'1924-03-20 21:19:55',1,0,1,95147,0,0,7693,0,0,0,1924),
 	 (1,0,'1925-06-21 22:49:46',0,0,0,95209,1,0,7698,1,0,0,1925);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1928-03-20 20:44:03',1,0,0,95345,1,0,7709,0,0,0,1928),
 	 (1,0,'1929-06-21 21:00:25',0,0,1,95407,0,0,7714,1,1,0,1929),
 	 (0,0,'1934-09-23 17:44:59',1,0,1,95667,0,0,7735,0,0,1,1934),
@@ -1153,7 +1153,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1942-12-22 10:39:24',0,1,1,96075,0,0,7768,1,0,0,1942),
 	 (0,1,'1943-03-21 11:02:27',1,0,1,96087,0,0,7769,0,0,0,1943),
 	 (1,0,'1944-06-21 11:02:09',0,0,0,96149,1,0,7774,1,0,0,1944);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1948-06-21 11:10:28',0,0,1,96347,0,0,7790,1,0,0,1948),
 	 (0,0,'1949-09-23 07:05:44',1,0,0,96409,1,0,7795,0,1,1,1949),
 	 (1,0,'1952-06-21 10:12:28',0,0,0,96545,1,0,7806,1,0,0,1952),
@@ -1164,7 +1164,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1961-12-22 01:19:26',0,1,1,97015,0,0,7844,1,0,0,1961),
 	 (0,1,'1962-03-21 01:29:31',1,0,1,97027,0,0,7845,0,0,0,1962),
 	 (1,0,'1963-06-22 02:04:00',0,0,0,97089,1,0,7850,1,0,0,1963);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'1965-12-22 00:40:24',0,1,0,97213,1,0,7860,1,0,0,1965),
 	 (1,0,'1967-06-22 01:22:49',0,0,1,97287,0,0,7866,1,0,0,1967),
 	 (0,0,'1968-09-22 22:26:10',1,0,0,97349,1,0,7871,0,0,1,1968),
@@ -1175,7 +1175,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,1,'1977-03-20 16:42:15',1,0,0,97769,1,0,7905,0,0,0,1977),
 	 (1,0,'1978-06-21 16:09:33',0,0,1,97831,0,1,7910,1,0,0,1978),
 	 (0,0,'1980-12-21 15:56:05',0,1,1,97955,0,0,7920,1,0,0,1980);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'1981-03-20 16:02:51',1,0,1,97967,0,0,7921,0,0,0,1981),
 	 (1,0,'1982-06-21 15:23:00',0,0,0,98029,1,0,7926,1,1,0,1982),
 	 (0,0,'1984-12-21 15:22:49',0,1,0,98153,1,0,7936,1,0,0,1984),
@@ -1186,7 +1186,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'1991-12-22 07:53:38',0,1,1,98499,0,1,7964,1,0,0,1991),
 	 (0,0,'1995-12-22 07:16:48',0,1,0,98697,1,0,7980,1,1,0,1995),
 	 (0,1,'1996-03-20 07:03:04',1,0,0,98709,1,0,7981,0,0,0,1996);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (1,0,'1997-06-21 06:19:56',0,0,1,98771,0,0,7986,1,0,0,1997),
 	 (0,0,'1999-12-22 06:43:48',0,1,1,98895,0,1,7996,1,0,0,1999),
 	 (0,1,'2000-03-20 06:35:14',1,0,1,98907,0,0,7997,0,0,0,2000),
@@ -1197,7 +1197,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'2010-09-23 01:09:02',1,0,1,99427,0,0,8039,0,0,1,2010),
 	 (0,0,'2010-12-21 22:38:27',0,1,1,99439,0,0,8040,1,0,0,2010),
 	 (0,0,'2014-12-21 22:03:02',0,1,0,99637,1,0,8056,1,0,0,2014);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'2015-03-20 21:45:09',1,0,0,99649,1,0,8057,0,1,0,2015),
 	 (1,0,'2016-06-20 20:34:11',0,0,1,99711,0,0,8062,1,0,0,2016),
 	 (0,0,'2018-12-21 21:22:44',0,1,1,99835,0,0,8072,1,0,0,2018),
@@ -1208,7 +1208,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'2029-09-22 15:38:30',1,0,1,100367,0,0,8115,0,0,1,2029),
 	 (0,0,'2029-12-21 13:14:06',0,1,1,100379,0,0,8116,1,0,0,2029),
 	 (0,1,'2030-03-20 12:52:06',1,0,1,100391,0,0,8117,0,0,0,2030);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'2033-09-22 14:51:41',1,0,0,100565,1,0,8131,0,0,1,2033),
 	 (0,0,'2033-12-21 12:46:00',0,1,0,100577,1,0,8132,1,0,0,2033),
 	 (0,1,'2034-03-20 12:17:30',1,0,0,100589,1,0,8133,0,0,0,2034),
@@ -1219,7 +1219,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (0,0,'2048-09-22 06:00:47',1,0,1,101307,0,0,8191,0,0,1,2048),
 	 (0,0,'2048-12-21 04:02:24',0,1,1,101319,0,0,8192,1,1,0,2048),
 	 (0,1,'2049-03-20 03:28:46',1,0,1,101331,0,0,8193,0,0,0,2049);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'2052-09-22 05:15:57',1,0,0,101505,1,0,8207,0,0,1,2052),
 	 (0,0,'2052-12-21 03:17:27',0,1,0,101517,1,0,8208,1,0,0,2052),
 	 (0,1,'2053-03-20 02:47:38',1,0,0,101529,1,0,8209,0,0,0,2053),
@@ -1230,7 +1230,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'2062-06-20 23:11:56',0,0,1,101987,0,0,8246,1,0,0,2062),
 	 (0,0,'2063-09-22 21:08:49',1,0,0,102049,1,0,8251,0,1,1,2063),
 	 (0,0,'2067-09-22 20:20:22',1,0,1,102247,0,0,8267,0,0,1,2067);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,1,'2068-03-19 17:49:43',1,0,1,102271,0,0,8269,0,0,0,2068),
 	 (0,0,'2071-09-22 19:38:35',1,0,0,102445,1,0,8283,0,0,1,2071),
 	 (0,0,'2071-12-21 18:04:43',0,1,0,102457,1,0,8284,1,0,0,2071),
@@ -1241,7 +1241,7 @@ INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lle
 	 (1,0,'2077-06-20 14:24:30',0,0,0,102729,1,0,8306,1,0,0,2077),
 	 (0,0,'2078-09-22 12:25:37',1,0,1,102791,0,0,8311,0,0,1,2078),
 	 (1,0,'2081-06-20 13:17:36',0,0,1,102927,0,0,8322,1,0,0,2081);
-INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,transicional,tricuartal,`year`) VALUES
+INSERT INTO calendar_db.metons (bicuartal,cuartal,`date`,equinoccial,inicial,lleno,luna_id,nuevo,selecto,soe_id,solsticial,invertido,tricuartal,`year`) VALUES
 	 (0,0,'2082-09-22 11:24:13',1,0,0,102989,1,0,8327,0,0,1,2082),
 	 (0,0,'2086-09-22 10:33:40',1,0,1,103187,0,1,8343,0,0,1,2086),
 	 (0,0,'2090-12-21 08:45:15',0,1,0,103397,1,0,8360,1,0,0,2090),
