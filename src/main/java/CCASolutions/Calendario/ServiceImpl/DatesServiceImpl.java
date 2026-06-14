@@ -1377,8 +1377,11 @@ public class DatesServiceImpl implements DatesService {
 				month.setSurname(surname);
 			}
 			else {
-	
-				if ((lunaNuevaAnteriorMasCercanaALaFecha.getDate().toLocalDate().isBefore(date) && lunaLlenaPosteriorMasCercanaALaFecha.getDate().toLocalDate().isAfter(date))) {
+				
+				boolean mitadALaLunaNuevaAnterior = numeroMinimoDeDiasEntreLunaNuevaAnteriorYDate <= numeroMinimoDeDiasEntreLunaLlenaAnteriorYDate;
+				boolean mitadALaLunaNuevaPosterior = numeroMinimoDeDiasEntreLunaNuevaSiguienteYDate <= numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate;
+				
+				if(mitadALaLunaNuevaAnterior) {
 					if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta()) {
 						month.setSurname("selecto");
 					}
@@ -1386,7 +1389,7 @@ public class DatesServiceImpl implements DatesService {
 						month.setSurname("invertido");
 					}
 				}
-				else if(lunaLlenaAnteriorMasCercanaALaFecha.getDate().toLocalDate().isBefore(date) && lunaNuevaPosteriorMasCercanaALaFecha.getDate().toLocalDate().isAfter(date)) {
+				else if(mitadALaLunaNuevaPosterior) {
 					if(lunaNuevaPosteriorMasCercanaALaFecha.isSelecta()) {
 						month.setSurname("selecto");
 					}
@@ -1395,7 +1398,7 @@ public class DatesServiceImpl implements DatesService {
 					}
 				}
 			}
-			
+	
 
 			
 
