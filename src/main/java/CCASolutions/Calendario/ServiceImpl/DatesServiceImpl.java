@@ -1115,10 +1115,14 @@ public class DatesServiceImpl implements DatesService {
 		MonthDTO month = new MonthDTO();
 		
 		List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente = new ArrayList<>();
+		List<LunasEntity> lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente = new ArrayList<>();
 		
 		for(LunasEntity luna : lunasDesdeElAnyoAnteriorHastaElSiguiente) {
 			if(luna.isNueva()) {
 				lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente.add(luna);
+			}
+			else if(luna.isLlena()) {
+				lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente.add(luna);
 			}
 		}
 		
@@ -1167,10 +1171,13 @@ public class DatesServiceImpl implements DatesService {
 			// Si cae en Luna nueva, ya tenemos el mes
 			
 			LunasEntity lunaNuevaAnteriorMasCercanaALaFecha = new LunasEntity();
-			Long numeroMinimoDeDiasEntreLunaNuevaYDate = Long.MAX_VALUE;			
+			LunasEntity lunaNuevaPosteriorMasCercanaALaFecha = new LunasEntity();
+			Long numeroMinimoDeDiasEntreLunaNuevaAnteriorYDate = Long.MAX_VALUE;	
+			Long numeroMinimoDeDiasEntreLunaNuevaSiguienteYDate = Long.MAX_VALUE;	
 			
 			List<LunasEntity> lunasNuevasEntreLastSOEYNextSOE = new ArrayList<>();
 			boolean caeEnLunaNueva = false;
+			String surname = "";
 			for(int i = 0; i<lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente.size(); i++) {
 				
 				LunasEntity luna = lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente.get(i);
@@ -1178,36 +1185,75 @@ public class DatesServiceImpl implements DatesService {
 				if(luna.getDate().toLocalDate().isEqual(date)) {
 						
 					lunasNuevasEntreLastSOEYNextSOE.add(luna);	
-					caeEnLunaNueva = true;	
-					long diasDeDiferenciaEntreLNYDate = Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date));
+					caeEnLunaNueva = true;
 					
-					if(luna.getDate().isBefore(date.atTime(LocalTime.MAX)) && diasDeDiferenciaEntreLNYDate < numeroMinimoDeDiasEntreLunaNuevaYDate) {
-						
-						numeroMinimoDeDiasEntreLunaNuevaYDate = diasDeDiferenciaEntreLNYDate;
-						lunaNuevaAnteriorMasCercanaALaFecha = luna;
+					if(luna.isSelecta()) {
+						surname = "selecto";
+					}
+					else if(luna.isInvertida()) {
+						surname = "invertido";
 					}
 						
 				}
 				else if(!luna.getDate().toLocalDate().isBefore(lastSOE.getDate().toLocalDate()) && luna.getDate().toLocalDate().isBefore(nextSOE.getDate().toLocalDate())){							
 							
-						lunasNuevasEntreLastSOEYNextSOE.add(luna);					
-						
-							
+					lunasNuevasEntreLastSOEYNextSOE.add(luna);						
 				}
 
 
-				if(luna.getDate().isBefore(date.atTime(LocalTime.MAX))) {
+				if(luna.getDate().toLocalDate().isBefore(date)) {
 					
-					long diasDeDiferenciaEntreLNYDate = Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date));
+					long diasDeDiferenciaEntreLNAnteriorYDate = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
 					
-					if(diasDeDiferenciaEntreLNYDate < numeroMinimoDeDiasEntreLunaNuevaYDate) {
+					if(diasDeDiferenciaEntreLNAnteriorYDate < numeroMinimoDeDiasEntreLunaNuevaAnteriorYDate) {
 						
-						numeroMinimoDeDiasEntreLunaNuevaYDate = diasDeDiferenciaEntreLNYDate;
+						numeroMinimoDeDiasEntreLunaNuevaAnteriorYDate = diasDeDiferenciaEntreLNAnteriorYDate;
 						lunaNuevaAnteriorMasCercanaALaFecha = luna;
-					}
-								
-				}			
+					}			
+				}
+				else if(luna.getDate().toLocalDate().isAfter(date)) {
+				
+					long diasDeDiferenciaEntreLNPosteriorYDate = ChronoUnit.DAYS.between( date, luna.getDate().toLocalDate());
+					
+					if(diasDeDiferenciaEntreLNPosteriorYDate < numeroMinimoDeDiasEntreLunaNuevaSiguienteYDate) {
+						
+						numeroMinimoDeDiasEntreLunaNuevaSiguienteYDate = diasDeDiferenciaEntreLNPosteriorYDate;
+						lunaNuevaPosteriorMasCercanaALaFecha = luna;
+					}		
+				}
 			}
+			
+			LunasEntity lunaLlenaAnteriorMasCercanaALaFecha = new LunasEntity();
+			LunasEntity lunaLlenaPosteriorMasCercanaALaFecha = new LunasEntity();
+			Long numeroMinimoDeDiasEntreLunaLlenaAnteriorYDate = Long.MAX_VALUE;	
+			Long numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate = Long.MAX_VALUE;	
+			
+			for(int i = 0; i<lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente.size(); i++) {
+				
+				LunasEntity luna = lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente.get(i);
+				
+				if(luna.getDate().isBefore(date.atStartOfDay())) {
+					
+					long diasDeDiferenciaEntreLLAnteriorYDate = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
+					
+					if(diasDeDiferenciaEntreLLAnteriorYDate < numeroMinimoDeDiasEntreLunaLlenaAnteriorYDate) {
+						
+						numeroMinimoDeDiasEntreLunaLlenaAnteriorYDate = diasDeDiferenciaEntreLLAnteriorYDate;
+						lunaLlenaAnteriorMasCercanaALaFecha = luna;
+					}		
+				}
+				else if(luna.getDate().isAfter(date.atStartOfDay())) {
+					long diasDeDiferenciaEntreLLPosteriorYDate = ChronoUnit.DAYS.between(date, luna.getDate().toLocalDate());
+					
+					if(diasDeDiferenciaEntreLLPosteriorYDate < numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate) {
+						
+						numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate = diasDeDiferenciaEntreLLPosteriorYDate;
+						lunaLlenaPosteriorMasCercanaALaFecha = luna;
+					}		
+				}
+				
+			}
+			
 			
 			MonthsEntity vauMonth = new MonthsEntity();
 			// Si cae en soe, pertenece al mes hibrido de ese soe.
@@ -1217,7 +1263,7 @@ public class DatesServiceImpl implements DatesService {
 				if(caeEnLunaNueva) {
 					
 					// Basicamente si hay un metono (da igual el tipo)
-					MonthDTO monthIfLN = getVAUMonth(date.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente);
+					MonthDTO monthIfLN = getVAUMonth(date.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasDesdeElAnyoAnteriorHastaElSiguiente);
 					vauMonth.setName(monthIfLN.getName());
 					
 				}
@@ -1302,7 +1348,7 @@ public class DatesServiceImpl implements DatesService {
 							
 						if (caeEnLunaNueva) {
 							
-							MonthDTO monthIfLN = getVAUMonth(date.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente);
+							MonthDTO monthIfLN = getVAUMonth(date.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasDesdeElAnyoAnteriorHastaElSiguiente);
 							vauMonth.setName(monthIfLN.getName());
 						}
 						else {
@@ -1318,13 +1364,40 @@ public class DatesServiceImpl implements DatesService {
 			}			
 			
 			
-			// Para ver si el mes es selecto o inverso, hay que ver la luna			
-			if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta()) {
-				month.setSurname("selecto");
+			/* 
+				Una parte de un mes tiene apellido cuando:
+				
+					1 - Se encuentra despues de una luna llena y antes de una luna nueva y esa luna nueva es selecta o invertida
+					2 - Se encuentra despues de una luna nueva y antes de una luna llena y esa luna nueva es selecta o invertida
+			*/
+				
+			
+			
+			if(caeEnLunaNueva) {
+				month.setSurname(surname);
 			}
-			else if (lunaNuevaAnteriorMasCercanaALaFecha.isInvertida()) {
-				month.setSurname("invertido");
+			else {
+	
+				if ((lunaNuevaAnteriorMasCercanaALaFecha.getDate().toLocalDate().isBefore(date) && lunaLlenaPosteriorMasCercanaALaFecha.getDate().toLocalDate().isAfter(date))) {
+					if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta()) {
+						month.setSurname("selecto");
+					}
+					else if(lunaNuevaAnteriorMasCercanaALaFecha.isInvertida()) {
+						month.setSurname("invertido");
+					}
+				}
+				else if(lunaLlenaAnteriorMasCercanaALaFecha.getDate().toLocalDate().isBefore(date) && lunaNuevaPosteriorMasCercanaALaFecha.getDate().toLocalDate().isAfter(date)) {
+					if(lunaNuevaPosteriorMasCercanaALaFecha.isSelecta()) {
+						month.setSurname("selecto");
+					}
+					else if(lunaNuevaPosteriorMasCercanaALaFecha.isInvertida()) {
+						month.setSurname("invertido");
+					}
+				}
 			}
+			
+
+			
 
 			month.setNewMoon(caeEnLunaNueva);	
 			month.setName(vauMonth.getName());

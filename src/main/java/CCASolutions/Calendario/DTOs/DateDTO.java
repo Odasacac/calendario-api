@@ -16,10 +16,6 @@ public class DateDTO {
 	private FestividadesDTO festividades;
 	
 	
-	
-	
-
-
 	public EclipenoSelectoDTO getLastEclipenoSelecto() {
 		return lastEclipenoSelecto;
 	}
