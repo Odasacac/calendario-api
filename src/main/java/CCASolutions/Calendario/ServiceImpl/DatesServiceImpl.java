@@ -1430,19 +1430,19 @@ public class DatesServiceImpl implements DatesService {
 						
 				if (Boolean.TRUE.equals(eclipeno.getInicial())) {
 							
-					evento = evento + "Eclípeno inicial ";
+					evento = evento + "Eclípeno invernal ";
 				}
 				else if(Boolean.TRUE.equals(eclipeno.getCuartal())) {
 							
-					evento = evento + "Eclípeno cuartal ";
+					evento = evento + "Eclípeno primaveral ";
 				}
 				else if (Boolean.TRUE.equals(eclipeno.getBicuartal())) {
 							
-					evento = evento + "Eclípeno bicuartal ";
+					evento = evento + "Eclípeno estival ";
 				}
 				else if (Boolean.TRUE.equals(eclipeno.getTricuartal())) {
 							
-					evento = evento + "Eclípeno tricuartal ";
+					evento = evento + "Eclípeno otoñal ";
 				}
 						
 				if(Boolean.TRUE.equals(eclipeno.getNuevo())) {
@@ -1467,19 +1467,19 @@ public class DatesServiceImpl implements DatesService {
 						
 				if (Boolean.TRUE.equals(meton.getInicial())) {
 							
-					evento = evento + "Métono inicial ";
+					evento = evento + "Métono invernal ";
 				}
 				else if(Boolean.TRUE.equals(meton.getCuartal())) {
 							
-					evento = evento + "Métono cuartal ";
+					evento = evento + "Métono primaveral ";
 				}
 				else if (Boolean.TRUE.equals(meton.getBicuartal())) {
 							
-					evento = evento + "Métono bicuartal ";
+					evento = evento + "Métono estival ";
 				}
 				else if (Boolean.TRUE.equals(meton.getTricuartal())) {
 							
-					evento = evento + "Métono tricuartal ";
+					evento = evento + "Métono otoñal ";
 				}
 						
 				if(Boolean.TRUE.equals(meton.getNuevo())) {
