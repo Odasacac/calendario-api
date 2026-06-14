@@ -1166,6 +1166,8 @@ public class DatesServiceImpl implements DatesService {
 			// Luego, coger las lunas nuevas que se encuentran entre ambos lastSOE y nextSOE
 			// Si cae en Luna nueva, ya tenemos el mes
 			
+			LunasEntity lunaNuevaAnteriorMasCercanaALaFecha = new LunasEntity();
+			Long numeroMinimoDeDiasEntreLunaNuevaYDate = Long.MAX_VALUE;			
 			
 			List<LunasEntity> lunasNuevasEntreLastSOEYNextSOE = new ArrayList<>();
 			boolean caeEnLunaNueva = false;
@@ -1177,17 +1179,34 @@ public class DatesServiceImpl implements DatesService {
 						
 					lunasNuevasEntreLastSOEYNextSOE.add(luna);	
 					caeEnLunaNueva = true;	
+					long diasDeDiferenciaEntreLNYDate = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
+					
+					if(luna.getDate().isBefore(date.atTime(LocalTime.MAX)) && diasDeDiferenciaEntreLNYDate < numeroMinimoDeDiasEntreLunaNuevaYDate) {
+						
+						numeroMinimoDeDiasEntreLunaNuevaYDate = diasDeDiferenciaEntreLNYDate;
+						lunaNuevaAnteriorMasCercanaALaFecha = luna;
+					}
 						
 				}
-				else if(luna.getDate().toLocalDate().isAfter(lastSOE.getDate().toLocalDate()) || luna.getDate().toLocalDate().isEqual(lastSOE.getDate().toLocalDate())) {
-							
-					if(luna.getDate().toLocalDate().isBefore(nextSOE.getDate().toLocalDate())) {							
+				else if(!luna.getDate().toLocalDate().isBefore(lastSOE.getDate().toLocalDate()) && luna.getDate().toLocalDate().isBefore(nextSOE.getDate().toLocalDate())){							
 							
 						lunasNuevasEntreLastSOEYNextSOE.add(luna);					
-					}	
-				}
-				
-				
+						
+						//Vamos a ver si la luna nueva del mes es selecta o invertida, para ver si el mes lo es
+						// Para ello hay que coger la luna nueva mas cercana
+						
+						if(luna.getDate().toLocalDate().isBefore(date)) {
+							
+							long diasDeDiferenciaEntreLNYDate = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
+							
+							if(luna.getDate().isBefore(date.atTime(LocalTime.MAX)) && diasDeDiferenciaEntreLNYDate < numeroMinimoDeDiasEntreLunaNuevaYDate) {
+								
+								numeroMinimoDeDiasEntreLunaNuevaYDate = diasDeDiferenciaEntreLNYDate;
+								lunaNuevaAnteriorMasCercanaALaFecha = luna;
+							}
+										
+						}				
+				}				
 			}
 			
 			MonthsEntity vauMonth = new MonthsEntity();
@@ -1297,6 +1316,15 @@ public class DatesServiceImpl implements DatesService {
 				}
 									
 			}			
+			
+			
+			// Para ver si el mes es selecto o inverso, hay que ver la luna			
+			if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta()) {
+				month.setSurname("selecto");
+			}
+			else if (lunaNuevaAnteriorMasCercanaALaFecha.isInvertida()) {
+				month.setSurname("invertido");
+			}
 
 			month.setNewMoon(caeEnLunaNueva);	
 			month.setName(vauMonth.getName());

@@ -4,6 +4,7 @@ public class MonthDTO {
 
 	private boolean newMoon;
 	private String name;
+	private String surname;
 	
 
 	public boolean isNewMoon() {
@@ -18,6 +19,14 @@ public class MonthDTO {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getSurname() {
+		return surname;
+	}
+	public void setSurname(String surname) {
+		this.surname = surname;
+	}
+	
+	
 	
 	
 }
