@@ -1227,12 +1227,13 @@ public class DatesServiceImpl implements DatesService {
 			LunasEntity lunaLlenaPosteriorMasCercanaALaFecha = new LunasEntity();
 			Long numeroMinimoDeDiasEntreLunaLlenaAnteriorYDate = Long.MAX_VALUE;	
 			Long numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate = Long.MAX_VALUE;	
+			boolean caeEnLunaLlena = false;
 			
 			for(int i = 0; i<lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente.size(); i++) {
 				
 				LunasEntity luna = lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente.get(i);
 				
-				if(luna.getDate().isBefore(date.atStartOfDay())) {
+				if(luna.getDate().toLocalDate().isBefore(date)) {
 					
 					long diasDeDiferenciaEntreLLAnteriorYDate = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
 					
@@ -1242,7 +1243,7 @@ public class DatesServiceImpl implements DatesService {
 						lunaLlenaAnteriorMasCercanaALaFecha = luna;
 					}		
 				}
-				else if(luna.getDate().isAfter(date.atStartOfDay())) {
+				else if(luna.getDate().toLocalDate().isAfter(date)) {
 					long diasDeDiferenciaEntreLLPosteriorYDate = ChronoUnit.DAYS.between(date, luna.getDate().toLocalDate());
 					
 					if(diasDeDiferenciaEntreLLPosteriorYDate < numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate) {
@@ -1250,6 +1251,9 @@ public class DatesServiceImpl implements DatesService {
 						numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate = diasDeDiferenciaEntreLLPosteriorYDate;
 						lunaLlenaPosteriorMasCercanaALaFecha = luna;
 					}		
+				}
+				else if(luna.getDate().toLocalDate().isEqual(date)) {
+					caeEnLunaLlena = true;
 				}
 				
 			}
@@ -1375,6 +1379,15 @@ public class DatesServiceImpl implements DatesService {
 			
 			if(caeEnLunaNueva) {
 				month.setSurname(surname);
+			}
+			else if(caeEnLunaLlena) {
+				
+				if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta() || lunaNuevaPosteriorMasCercanaALaFecha.isSelecta()) {
+					month.setSurname("selecto");
+				}
+				else if(lunaNuevaAnteriorMasCercanaALaFecha.isInvertida() || lunaNuevaPosteriorMasCercanaALaFecha.isInvertida()) {
+					month.setSurname("invertido");
+				}
 			}
 			else {
 				
