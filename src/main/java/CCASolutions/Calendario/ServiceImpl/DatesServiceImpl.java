@@ -1025,10 +1025,10 @@ public class DatesServiceImpl implements DatesService {
 		}
 		eclipenoVAU.setNumberOfEclipeno(yearOfTheEclipeno);
 		
-		if(Boolean.TRUE.equals(eclipenosIN.get(0).getInvertido())) {
+		if(Boolean.TRUE.equals(eclipenosIN.get(0).getInvertido()) && yearOfTheEclipeno != 0) {
 			eclipenoVAU.setLastEclipenoSurname("(Invertido)");
 		}
-		else if(Boolean.TRUE.equals(eclipenosIN.get(0).getSelecto())) {
+		else if(Boolean.TRUE.equals(eclipenosIN.get(0).getSelecto()) && yearOfTheEclipeno != 0) {
 			eclipenoVAU.setLastEclipenoSurname("(Selecto)");
 		}
 		
@@ -1068,10 +1068,10 @@ public class DatesServiceImpl implements DatesService {
 		}
 		metonIN.setNumberOfMeton(yearOfTheMeton);
 		
-		if(Boolean.TRUE.equals(metonsIN.get(0).getInvertido())) {
+		if(Boolean.TRUE.equals(metonsIN.get(0).getInvertido()) && yearOfTheMeton != 0) {
 			metonIN.setLastMetonSurname("(Invertido)");
 		}
-		else if(Boolean.TRUE.equals(metonsIN.get(0).getSelecto())) {
+		else if(Boolean.TRUE.equals(metonsIN.get(0).getSelecto()) && yearOfTheMeton != 0) {
 			metonIN.setLastMetonSurname("(Selecto)");
 		}
 		
