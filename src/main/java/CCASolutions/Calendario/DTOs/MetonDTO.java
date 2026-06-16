@@ -6,9 +6,16 @@ public class MetonDTO {
 	private int metonosINSinceLastEclipenoIN;
 	private int yearOfCurrentMetonIN;
 	private int numberOfMeton;
+	private String lastMetonSurname;
 	
 	
 
+	public String getLastMetonSurname() {
+		return lastMetonSurname;
+	}
+	public void setLastMetonSurname(String lastMetonSurname) {
+		this.lastMetonSurname = lastMetonSurname;
+	}
 	public int getNumberOfMeton() {
 		return numberOfMeton;
 	}

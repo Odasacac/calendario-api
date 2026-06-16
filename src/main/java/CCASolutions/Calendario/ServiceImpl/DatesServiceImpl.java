@@ -1025,6 +1025,13 @@ public class DatesServiceImpl implements DatesService {
 		}
 		eclipenoVAU.setNumberOfEclipeno(yearOfTheEclipeno);
 		
+		if(Boolean.TRUE.equals(eclipenosIN.get(0).getInvertido())) {
+			eclipenoVAU.setLastEclipenoSurname("(Invertido)");
+		}
+		else if(Boolean.TRUE.equals(eclipenosIN.get(0).getSelecto())) {
+			eclipenoVAU.setLastEclipenoSurname("(Selecto)");
+		}
+		
 		return eclipenoVAU;
 	}
 	
@@ -1060,6 +1067,13 @@ public class DatesServiceImpl implements DatesService {
 			yearOfTheMeton= yearOfTheMeton-1;
 		}
 		metonIN.setNumberOfMeton(yearOfTheMeton);
+		
+		if(Boolean.TRUE.equals(metonsIN.get(0).getInvertido())) {
+			metonIN.setLastMetonSurname("(Invertido)");
+		}
+		else if(Boolean.TRUE.equals(metonsIN.get(0).getSelecto())) {
+			metonIN.setLastMetonSurname("(Selecto)");
+		}
 		
 		return metonIN;
 	}
@@ -1223,8 +1237,8 @@ public class DatesServiceImpl implements DatesService {
 				}
 			}
 			
-			LunasEntity lunaLlenaAnteriorMasCercanaALaFecha = new LunasEntity();
-			LunasEntity lunaLlenaPosteriorMasCercanaALaFecha = new LunasEntity();
+			LunasEntity lunaLlenaAnteriorMasCercanaALaFecha = new LunasEntity(); // Ya tendra utilidad
+			LunasEntity lunaLlenaPosteriorMasCercanaALaFecha = new LunasEntity(); // Ya tendra utilidad
 			Long numeroMinimoDeDiasEntreLunaLlenaAnteriorYDate = Long.MAX_VALUE;	
 			Long numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate = Long.MAX_VALUE;	
 			boolean caeEnLunaLlena = false;

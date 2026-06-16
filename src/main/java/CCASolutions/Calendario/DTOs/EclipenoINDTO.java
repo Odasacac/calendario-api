@@ -6,9 +6,16 @@ public class EclipenoINDTO {
 	private int yearOfCurrentEclipenoIN;
 	private int eclipenosINSinceLastEclipenoINSelecto;
 	private int numberOfEclipeno;
+	private String lastEclipenoSurname;
 	
 
 	
+	public String getLastEclipenoSurname() {
+		return lastEclipenoSurname;
+	}
+	public void setLastEclipenoSurname(String lastEclipenoSurname) {
+		this.lastEclipenoSurname = lastEclipenoSurname;
+	}
 	public int getEclipenosINSinceLastEclipenoINSelecto() {
 		return eclipenosINSinceLastEclipenoINSelecto;
 	}
