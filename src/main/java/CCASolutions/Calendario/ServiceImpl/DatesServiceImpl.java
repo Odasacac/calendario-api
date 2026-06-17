@@ -995,47 +995,60 @@ public class DatesServiceImpl implements DatesService {
 	private EclipenoINDTO getVAUEclipeno(List<EclipenosEntity> allEclipenos, EclipenosEntity lastEclipenoSelecto, LocalDate date) {
 		
 		EclipenoINDTO eclipenoVAU = new EclipenoINDTO();
-
-		List<EclipenosEntity> eclipenosIN = new ArrayList<>();
 		
-		for(EclipenosEntity eclipeno : allEclipenos) {
+		if(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)){
 			
-			if(eclipeno.getInicial() && eclipeno.getNuevo() && !eclipeno.getDate().isBefore(lastEclipenoSelecto.getDate())) {
-				eclipenosIN.add(eclipeno);
+			eclipenoVAU.setEclipenoINDay(true);
+			eclipenoVAU.setEclipenosINSinceLastEclipenoINSelecto(0);
+			eclipenoVAU.setNumberOfEclipeno(0);
+			eclipenoVAU.setYearOfCurrentEclipenoIN(lastEclipenoSelecto.getYear());
+			
+		}
+		else {
+			
+			List<EclipenosEntity> eclipenosIN = new ArrayList<>();
+			
+			for(EclipenosEntity eclipeno : allEclipenos) {
+				
+				if(eclipeno.getInicial() && eclipeno.getNuevo() && !eclipeno.getDate().isBefore(lastEclipenoSelecto.getDate()) && !eclipeno.getDate().toLocalDate().isAfter(date)) {
+					eclipenosIN.add(eclipeno);
+				}
+			}
+			
+			eclipenoVAU.setYearOfCurrentEclipenoIN(eclipenosIN.get(0).getYear());
+			eclipenoVAU.setEclipenoINDay(eclipenosIN.get(0).getDate().toLocalDate().isEqual(date));
+			
+			int eclipenosDesdeElLastEclipenSelecto = (eclipenosIN.size()-1); // -1 porque incluye el del eclipeno
+			
+			// No se suma un eclipeno hasta que pase el dia del eclipeno, pero si es el dia de eclipeno no se resta, que se ha restado antes
+			
+			if(eclipenoVAU.isEclipenoINDay() && !lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) {
+				
+				eclipenosDesdeElLastEclipenSelecto = eclipenosDesdeElLastEclipenSelecto-1;
+			}
+			
+			eclipenoVAU.setEclipenosINSinceLastEclipenoINSelecto(eclipenosDesdeElLastEclipenSelecto);
+			int yearOfTheEclipeno = eclipenosDesdeElLastEclipenSelecto +1;
+			
+			if(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) { //Si es el dia del eclipeno selecto, no estamos en ningun eclipeno
+				yearOfTheEclipeno= yearOfTheEclipeno-1;
+			}
+			eclipenoVAU.setNumberOfEclipeno(yearOfTheEclipeno);
+			
+			if(Boolean.TRUE.equals(eclipenosIN.get(0).getInvertido()) && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
+				eclipenoVAU.setLastEclipenoSurname("(Invertido)");
+			}
+			else if(Boolean.TRUE.equals(eclipenosIN.get(0).getSelecto()) && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
+				eclipenoVAU.setLastEclipenoSurname("(Selecto)");
 			}
 		}
+
 		
-		eclipenoVAU.setYearOfCurrentEclipenoIN(eclipenosIN.get(0).getYear());
-		eclipenoVAU.setEclipenoINDay(eclipenosIN.get(0).getDate().toLocalDate().isEqual(date));
-		
-		int eclipenosDesdeElLastEclipenSelecto = (eclipenosIN.size()-1); // -1 porque incluye el del eclipeno
-		
-		// No se suma un eclipeno hasta que pase el dia del eclipeno, pero si es el dia de eclipeno no se resta, que se ha restado antes
-		
-		if(eclipenoVAU.isEclipenoINDay() && !lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) {
-			
-			eclipenosDesdeElLastEclipenSelecto = eclipenosDesdeElLastEclipenSelecto-1;
-		}
-		
-		eclipenoVAU.setEclipenosINSinceLastEclipenoINSelecto(eclipenosDesdeElLastEclipenSelecto);
-		int yearOfTheEclipeno = eclipenosDesdeElLastEclipenSelecto +1;
-		
-		if(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) { //Si es el dia del eclipeno selecto, no estamos en ningun eclipeno
-			yearOfTheEclipeno= yearOfTheEclipeno-1;
-		}
-		eclipenoVAU.setNumberOfEclipeno(yearOfTheEclipeno);
-		
-		if(Boolean.TRUE.equals(eclipenosIN.get(0).getInvertido()) && yearOfTheEclipeno != 0) {
-			eclipenoVAU.setLastEclipenoSurname("(Invertido)");
-		}
-		else if(Boolean.TRUE.equals(eclipenosIN.get(0).getSelecto()) && yearOfTheEclipeno != 0) {
-			eclipenoVAU.setLastEclipenoSurname("(Selecto)");
-		}
 		
 		return eclipenoVAU;
 	}
 	
-	private MetonDTO getVAUMeton (EclipenosEntity lastEclipenoIN, List<MetonsEntity> metons, LocalDate dateO) {
+	private MetonDTO getVAUMeton (EclipenosEntity lastEclipenoIN, List<MetonsEntity> metons, LocalDate date) {
 		
 		MetonDTO metonIN = new MetonDTO();
 		
@@ -1043,19 +1056,19 @@ public class DatesServiceImpl implements DatesService {
 		
 		for(MetonsEntity meton : metons) {
 			
-			if(meton.getInicial() && meton.getNuevo()) {
+			if(meton.getInicial() && meton.getNuevo() && !meton.getDate().toLocalDate().isAfter(date)) {
 				metonsIN.add(meton);
 			}
 		}
 		
 		metonIN.setYearOfCurrentMetonIN(metonsIN.get(0).getYear());
-		metonIN.setMetonoINDay(metonsIN.get(0).getDate().toLocalDate().isEqual(dateO));
+		metonIN.setMetonoINDay(metonsIN.get(0).getDate().toLocalDate().isEqual(date));
 		
 		int metonosDesdeElLastEclipen = (metonsIN.size()-1); // -1 porque incluye el del eclipeno
 		
 		// No se suma un metono hasta que pase el dia del metono, pero si es el dia de eclipeno no se resta, que se ha restado antes
 		
-		if(metonIN.isMetonoINDay() && !lastEclipenoIN.getDate().toLocalDate().isEqual(dateO)) {
+		if(metonIN.isMetonoINDay() && !lastEclipenoIN.getDate().toLocalDate().isEqual(date)) {
 			
 			metonosDesdeElLastEclipen = metonosDesdeElLastEclipen-1;
 		}
@@ -1063,15 +1076,15 @@ public class DatesServiceImpl implements DatesService {
 		metonIN.setMetonosINSinceLastEclipenoIN(metonosDesdeElLastEclipen);
 		int yearOfTheMeton = metonosDesdeElLastEclipen +1;
 		
-		if(lastEclipenoIN.getDate().toLocalDate().isEqual(dateO)) { //Si es el dia del eclipeno, no estamos en ningun metono
+		if(lastEclipenoIN.getDate().toLocalDate().isEqual(date)) { //Si es el dia del eclipeno, no estamos en ningun metono
 			yearOfTheMeton= yearOfTheMeton-1;
 		}
 		metonIN.setNumberOfMeton(yearOfTheMeton);
 		
-		if(Boolean.TRUE.equals(metonsIN.get(0).getInvertido()) && yearOfTheMeton != 0) {
+		if(Boolean.TRUE.equals(metonsIN.get(0).getInvertido()) && yearOfTheMeton != 0 && !metonIN.isMetonoINDay()) {
 			metonIN.setLastMetonSurname("(Invertido)");
 		}
-		else if(Boolean.TRUE.equals(metonsIN.get(0).getSelecto()) && yearOfTheMeton != 0) {
+		else if(Boolean.TRUE.equals(metonsIN.get(0).getSelecto()) && yearOfTheMeton != 0 && !metonIN.isMetonoINDay()) {
 			metonIN.setLastMetonSurname("(Selecto)");
 		}
 		
