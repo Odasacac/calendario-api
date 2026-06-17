@@ -1125,7 +1125,7 @@ public class DatesServiceImpl implements DatesService {
 		vauYear.setSolsticiosDeInviernoSinceLastMetonIN(year);	
 		
 		int numberOfYear = year +1;
-		if(lastEclipenoIN.getDate().toLocalDate().isEqual(date)) {
+		if(lastEclipenoIN.getDate().toLocalDate().isEqual(date) || lastMetonIN.getDate().toLocalDate().isEqual(date)) {
 			
 			numberOfYear = numberOfYear-1;
 		}
