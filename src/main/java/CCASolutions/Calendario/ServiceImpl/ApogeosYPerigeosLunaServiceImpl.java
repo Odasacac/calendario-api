@@ -69,7 +69,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 				for(ApogeosDTO apogeo : allApogeosAPI) {
 							
 					ApogeosYPerigeosLunaEntity apogeoParaDB = new ApogeosYPerigeosLunaEntity();
-					apogeoParaDB.setDate(LocalDateTime.parse(apogeo.getDate(), FORMATTER_API_RESPONSE));
+					apogeoParaDB.setDate(LocalDateTime.parse(apogeo.getDate(), FORMATTER_API_RESPONSE).truncatedTo(ChronoUnit.SECONDS));
 						
 					switch (apogeo.getPhenomena()) {
 							
@@ -115,12 +115,12 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 								if(apoperi.isEsApogeo()) {
 									luna.setInvertida(true);
 									this.lunasRepository.save(luna);
-									System.out.println("Luna transicional encontrada en " + luna.getDate());
+									System.out.println("Luna transicional encontrada en " + luna.getDate().toLocalDate());
 								}
 								else if(apoperi.isEsPerigeo()) {
 									luna.setSelecta(true);
 									this.lunasRepository.save(luna);
-									System.out.println("Luna selecta encontrada en " + luna.getDate());
+									System.out.println("Luna selecta encontrada en " + luna.getDate().toLocalDate());
 								}								
 							}
 							else if (luna.isNueva()){
@@ -128,12 +128,12 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 								if(apoperi.isEsPerigeo()) {
 									luna.setInvertida(true);
 									this.lunasRepository.save(luna);
-									System.out.println("Luna transicional encontrada en " + luna.getDate());
+									System.out.println("Luna transicional encontrada en " + luna.getDate().toLocalDate());
 								}
 								else if(apoperi.isEsApogeo()) {
 									luna.setSelecta(true);
 									this.lunasRepository.save(luna);
-									System.out.println("Luna selecta encontrada en " + luna.getDate());
+									System.out.println("Luna selecta encontrada en " + luna.getDate().toLocalDate());
 								}
 										
 							}
