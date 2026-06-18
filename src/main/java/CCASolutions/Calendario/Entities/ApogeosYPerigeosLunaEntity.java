@@ -25,7 +25,24 @@ public class ApogeosYPerigeosLunaEntity implements Serializable {
 	private boolean esApogeo;
 	private boolean esPerigeo;
 	private double distance;
+	private boolean esSelecto;
+	private boolean esInvertido;
 	
+	
+	
+	
+	public boolean isEsSelecto() {
+		return esSelecto;
+	}
+	public void setEsSelecto(boolean esSelecto) {
+		this.esSelecto = esSelecto;
+	}
+	public boolean isEsInvertido() {
+		return esInvertido;
+	}
+	public void setEsInvertido(boolean esInvertido) {
+		this.esInvertido = esInvertido;
+	}
 	public Long getId() {
 		return id;
 	}

@@ -32,7 +32,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 	private LunasRepository lunasRepository;
 	
 	@Autowired
-	private ApogeosYPerigeosLunaRepository apogeosYPerigeosLunaServiceRepository;
+	private ApogeosYPerigeosLunaRepository apogeosYPerigeosLunaRepository;
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
@@ -57,7 +57,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 		DatosEntity apiGetApogeosUrl = datosRepository.findByConcepto("APG");
 		String apogeosUrl = apiGetApogeosUrl.getValor();
 		
-		List<ApogeosYPerigeosLunaEntity> apogeosYPerigeosExistentesEnBD = this.apogeosYPerigeosLunaServiceRepository.findAll();
+		List<ApogeosYPerigeosLunaEntity> apogeosYPerigeosExistentesEnBD = this.apogeosYPerigeosLunaRepository.findAll();
 		
 		if(apogeosYPerigeosExistentesEnBD.isEmpty()) {
 			
@@ -85,7 +85,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 					
 					apogeosParaDB.add(apogeoParaDB);
 				}
-				this.apogeosYPerigeosLunaServiceRepository.saveAll(apogeosParaDB);
+				this.apogeosYPerigeosLunaRepository.saveAll(apogeosParaDB);
 				apogeosYPerigeosExistentesEnBD = apogeosParaDB;
 				System.out.println("Apogeos almacenados en la BD.");
 			}	
@@ -113,12 +113,16 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 							if(luna.isLlena()) {
 									
 								if(apoperi.isEsApogeo()) {
+									apoperi.setEsInvertido(true);
 									luna.setInvertida(true);
+									this.apogeosYPerigeosLunaRepository.save(apoperi);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna transicional encontrada en " + luna.getDate().toLocalDate());
 								}
 								else if(apoperi.isEsPerigeo()) {
+									apoperi.setEsSelecto(true);
 									luna.setSelecta(true);
+									this.apogeosYPerigeosLunaRepository.save(apoperi);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna selecta encontrada en " + luna.getDate().toLocalDate());
 								}								
@@ -126,12 +130,16 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 							else if (luna.isNueva()){
 									
 								if(apoperi.isEsPerigeo()) {
+									apoperi.setEsInvertido(true);
 									luna.setInvertida(true);
+									this.apogeosYPerigeosLunaRepository.save(apoperi);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna transicional encontrada en " + luna.getDate().toLocalDate());
 								}
 								else if(apoperi.isEsApogeo()) {
+									apoperi.setEsSelecto(true);
 									luna.setSelecta(true);
+									this.apogeosYPerigeosLunaRepository.save(apoperi);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna selecta encontrada en " + luna.getDate().toLocalDate());
 								}
@@ -176,7 +184,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 				  
 				   String urlParaLlamada = urlConDias.replace("{{YYYY-MM-DD}}", fechaParaLlamadaFormateada);
 
-				   System.out.println("Haciendo llamada para " + fechaParaLlamadaFormateada);
+				   System.out.println("Haciendo llamada para " + fechaParaLlamada.toLocalDate());
 				   List<ApogeosDTO> apogeosFromAPI = this.getAPGDTO(urlParaLlamada);
 
 				   LocalDateTime nuevaFechaParaLlamada = fechaParaLlamada;

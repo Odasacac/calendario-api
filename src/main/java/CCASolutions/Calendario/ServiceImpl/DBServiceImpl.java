@@ -12,6 +12,7 @@ import CCASolutions.Calendario.Services.EclipenosService;
 import CCASolutions.Calendario.Services.EclipsesService;
 import CCASolutions.Calendario.Services.FestividadesService;
 import CCASolutions.Calendario.Services.LunasService;
+import CCASolutions.Calendario.Services.MetonosApopericosService;
 import CCASolutions.Calendario.Services.MetonsService;
 import CCASolutions.Calendario.Services.MonthService;
 import CCASolutions.Calendario.Services.SolsticiosYEquinocciosService;
@@ -28,6 +29,9 @@ public class DBServiceImpl implements DBService {
 	
 	@Autowired
 	private MetonsService metonsService;
+	
+	@Autowired
+	private MetonosApopericosService metonosApopericosService;
 	
 	@Autowired
 	private EclipsesService eclipsesService;
@@ -60,44 +64,34 @@ public class DBServiceImpl implements DBService {
 	public String poblateDB() {
 		
 		String resultado = "~ Resultados población de la Base de Datos ~";
-		String resultadoDatos="";
-		String resultadoDias="";
-		String resultadoWeeks="";
-		String resultadoMonths ="";
-		String resultadoLunas="";
-		String resultadoSoes="";
-		String resultadoMetonos="";
-		String resultadoEclipses="";
-		String resultadoEclipenos="";
-		String resultadoCasaleros="";
-		String resultadoFestividades="";
-		String resultadoApogeos="";
 		
 		try {
 			
-			resultadoDatos = this.datosService.poblateDatos();
+			resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos();
 			
-			resultadoDias = this.daysService.poblateDays();
+			resultado = resultado + "\n - DÍAS: " + this.daysService.poblateDays();
 			
-			resultadoWeeks = this.weeksService.poblateWeeks();
+			resultado = resultado + "\n - SEMANAS: " + this.weeksService.poblateWeeks();
 			
-			resultadoMonths = this.monthsService.poblateMonths();
+			resultado = resultado + "\n - MESES: " + this.monthsService.poblateMonths();
 			
-			resultadoFestividades= this.festividadesService.poblateFestividades();
+			resultado = resultado + "\n - FESTIVIDADES: " +this.festividadesService.poblateFestividades();
 			
-			resultadoLunas = this.lunasService.poblateLunas();
+			resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunas();
 			
-			resultadoApogeos = this.apogeosYPerigeosLunaService.poblateApogeos();
+			resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeos();
 						
-			resultadoSoes = this.solsticiosYEquinocciosService.poblateSolsticiosYEquinoccios();		
+			resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinoccios();		
 					
-			resultadoMetonos = this.metonsService.checkMetonosViaDB();				
+			resultado = resultado + "\n - METONOS: " + this.metonsService.checkMetonosViaDB();	
+			
+			resultado = resultado + "\n - METONOSAPO: " + this.metonosApopericosService.checkMetonosApoViaDB();	
 						
-			resultadoEclipses = this.eclipsesService.poblateEclipses();			
+			resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipses();			
 							
-			resultadoEclipenos = this.eclipenosService.poblateEclipenos();
+			resultado = resultado + "\n - ECLIPENOS: " +this.eclipenosService.poblateEclipenos();
 
-			resultadoCasaleros = this.casalerosService.poblateCasaleros();
+			resultado = resultado + "\n - CASALEROS:" + this.casalerosService.poblateCasaleros();
 								
 		}
 		catch(Exception e) {
@@ -106,7 +100,7 @@ public class DBServiceImpl implements DBService {
 		}
 		
 		
-		return resultado + "\n - DATOS: " + resultadoDatos + "\n - DÍAS: " + resultadoDias + "\n - SEMANAS: " + resultadoWeeks + "\n - MESES: " + resultadoMonths + "\n - FESTIVIDADES: " + resultadoFestividades + "\n - LUNAS: " + resultadoLunas + "\n - APOPERI LUNARES: " + resultadoApogeos + "\n - SOES: " + resultadoSoes + "\n - METONOS: " + resultadoMetonos + "\n - ECLIPSES: " + resultadoEclipses + "\n - ECLIPENOS: " + resultadoEclipenos + "\n - CASALEROS:" + resultadoCasaleros;
+		return resultado;
 	}
 
 }

@@ -5,6 +5,7 @@ public class DateDTO {
 	private EclipenoSelectoDTO lastEclipenoSelecto;
 	private EclipenoINDTO eclipenoIN;
 	private MetonDTO metonoIN;
+	private MetonosApopericosDTO metonoApoperico;
 	private YearDTO year;
 	private MonthDTO month;
 	private String week;
@@ -16,6 +17,15 @@ public class DateDTO {
 	private FestividadesDTO festividades;
 	
 	
+	
+	public MetonosApopericosDTO getMetonoApoperico() {
+		return metonoApoperico;
+	}
+
+	public void setMetonoApoperico(MetonosApopericosDTO metonoApoperico) {
+		this.metonoApoperico = metonoApoperico;
+	}
+
 	public EclipenoSelectoDTO getLastEclipenoSelecto() {
 		return lastEclipenoSelecto;
 	}
