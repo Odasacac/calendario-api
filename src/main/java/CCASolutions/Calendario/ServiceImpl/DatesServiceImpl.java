@@ -1395,48 +1395,20 @@ public class DatesServiceImpl implements DatesService {
 			}			
 			
 			
-			/* 
-				Una parte de un mes tiene apellido cuando:
-				
-					1 - Se encuentra despues de una luna llena y antes de una luna nueva y esa luna nueva es selecta o invertida
-					2 - Se encuentra despues de una luna nueva y antes de una luna llena y esa luna nueva es selecta o invertida
-			*/
-				
-			
-			
+			// Una parte de un mes tiene apellido cuando su luna nueva es selecta o invertida
+
+		
 			if(caeEnLunaNueva) {
 				month.setSurname(surname);
 			}
-			else if(caeEnLunaLlena) {
-				
-				if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta() || lunaNuevaPosteriorMasCercanaALaFecha.isSelecta()) {
+			else {
+			
+				if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta()) {
 					month.setSurname("selecto");
 				}
-				else if(lunaNuevaAnteriorMasCercanaALaFecha.isInvertida() || lunaNuevaPosteriorMasCercanaALaFecha.isInvertida()) {
+				else if(lunaNuevaAnteriorMasCercanaALaFecha.isInvertida()) {
 					month.setSurname("invertido");
-				}
-			}
-			else {
-				
-				boolean mitadALaLunaNuevaAnterior = numeroMinimoDeDiasEntreLunaNuevaAnteriorYDate <= numeroMinimoDeDiasEntreLunaLlenaAnteriorYDate;
-				boolean mitadALaLunaNuevaPosterior = numeroMinimoDeDiasEntreLunaNuevaSiguienteYDate <= numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate;
-				
-				if(mitadALaLunaNuevaAnterior) {
-					if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta()) {
-						month.setSurname("selecto");
-					}
-					else if(lunaNuevaAnteriorMasCercanaALaFecha.isInvertida()) {
-						month.setSurname("invertido");
-					}
-				}
-				else if(mitadALaLunaNuevaPosterior) {
-					if(lunaNuevaPosteriorMasCercanaALaFecha.isSelecta()) {
-						month.setSurname("selecto");
-					}
-					else if(lunaNuevaPosteriorMasCercanaALaFecha.isInvertida()) {
-						month.setSurname("invertido");
-					}
-				}
+				}	
 			}
 	
 
