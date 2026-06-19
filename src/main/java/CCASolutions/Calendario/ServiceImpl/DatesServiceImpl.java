@@ -105,7 +105,7 @@ public class DatesServiceImpl implements DatesService {
 			lunasSolsticiosEclipsesMetonosYEclipenos.setLastEclipenoIN(this.getLastEclipenoIN(allEclipenos, date));
 			lunasSolsticiosEclipsesMetonosYEclipenos.setLastEclipenoInvernalApofasalRemoto(this.getLastEclipenoInvernalApofasalRemoto(allEclipenos, date));
 			
-			if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() != null || lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto() != null) {
+			if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() != null && lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto() != null) {
 				
 				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto().getDate(), dateO.plusYears(1));
 	
