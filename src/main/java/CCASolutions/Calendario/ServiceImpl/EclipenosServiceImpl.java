@@ -71,13 +71,15 @@ public class EclipenosServiceImpl implements EclipenosService{
 								eclipeno.setMetonoId(meton.getId());
 								eclipeno.setInvertido(meton.isInvertido());
 								eclipeno.setSelecto(meton.isSelecto());
+								
+								eclipeno.setApofasal(meton.isApofasal());
 														
 								this.eclipenosRepository.save(eclipeno);
 							}
 						}
 					}
+				}	
 					
-				}										
 			}
 			catch (Exception e) {
 				System.out.println("Error al evaluar los eclipenos: " + e);

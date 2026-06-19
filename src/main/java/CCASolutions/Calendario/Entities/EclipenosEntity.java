@@ -42,7 +42,16 @@ public class EclipenosEntity implements Serializable{
 	private long metonoId;
 	private long eclipseId;
 	
+	private boolean apofasal;
 	
+	
+
+	public boolean isApofasal() {
+		return apofasal;
+	}
+	public void setApofasal(boolean apofasal) {
+		this.apofasal = apofasal;
+	}	
 	public Long getId() {
 		return id;
 	}

@@ -2,6 +2,7 @@ package CCASolutions.Calendario.Repositories;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,8 @@ public interface LunasRepository extends JpaRepository <LunasEntity, Long> {
 	public abstract LunasEntity findTopByDateGreaterThanEqualAndNuevaIsTrueOrderByDateAsc(LocalDateTime date);
 	
 	public abstract List<LunasEntity> findByDateBetween(LocalDateTime inicio, LocalDateTime fin);
+	
+	public abstract Optional<LunasEntity> findById (Long id);
 	
 	public abstract LunasEntity findTopByOrderByDateDesc();
 	

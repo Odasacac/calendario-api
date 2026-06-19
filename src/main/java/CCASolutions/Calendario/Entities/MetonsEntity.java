@@ -39,12 +39,19 @@ public class MetonsEntity implements Serializable {
 	private boolean selecto;
 	private boolean invertido;
 	
-	private long lunaId;
+	private Long lunaId;
 	private Long apoperiId;
-	private long soeId;
+	private Long soeId;
 	
+	private boolean apofasal;
 	
-	
+
+	public boolean isApofasal() {
+		return apofasal;
+	}
+	public void setApofasal(boolean apofasal) {
+		this.apofasal = apofasal;
+	}	
 	
 	public Long getId() {
 		return id;
@@ -136,10 +143,10 @@ public class MetonsEntity implements Serializable {
 	public void setInvertido(boolean invertido) {
 		this.invertido = invertido;
 	}
-	public long getLunaId() {
+	public Long getLunaId() {
 		return lunaId;
 	}
-	public void setLunaId(long lunaId) {
+	public void setLunaId(Long lunaId) {
 		this.lunaId = lunaId;
 	}
 	public Long getApoperiId() {
@@ -148,10 +155,10 @@ public class MetonsEntity implements Serializable {
 	public void setApoperiId(Long apoperiId) {
 		this.apoperiId = apoperiId;
 	}
-	public long getSoeId() {
+	public Long getSoeId() {
 		return soeId;
 	}
-	public void setSoeId(long soeId) {
+	public void setSoeId(Long soeId) {
 		this.soeId = soeId;
 	}
 	public static long getSerialversionuid() {

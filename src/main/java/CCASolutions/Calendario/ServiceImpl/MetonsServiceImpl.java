@@ -3,6 +3,8 @@ package CCASolutions.Calendario.ServiceImpl;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,7 +33,7 @@ public class MetonsServiceImpl implements MetonsService {
 	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository;
 	
 	@Autowired
-	private ApogeosYPerigeosLunaRepository apogeosYPerigeosRepository;
+	private ApogeosYPerigeosLunaRepository apogeosYPerigeosLunaRepository;
 	
 	public String poblateMetonos() {
 		
@@ -43,7 +45,7 @@ public class MetonsServiceImpl implements MetonsService {
 		
 		if(metonosEnBBDD.isEmpty()) {
 			List<LunasEntity> allLunas = this.lunasRepository.findAll();
-			List<ApogeosYPerigeosLunaEntity> allApoperis = this.apogeosYPerigeosRepository.findAll();
+			List<ApogeosYPerigeosLunaEntity> allApoperis = this.apogeosYPerigeosLunaRepository.findAll();
 			List<SolsticiosYEquinocciosEntity> allSoes = this.solsticiosYEquinocciosRepository.findAll();
 			
 			if(!allLunas.isEmpty() && ! allSoes.isEmpty()) {
@@ -105,12 +107,65 @@ public class MetonsServiceImpl implements MetonsService {
 										
 							metonosParaDB.add(nuevoMetono);
 							
-							System.out.println("Nuevo métono fasal apopérico: " + nuevoMetono.getDate().toLocalDate());
+							System.out.println("Nuevo métono apopérico encontrado: " + nuevoMetono.getDate().toLocalDate());
 						}
 					}
 					
 				}
-				this.metonsRepository.saveAll(metonosParaDB);
+				
+				System.out.println("Actualizando métonos apofasales");
+				Map<Long, LunasEntity> lunasMap = allLunas.stream().collect(Collectors.toMap(LunasEntity::getId, l -> l));
+				Map<Long, ApogeosYPerigeosLunaEntity> apoperiMap = allApoperis.stream().collect(Collectors.toMap(ApogeosYPerigeosLunaEntity::getId, a -> a));
+				
+				for(MetonsEntity meton : metonosParaDB) {
+					
+					if(meton.getLunaId() != null) {
+						
+						ApogeosYPerigeosLunaEntity apoperiMasCercano = new ApogeosYPerigeosLunaEntity();
+						Long minimosDiasDeDiferenciaEntreLunaYApoperi = Long.MAX_VALUE;
+						
+						for(ApogeosYPerigeosLunaEntity apoperi : allApoperis) {
+							
+							Long diasDeDiferenciaEntreLunaYApoperi = Math.abs(ChronoUnit.DAYS.between(apoperi.getDate().toLocalDate(), lunasMap.get(meton.getLunaId()).getDate().toLocalDate()));
+							
+							if(diasDeDiferenciaEntreLunaYApoperi < minimosDiasDeDiferenciaEntreLunaYApoperi) {
+								minimosDiasDeDiferenciaEntreLunaYApoperi = diasDeDiferenciaEntreLunaYApoperi;
+								apoperiMasCercano = apoperi;
+							}
+						}
+						
+						if(Math.abs(ChronoUnit.SECONDS.between(apoperiMasCercano.getDate(), meton.getDate())) <= 86164 &&  Math.abs(ChronoUnit.SECONDS.between(lunasMap.get(meton.getLunaId()).getDate(), meton.getDate())) <= 86164 ) {
+							meton.setApofasal(true);
+							System.out.println("Nuevo métono apofasal encontrado: " + meton.getDate().toLocalDate());
+						}						
+					}
+					else if (meton.getApoperiId() != null) {
+						
+						LunasEntity lunaMasCercana = new LunasEntity();
+						Long minimosDiasDeDiferenciaEntreLunaYApoperi = Long.MAX_VALUE;
+						for(LunasEntity luna : allLunas) {
+							
+							if(luna.isNueva() || luna.isLlena()) {
+								Long diasDeDiferenciaEntreLunaYApoperi = Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), apoperiMap.get(meton.getApoperiId()).getDate().toLocalDate()));
+								
+								if(diasDeDiferenciaEntreLunaYApoperi < minimosDiasDeDiferenciaEntreLunaYApoperi) {
+									minimosDiasDeDiferenciaEntreLunaYApoperi = diasDeDiferenciaEntreLunaYApoperi;
+									lunaMasCercana = luna;
+								}
+							}
+						}
+						
+						if(Math.abs(ChronoUnit.SECONDS.between(lunaMasCercana.getDate(), meton.getDate())) <= 86164 &&  Math.abs(ChronoUnit.SECONDS.between(apoperiMap.get(meton.getApoperiId()).getDate(), meton.getDate())) <= 86164 ) {
+							meton.setApofasal(true);
+							System.out.println("Nuevo métono apofasal encontrado: " + meton.getDate().toLocalDate());
+						}											
+					}
+									
+				}
+				
+				
+				this.metonsRepository.saveAll(metonosParaDB);				
+				
 				System.out.println("Evaluacion de métonos finalizada.");
 			}
 			else {
