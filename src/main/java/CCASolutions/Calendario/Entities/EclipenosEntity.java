@@ -20,188 +20,138 @@ public class EclipenosEntity implements Serializable{
 	private Long id;
 	
 	private LocalDateTime date;
-	
 	private int year;
 	
-	private Boolean inicial;
+	private boolean invernal;
+	private boolean primaveral;
+	private boolean estival;
+	private boolean otonyal;
 	
-	private Boolean bicuartal;
-	
-	private Boolean cuartal;
-	
-	private Boolean tricuartal;
-	
-	private Boolean nuevo;
-	
-	private Boolean lleno;
+	private boolean nuevo;
+	private boolean lleno;
 
+	private boolean selecto;
+	private boolean invertido;
+	
 	private boolean esTotal;
-	
 	private boolean esParcial;
-	
 	private boolean esAnular;
-	
 	private boolean esHibrido;
-		
 	private boolean esPenumbral;
-	
-	private Boolean selecto;
-	
-	private Boolean invertido;
-	
+
 	private long metonoId;
-	
 	private long eclipseId;
 	
 	
-	
-	public Boolean getSelecto() {
-		return selecto;
-	}
-
-	public void setSelecto(Boolean selecto) {
-		this.selecto = selecto;
-	}
-
-	public Boolean getInvertido() {
-		return invertido;
-	}
-
-	public void setInvertido(Boolean invertido) {
-		this.invertido = invertido;
-	}
-
-	public long getMetonoId() {
-		return metonoId;
-	}
-
-	public void setMetonoId(long metonoId) {
-		this.metonoId = metonoId;
-	}
-
-	public long getEclipseId() {
-		return eclipseId;
-	}
-
-	public void setEclipseId(long eclipseId) {
-		this.eclipseId = eclipseId;
-	}
-
-	public boolean isEsTotal() {
-		return esTotal;
-	}
-
-	public void setEsTotal(boolean esTotal) {
-		this.esTotal = esTotal;
-	}
-
-	public boolean isEsParcial() {
-		return esParcial;
-	}
-
-	public void setEsParcial(boolean esParcial) {
-		this.esParcial = esParcial;
-	}
-
-	public boolean isEsAnular() {
-		return esAnular;
-	}
-
-	public void setEsAnular(boolean esAnular) {
-		this.esAnular = esAnular;
-	}
-
-	public boolean isEsHibrido() {
-		return esHibrido;
-	}
-
-	public void setEsHibrido(boolean esHibrido) {
-		this.esHibrido = esHibrido;
-	}
-
-	public boolean isEsPenumbral() {
-		return esPenumbral;
-	}
-
-	public void setEsPenumbral(boolean esPenumbral) {
-		this.esPenumbral = esPenumbral;
-	}
-
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public LocalDateTime getDate() {
 		return date;
 	}
-
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-
 	public int getYear() {
 		return year;
 	}
-
 	public void setYear(int year) {
 		this.year = year;
 	}
-
-	public Boolean getInicial() {
-		return inicial;
+	public boolean isInvernal() {
+		return invernal;
 	}
-
-	public void setInicial(Boolean inicial) {
-		this.inicial = inicial;
+	public void setInvernal(boolean invernal) {
+		this.invernal = invernal;
 	}
-
-	public Boolean getBicuartal() {
-		return bicuartal;
+	public boolean isPrimaveral() {
+		return primaveral;
 	}
-
-	public void setBicuartal(Boolean bicuartal) {
-		this.bicuartal = bicuartal;
+	public void setPrimaveral(boolean primaveral) {
+		this.primaveral = primaveral;
 	}
-
-	public Boolean getCuartal() {
-		return cuartal;
+	public boolean isEstival() {
+		return estival;
 	}
-
-	public void setCuartal(Boolean cuartal) {
-		this.cuartal = cuartal;
+	public void setEstival(boolean estival) {
+		this.estival = estival;
 	}
-
-	public Boolean getTricuartal() {
-		return tricuartal;
+	public boolean isOtonyal() {
+		return otonyal;
 	}
-
-	public void setTricuartal(Boolean tricuartal) {
-		this.tricuartal = tricuartal;
+	public void setOtonyal(boolean otonyal) {
+		this.otonyal = otonyal;
 	}
-
-	public Boolean getNuevo() {
+	public boolean isNuevo() {
 		return nuevo;
 	}
-
-	public void setNuevo(Boolean nuevo) {
+	public void setNuevo(boolean nuevo) {
 		this.nuevo = nuevo;
 	}
-
-	public Boolean getLleno() {
+	public boolean isLleno() {
 		return lleno;
 	}
-
-	public void setLleno(Boolean lleno) {
+	public void setLleno(boolean lleno) {
 		this.lleno = lleno;
 	}
-
+	public boolean isSelecto() {
+		return selecto;
+	}
+	public void setSelecto(boolean selecto) {
+		this.selecto = selecto;
+	}
+	public boolean isInvertido() {
+		return invertido;
+	}
+	public void setInvertido(boolean invertido) {
+		this.invertido = invertido;
+	}
+	public boolean isEsTotal() {
+		return esTotal;
+	}
+	public void setEsTotal(boolean esTotal) {
+		this.esTotal = esTotal;
+	}
+	public boolean isEsParcial() {
+		return esParcial;
+	}
+	public void setEsParcial(boolean esParcial) {
+		this.esParcial = esParcial;
+	}
+	public boolean isEsAnular() {
+		return esAnular;
+	}
+	public void setEsAnular(boolean esAnular) {
+		this.esAnular = esAnular;
+	}
+	public boolean isEsHibrido() {
+		return esHibrido;
+	}
+	public void setEsHibrido(boolean esHibrido) {
+		this.esHibrido = esHibrido;
+	}
+	public boolean isEsPenumbral() {
+		return esPenumbral;
+	}
+	public void setEsPenumbral(boolean esPenumbral) {
+		this.esPenumbral = esPenumbral;
+	}
+	public long getMetonoId() {
+		return metonoId;
+	}
+	public void setMetonoId(long metonoId) {
+		this.metonoId = metonoId;
+	}
+	public long getEclipseId() {
+		return eclipseId;
+	}
+	public void setEclipseId(long eclipseId) {
+		this.eclipseId = eclipseId;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}
-
-	
+	}	
 }

@@ -9,30 +9,18 @@ public class CasaleroDTO {
 
 	private boolean nuevo;
 	private boolean lleno;
-	private boolean inicial;
-	private boolean bicuartal;
-	private boolean cuartal;
-	private boolean tricuartal;
 	
+	private boolean invernal;
+	private boolean primaveral;
+	private boolean estival;
+	private boolean otonyal;
 	
 	private boolean deSol;
 	private boolean deLuna;
 	
+	private boolean fasal;
+	private boolean apoperico;
 	
-	
-
-	public boolean isCuartal() {
-		return cuartal;
-	}
-	public void setCuartal(boolean cuartal) {
-		this.cuartal = cuartal;
-	}
-	public boolean isTricuartal() {
-		return tricuartal;
-	}
-	public void setTricuartal(boolean tricuartal) {
-		this.tricuartal = tricuartal;
-	}
 	public LocalDate getDateO() {
 		return dateO;
 	}
@@ -57,17 +45,29 @@ public class CasaleroDTO {
 	public void setLleno(boolean lleno) {
 		this.lleno = lleno;
 	}
-	public boolean isInicial() {
-		return inicial;
+	public boolean isInvernal() {
+		return invernal;
 	}
-	public void setInicial(boolean inicial) {
-		this.inicial = inicial;
+	public void setInvernal(boolean invernal) {
+		this.invernal = invernal;
 	}
-	public boolean isBicuartal() {
-		return bicuartal;
+	public boolean isPrimaveral() {
+		return primaveral;
 	}
-	public void setBicuartal(boolean bicuartal) {
-		this.bicuartal = bicuartal;
+	public void setPrimaveral(boolean primaveral) {
+		this.primaveral = primaveral;
+	}
+	public boolean isEstival() {
+		return estival;
+	}
+	public void setEstival(boolean estival) {
+		this.estival = estival;
+	}
+	public boolean isOtonyal() {
+		return otonyal;
+	}
+	public void setOtonyal(boolean otonyal) {
+		this.otonyal = otonyal;
 	}
 	public boolean isDeSol() {
 		return deSol;
@@ -80,5 +80,17 @@ public class CasaleroDTO {
 	}
 	public void setDeLuna(boolean deLuna) {
 		this.deLuna = deLuna;
-	}	
+	}
+	public boolean isFasal() {
+		return fasal;
+	}
+	public void setFasal(boolean fasal) {
+		this.fasal = fasal;
+	}
+	public boolean isApoperico() {
+		return apoperico;
+	}
+	public void setApoperico(boolean apoperico) {
+		this.apoperico = apoperico;
+	}
 }

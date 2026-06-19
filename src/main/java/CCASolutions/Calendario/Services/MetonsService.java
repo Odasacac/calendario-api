@@ -3,6 +3,5 @@ package CCASolutions.Calendario.Services;
 
 public interface MetonsService {
 	
-	public abstract String checkMetonosSinceToViaAPI();
-	public abstract String checkMetonosViaDB();
+	public abstract String poblateMetonosViaDB();
 }

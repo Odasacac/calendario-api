@@ -11,23 +11,23 @@ public interface MetonsRepository extends JpaRepository <MetonsEntity, Long> {
 	
 	MetonsEntity findByDateBetween(LocalDateTime inicio, LocalDateTime fin);
 	List<MetonsEntity> findByYear(int year);
-	MetonsEntity findByYearAndInicialIsTrueAndNuevoIsTrue(int year);
-	MetonsEntity findTopByDateLessThanEqualAndInicialIsTrueAndNuevoIsTrueOrderByDateDesc(LocalDateTime fecha);
-	MetonsEntity findFirstByYearGreaterThanAndInicialIsTrueAndNuevoIsTrueOrderByYearAsc(int year);
-	List<MetonsEntity> findByDateBetweenAndInicialIsTrueAndNuevoIsTrueOrderByDateDesc(LocalDateTime from, LocalDateTime to);
-	List<MetonsEntity> findByYearGreaterThanEqualAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(int year);
-	List<MetonsEntity> findAllByInicialIsTrueAndNuevoIsTrue();
-	List<MetonsEntity> findByYearBetweenAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(int yearInicio, int yearFin);
+	MetonsEntity findByYearAndInvernalIsTrueAndNuevoIsTrue(int year);
+	MetonsEntity findTopByDateLessThanEqualAndInvernalIsTrueAndNuevoIsTrueOrderByDateDesc(LocalDateTime fecha);
+	MetonsEntity findFirstByYearGreaterThanAndInvernalIsTrueAndNuevoIsTrueOrderByYearAsc(int year);
+	List<MetonsEntity> findByDateBetweenAndInvernalIsTrueAndNuevoIsTrueOrderByDateDesc(LocalDateTime from, LocalDateTime to);
+	List<MetonsEntity> findByYearGreaterThanEqualAndInvernalIsTrueAndNuevoIsTrueOrderByDateAsc(int year);
+	List<MetonsEntity> findAllByInvernalIsTrueAndNuevoIsTrue();
+	List<MetonsEntity> findByYearBetweenAndInvernalIsTrueAndNuevoIsTrueOrderByDateAsc(int yearInicio, int yearFin);
 	List<MetonsEntity> findByDateBetweenOrderByDateDesc(LocalDateTime from, LocalDateTime to);
 	
-	MetonsEntity findFirstByDateAfterAndInicialIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
-	MetonsEntity findFirstByDateAfterAndInicialIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
-	MetonsEntity findFirstByDateAfterAndCuartalIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
-	MetonsEntity findFirstByDateAfterAndCuartalIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
-	MetonsEntity findFirstByDateAfterAndBicuartalIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
-	MetonsEntity findFirstByDateAfterAndBicuartalIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
-	MetonsEntity findFirstByDateAfterAndTricuartalIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
-	MetonsEntity findFirstByDateAfterAndTricuartalIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndInvernalIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndInvernalIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndPrimaveralIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndPrimaveralIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndEstivalIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndEstivalIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndOtonyalIsTrueAndNuevoIsTrueOrderByDateAsc(LocalDateTime date);
+	MetonsEntity findFirstByDateAfterAndOtonyalIsTrueAndLlenoIsTrueOrderByDateAsc(LocalDateTime date);
 	
 	MetonsEntity findFirstByDateBeforeOrderByDateDesc(LocalDateTime date);
 	MetonsEntity findFirstByDateAfterOrderByDateAsc(LocalDateTime date);

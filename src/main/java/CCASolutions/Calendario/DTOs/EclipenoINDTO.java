@@ -5,7 +5,7 @@ public class EclipenoINDTO {
 	private boolean eclipenoINDay;
 	private int yearOfCurrentEclipenoIN;
 	private int eclipenosINSinceLastEclipenoINSelecto;
-	private int numberOfEclipeno;
+	private int numberOfEclipenoIN;
 	private String lastEclipenoSurname;
 	
 
@@ -22,11 +22,11 @@ public class EclipenoINDTO {
 	public void setEclipenosINSinceLastEclipenoINSelecto(int eclipenosINSinceLastEclipenoINSelecto) {
 		this.eclipenosINSinceLastEclipenoINSelecto = eclipenosINSinceLastEclipenoINSelecto;
 	}
-	public int getNumberOfEclipeno() {
-		return numberOfEclipeno;
+	public int getNumberOfEclipenoIN() {
+		return numberOfEclipenoIN;
 	}
-	public void setNumberOfEclipeno(int numberOfEclipeno) {
-		this.numberOfEclipeno = numberOfEclipeno;
+	public void setNumberOfEclipenoIN(int numberOfEclipenoIN) {
+		this.numberOfEclipenoIN = numberOfEclipenoIN;
 	}
 	public boolean isEclipenoINDay() {
 		return eclipenoINDay;

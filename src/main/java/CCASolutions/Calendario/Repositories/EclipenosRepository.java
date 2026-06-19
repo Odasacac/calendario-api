@@ -12,9 +12,9 @@ import CCASolutions.Calendario.Entities.EclipenosEntity;
 public interface EclipenosRepository extends JpaRepository <EclipenosEntity, Long>{
 
 	EclipenosEntity findByDateBetween(LocalDateTime inicio, LocalDateTime fin);
-	EclipenosEntity findTopByDateLessThanEqualAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrDateLessThanEqualAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrueOrderByDateDesc(@Param("dateO") LocalDateTime dateO, @Param("dateOO") LocalDateTime dateOO);
-	EclipenosEntity findTopByYearAndInicialIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrYearAndInicialIsTrueAndNuevoIsTrueAndEsTotalIsTrue(@Param("yearUno") int yearUno, @Param("yearDos") int yearDos);
-	List<EclipenosEntity> findTop2ByYearGreaterThanEqualAndNuevoIsTrueAndInicialIsTrueOrderByYearAsc(int year);
+	EclipenosEntity findTopByDateLessThanEqualAndInvernalIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrDateLessThanEqualAndInvernalIsTrueAndNuevoIsTrueAndEsTotalIsTrueOrderByDateDesc(@Param("dateO") LocalDateTime dateO, @Param("dateOO") LocalDateTime dateOO);
+	EclipenosEntity findTopByYearAndInvernalIsTrueAndNuevoIsTrueAndEsAnularIsTrueOrYearAndInvernalIsTrueAndNuevoIsTrueAndEsTotalIsTrue(@Param("yearUno") int yearUno, @Param("yearDos") int yearDos);
+	List<EclipenosEntity> findTop2ByYearGreaterThanEqualAndInvernalIsTrueAndInvernalIsTrueOrderByYearAsc(int year);
 	
 	EclipenosEntity findFirstByDateAfterOrderByDateAsc(LocalDateTime date);
 	EclipenosEntity findFirstByDateBeforeOrderByDateDesc(LocalDateTime date);

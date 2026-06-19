@@ -20,162 +20,144 @@ public class MetonsEntity implements Serializable {
 	private Long id;
 
 	private LocalDateTime date;
-	
 	private int year;
 	
-	private Boolean solsticial;
+	private boolean fasal;
+	private boolean apoperico;
 	
-	private Boolean equinoccial;
+	private boolean invernal;
+	private boolean primaveral;
+	private boolean estival;
+	private boolean otonyal;
 	
-	private Boolean inicial;
+	private boolean nuevo;
+	private boolean lleno;
 	
-	private Boolean bicuartal;
+	private boolean perico;
+	private boolean aporico;
 	
-	private Boolean cuartal;
-	
-	private Boolean tricuartal;
-	
-	private Boolean nuevo;
-	
-	private Boolean lleno;
-	
-	private Boolean selecto;
-	
-	private Boolean invertido;
+	private boolean selecto;
+	private boolean invertido;
 	
 	private long lunaId;
-	
+	private Long apoperiId;
 	private long soeId;
 	
 	
 	
 	
-
-	public long getLunaId() {
-		return lunaId;
-	}
-
-	public void setLunaId(long lunaId) {
-		this.lunaId = lunaId;
-	}
-
-	public long getSoeId() {
-		return soeId;
-	}
-
-	public void setSoeId(long soeId) {
-		this.soeId = soeId;
-	}
-
-	public Boolean getSelecto() {
-		return selecto;
-	}
-
-	public void setSelecto(Boolean selecto) {
-		this.selecto = selecto;
-	}
-
-
-	
-	public Boolean getInvertido() {
-		return invertido;
-	}
-
-	public void setInvertido(Boolean invertido) {
-		this.invertido = invertido;
-	}
-
-	public int getYear() {
-		return year;
-	}
-
-	public void setYear(int year) {
-		this.year = year;
-	}
-
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public LocalDateTime getDate() {
 		return date;
 	}
-
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-
-	public Boolean getSolsticial() {
-		return solsticial;
+	public int getYear() {
+		return year;
 	}
-
-	public void setSolsticial(Boolean solsticial) {
-		this.solsticial = solsticial;
+	public void setYear(int year) {
+		this.year = year;
 	}
-
-	public Boolean getEquinoccial() {
-		return equinoccial;
+	public boolean isFasal() {
+		return fasal;
 	}
-
-	public void setEquinoccial(Boolean equinoccial) {
-		this.equinoccial = equinoccial;
+	public void setFasal(boolean fasal) {
+		this.fasal = fasal;
 	}
-
-	public Boolean getInicial() {
-		return inicial;
+	public boolean isApoperico() {
+		return apoperico;
 	}
-
-	public void setInicial(Boolean inicial) {
-		this.inicial = inicial;
+	public void setApoperico(boolean apoperico) {
+		this.apoperico = apoperico;
 	}
-
-	public Boolean getBicuartal() {
-		return bicuartal;
+	public boolean isInvernal() {
+		return invernal;
 	}
-
-	public void setBicuartal(Boolean bicuartal) {
-		this.bicuartal = bicuartal;
+	public void setInvernal(boolean invernal) {
+		this.invernal = invernal;
 	}
-
-	public Boolean getCuartal() {
-		return cuartal;
+	public boolean isPrimaveral() {
+		return primaveral;
 	}
-
-	public void setCuartal(Boolean cuarta) {
-		this.cuartal = cuarta;
+	public void setPrimaveral(boolean primaveral) {
+		this.primaveral = primaveral;
 	}
-
-	public Boolean getTricuartal() {
-		return tricuartal;
+	public boolean isEstival() {
+		return estival;
 	}
-
-	public void setTricuartal(Boolean tricuartal) {
-		this.tricuartal = tricuartal;
+	public void setEstival(boolean estival) {
+		this.estival = estival;
 	}
-
-	public Boolean getNuevo() {
+	public boolean isOtonyal() {
+		return otonyal;
+	}
+	public void setOtonyal(boolean otonyal) {
+		this.otonyal = otonyal;
+	}
+	public boolean isNuevo() {
 		return nuevo;
 	}
-
-	public void setNuevo(Boolean nuevo) {
+	public void setNuevo(boolean nuevo) {
 		this.nuevo = nuevo;
 	}
-
-	public Boolean getLleno() {
+	public boolean isLleno() {
 		return lleno;
 	}
-
-	public void setLleno(Boolean lleno) {
+	public void setLleno(boolean lleno) {
 		this.lleno = lleno;
 	}
-
+	public boolean isPerico() {
+		return perico;
+	}
+	public void setPerico(boolean perico) {
+		this.perico = perico;
+	}
+	public boolean isAporico() {
+		return aporico;
+	}
+	public void setAporico(boolean aporico) {
+		this.aporico = aporico;
+	}
+	public boolean isSelecto() {
+		return selecto;
+	}
+	public void setSelecto(boolean selecto) {
+		this.selecto = selecto;
+	}
+	public boolean isInvertido() {
+		return invertido;
+	}
+	public void setInvertido(boolean invertido) {
+		this.invertido = invertido;
+	}
+	public long getLunaId() {
+		return lunaId;
+	}
+	public void setLunaId(long lunaId) {
+		this.lunaId = lunaId;
+	}
+	public Long getApoperiId() {
+		return apoperiId;
+	}
+	public void setApoperiId(Long apoperiId) {
+		this.apoperiId = apoperiId;
+	}
+	public long getSoeId() {
+		return soeId;
+	}
+	public void setSoeId(long soeId) {
+		this.soeId = soeId;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-		
+	
+	
 		
 }

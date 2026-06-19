@@ -3,9 +3,8 @@ package CCASolutions.Calendario.DTOs;
 public class DateDTO {
 
 	private EclipenoSelectoDTO lastEclipenoSelecto;
-	private EclipenoINDTO eclipenoIN;
-	private MetonDTO metonoIN;
-	private MetonosApopericosDTO metonoApoperico;
+	private EclipenoINDTO eclipenoVAU;
+	private MetonDTO metonoVAU;
 	private YearDTO year;
 	private MonthDTO month;
 	private String week;
@@ -17,13 +16,22 @@ public class DateDTO {
 	private FestividadesDTO festividades;
 	
 	
-	
-	public MetonosApopericosDTO getMetonoApoperico() {
-		return metonoApoperico;
+
+
+	public EclipenoINDTO getEclipenoVAU() {
+		return eclipenoVAU;
 	}
 
-	public void setMetonoApoperico(MetonosApopericosDTO metonoApoperico) {
-		this.metonoApoperico = metonoApoperico;
+	public void setEclipenoVAU(EclipenoINDTO eclipenoVAU) {
+		this.eclipenoVAU = eclipenoVAU;
+	}
+
+	public MetonDTO getMetonoVAU() {
+		return metonoVAU;
+	}
+
+	public void setMetonoVAU(MetonDTO metonoVAU) {
+		this.metonoVAU = metonoVAU;
 	}
 
 	public EclipenoSelectoDTO getLastEclipenoSelecto() {
@@ -73,21 +81,6 @@ public class DateDTO {
 
 	public void setNotableEvent(NotableEventDTO notableEvent) {
 		this.notableEvent = notableEvent;
-	}
-	public EclipenoINDTO getEclipenoIN() {
-		return eclipenoIN;
-	}
-
-	public void setEclipenoIN(EclipenoINDTO eclipenoIN) {
-		this.eclipenoIN = eclipenoIN;
-	}
-
-	public MetonDTO getMetonoIN() {
-		return metonoIN;
-	}
-
-	public void setMetonoIN(MetonDTO metonoIN) {
-		this.metonoIN = metonoIN;
 	}
 
 	public YearDTO getYear() {

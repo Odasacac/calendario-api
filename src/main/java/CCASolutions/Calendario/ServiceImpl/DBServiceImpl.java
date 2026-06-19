@@ -12,7 +12,6 @@ import CCASolutions.Calendario.Services.EclipenosService;
 import CCASolutions.Calendario.Services.EclipsesService;
 import CCASolutions.Calendario.Services.FestividadesService;
 import CCASolutions.Calendario.Services.LunasService;
-import CCASolutions.Calendario.Services.MetonosApopericosService;
 import CCASolutions.Calendario.Services.MetonsService;
 import CCASolutions.Calendario.Services.MonthService;
 import CCASolutions.Calendario.Services.SolsticiosYEquinocciosService;
@@ -29,9 +28,6 @@ public class DBServiceImpl implements DBService {
 	
 	@Autowired
 	private MetonsService metonsService;
-	
-	@Autowired
-	private MetonosApopericosService metonosApopericosService;
 	
 	@Autowired
 	private EclipsesService eclipsesService;
@@ -79,13 +75,11 @@ public class DBServiceImpl implements DBService {
 			
 			resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunas();
 			
-			resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeos();
+			//resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeos();
 						
 			resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinoccios();		
 					
-			resultado = resultado + "\n - METONOS: " + this.metonsService.checkMetonosViaDB();	
-			
-			resultado = resultado + "\n - METONOSAPO: " + this.metonosApopericosService.checkMetonosApoViaDB();	
+			resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonosViaDB();	
 						
 			resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipses();			
 							

@@ -40,37 +40,43 @@ public class EclipenosServiceImpl implements EclipenosService{
 					System.out.println("Actualizando los eclípenos del anyo: " + meton.getYear());
 					List<EclipsesEntity> eclipses = this.eclipsesRepository.findByYear(meton.getYear());
 					
-					for(EclipsesEntity eclipse : eclipses) {
+					if(meton.isFasal()) {
 						
-						long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(eclipse.getDate(), meton.getDate()));
-						
-						if(segundosDeDiferencia <= 86164) {
+						for(EclipsesEntity eclipse : eclipses) {
 							
-							EclipenosEntity eclipeno = new EclipenosEntity();
+							long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(eclipse.getDate(), meton.getDate()));
 							
-							eclipeno.setDate(meton.getDate());
-							eclipeno.setYear(meton.getYear());
-							eclipeno.setInicial(meton.getInicial());
-							eclipeno.setCuartal(meton.getCuartal());
-							eclipeno.setBicuartal(meton.getBicuartal());
-							eclipeno.setTricuartal(meton.getTricuartal());
-							eclipeno.setLleno(meton.getLleno());
-							eclipeno.setNuevo(meton.getNuevo());
-							
-							eclipeno.setEsAnular(eclipse.isEsAnular());
-							eclipeno.setEsParcial(eclipse.isEsParcial());
-							eclipeno.setEsTotal(eclipse.isEsTotal());
-							eclipeno.setEsPenumbral(eclipse.isEsPenumbral());
-							eclipeno.setEsHibrido(eclipse.isEsHibrido());	
-							
-							eclipeno.setEclipseId(eclipse.getId());
-							eclipeno.setMetonoId(meton.getId());
-							eclipeno.setInvertido(meton.getInvertido());
-							eclipeno.setSelecto(meton.getSelecto());
-													
-							this.eclipenosRepository.save(eclipeno);
+							if(segundosDeDiferencia <= 86164) {
+								
+								EclipenosEntity eclipeno = new EclipenosEntity();
+								
+								eclipeno.setDate(meton.getDate());
+								eclipeno.setYear(meton.getYear());
+								
+								eclipeno.setInvernal(meton.isInvernal());
+								eclipeno.setPrimaveral(meton.isPrimaveral());
+								eclipeno.setEstival(meton.isEstival());
+								eclipeno.setOtonyal(meton.isOtonyal());
+								
+								eclipeno.setLleno(meton.isLleno());
+								eclipeno.setNuevo(meton.isNuevo());
+								
+								eclipeno.setEsAnular(eclipse.isEsAnular());
+								eclipeno.setEsParcial(eclipse.isEsParcial());
+								eclipeno.setEsTotal(eclipse.isEsTotal());
+								eclipeno.setEsPenumbral(eclipse.isEsPenumbral());
+								eclipeno.setEsHibrido(eclipse.isEsHibrido());	
+								
+								eclipeno.setEclipseId(eclipse.getId());
+								eclipeno.setMetonoId(meton.getId());
+								eclipeno.setInvertido(meton.isInvertido());
+								eclipeno.setSelecto(meton.isSelecto());
+														
+								this.eclipenosRepository.save(eclipeno);
+							}
 						}
 					}
+					
 				}										
 			}
 			catch (Exception e) {
