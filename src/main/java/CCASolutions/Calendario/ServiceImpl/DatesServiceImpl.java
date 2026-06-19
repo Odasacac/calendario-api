@@ -1680,10 +1680,9 @@ public class DatesServiceImpl implements DatesService {
 						else if(meton.get(0).isApoperico() && meton.get(0).isPerico()) {
 							evento = evento + " périco";
 						}
+						evento = evento + " invertido";
 					}
 					
-					
-					evento = evento + " invertido";
 				}
 				else {
 					
