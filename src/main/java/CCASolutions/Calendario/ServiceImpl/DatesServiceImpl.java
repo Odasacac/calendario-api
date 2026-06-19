@@ -1044,10 +1044,10 @@ public class DatesServiceImpl implements DatesService {
 			}
 			eclipenoVAU.setNumberOfEclipenoIN(yearOfTheEclipeno);
 			
-			if(eclipenosIN.get(0).isInvertido() && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
+			if(eclipenosIN.get(0).isInvertido() && eclipenosIN.get(0).isApofasal() && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
 				eclipenoVAU.setLastEclipenoSurname("(Invertido)");
 			}
-			else if(eclipenosIN.get(0).isSelecto() && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
+			else if(eclipenosIN.get(0).isSelecto() && eclipenosIN.get(0).isApofasal() && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
 				eclipenoVAU.setLastEclipenoSurname("(Selecto)");
 			}
 		}
