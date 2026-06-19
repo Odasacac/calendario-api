@@ -3,5 +3,5 @@ package CCASolutions.Calendario.Services;
 
 public interface MetonsService {
 	
-	public abstract String poblateMetonosViaDB();
+	public abstract String poblateMetonos();
 }

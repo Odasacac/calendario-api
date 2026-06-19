@@ -1,5 +1,7 @@
 package CCASolutions.Calendario.DTOs;
 
+import java.util.List;
+
 import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
@@ -21,9 +23,9 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	private SolsticiosYEquinocciosEntity soeProximo;
 	private SolsticiosYEquinocciosEntity soeAnterior;
 	
-	private MetonsEntity metonoActual;
-	private MetonsEntity metonoProximo;
-	private MetonsEntity metonoAnterior;
+	private List<MetonsEntity> metonoActual;
+	private List<MetonsEntity> metonoProximo;
+	private List<MetonsEntity> metonoAnterior;
 	
 	private EclipsesEntity eclipseActual;
 	private EclipsesEntity eclipseProximo;
@@ -33,28 +35,6 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	private EclipenosEntity eclipenoProximo;
 	private EclipenosEntity eclipenoAnterior;
 	
-	
-	
-	
-	
-	public ApogeosYPerigeosLunaEntity getApoperiActual() {
-		return apoperiActual;
-	}
-	public void setApoperiActual(ApogeosYPerigeosLunaEntity apoperiActual) {
-		this.apoperiActual = apoperiActual;
-	}
-	public ApogeosYPerigeosLunaEntity getApoperiProximo() {
-		return apoperiProximo;
-	}
-	public void setApoperiProximo(ApogeosYPerigeosLunaEntity apoperiProximo) {
-		this.apoperiProximo = apoperiProximo;
-	}
-	public ApogeosYPerigeosLunaEntity getApoperiAnterior() {
-		return apoperiAnterior;
-	}
-	public void setApoperiAnterior(ApogeosYPerigeosLunaEntity apoperiAnterior) {
-		this.apoperiAnterior = apoperiAnterior;
-	}
 	public LunasEntity getLunaActual() {
 		return lunaActual;
 	}
@@ -72,6 +52,24 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	}
 	public void setLunaAnterior(LunasEntity lunaAnterior) {
 		this.lunaAnterior = lunaAnterior;
+	}
+	public ApogeosYPerigeosLunaEntity getApoperiActual() {
+		return apoperiActual;
+	}
+	public void setApoperiActual(ApogeosYPerigeosLunaEntity apoperiActual) {
+		this.apoperiActual = apoperiActual;
+	}
+	public ApogeosYPerigeosLunaEntity getApoperiProximo() {
+		return apoperiProximo;
+	}
+	public void setApoperiProximo(ApogeosYPerigeosLunaEntity apoperiProximo) {
+		this.apoperiProximo = apoperiProximo;
+	}
+	public ApogeosYPerigeosLunaEntity getApoperiAnterior() {
+		return apoperiAnterior;
+	}
+	public void setApoperiAnterior(ApogeosYPerigeosLunaEntity apoperiAnterior) {
+		this.apoperiAnterior = apoperiAnterior;
 	}
 	public SolsticiosYEquinocciosEntity getSoeActual() {
 		return soeActual;
@@ -91,22 +89,22 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	public void setSoeAnterior(SolsticiosYEquinocciosEntity soeAnterior) {
 		this.soeAnterior = soeAnterior;
 	}
-	public MetonsEntity getMetonoActual() {
+	public List<MetonsEntity> getMetonoActual() {
 		return metonoActual;
 	}
-	public void setMetonoActual(MetonsEntity metonoActual) {
+	public void setMetonoActual(List<MetonsEntity> metonoActual) {
 		this.metonoActual = metonoActual;
 	}
-	public MetonsEntity getMetonoProximo() {
+	public List<MetonsEntity> getMetonoProximo() {
 		return metonoProximo;
 	}
-	public void setMetonoProximo(MetonsEntity metonoProximo) {
+	public void setMetonoProximo(List<MetonsEntity> metonoProximo) {
 		this.metonoProximo = metonoProximo;
 	}
-	public MetonsEntity getMetonoAnterior() {
+	public List<MetonsEntity> getMetonoAnterior() {
 		return metonoAnterior;
 	}
-	public void setMetonoAnterior(MetonsEntity metonoAnterior) {
+	public void setMetonoAnterior(List<MetonsEntity> metonoAnterior) {
 		this.metonoAnterior = metonoAnterior;
 	}
 	public EclipsesEntity getEclipseActual() {
@@ -144,7 +142,5 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	}
 	public void setEclipenoAnterior(EclipenosEntity eclipenoAnterior) {
 		this.eclipenoAnterior = eclipenoAnterior;
-	}
-	
-	
+	}	
 }

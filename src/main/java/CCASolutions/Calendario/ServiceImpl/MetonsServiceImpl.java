@@ -33,7 +33,7 @@ public class MetonsServiceImpl implements MetonsService {
 	@Autowired
 	private ApogeosYPerigeosLunaRepository apogeosYPerigeosRepository;
 	
-	public String poblateMetonosViaDB() {
+	public String poblateMetonos() {
 		
 		String resultado = "Metonos checkeados sin problema.";
 		

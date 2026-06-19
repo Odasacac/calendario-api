@@ -75,11 +75,11 @@ public class DBServiceImpl implements DBService {
 			
 			resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunas();
 			
-			//resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeos();
+			resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeos();
 						
 			resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinoccios();		
 					
-			resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonosViaDB();	
+			resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();	
 						
 			resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipses();			
 							

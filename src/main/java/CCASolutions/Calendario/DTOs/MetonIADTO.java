@@ -3,7 +3,7 @@ package CCASolutions.Calendario.DTOs;
 public class MetonIADTO {
 	
 	private boolean metonoIADay;
-	private int metonosIASinceLastEclipenoIA;
+	private int metonosIASinceLastEclipenoSelecto;
 	private int yearOfCurrentMetonIA;
 	private int numberOfMetonIA;
 	private String lastMetonSurname;
@@ -16,11 +16,11 @@ public class MetonIADTO {
 	public void setMetonoIADay(boolean metonoIADay) {
 		this.metonoIADay = metonoIADay;
 	}
-	public int getMetonosIASinceLastEclipenoIA() {
-		return metonosIASinceLastEclipenoIA;
+	public int getMetonosIASinceLastEclipenoSelecto() {
+		return metonosIASinceLastEclipenoSelecto;
 	}
-	public void setMetonosIASinceLastEclipenoIA(int metonosIASinceLastEclipenoIA) {
-		this.metonosIASinceLastEclipenoIA = metonosIASinceLastEclipenoIA;
+	public void setMetonosIASinceLastEclipenoSelecto(int metonosIASinceLastEclipenoSelecto) {
+		this.metonosIASinceLastEclipenoSelecto = metonosIASinceLastEclipenoSelecto;
 	}
 	public int getYearOfCurrentMetonIA() {
 		return yearOfCurrentMetonIA;
