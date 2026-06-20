@@ -114,7 +114,7 @@ public class DatesServiceImpl implements DatesService {
 					
 					lunasSolsticiosEclipsesMetonosYEclipenos.setMetons(allMetons);
 					lunasSolsticiosEclipsesMetonosYEclipenos.setLastMetonIN(this.getLastMetonINForDate(allMetons, date));
-					lunasSolsticiosEclipsesMetonosYEclipenos.setLastMetonIApofasalDurmiente(this.getLastMetonIApofasalDurmiente(allMetons,date));
+					lunasSolsticiosEclipsesMetonosYEclipenos.setLastMetonIApofasalRemoto(this.getLastMetonIApofasalRemoto(allMetons,date));
 					
 					if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN() != null) {									
 						
@@ -177,7 +177,7 @@ public class DatesServiceImpl implements DatesService {
 
 		dateVAU.setLastEclipenoSelecto(this.getVAUEclipenoSelecto(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), date));
 		
-		dateVAU.setMetonoVAU(this.getVAUMeton(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIApofasalDurmiente(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
+		dateVAU.setMetonoVAU(this.getVAUMeton(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
 		
 		dateVAU.setEclipenoVAU(this.getVAUEclipeno(allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), date));			
 		dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipses(), date, allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));
@@ -1056,7 +1056,7 @@ public class DatesServiceImpl implements DatesService {
 		return eclipenoVAU;
 	}
 	
-	private MetonDTO getVAUMeton (MetonsEntity lastMetonIApofasalDurmiente, EclipenosEntity lastEclipenoIN, EclipenosEntity lastEclipenoINSelecto, List<MetonsEntity> metons, LocalDate date) {
+	private MetonDTO getVAUMeton (MetonsEntity lastMetonIApofasalRemoto, EclipenosEntity lastEclipenoIN, EclipenosEntity lastEclipenoINSelecto, List<MetonsEntity> metons, LocalDate date) {
 		
 		MetonDTO metonVAU = new MetonDTO();
 		
@@ -1115,7 +1115,7 @@ public class DatesServiceImpl implements DatesService {
 		metonIADTO.setMetonosIASinceLastEclipenoSelecto(metonosIADesdeElLastEclipenSelecto);
 		int yearOfTheMetonIA = metonosIADesdeElLastEclipenSelecto +1;
 		
-		if(lastMetonIApofasalDurmiente.getDate().toLocalDate().isEqual(date)) {
+		if(lastMetonIApofasalRemoto.getDate().toLocalDate().isEqual(date)) {
 			yearOfTheMetonIA=yearOfTheMetonIA-1;
 		}
 		
@@ -1877,9 +1877,9 @@ public class DatesServiceImpl implements DatesService {
 		return InvernalApofasalRemoto;
 	}
 	
-	private MetonsEntity getLastMetonIApofasalDurmiente(List<MetonsEntity> allMetons, LocalDate date) {
+	private MetonsEntity getLastMetonIApofasalRemoto(List<MetonsEntity> allMetons, LocalDate date) {
 		
-		MetonsEntity lastMetonIApofasalDurmiente = new MetonsEntity();
+		MetonsEntity lastMetonIApofasalRemoto = new MetonsEntity();
 		
 		long diasMinimosDeDiferenciaEntreMetonoYDate =Long.MAX_VALUE;
 		
@@ -1890,13 +1890,13 @@ public class DatesServiceImpl implements DatesService {
 				long diasDeDiferenciaEntreMetonoYDate = ChronoUnit.DAYS.between(metono.getDate().toLocalDate(), date);
 				
 				if(diasDeDiferenciaEntreMetonoYDate < diasMinimosDeDiferenciaEntreMetonoYDate) {
-					lastMetonIApofasalDurmiente = new MetonsEntity();
+					lastMetonIApofasalRemoto = new MetonsEntity();
 					diasMinimosDeDiferenciaEntreMetonoYDate = diasDeDiferenciaEntreMetonoYDate;
-					lastMetonIApofasalDurmiente = metono;
+					lastMetonIApofasalRemoto = metono;
 				}
 			}
 		}
-		return lastMetonIApofasalDurmiente;
+		return lastMetonIApofasalRemoto;
 	}
 	
 	

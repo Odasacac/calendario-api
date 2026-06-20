@@ -20,15 +20,16 @@ public class LunasSolsticiosEclipsesMetonosYEclipenosDTO {
 	EclipenosEntity lastEclipenoIN;
 	EclipenosEntity lastEclipenoInvernalApofasalRemoto;
 	MetonsEntity lastMetonIN;
-	MetonsEntity lastMetonIApofasalDurmiente;
+	MetonsEntity lastMetonIApofasalRemoto;
 	
 	
 
-	public MetonsEntity getLastMetonIApofasalDurmiente() {
-		return lastMetonIApofasalDurmiente;
+	
+	public MetonsEntity getLastMetonIApofasalRemoto() {
+		return lastMetonIApofasalRemoto;
 	}
-	public void setLastMetonIApofasalDurmiente(MetonsEntity lastMetonIApofasalDurmiente) {
-		this.lastMetonIApofasalDurmiente = lastMetonIApofasalDurmiente;
+	public void setLastMetonIApofasalRemoto(MetonsEntity lastMetonIApofasalRemoto) {
+		this.lastMetonIApofasalRemoto = lastMetonIApofasalRemoto;
 	}
 	public EclipenosEntity getLastEclipenoInvernalApofasalRemoto() {
 		return lastEclipenoInvernalApofasalRemoto;
