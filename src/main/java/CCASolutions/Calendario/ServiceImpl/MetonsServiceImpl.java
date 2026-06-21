@@ -134,7 +134,7 @@ public class MetonsServiceImpl implements MetonsService {
 							}
 						}
 						
-						if(Math.abs(ChronoUnit.SECONDS.between(apoperiMasCercano.getDate(), meton.getDate())) <= 86164 &&  Math.abs(ChronoUnit.SECONDS.between(lunasMap.get(meton.getLunaId()).getDate(), meton.getDate())) <= 86164 ) {
+						if(Math.abs(ChronoUnit.SECONDS.between(apoperiMasCercano.getDate(), meton.getDate())) <= 86164 &&  Math.abs(ChronoUnit.SECONDS.between(lunasMap.get(meton.getLunaId()).getDate(), meton.getDate())) <= 86164 &&  Math.abs(ChronoUnit.SECONDS.between(apoperiMasCercano.getDate(), meton.getDate())) <= 86164) {
 							meton.setApofasal(true);
 							System.out.println("Nuevo métono apofasal encontrado: " + meton.getDate().toLocalDate());
 						}						
@@ -155,7 +155,7 @@ public class MetonsServiceImpl implements MetonsService {
 							}
 						}
 						
-						if(Math.abs(ChronoUnit.SECONDS.between(lunaMasCercana.getDate(), meton.getDate())) <= 86164 &&  Math.abs(ChronoUnit.SECONDS.between(apoperiMap.get(meton.getApoperiId()).getDate(), meton.getDate())) <= 86164 ) {
+						if(Math.abs(ChronoUnit.SECONDS.between(lunaMasCercana.getDate(), meton.getDate())) <= 86164 &&  Math.abs(ChronoUnit.SECONDS.between(apoperiMap.get(meton.getApoperiId()).getDate(), meton.getDate())) <= 86164 &&  Math.abs(ChronoUnit.SECONDS.between(apoperiMap.get(meton.getApoperiId()).getDate(), lunaMasCercana.getDate())) <= 86164) {
 							meton.setApofasal(true);
 							System.out.println("Nuevo métono apofasal encontrado: " + meton.getDate().toLocalDate());
 						}											
