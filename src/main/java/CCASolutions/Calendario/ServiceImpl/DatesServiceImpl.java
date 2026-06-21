@@ -177,9 +177,9 @@ public class DatesServiceImpl implements DatesService {
 		dateVAU.setDay(vauWeekAndDay.getDay());					
 
 		dateVAU.setLastEclipenoSelecto(this.getVAUEclipenoSelecto(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), date));
-		dateVAU.setLastMetonoInvernalApofasalRemoto(this.getMetonoInvernalApofasalRemoto(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIApofasalRemoto(), date));
+		dateVAU.setMetonoInvernalApofasalRemoto(this.getMetonoInvernalApofasalRemoto(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
 		
-		dateVAU.setMetonoVAU(this.getVAUMeton(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
+		dateVAU.setMetonoVAU(this.getVAUMeton(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
 		
 		dateVAU.setEclipenoVAU(this.getVAUEclipeno(allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), date));			
 		dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipses(), date, allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));
@@ -993,12 +993,49 @@ public class DatesServiceImpl implements DatesService {
 	}
 	
 	
-	private MetonoInvernalApofasalRemotoDTO getMetonoInvernalApofasalRemoto(MetonsEntity lastMetonoInvernalApofasalRemoto, LocalDate date) {
+	private MetonoInvernalApofasalRemotoDTO getMetonoInvernalApofasalRemoto(EclipenosEntity lastEclipenoInvernalApofasalRemoto, List<MetonsEntity> allMetons, LocalDate date) {
 		
 		MetonoInvernalApofasalRemotoDTO metonoInvernalApofasalRemotoDTO = new MetonoInvernalApofasalRemotoDTO();
 		
-		metonoInvernalApofasalRemotoDTO.setDaysSinceCurrentMetonoInvernalApofasalRemoto("hace " + ChronoUnit.DAYS.between(lastMetonoInvernalApofasalRemoto.getDate().toLocalDate(), date) + " días");
-		metonoInvernalApofasalRemotoDTO.setMetonoInvernalApofasalRemotoDay(lastMetonoInvernalApofasalRemoto.getDate().toLocalDate().isEqual(date));
+		if(lastEclipenoInvernalApofasalRemoto.getDate().toLocalDate().isEqual(date)){
+			
+			metonoInvernalApofasalRemotoDTO.setMetonoInvernalApofasalRemotoDay(true);
+			metonoInvernalApofasalRemotoDTO.setMetonosInvernalApofasalRemotoSinceLastEclipenoINSelecto(0);
+			metonoInvernalApofasalRemotoDTO.setNumberOfMetonoInvernalApofasalRemoto(0);
+			metonoInvernalApofasalRemotoDTO.setYearOfCurrentMetonoInvernalApofasalRemoto(0);
+		}
+		else {
+			
+			List<MetonsEntity> metonosInvernalesApofasalesRemotos = new ArrayList<>();
+			
+			for(MetonsEntity metono : allMetons) {
+				
+				if(metono.isInvernal() && metono.isApofasal() && metono.isNuevo() && metono.isSelecto() && !metono.getDate().isBefore(lastEclipenoInvernalApofasalRemoto.getDate()) && !metono.getDate().toLocalDate().isAfter(date)) {
+					metonosInvernalesApofasalesRemotos.add(metono);
+				}
+			}
+			
+			metonoInvernalApofasalRemotoDTO.setYearOfCurrentMetonoInvernalApofasalRemoto(metonosInvernalesApofasalesRemotos.get(0).getYear());
+			metonoInvernalApofasalRemotoDTO.setMetonoInvernalApofasalRemotoDay(metonosInvernalesApofasalesRemotos.get(0).getDate().toLocalDate().isEqual(date));
+			
+			int metonosIARDesdeElLastEclipenSelecto = (metonosInvernalesApofasalesRemotos.size()-1); // -1 porque incluye el del eclipeno
+			
+			// No se suma un eclipeno hasta que pase el dia del eclipeno, pero si es el dia de eclipeno no se resta, que se ha restado antes
+			
+			if(metonoInvernalApofasalRemotoDTO.isMetonoInvernalApofasalRemotoDay() && !lastEclipenoInvernalApofasalRemoto.getDate().toLocalDate().isEqual(date)) {
+				
+				metonosIARDesdeElLastEclipenSelecto = metonosIARDesdeElLastEclipenSelecto-1;
+			}
+			
+			metonoInvernalApofasalRemotoDTO.setMetonosInvernalApofasalRemotoSinceLastEclipenoINSelecto(metonosIARDesdeElLastEclipenSelecto);
+			int yearOfTheMetono= metonosIARDesdeElLastEclipenSelecto +1;
+			
+			if(lastEclipenoInvernalApofasalRemoto.getDate().toLocalDate().isEqual(date)) { //Si es el dia del eclipeno selecto, no estamos en ningun metono
+				yearOfTheMetono= yearOfTheMetono-1;
+			}
+			metonoInvernalApofasalRemotoDTO.setNumberOfMetonoInvernalApofasalRemoto(yearOfTheMetono);
+		}
+		
 		
 		return metonoInvernalApofasalRemotoDTO;
 	}
@@ -1069,7 +1106,7 @@ public class DatesServiceImpl implements DatesService {
 		return eclipenoVAU;
 	}
 	
-	private MetonDTO getVAUMeton (MetonsEntity lastMetonIApofasalRemoto, EclipenosEntity lastEclipenoIN, EclipenosEntity lastEclipenoINSelecto, List<MetonsEntity> metons, LocalDate date) {
+	private MetonDTO getVAUMeton (MetonsEntity lastMetonIApofasalRemoto, EclipenosEntity lastEclipenoINSelecto, List<MetonsEntity> metons, LocalDate date) {
 		
 		MetonDTO metonVAU = new MetonDTO();
 		
@@ -1082,7 +1119,7 @@ public class DatesServiceImpl implements DatesService {
 		for(MetonsEntity meton : metons) {
 			
 			if(meton.isInvernal() && !meton.getDate().toLocalDate().isAfter(date)) {
-				if(meton.isNuevo() && !meton.getDate().isBefore(lastEclipenoIN.getDate())) {
+				if(meton.isNuevo() && !meton.getDate().isBefore(lastMetonIApofasalRemoto.getDate())) {
 					metonsIN.add(meton);
 				}
 				else if(meton.isAporico() && !meton.getDate().isBefore(lastMetonIApofasalRemoto.getDate())) {
@@ -1101,7 +1138,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		// No se suma un metono hasta que pase el dia del metono, pero si es el dia de eclipeno no se resta, que se ha restado antes
 		
-		if(metonINDTO.isMetonoINDay() && !lastEclipenoIN.getDate().toLocalDate().isEqual(date)) {
+		if(metonINDTO.isMetonoINDay() && !lastMetonIApofasalRemoto.getDate().toLocalDate().isEqual(date)) {
 			
 			metonosINDesdeElLastEclipen = metonosINDesdeElLastEclipen-1;
 		}
@@ -1109,7 +1146,7 @@ public class DatesServiceImpl implements DatesService {
 		metonINDTO.setMetonosINSinceLastEclipenoIN(metonosINDesdeElLastEclipen);
 		int yearOfTheMetonIN = metonosINDesdeElLastEclipen +1;
 		
-		if(lastEclipenoIN.getDate().toLocalDate().isEqual(date)) { //Si es el dia del eclipeno, no estamos en ningun metono
+		if(lastMetonIApofasalRemoto.getDate().toLocalDate().isEqual(date)) { //Si es el dia del metonoIAR, no estamos en ningun metono
 			yearOfTheMetonIN= yearOfTheMetonIN-1;
 		}
 		
@@ -1120,7 +1157,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		int metonosIADesdeElMetonIApofasalRemoto = (metonsIA.size()-1);
 		
-		if(metonIADTO.isMetonoIADay() && !lastEclipenoINSelecto.getDate().toLocalDate().isEqual(date)) {
+		if(metonIADTO.isMetonoIADay() && !lastMetonIApofasalRemoto.getDate().toLocalDate().isEqual(date)) {
 			
 			metonosIADesdeElMetonIApofasalRemoto = metonosIADesdeElMetonIApofasalRemoto-1;
 		}

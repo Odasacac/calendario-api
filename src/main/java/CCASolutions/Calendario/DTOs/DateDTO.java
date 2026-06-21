@@ -3,7 +3,7 @@ package CCASolutions.Calendario.DTOs;
 public class DateDTO {
 
 	private EclipenoSelectoDTO lastEclipenoSelecto;
-	private MetonoInvernalApofasalRemotoDTO lastMetonoInvernalApofasalRemoto;
+	private MetonoInvernalApofasalRemotoDTO metonoInvernalApofasalRemoto;
 	private EclipenoINDTO eclipenoVAU;
 	private MetonDTO metonoVAU;
 	private YearDTO year;
@@ -19,12 +19,14 @@ public class DateDTO {
 	
 
 
-	public MetonoInvernalApofasalRemotoDTO getLastMetonoInvernalApofasalRemoto() {
-		return lastMetonoInvernalApofasalRemoto;
+	
+
+	public MetonoInvernalApofasalRemotoDTO getMetonoInvernalApofasalRemoto() {
+		return metonoInvernalApofasalRemoto;
 	}
 
-	public void setLastMetonoInvernalApofasalRemoto(MetonoInvernalApofasalRemotoDTO lastMetonoInvernalApofasalRemoto) {
-		this.lastMetonoInvernalApofasalRemoto = lastMetonoInvernalApofasalRemoto;
+	public void setMetonoInvernalApofasalRemoto(MetonoInvernalApofasalRemotoDTO metonoInvernalApofasalRemoto) {
+		this.metonoInvernalApofasalRemoto = metonoInvernalApofasalRemoto;
 	}
 
 	public EclipenoINDTO getEclipenoVAU() {
