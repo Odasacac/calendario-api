@@ -22,6 +22,7 @@ import CCASolutions.Calendario.DTOs.LunasSolsticiosEclipsesMetonosYEclipenosDTO;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MetonIADTO;
 import CCASolutions.Calendario.DTOs.MetonINDTO;
+import CCASolutions.Calendario.DTOs.MetonoInvernalApofasalRemotoDTO;
 import CCASolutions.Calendario.DTOs.MinimaFestividadesDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.NotableEventDTO;
@@ -176,6 +177,7 @@ public class DatesServiceImpl implements DatesService {
 		dateVAU.setDay(vauWeekAndDay.getDay());					
 
 		dateVAU.setLastEclipenoSelecto(this.getVAUEclipenoSelecto(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), date));
+		dateVAU.setLastMetonoInvernalApofasalRemoto(this.getMetonoInvernalApofasalRemoto(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIApofasalRemoto(), date));
 		
 		dateVAU.setMetonoVAU(this.getVAUMeton(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
 		
@@ -990,6 +992,17 @@ public class DatesServiceImpl implements DatesService {
 		return absoluteEclipses;
 	}
 	
+	
+	private MetonoInvernalApofasalRemotoDTO getMetonoInvernalApofasalRemoto(MetonsEntity lastMetonoInvernalApofasalRemoto, LocalDate date) {
+		
+		MetonoInvernalApofasalRemotoDTO metonoInvernalApofasalRemotoDTO = new MetonoInvernalApofasalRemotoDTO();
+		
+		metonoInvernalApofasalRemotoDTO.setDaysSinceCurrentMetonoInvernalApofasalRemoto("hace " + ChronoUnit.DAYS.between(lastMetonoInvernalApofasalRemoto.getDate().toLocalDate(), date) + " días");
+		metonoInvernalApofasalRemotoDTO.setMetonoInvernalApofasalRemotoDay(lastMetonoInvernalApofasalRemoto.getDate().toLocalDate().isEqual(date));
+		
+		return metonoInvernalApofasalRemotoDTO;
+	}
+	
 	private EclipenoSelectoDTO getVAUEclipenoSelecto(EclipenosEntity lastEclipenoSelecto, LocalDate date) {
 		
 		EclipenoSelectoDTO eclipenoSelectoVAU = new EclipenoSelectoDTO();
@@ -1072,8 +1085,8 @@ public class DatesServiceImpl implements DatesService {
 				if(meton.isNuevo() && !meton.getDate().isBefore(lastEclipenoIN.getDate())) {
 					metonsIN.add(meton);
 				}
-				else if(meton.isAporico()) {
-					metonsIA.add(meton);
+				else if(meton.isAporico() && !meton.getDate().isBefore(lastMetonIApofasalRemoto.getDate())) {
+					metonsIA.add(meton); 
 				}		
 			}
 		}
@@ -1105,15 +1118,15 @@ public class DatesServiceImpl implements DatesService {
 		
 		
 		
-		int metonosIADesdeElLastEclipenSelecto = (metonsIA.size()-1);
+		int metonosIADesdeElMetonIApofasalRemoto = (metonsIA.size()-1);
 		
 		if(metonIADTO.isMetonoIADay() && !lastEclipenoINSelecto.getDate().toLocalDate().isEqual(date)) {
 			
-			metonosIADesdeElLastEclipenSelecto = metonosIADesdeElLastEclipenSelecto-1;
+			metonosIADesdeElMetonIApofasalRemoto = metonosIADesdeElMetonIApofasalRemoto-1;
 		}
 		
-		metonIADTO.setMetonosIASinceLastEclipenoSelecto(metonosIADesdeElLastEclipenSelecto);
-		int yearOfTheMetonIA = metonosIADesdeElLastEclipenSelecto +1;
+		metonIADTO.setMetonosIASinceLastEclipenoSelecto(metonosIADesdeElMetonIApofasalRemoto);
+		int yearOfTheMetonIA = metonosIADesdeElMetonIApofasalRemoto +1;
 		
 		if(lastMetonIApofasalRemoto.getDate().toLocalDate().isEqual(date)) {
 			yearOfTheMetonIA=yearOfTheMetonIA-1;
@@ -1885,7 +1898,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		for(MetonsEntity metono : allMetons) {									
 			
-			if(!metono.getDate().toLocalDate().isAfter(date) && metono.isInvernal() && metono.isApofasal() && metono.isSelecto() && (metono.isNuevo() || metono.isApoperico())) {
+			if(!metono.getDate().toLocalDate().isAfter(date) && metono.isInvernal() && metono.isApofasal() && metono.isSelecto() && metono.isNuevo()) {
 				
 				long diasDeDiferenciaEntreMetonoYDate = ChronoUnit.DAYS.between(metono.getDate().toLocalDate(), date);
 				
