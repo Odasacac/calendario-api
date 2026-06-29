@@ -65,26 +65,23 @@ public class DBServiceImpl implements DBService {
 			
 			resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos();
 			
+			if(true) {
+				resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunas();
+				resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeos();
+				resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinoccios();	
+				resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipses();	
+			}
+			
 			resultado = resultado + "\n - DÍAS: " + this.daysService.poblateDays();
-			
 			resultado = resultado + "\n - SEMANAS: " + this.weeksService.poblateWeeks();
-			
 			resultado = resultado + "\n - MESES: " + this.monthsService.poblateMonths();
-			
 			resultado = resultado + "\n - FESTIVIDADES: " +this.festividadesService.poblateFestividades();
 			
-			resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunas();
 			
-			resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeos();
-						
-			resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinoccios();		
-					
-			resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();	
-						
-			resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipses();			
-							
+			
+			resultado = resultado + "\n - ACTUALIZAR APOPERIS Y FASES: " + this.apogeosYPerigeosLunaService.updateLunasYApoperisConSelectoOInvertido();		
+			resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();			
 			resultado = resultado + "\n - ECLIPENOS: " +this.eclipenosService.poblateEclipenos();
-
 			resultado = resultado + "\n - CASALEROS:" + this.casalerosService.poblateCasaleros();
 								
 		}

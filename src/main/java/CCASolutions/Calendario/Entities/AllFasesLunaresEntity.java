@@ -1,7 +1,6 @@
 package CCASolutions.Calendario.Entities;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -10,64 +9,34 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="lunas")
-public class LunasEntity implements Serializable {
+@Table(name="all_faseslunares")
+public class AllFasesLunaresEntity implements Serializable {
 
-	private static final long serialVersionUID = -7995525595322744836L;
-
+	private static final long serialVersionUID = -233937609496062129L;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
-
-	private LocalDateTime date;
-	private int year;	
 	
 	private boolean nueva;
 	private boolean cuartoCreciente;
 	private boolean llena;
 	private boolean cuartoMenguante;
 	
-	private boolean selecta;
-	private boolean invertida;
-	private Long apoperiId;
-
+	private int year;
+	private int month;
+	private int day;
+	private int hour;
+	private int minute;
+	private int second;
 	
-	public Long getApoperiId() {
-		return apoperiId;
-	}
-	public void setApoperiId(Long apoperiId) {
-		this.apoperiId = apoperiId;
-	}
-	public boolean isSelecta() {
-		return selecta;
-	}
-	public void setSelecta(boolean selecta) {
-		this.selecta = selecta;
-	}
-
-	public boolean isInvertida() {
-		return invertida;
-	}
-	public void setInvertida(boolean invertida) {
-		this.invertida = invertida;
-	}
+	
+	
 	public Long getId() {
 		return id;
 	}
 	public void setId(Long id) {
 		this.id = id;
-	}
-	public LocalDateTime getDate() {
-		return date;
-	}
-	public void setDate(LocalDateTime date) {
-		this.date = date;
-	}
-	public int getYear() {
-		return year;
-	}
-	public void setYear(int year) {
-		this.year = year;
 	}
 	public boolean isNueva() {
 		return nueva;
@@ -93,8 +62,46 @@ public class LunasEntity implements Serializable {
 	public void setCuartoMenguante(boolean cuartoMenguante) {
 		this.cuartoMenguante = cuartoMenguante;
 	}
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
+	public int getMonth() {
+		return month;
+	}
+	public void setMonth(int month) {
+		this.month = month;
+	}
+	public int getDay() {
+		return day;
+	}
+	public void setDay(int day) {
+		this.day = day;
+	}
+	public int getHour() {
+		return hour;
+	}
+	public void setHour(int hour) {
+		this.hour = hour;
+	}
+	public int getMinute() {
+		return minute;
+	}
+	public void setMinute(int minute) {
+		this.minute = minute;
+	}
+	public int getSecond() {
+		return second;
+	}
+	public void setSecond(int second) {
+		this.second = second;
+	}
 	public static long getSerialversionuid() {
 		return serialVersionUID;
-	}	
+	}
 	
+	
+
 }

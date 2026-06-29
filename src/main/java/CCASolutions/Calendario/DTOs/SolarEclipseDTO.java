@@ -1,24 +1,22 @@
 package CCASolutions.Calendario.DTOs;
 
-import java.time.LocalDateTime;
-
 public class SolarEclipseDTO {
 
-    private LocalDateTime date;
+    private String date;
     private String type;
 
     public SolarEclipseDTO() {}
 
-    public SolarEclipseDTO(LocalDateTime date, String type) {
+    public SolarEclipseDTO(String date, String type) {
         this.date = date;
         this.type = type;
     }
 
-    public LocalDateTime getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(LocalDateTime date) {
+    public void setDate(String date) {
         this.date = date;
     }
 

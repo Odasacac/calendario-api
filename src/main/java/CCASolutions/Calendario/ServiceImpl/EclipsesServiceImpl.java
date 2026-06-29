@@ -1,5 +1,6 @@
 package CCASolutions.Calendario.ServiceImpl;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -8,8 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import CCASolutions.Calendario.Entities.AllEclipsesEntity;
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
+import CCASolutions.Calendario.Repositories.AllEclipsesRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
 import CCASolutions.Calendario.Services.EclipsesService;
@@ -25,6 +28,9 @@ public class EclipsesServiceImpl implements EclipsesService{
 	
 	@Autowired
 	private EclipsesRepository eclipsesRepository;
+	
+	@Autowired
+	private AllEclipsesRepository allEclipsesRepository;
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
@@ -57,7 +63,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 				
 				try {
 					
-					for (int i = 0; i <= 2100; i++) {
+					for (int i = -4700; i <= 2100; i++) {
 															
 						this.actualizarEclipsesLunaresDelAnyo(String.valueOf(i), apiEclipsesLunares);
 						
@@ -102,27 +108,71 @@ public class EclipsesServiceImpl implements EclipsesService{
 				
 				for(LunarEclipseDTO eclipse : eclipsesLunaresDelAnyo) {
 					
-					EclipsesEntity eclipseParaBD = new EclipsesEntity();
-					eclipseParaBD.setDeLuna(true);
-					eclipseParaBD.setDate(eclipse.getDate());
-					eclipseParaBD.setYear(Integer.valueOf(anyo));
+					if(Integer.valueOf(anyo) > 0) {
+						
+						EclipsesEntity eclipseParaBD = new EclipsesEntity();
+						eclipseParaBD.setDeLuna(true);
+						eclipseParaBD.setDate(LocalDateTime.parse(eclipse.getDate()));
+						eclipseParaBD.setYear(Integer.valueOf(anyo));
+						
+						switch(eclipse.getType()) {
+						
+							case "TotalEclipse":
+								eclipseParaBD.setEsTotal(true);
+								break;
+								
+							case "PartialEclipse":
+								eclipseParaBD.setEsParcial(true);
+								break;
+								
+							case "PenumbralEclipse":
+								eclipseParaBD.setEsPenumbral(true);
+								break;
+						}
+						
+						this.eclipsesRepository.save(eclipseParaBD);
+					}
 					
+					
+					AllEclipsesEntity allEclipseParaDB = new AllEclipsesEntity();
+					allEclipseParaDB.setDeLuna(true);
 					switch(eclipse.getType()) {
 					
 						case "TotalEclipse":
-							eclipseParaBD.setEsTotal(true);
+							allEclipseParaDB.setTotal(true);
 							break;
-							
+						
 						case "PartialEclipse":
-							eclipseParaBD.setEsParcial(true);
+							allEclipseParaDB.setParcial(true);
 							break;
-							
+						
 						case "PenumbralEclipse":
-							eclipseParaBD.setEsPenumbral(true);
+							allEclipseParaDB.setPenumbral(true);
 							break;
 					}
-											
-					this.eclipsesRepository.save(eclipseParaBD);
+					
+					String[] parts = String.valueOf(eclipse.getDate()).split("T");
+					String[] dateParts = parts[0].split("-");
+					String[] timeParts = parts[1].split(":");
+
+					if(String.valueOf(eclipse.getDate()).startsWith("-")) {
+						allEclipseParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
+						allEclipseParaDB.setMonth(Integer.parseInt(dateParts[2]));
+						allEclipseParaDB.setDay(Integer.parseInt(dateParts[3]));
+					}
+					else {
+						allEclipseParaDB.setYear(Integer.parseInt(dateParts[0]));
+						allEclipseParaDB.setMonth(Integer.parseInt(dateParts[1]));
+						allEclipseParaDB.setDay(Integer.parseInt(dateParts[2]));
+					}
+					
+
+					allEclipseParaDB.setHour(Integer.parseInt(timeParts[0]));
+					allEclipseParaDB.setMinute(Integer.parseInt(timeParts[1]));
+					allEclipseParaDB.setSecond(Integer.parseInt(timeParts[2]));
+					
+					this.allEclipsesRepository.save(allEclipseParaDB);
+					
 				}
 			}
 		}
@@ -150,28 +200,69 @@ public class EclipsesServiceImpl implements EclipsesService{
 			
 			for(SolarEclipseDTO eclipse : eclipsesSolaresDelAnyo) {
 				
-				EclipsesEntity eclipseParaBD = new EclipsesEntity();
-				eclipseParaBD.setDeSol(true);
-				eclipseParaBD.setDate(eclipse.getDate());
-				eclipseParaBD.setYear(Integer.valueOf(anyo));
+				if(Integer.valueOf(anyo) > 0) {
+					EclipsesEntity eclipseParaBD = new EclipsesEntity();
+					eclipseParaBD.setDeSol(true);
+					eclipseParaBD.setDate(LocalDateTime.parse(eclipse.getDate()));
+					eclipseParaBD.setYear(Integer.valueOf(anyo));
+					
+					switch(eclipse.getType()) {
+					
+						case "NonCentralPartialEclipse":
+							eclipseParaBD.setEsParcial(true);
+							break;
+						
+						case "CentralAnnularEclipse":
+							eclipseParaBD.setEsAnular(true);
+							break;
+							
+						case "CentralTotalEclipse":
+							eclipseParaBD.setEsTotal(true);
+							break;
+					}
 				
+					this.eclipsesRepository.save(eclipseParaBD);
+				}
+				
+				AllEclipsesEntity allEclipseParaDB = new AllEclipsesEntity();
+				allEclipseParaDB.setDeLuna(true);
 				switch(eclipse.getType()) {
 				
 					case "NonCentralPartialEclipse":
-						eclipseParaBD.setEsParcial(true);
+						allEclipseParaDB.setParcial(true);
+						break;
+				
+					case "CentralAnnularEclipse":
+						allEclipseParaDB.setAnular(true);
 						break;
 					
-					case "CentralAnnularEclipse":
-						eclipseParaBD.setEsAnular(true);
-						break;
-						
 					case "CentralTotalEclipse":
-						eclipseParaBD.setEsTotal(true);
+						allEclipseParaDB.setTotal(true);
 						break;
-				}
+					}
+				
+				String[] parts = String.valueOf(eclipse.getDate()).split("T");
+				String[] dateParts = parts[0].split("-");
+				String[] timeParts = parts[1].split(":");
 
-			
-				this.eclipsesRepository.save(eclipseParaBD);
+				if(String.valueOf(eclipse.getDate()).startsWith("-")) {
+					allEclipseParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
+					allEclipseParaDB.setMonth(Integer.parseInt(dateParts[2]));
+					allEclipseParaDB.setDay(Integer.parseInt(dateParts[3]));
+				}
+				else {
+					allEclipseParaDB.setYear(Integer.parseInt(dateParts[0]));
+					allEclipseParaDB.setMonth(Integer.parseInt(dateParts[1]));
+					allEclipseParaDB.setDay(Integer.parseInt(dateParts[2]));
+				}
+				
+
+				allEclipseParaDB.setHour(Integer.parseInt(timeParts[0]));
+				allEclipseParaDB.setMinute(Integer.parseInt(timeParts[1]));
+				allEclipseParaDB.setSecond(Integer.parseInt(timeParts[2]));
+				
+				this.allEclipsesRepository.save(allEclipseParaDB);
+				
 		
 			}
 		}
@@ -233,7 +324,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 
 				 if (eclipse.getEvents() != null && eclipse.getEvents().getGreatest() != null && eclipse.getEvents().getGreatest().getDate() != null) {
 
-			        LunarEclipseDTO dto = new LunarEclipseDTO(eclipse.getEvents().getGreatest().getDate(), eclipse.getType());
+			        LunarEclipseDTO dto = new LunarEclipseDTO(String.valueOf(eclipse.getEvents().getGreatest().getDate()), eclipse.getType());
 			        eclipsesLunares.add(dto);
 			    }
 			 }
@@ -256,7 +347,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 
 	    		if (eclipse.getEvents() != null && eclipse.getEvents().getGreatest() != null && eclipse.getEvents().getGreatest().getDate() != null) {
 	       
-	    			SolarEclipseDTO dto = new SolarEclipseDTO(eclipse.getEvents().getGreatest().getDate(), eclipse.getType());
+	    			SolarEclipseDTO dto = new SolarEclipseDTO(String.valueOf(eclipse.getEvents().getGreatest().getDate()), eclipse.getType());
 
 	    			eclipsesSolares.add(dto);
 	    		}

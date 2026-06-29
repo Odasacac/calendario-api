@@ -12,8 +12,10 @@ import org.springframework.web.client.RestTemplate;
 
 import CCASolutions.Calendario.DTOs.LunarPhaseDTO;
 import CCASolutions.Calendario.DTOs.YLPDTO;
+import CCASolutions.Calendario.Entities.AllFasesLunaresEntity;
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Repositories.AllFasesLunaresRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.LunasRepository;
 import CCASolutions.Calendario.Services.LunasService;
@@ -26,6 +28,9 @@ public class LunasServiceImpl implements LunasService {
 	
 	@Autowired
 	private LunasRepository lunasRepository;
+	
+	@Autowired
+	private AllFasesLunaresRepository allFasesLunaresRepository;
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
@@ -106,9 +111,8 @@ public class LunasServiceImpl implements LunasService {
 		List<LunasEntity> allLunas = this.lunasRepository.findAll();
 		
 		if(apiGetLunasUrl != null && allLunas.isEmpty()) {	
-				
 			
-			for (int i = 0; i < 2100; i++) {
+			for (int i = -4700; i < 2100; i++) {
 				
 				System.out.println("Actualizando lunas del anyo: " + i);
 				
@@ -119,6 +123,8 @@ public class LunasServiceImpl implements LunasService {
 						
 						for(LunarPhaseDTO faseLunarAPI : fasesLunaresDelAnyo) {
 							
+							if(i > 0) {
+								
 								LunasEntity lunaParaDB = new LunasEntity();
 								
 								switch (faseLunarAPI.getMoonPhase()){
@@ -140,21 +146,59 @@ public class LunasServiceImpl implements LunasService {
 										break;
 								}
 								
-								lunaParaDB.setYear(faseLunarAPI.getDate().getYear());
-								lunaParaDB.setDate(faseLunarAPI.getDate());									
+								lunaParaDB.setYear(LocalDateTime.parse(faseLunarAPI.getDate()).getYear());
+								lunaParaDB.setDate(LocalDateTime.parse(faseLunarAPI.getDate()));									
 								lunaParaDB.setSelecta(false);
 								lunaParaDB.setInvertida(false);
+								
+								this.lunasRepository.save(lunaParaDB);;
+							}
+		
+							AllFasesLunaresEntity allFaseLunarParaDB = new AllFasesLunaresEntity();
+							
+							switch (faseLunarAPI.getMoonPhase()){
+							
+								case "NewMoon":
+									allFaseLunarParaDB.setNueva(true);
+									break;
+								
+								case "FirstQuarter":
+									allFaseLunarParaDB.setCuartoCreciente(true);
+									break;
+								
+								case "FullMoon":
+									allFaseLunarParaDB.setLlena(true);
+									break;
+								
+								case "LastQuarter":
+									allFaseLunarParaDB.setCuartoMenguante(true);
+									break;
+							}
+							
 
-								try {
-									
-									this.lunasRepository.save(lunaParaDB);
-								}
-								catch (Exception e)	{
-										
-									System.out.println("Error al almacenar luna: " + e);
-									resultado = "Error al actualizar lunas, checkear logs.";
-								}		
-						}
+							String[] parts = String.valueOf(faseLunarAPI.getDate()).split("T");
+							String[] dateParts = parts[0].split("-");
+							String[] timeParts = parts[1].split(":");
+
+							if(String.valueOf(faseLunarAPI.getDate()).startsWith("-")) {
+								allFaseLunarParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
+								allFaseLunarParaDB.setMonth(Integer.parseInt(dateParts[2]));
+								allFaseLunarParaDB.setDay(Integer.parseInt(dateParts[3]));
+							}
+							else {
+								allFaseLunarParaDB.setYear(Integer.parseInt(dateParts[0]));
+								allFaseLunarParaDB.setMonth(Integer.parseInt(dateParts[1]));
+								allFaseLunarParaDB.setDay(Integer.parseInt(dateParts[2]));
+							}
+							
+
+							allFaseLunarParaDB.setHour(Integer.parseInt(timeParts[0]));
+							allFaseLunarParaDB.setMinute(Integer.parseInt(timeParts[1]));
+							allFaseLunarParaDB.setSecond(Integer.parseInt(timeParts[2]));
+							
+							this.allFasesLunaresRepository.save(allFaseLunarParaDB);
+						}					
+						
 						
 						System.out.println("Actualizadas las lunas del anyo: " + i);
 					}					

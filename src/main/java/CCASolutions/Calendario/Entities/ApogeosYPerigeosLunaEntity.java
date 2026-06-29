@@ -21,16 +21,31 @@ public class ApogeosYPerigeosLunaEntity implements Serializable {
 	private Long id;
 
 	private LocalDateTime date;
+	private int year;
 	
 	private boolean esApogeo;
 	private boolean esPerigeo;
 	private double distance;
+	
 	private boolean esSelecto;
 	private boolean esInvertido;
+	private Long lunaId;
 	
 	
 	
 	
+	public int getYear() {
+		return year;
+	}
+	public void setYear(int year) {
+		this.year = year;
+	}
+	public Long getLunaId() {
+		return lunaId;
+	}
+	public void setLunaId(Long lunaId) {
+		this.lunaId = lunaId;
+	}
 	public boolean isEsSelecto() {
 		return esSelecto;
 	}

@@ -1,20 +1,15 @@
 package CCASolutions.Calendario.DTOs;
 
-import java.time.LocalDateTime;
-
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 public class LunarPhaseDTO {
 	
-	@JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
-	private LocalDateTime date;
+	private String date;
 	
 	private String moonPhase;
 	
-	public LocalDateTime getDate() {
+	public String getDate() {
 		return date;
 	}
-	public void setDate(LocalDateTime date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 	public String getMoonPhase() {

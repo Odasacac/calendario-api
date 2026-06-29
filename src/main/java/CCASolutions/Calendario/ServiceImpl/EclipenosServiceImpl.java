@@ -31,13 +31,12 @@ public class EclipenosServiceImpl implements EclipenosService{
 		String resultado = "Eclipenos actualizados sin problema.";		
 		List<EclipenosEntity> allEclipenos = this.eclipenosRepository.findAll();
 		List<MetonsEntity> metonos = this.metonsRepository.findAll();
-		
+		System.out.println("Iniciando actualizar eclipenos");
 		if(allEclipenos.isEmpty() && !metonos.isEmpty()) {
 			try {
 				
 				for (MetonsEntity meton : metonos) {
 					
-					System.out.println("Actualizando los eclípenos del anyo: " + meton.getYear());
 					List<EclipsesEntity> eclipses = this.eclipsesRepository.findByYear(meton.getYear());
 					
 					if(meton.isFasal()) {
@@ -47,7 +46,7 @@ public class EclipenosServiceImpl implements EclipenosService{
 							long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(eclipse.getDate(), meton.getDate()));
 							
 							if(segundosDeDiferencia <= 86164) {
-								
+								System.out.println("Actualizando los eclípenos del anyo: " + meton.getYear());
 								EclipenosEntity eclipeno = new EclipenosEntity();
 								
 								eclipeno.setDate(meton.getDate());
