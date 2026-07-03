@@ -368,10 +368,20 @@ public class DatesServiceImpl implements DatesService {
 		
 		List<MinimaFestividadesDTO> festividadesObtenidasDTO = new ArrayList<>();
 
+		String cambioDeEclipenoCode = "CE";
+		String cambioDeMetonoCode = "CM";		 
+		String cambioDeAnyoCode= "CA";
+		String bienvenidaPrimaveraCode = "BP";
+		String mitadAnyoCode = "MA";
+		String pasoOtonyoCode = "PO";
+		String inicioAnyoCode = "IA";
+		String despedidaVeranoCode = "DV";
+		String despedidaAnyoCode = "DA";
+
 		
 		// 1 - Cambio de eclipeno
 		MinimaFestividadesDTO cambioDeEclipeno = new MinimaFestividadesDTO();
-		cambioDeEclipeno.setCode("CE");		
+		cambioDeEclipeno.setCode(cambioDeEclipenoCode);		
 		long diasMinimosDeDiferenciaEntreCEYDate = Long.MAX_VALUE;
 		boolean esHoyCE = false;
 		
@@ -407,7 +417,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		// 2 - Cambio de metono
 		MinimaFestividadesDTO cambioDeMetono = new MinimaFestividadesDTO();
-		cambioDeMetono.setCode("CM");		
+		cambioDeMetono.setCode(cambioDeMetonoCode);		
 		long diasMinimosDeDiferenciaEntreCMYDate = Long.MAX_VALUE;
 		boolean esHoyCM = false;
 		
@@ -441,22 +451,22 @@ public class DatesServiceImpl implements DatesService {
 		
 		// 3 - Cambio de año, Bienvenida a la Primavera, Mitad de año y Bienvenida del otoño
 		MinimaFestividadesDTO cambioDeAnyo = new MinimaFestividadesDTO();
-		cambioDeAnyo.setCode("CA");		
+		cambioDeAnyo.setCode(cambioDeAnyoCode);		
 		long diasMinimosDeDiferenciaEntreCAYDate = Long.MAX_VALUE;
 		boolean esHoyCA = false;
 		
 		MinimaFestividadesDTO bienvenidaPrimavera = new MinimaFestividadesDTO();
-		bienvenidaPrimavera.setCode("BP");		
+		bienvenidaPrimavera.setCode(bienvenidaPrimaveraCode);		
 		long diasMinimosDeDiferenciaEntreBPYDate = Long.MAX_VALUE;
 		boolean esHoyBP =false;
 		
 		MinimaFestividadesDTO pasoOtonyo = new MinimaFestividadesDTO();
-		pasoOtonyo.setCode("PO");		
+		pasoOtonyo.setCode(pasoOtonyoCode);		
 		long diasMinimosDeDiferenciaEntrePOYDate = Long.MAX_VALUE;
 		boolean esHoyBO =false;
 		
 		MinimaFestividadesDTO mitadAnyo = new MinimaFestividadesDTO();
-		mitadAnyo.setCode("MA");		
+		mitadAnyo.setCode(mitadAnyoCode);		
 		long diasMinimosDeDiferenciaEntreMAYDate = Long.MAX_VALUE;
 		boolean esHoyMA = false;
 		
@@ -566,17 +576,17 @@ public class DatesServiceImpl implements DatesService {
 		// 4 - Inicio del primer mes del año, despedida del verano y despedida del año
 		
 		MinimaFestividadesDTO inicioPrimerMesAnyo = new MinimaFestividadesDTO();
-		inicioPrimerMesAnyo.setCode("IA");		
+		inicioPrimerMesAnyo.setCode(inicioAnyoCode);		
 		long diasMinimosDeDiferenciaEntreLunaYSI = Long.MAX_VALUE;
 
 		
 		MinimaFestividadesDTO despedidaVerano = new MinimaFestividadesDTO();
-		despedidaVerano.setCode("DV");		
+		despedidaVerano.setCode(despedidaVeranoCode);		
 		long diasMinimosDeDiferenciaEntreDVYLuna = Long.MAX_VALUE;
 		
 		
 		MinimaFestividadesDTO despedidaAnyo = new MinimaFestividadesDTO();
-		despedidaAnyo.setCode("DA");		
+		despedidaAnyo.setCode(despedidaAnyoCode);		
 		long diasMinimosDeDiferenciaEntreDAYLuna = Long.MAX_VALUE;
 
 		
