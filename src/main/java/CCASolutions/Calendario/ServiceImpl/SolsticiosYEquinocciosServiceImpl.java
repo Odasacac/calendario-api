@@ -33,12 +33,19 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
+	private final static String API_SOES = "ASYEF";
+	
+	private final static String SI = "WinterSolstice";
+	private final static String EP = "VernalEquinox";
+	private final static String SV = "SummerSolstice";
+	private final static String EO = "AutumnalEquinox";
+	
 
 	public String poblateSolsticiosYEquinoccios() {
 		
 		String resultado = "Solsticios y equinoccios actualizados sin problema";
 		
-		DatosEntity apiGetSYEUrl = datosRepository.findByConcepto("ASYEF");
+		DatosEntity apiGetSYEUrl = datosRepository.findByConcepto(API_SOES);
 		
 		List<SolsticiosYEquinocciosEntity> allSoes = this.solsticiosYEquinocciosRepository.findAll();
 		
@@ -61,22 +68,22 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 							
 								switch (soeAPI.getPhenomena()) {
 							
-									case "WinterSolstice":
+									case SI:
 										soeParaDB.setSolsticioInvierno(true);
 										soeParaDB.setStartingSeason(1);
 										break;
 									
-									case "VernalEquinox":
+									case EP:
 										soeParaDB.setEquinoccioPrimavera(true);
 										soeParaDB.setStartingSeason(2);
 										break;
 									
-									case "SummerSolstice":
+									case SV:
 										soeParaDB.setSolsticioVerano(true);
 										soeParaDB.setStartingSeason(3);
 										break;
 									
-									case "AutumnalEquinox":
+									case EO:
 										soeParaDB.setEquinoccioOtonyo(true);
 										soeParaDB.setStartingSeason(4);
 										break;
@@ -92,19 +99,19 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 							
 							switch (soeAPI.getPhenomena()) {
 							
-								case "WinterSolstice":
+								case SI:
 									allSoEsParaDB.setSolsticioInvierno(true);
 									break;
 							
-								case "VernalEquinox":
+								case EP:
 									allSoEsParaDB.setEquinoccioPrimavera(true);
 									break;
 							
-								case "SummerSolstice":
+								case SV:
 									allSoEsParaDB.setSolsticioVerano(true);
 									break;
 							
-								case "AutumnalEquinox":
+								case EO:
 									allSoEsParaDB.setEquinoccioOtonyo(true);
 									break;
 							}

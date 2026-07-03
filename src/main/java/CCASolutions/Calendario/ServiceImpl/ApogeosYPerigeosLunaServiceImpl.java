@@ -36,6 +36,8 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
+	private final static String API_APOPERIS = "APG";
+	
 	private static final String APOGEO = "MaximalDistance";
 	private static final String PERIGEO = "MinimalDistance";
 	private static final DateTimeFormatter FORMATTER_API_REQUEST =
@@ -54,7 +56,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 		
 		String resultado = "Apogeos actualizados sin problema.";
 		
-		DatosEntity apiGetApogeosUrl = datosRepository.findByConcepto("APG");
+		DatosEntity apiGetApogeosUrl = datosRepository.findByConcepto(API_APOPERIS);
 		String apogeosUrl = apiGetApogeosUrl.getValor();
 		
 		List<ApogeosYPerigeosLunaEntity> apogeosYPerigeosExistentesEnBD = this.apogeosYPerigeosLunaRepository.findAll();

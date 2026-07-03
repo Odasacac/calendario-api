@@ -1,8 +1,6 @@
 package CCASolutions.Calendario.ServiceImpl;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,79 +32,22 @@ public class LunasServiceImpl implements LunasService {
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
+	private final static String API_LUNAR_FASES = "YLP";
+	
+	private final static String NEW_MOON = "NewMoon";
+	private final static String FIRST_QUARTER = "FirstQuarter";
+	private final static String FULLMOON = "FullMoon";
+	private final static String LAST_QUARTER = "LastQuarter";
+	
 	
 	// METODOS PUBLICOS
-	
-
-	public boolean esDateOLunaNueva(LocalDateTime dateO, List<LunasEntity> fasesLunaresDelAnyo) {
-	
-	boolean esLunaNueva = false;
-	
-	for(int i = 0; i < fasesLunaresDelAnyo.size() && !esLunaNueva; i++) {			
-			
-		LunasEntity luna = fasesLunaresDelAnyo.get(i);
-			
-		if(luna.isNueva() && dateO.toLocalDate().isEqual(luna.getDate().toLocalDate())) {
-			
-			esLunaNueva = true;
-		}
 		
-	}
-
-	
-	return esLunaNueva;
-}
-
-
-	public LunasEntity getPrimeraLunaNuevaAnteriorAFecha(List<LunasEntity> lunasNuevasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha) {
-		
-		LunasEntity primeraLunaNuevaAnteriorAFecha = new LunasEntity();
-		
-		long diasMinimosDeDiferenciaConLastSOE = Long.MAX_VALUE;
-		for(LunasEntity luna :lunasNuevasDesdeAnyoMinimoAAnyoMaximo) {
-				
-			if(luna.getDate().toLocalDate().isBefore(fecha)) {
-					
-				long diasDeDiferenciaEntreLastSOEYLuna = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), fecha);
-					
-				if(diasDeDiferenciaEntreLastSOEYLuna < diasMinimosDeDiferenciaConLastSOE) {
-					diasMinimosDeDiferenciaConLastSOE = diasDeDiferenciaEntreLastSOEYLuna;
-					primeraLunaNuevaAnteriorAFecha = luna;
-				}
-
-			}
-		}
-		return primeraLunaNuevaAnteriorAFecha;
-	}
-
-	public LunasEntity getPrimeraLunaNuevaPosteriorAFecha(List<LunasEntity> lunasDesdeAnyoMinimoAAnyoMaximo, LocalDate fecha) {
-		
-		LunasEntity primeraLunaNuevaAnteriorAFecha = new LunasEntity();
-		
-		long diasMinimosDeDiferenciaConLastSOE = Long.MAX_VALUE;
-		for(LunasEntity luna :lunasDesdeAnyoMinimoAAnyoMaximo) {
-				
-			if(luna.isNueva() && luna.getDate().toLocalDate().isAfter(fecha)) {
-					
-				long diasDeDiferenciaEntreLastSOEYLuna = ChronoUnit.DAYS.between(fecha, luna.getDate().toLocalDate());
-					
-				if(diasDeDiferenciaEntreLastSOEYLuna < diasMinimosDeDiferenciaConLastSOE) {
-					diasMinimosDeDiferenciaConLastSOE = diasDeDiferenciaEntreLastSOEYLuna;
-					primeraLunaNuevaAnteriorAFecha = luna;
-				}
-
-			}
-		}
-		return primeraLunaNuevaAnteriorAFecha;
-	}
-
-	
 	
 	public String poblateLunas() {
 		
 		String resultado = "Lunas actualizadas sin problema.";
 		
-		DatosEntity apiGetLunasUrl = datosRepository.findByConcepto("YLP");
+		DatosEntity apiGetLunasUrl = datosRepository.findByConcepto(API_LUNAR_FASES);
 		
 		List<LunasEntity> allLunas = this.lunasRepository.findAll();
 		
@@ -129,19 +70,19 @@ public class LunasServiceImpl implements LunasService {
 								
 								switch (faseLunarAPI.getMoonPhase()){
 								
-									case "NewMoon":
+									case NEW_MOON:
 										lunaParaDB.setNueva(true);
 										break;
 										
-									case "FirstQuarter":
+									case FIRST_QUARTER:
 										lunaParaDB.setCuartoCreciente(true);
 										break;
 										
-									case "FullMoon":
+									case FULLMOON:
 										lunaParaDB.setLlena(true);
 										break;
 										
-									case "LastQuarter":
+									case LAST_QUARTER:
 										lunaParaDB.setCuartoMenguante(true);
 										break;
 								}
@@ -158,19 +99,19 @@ public class LunasServiceImpl implements LunasService {
 							
 							switch (faseLunarAPI.getMoonPhase()){
 							
-								case "NewMoon":
+								case NEW_MOON:
 									allFaseLunarParaDB.setNueva(true);
 									break;
 								
-								case "FirstQuarter":
+								case FIRST_QUARTER:
 									allFaseLunarParaDB.setCuartoCreciente(true);
 									break;
 								
-								case "FullMoon":
+								case FULLMOON:
 									allFaseLunarParaDB.setLlena(true);
 									break;
 								
-								case "LastQuarter":
+								case LAST_QUARTER:
 									allFaseLunarParaDB.setCuartoMenguante(true);
 									break;
 							}

@@ -34,11 +34,21 @@ public class EclipsesServiceImpl implements EclipsesService{
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
+	private final static String API_LUNAR_ECLIPSES = "LEPY";
+	private final static String API_SOLAR_ECLIPSES = "SEPY";
+	
+	private final static String TOTAL = "TotalEclipse";
+	private final static String PARTIAL = "PartialEclipse";
+	private final static String PENUMBRAL = "PenumbralEclipse";
+	private final static String NON_CENTRAL_PARTIAL = "NonCentralPartialEclipse";
+	private final static String CENTRAL_ANULAR = "CentralAnnularEclipse";
+	private final static String CENTRAL_TOTAL = "CentralTotalEclipse";
+	
 	public String poblateEclipses() {
 		
 		String resultado = "Eclipses actualizados sin problema.";
 		
-		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList("LEPY", "SEPY"));	
+		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList(API_LUNAR_ECLIPSES, API_SOLAR_ECLIPSES));	
 		List<EclipsesEntity> allEclipses = this.eclipsesRepository.findAll();
 		
 		String apiEclipsesLunares = "";
@@ -49,11 +59,11 @@ public class EclipsesServiceImpl implements EclipsesService{
 			{
 				switch (url.getConcepto()) {
 				
-					case "LEPY":					
+					case API_LUNAR_ECLIPSES:					
 						apiEclipsesLunares = url.getValor();
 						break;
 					
-					case "SEPY":					
+					case API_SOLAR_ECLIPSES:					
 						apiEclipsesSolares = url.getValor();
 						break;					
 				}
@@ -117,15 +127,15 @@ public class EclipsesServiceImpl implements EclipsesService{
 						
 						switch(eclipse.getType()) {
 						
-							case "TotalEclipse":
+							case TOTAL:
 								eclipseParaBD.setEsTotal(true);
 								break;
 								
-							case "PartialEclipse":
+							case PARTIAL:
 								eclipseParaBD.setEsParcial(true);
 								break;
 								
-							case "PenumbralEclipse":
+							case PENUMBRAL:
 								eclipseParaBD.setEsPenumbral(true);
 								break;
 						}
@@ -138,15 +148,15 @@ public class EclipsesServiceImpl implements EclipsesService{
 					allEclipseParaDB.setDeLuna(true);
 					switch(eclipse.getType()) {
 					
-						case "TotalEclipse":
+						case TOTAL:
 							allEclipseParaDB.setTotal(true);
 							break;
 						
-						case "PartialEclipse":
+						case PARTIAL:
 							allEclipseParaDB.setParcial(true);
 							break;
 						
-						case "PenumbralEclipse":
+						case PENUMBRAL:
 							allEclipseParaDB.setPenumbral(true);
 							break;
 					}
@@ -208,15 +218,15 @@ public class EclipsesServiceImpl implements EclipsesService{
 					
 					switch(eclipse.getType()) {
 					
-						case "NonCentralPartialEclipse":
+						case NON_CENTRAL_PARTIAL:
 							eclipseParaBD.setEsParcial(true);
 							break;
 						
-						case "CentralAnnularEclipse":
+						case CENTRAL_ANULAR:
 							eclipseParaBD.setEsAnular(true);
 							break;
 							
-						case "CentralTotalEclipse":
+						case CENTRAL_TOTAL:
 							eclipseParaBD.setEsTotal(true);
 							break;
 					}
@@ -228,15 +238,15 @@ public class EclipsesServiceImpl implements EclipsesService{
 				allEclipseParaDB.setDeLuna(true);
 				switch(eclipse.getType()) {
 				
-					case "NonCentralPartialEclipse":
+					case NON_CENTRAL_PARTIAL:
 						allEclipseParaDB.setParcial(true);
 						break;
 				
-					case "CentralAnnularEclipse":
+					case CENTRAL_ANULAR:
 						allEclipseParaDB.setAnular(true);
 						break;
 					
-					case "CentralTotalEclipse":
+					case CENTRAL_TOTAL:
 						allEclipseParaDB.setTotal(true);
 						break;
 					}
