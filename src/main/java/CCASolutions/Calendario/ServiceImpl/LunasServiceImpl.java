@@ -205,7 +205,7 @@ public class LunasServiceImpl implements LunasService {
 					else {
 					
 						System.out.println("No se han obtenido lunas de la API.");
-						resultado = "Error al actualizar lunas, checkear logs.";
+						resultado = "Error al actualizar lunas: no se han obtenido lunas de la API.";
 					}					
 				}
 				catch(Exception e) {
@@ -221,13 +221,15 @@ public class LunasServiceImpl implements LunasService {
 			if(apiGetLunasUrl == null) {
 				
 				System.out.println("La URL de la API para obtener las lunas es nula.");
+				resultado = "Error al actualizar lunas: la URL de la API para obtener las lunas es nula.";
 			}
 			else if(!allLunas.isEmpty()) {
 				
 				System.out.println("Ya hay lunas en la base de datos.");
+				resultado = "Error al actualizar lunas: ya hay lunas en la base de datos.";
 			}
 			
-			resultado = "Error al actualizar lunas, checkear logs.";
+			
 		}
 		
 		return resultado;

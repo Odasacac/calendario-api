@@ -87,6 +87,7 @@ public class DBServiceImpl implements DBService {
 		catch(Exception e) {
 			
 			System.out.println("Error poblando la base de datos: " + e);
+			resultado = resultado + "\n - Ha habido un error poblando la base de datos: chequear logs";
 		}
 		
 		

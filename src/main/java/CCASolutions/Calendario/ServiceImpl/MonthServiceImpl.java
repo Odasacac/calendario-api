@@ -53,7 +53,7 @@ public class MonthServiceImpl implements MonthService{
 		}
 		else {
 			System.out.println("Ya hay meses en la base de datos.");
-			resultado = "Error al actualizar los meses, checkear logs.";
+			resultado = "Error al actualizar los meses: ya hay meses en la base de datos.";
 		}
 		System.out.println("Meses actualizados");
 		return resultado;

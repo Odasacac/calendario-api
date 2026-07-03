@@ -49,7 +49,7 @@ public class DaysServiceImpl implements DaysService{
 		}
 		else {
 			System.out.println("Ya hay días en la base de datos.");
-			resultado = "Error al actualizar los días, checkear logs.";
+			resultado = "Error al actualizar los días: ya hay días en la base de datos.";
 		}
 		System.out.println("Days actualizados");
 		return resultado;

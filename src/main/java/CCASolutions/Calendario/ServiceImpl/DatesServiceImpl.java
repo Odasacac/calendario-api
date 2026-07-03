@@ -13,12 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
+import CCASolutions.Calendario.DTOs.DatosCosmicosParaVAUDTO;
 import CCASolutions.Calendario.DTOs.EclipenoINDTO;
 import CCASolutions.Calendario.DTOs.EclipenoSelectoDTO;
 import CCASolutions.Calendario.DTOs.EstadoLunaDTO;
 import CCASolutions.Calendario.DTOs.FestividadesDTO;
 import CCASolutions.Calendario.DTOs.LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO;
-import CCASolutions.Calendario.DTOs.LunasSolsticiosEclipsesMetonosYEclipenosDTO;
 import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MetonIADTO;
 import CCASolutions.Calendario.DTOs.MetonINDTO;
@@ -101,7 +101,7 @@ public class DatesServiceImpl implements DatesService {
 		List<EclipenosEntity> allEclipenos = this.eclipenosRepository.findAllByOrderByDateDesc();
 		
 		if(!allEclipenos.isEmpty()) {
-			LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos = new LunasSolsticiosEclipsesMetonosYEclipenosDTO();
+			DatosCosmicosParaVAUDTO lunasSolsticiosEclipsesMetonosYEclipenos = new DatosCosmicosParaVAUDTO();
 			lunasSolsticiosEclipsesMetonosYEclipenos.setEclipenos(allEclipenos);
 			lunasSolsticiosEclipsesMetonosYEclipenos.setLastEclipenoIN(this.getLastEclipenoIN(allEclipenos, date));
 			lunasSolsticiosEclipsesMetonosYEclipenos.setLastEclipenoInvernalApofasalRemoto(this.getLastEclipenoInvernalApofasalRemoto(allEclipenos, date));
@@ -124,12 +124,19 @@ public class DatesServiceImpl implements DatesService {
 						lunasSolsticiosEclipsesMetonosYEclipenos.setEclipses(this.eclipsesRepository.findByDateBetweenAndEsParcialIsFalseAndEsPenumbralIsFalse(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(1)));
 						lunasSolsticiosEclipsesMetonosYEclipenos.setApoperis(this.apogeosYPerigeosLunaRepository.findByDateBetween(dateO.minusMonths(3), dateO.plusMonths(3)));
 						
-						if(lunasSolsticiosEclipsesMetonosYEclipenos.getApoperis().isEmpty() ||lunasSolsticiosEclipsesMetonosYEclipenos.getSoes().isEmpty() || lunasSolsticiosEclipsesMetonosYEclipenos.getLunas().isEmpty() || lunasSolsticiosEclipsesMetonosYEclipenos.getEclipses().isEmpty()) {
-							
-							System.out.println("Error al obtener dateVAU: no se han encontrado solsticios/equinoccios/lunas/eclipses/apoperis.");
+						if(lunasSolsticiosEclipsesMetonosYEclipenos.getApoperis().isEmpty()){
+							System.out.println("Error al obtener dateVAU: no se han encontrado apoperis.");
+						}
+						else if(lunasSolsticiosEclipsesMetonosYEclipenos.getSoes().isEmpty()) {
+							System.out.println("Error al obtener dateVAU: no se han encontrado soes.");
+						}
+						else if(lunasSolsticiosEclipsesMetonosYEclipenos.getLunas().isEmpty()) {
+							System.out.println("Error al obtener dateVAU: no se han encontrado fases lunares.");
+						}
+						else if(lunasSolsticiosEclipsesMetonosYEclipenos.getEclipses().isEmpty()) {
+							System.out.println("Error al obtener dateVAU: no se han encontrado eclipses.");
 						}
 						else {					
-	
 							dateVAU = this.getDateVAU(date, lunasSolsticiosEclipsesMetonosYEclipenos);									
 						}
 					}
@@ -144,7 +151,7 @@ public class DatesServiceImpl implements DatesService {
 			}
 			else {
 				if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() == null) {
-					System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno IN anterior a la fecha proporcionada.");
+					System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno inicial nuevo anterior a la fecha proporcionada.");
 				}
 				else if (lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto() == null) {
 					System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno invernal apofasal remoto anterior a la fecha proporcionada.");
@@ -165,39 +172,39 @@ public class DatesServiceImpl implements DatesService {
 	
 	// ========================= METODOS PRIVADOS
 	
-	private DateDTO getDateVAU(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosDTO allLunasSolsticiosEclipsesMetonosYEclipenos) {
+	private DateDTO getDateVAU(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
 		
 		DateDTO dateVAU= new DateDTO();
 		
-		dateVAU.setYear(this.getVAUYear(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN(), date, allLunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));					
-		dateVAU.setMonth(this.getVAUMonth(date, allLunasSolsticiosEclipsesMetonosYEclipenos.getSoes(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLunas()));
+		dateVAU.setYear(this.getVAUYear(datosCosmicosParaVAUDTO.getLastEclipenoIN(), date, datosCosmicosParaVAUDTO.getSoes(), datosCosmicosParaVAUDTO.getLastMetonIN()));					
+		dateVAU.setMonth(this.getVAUMonth(date, datosCosmicosParaVAUDTO.getSoes(), datosCosmicosParaVAUDTO.getLunas()));
 		
-		VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(date, allLunasSolsticiosEclipsesMetonosYEclipenos.getLunas());
+		VAUWeekAndDayDTO vauWeekAndDay = this.getVauWeekAndDay(date, datosCosmicosParaVAUDTO.getLunas());
 		dateVAU.setWeek(vauWeekAndDay.getWeek());
 		dateVAU.setDay(vauWeekAndDay.getDay());					
 
-		dateVAU.setLastEclipenoSelecto(this.getVAUEclipenoSelecto(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), date));
-		dateVAU.setMetonoInvernalApofasalRemoto(this.getMetonoInvernalApofasalRemoto(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
+		dateVAU.setLastEclipenoSelecto(this.getVAUEclipenoSelecto(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), date));
+		dateVAU.setMetonoInvernalApofasalRemoto(this.getMetonoInvernalApofasalRemoto(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), datosCosmicosParaVAUDTO.getMetons(), date));
 		
-		dateVAU.setMetonoVAU(this.getVAUMeton(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons(), date));
+		dateVAU.setMetonoVAU(this.getVAUMeton(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto(), datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), datosCosmicosParaVAUDTO.getMetons(), date));
 		
-		dateVAU.setEclipenoVAU(this.getVAUEclipeno(allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos(), allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto(), date));			
-		dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipses(), date, allLunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN()));
-		dateVAU.setCasalero(this.getCasalero(allLunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN()));
-		dateVAU.setEstadoLuna(this.getEstadoLuna(date, allLunasSolsticiosEclipsesMetonosYEclipenos.getApoperis()));	
+		dateVAU.setEclipenoVAU(this.getVAUEclipeno(datosCosmicosParaVAUDTO.getEclipenos(), datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), date));			
+		dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, datosCosmicosParaVAUDTO.getEclipses(), date, datosCosmicosParaVAUDTO.getLastMetonIN()));
+		dateVAU.setCasalero(this.getCasalero(datosCosmicosParaVAUDTO.getLastEclipenoIN()));
+		dateVAU.setEstadoLuna(this.getEstadoLuna(date, datosCosmicosParaVAUDTO.getApoperis()));	
 		
-		dateVAU.setNotableEvent(this.getNotableEvent(date, allLunasSolsticiosEclipsesMetonosYEclipenos));		
-		dateVAU.setFestividades(this.getFestividades(date, allLunasSolsticiosEclipsesMetonosYEclipenos));
+		dateVAU.setNotableEvent(this.getNotableEvent(date, datosCosmicosParaVAUDTO));		
+		dateVAU.setFestividades(this.getFestividades(date, datosCosmicosParaVAUDTO));
 		
 		return dateVAU;
 	}
 	
 	
-	private NotableEventDTO getNotableEvent(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosDTO allLunasSolsticiosEclipsesMetonosYEclipenos) {
+	private NotableEventDTO getNotableEvent(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
 	
 		NotableEventDTO notableEventDTO = new NotableEventDTO();
 		
-		LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosPPPFecha = this.getFenomenosPPPFecha(date, allLunasSolsticiosEclipsesMetonosYEclipenos);
+		LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosPPPFecha = this.getFenomenosPPPFecha(date, datosCosmicosParaVAUDTO);
 		
 		notableEventDTO.setToday(this.getEventoActual(date, fenomenosPPPFecha));
 		notableEventDTO.setPrevious(this.getEventoPasado(date, fenomenosPPPFecha));
@@ -207,11 +214,11 @@ public class DatesServiceImpl implements DatesService {
 	}
 	
 	
-	private FestividadesDTO getFestividades(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosDTO allLunasSolsticiosEclipsesMetonosYEclipenos) {
+	private FestividadesDTO getFestividades(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
 		
 		FestividadesDTO festividades = new FestividadesDTO();
 		
-		List<MinimaFestividadesDTO> festividadesObtenidasDTO = this.getFestividadesDesdeFecha(date, allLunasSolsticiosEclipsesMetonosYEclipenos);
+		List<MinimaFestividadesDTO> festividadesObtenidasDTO = this.getFestividadesDesdeFecha(date, datosCosmicosParaVAUDTO);
 		List<FestividadesEntity> festividadesEntities = this.festividadesRepository.findAll();
 		
 		List<MinimaFestividadesDTO> festividadesActuales = new ArrayList<>();
@@ -357,7 +364,7 @@ public class DatesServiceImpl implements DatesService {
 		return festividadParaGetName;
 	}
 	
-	private List<MinimaFestividadesDTO> getFestividadesDesdeFecha(LocalDate date, LunasSolsticiosEclipsesMetonosYEclipenosDTO allLunasSolsticiosEclipsesMetonosYEclipenos) {
+	private List<MinimaFestividadesDTO> getFestividadesDesdeFecha(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
 		
 		List<MinimaFestividadesDTO> festividadesObtenidasDTO = new ArrayList<>();
 
@@ -368,9 +375,9 @@ public class DatesServiceImpl implements DatesService {
 		long diasMinimosDeDiferenciaEntreCEYDate = Long.MAX_VALUE;
 		boolean esHoyCE = false;
 		
-		for(int i = 0; i<allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos().size(); i++) {
+		for(int i = 0; i<datosCosmicosParaVAUDTO.getEclipenos().size(); i++) {
 			
-			EclipenosEntity eclipeno = allLunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos().get(i);
+			EclipenosEntity eclipeno = datosCosmicosParaVAUDTO.getEclipenos().get(i);
 			
 			if(eclipeno.isInvernal() && eclipeno.isNuevo()) {
 				
@@ -404,9 +411,9 @@ public class DatesServiceImpl implements DatesService {
 		long diasMinimosDeDiferenciaEntreCMYDate = Long.MAX_VALUE;
 		boolean esHoyCM = false;
 		
-		for(int i = 0; i<allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons().size(); i++) {
+		for(int i = 0; i<datosCosmicosParaVAUDTO.getMetons().size(); i++) {
 			
-			MetonsEntity metono = allLunasSolsticiosEclipsesMetonosYEclipenos.getMetons().get(i);
+			MetonsEntity metono = datosCosmicosParaVAUDTO.getMetons().get(i);
 			
 			if(metono.isInvernal() && metono.isNuevo()) {
 				
@@ -459,9 +466,9 @@ public class DatesServiceImpl implements DatesService {
 		SolsticiosYEquinocciosEntity ePMasCercano = new SolsticiosYEquinocciosEntity(); // Tendra utilidad cuando haya festividades con luna en primavera
 		
 		
-		for(int j = 0; j<allLunasSolsticiosEclipsesMetonosYEclipenos.getSoes().size(); j++) {
+		for(int j = 0; j<datosCosmicosParaVAUDTO.getSoes().size(); j++) {
 			
-			SolsticiosYEquinocciosEntity soe = allLunasSolsticiosEclipsesMetonosYEclipenos.getSoes().get(j);
+			SolsticiosYEquinocciosEntity soe = datosCosmicosParaVAUDTO.getSoes().get(j);
 			
 			if(soe.getDate().toLocalDate().isEqual(date)) {
 				
@@ -573,7 +580,7 @@ public class DatesServiceImpl implements DatesService {
 		long diasMinimosDeDiferenciaEntreDAYLuna = Long.MAX_VALUE;
 
 		
-		for(LunasEntity luna : allLunasSolsticiosEclipsesMetonosYEclipenos.getLunas()) {
+		for(LunasEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
 			
 	
 			if(luna.isNueva()) {
@@ -597,7 +604,7 @@ public class DatesServiceImpl implements DatesService {
 				SolsticiosYEquinocciosEntity soeMasCercanoALaLuna = new SolsticiosYEquinocciosEntity();
 				
 				long diasMinimosDeDiferenciaEntreSoeYLuna = Long.MAX_VALUE;
-				for(SolsticiosYEquinocciosEntity soe : allLunasSolsticiosEclipsesMetonosYEclipenos.getSoes()) {
+				for(SolsticiosYEquinocciosEntity soe : datosCosmicosParaVAUDTO.getSoes()) {
 					
 					long diasDeDiferenciaEntreSoeYLuna = Math.abs(ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), luna.getDate().toLocalDate()));
 					
@@ -1302,7 +1309,7 @@ public class DatesServiceImpl implements DatesService {
 			// Si cae en Luna nueva, ya tenemos el mes
 			
 			LunasEntity lunaNuevaAnteriorMasCercanaALaFecha = new LunasEntity();
-			LunasEntity lunaNuevaPosteriorMasCercanaALaFecha = new LunasEntity();
+			LunasEntity lunaNuevaPosteriorMasCercanaALaFecha = new LunasEntity(); // Ya tendra utilidad
 			Long numeroMinimoDeDiasEntreLunaNuevaAnteriorYDate = Long.MAX_VALUE;	
 			Long numeroMinimoDeDiasEntreLunaNuevaSiguienteYDate = Long.MAX_VALUE;	
 			
@@ -1358,7 +1365,7 @@ public class DatesServiceImpl implements DatesService {
 			LunasEntity lunaLlenaPosteriorMasCercanaALaFecha = new LunasEntity(); // Ya tendra utilidad
 			Long numeroMinimoDeDiasEntreLunaLlenaAnteriorYDate = Long.MAX_VALUE;	
 			Long numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate = Long.MAX_VALUE;	
-			boolean caeEnLunaLlena = false;
+			boolean caeEnLunaLlena = false;  // Ya tendra utilidad
 			
 			for(int i = 0; i<lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente.size(); i++) {
 				
@@ -1972,7 +1979,7 @@ public class DatesServiceImpl implements DatesService {
 		return lastMetonINForDate;
 	}
 	
-private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomenosPPPFecha(LocalDate dateO, LunasSolsticiosEclipsesMetonosYEclipenosDTO lunasSolsticiosEclipsesMetonosYEclipenos) {
+private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomenosPPPFecha(LocalDate dateO, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
 		
 	LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosParaEventosDTO = new LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO();
 		
@@ -2000,7 +2007,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		
 		long diasMinimosDeDiferenciaEntreApoperiFuturaYDate = Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreApoperiPasadaYDate = Long.MAX_VALUE;
-		for(ApogeosYPerigeosLunaEntity apoperi : lunasSolsticiosEclipsesMetonosYEclipenos.getApoperis()) {
+		for(ApogeosYPerigeosLunaEntity apoperi : datosCosmicosParaVAUDTO.getApoperis()) {
 			
 			if (apoperi.getDate().toLocalDate().isEqual(dateO)) {
 				apoperiActual=apoperi;
@@ -2027,7 +2034,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		
 		long diasMinimosDeDiferenciaEntreLunaFuturaYDate = Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreLunaPasadaYDate = Long.MAX_VALUE;
-		for(LunasEntity luna : lunasSolsticiosEclipsesMetonosYEclipenos.getLunas()) {
+		for(LunasEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
 			
 			if (luna.getDate().toLocalDate().isEqual(dateO)) {
 				lunaActual=luna;
@@ -2055,7 +2062,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 	
 		long diasMinimosDeDiferenciaEntreSoePasadoYDate =Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreSoeFuturoYDate =Long.MAX_VALUE;
-		for(SolsticiosYEquinocciosEntity soe : lunasSolsticiosEclipsesMetonosYEclipenos.getSoes()) {
+		for(SolsticiosYEquinocciosEntity soe : datosCosmicosParaVAUDTO.getSoes()) {
 			
 			if(soe.getDate().toLocalDate().isEqual(dateO)) {
 				soeActual=soe;
@@ -2083,7 +2090,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		
 		long diasMinimosDeDiferenciaEntreMetonoPasadoYDate =Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreMetonoFuturoYDate =Long.MAX_VALUE;
-		for(MetonsEntity meton : lunasSolsticiosEclipsesMetonosYEclipenos.getMetons()) {
+		for(MetonsEntity meton : datosCosmicosParaVAUDTO.getMetons()) {
 			if(meton.getDate().toLocalDate().isEqual(dateO)) {
 				metonActual.add(meton);
 			}		
@@ -2119,7 +2126,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		
 		long diasMinimosDeDiferenciaEntreEclipsePasadoYDate =Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreEclipseFuturoYDate =Long.MAX_VALUE;
-		for(EclipsesEntity eclipse : lunasSolsticiosEclipsesMetonosYEclipenos.getEclipses()) {
+		for(EclipsesEntity eclipse : datosCosmicosParaVAUDTO.getEclipses()) {
 			
 			if(eclipse.getDate().toLocalDate().isEqual(dateO)) {
 				eclipseActual=eclipse;
@@ -2147,7 +2154,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		
 		long diasMinimosDeDiferenciaEntreEclipenoPasadoYDate =Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreEclipenoFuturoYDate =Long.MAX_VALUE;
-		for(EclipenosEntity eclipeno : lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenos()) {
+		for(EclipenosEntity eclipeno : datosCosmicosParaVAUDTO.getEclipenos()) {
 			if(eclipeno.getDate().toLocalDate().isEqual(dateO)) {
 				eclipenoActual=eclipeno;
 			}

@@ -129,26 +129,23 @@ public class CasalerosServiceImpl implements CasalerosService {
 				resultado = "Casaleros poblados correctamente.";
 							
 			}			
-			catch(Exception e) {					
-				resultado = "Error al acceder a la base de datos a recoger los eclipenos: " + e.getMessage();
+			catch(Exception e) {
+				System.out.println("Error al acceder a la base de datos a recoger los eclipenos: " + e.getMessage());
+				resultado = "Error al actualizar los casaleros, checkear logs.";
 			}
 		}
 		else {
 			
 			if(!allCasaleros.isEmpty()) {
-				
 				System.out.println("Ya hay casaleros en la base de datos.");
+				resultado = "Error al actualizar los casaleros: ya hay casaleros en la base de datos.";
 			}
 			else if(eclipenos.isEmpty()){
-				
 				System.out.println("No hay eclípenos en la base de datos.");
-			}
-			
-			resultado = "Error al actualizar los casaleros, checkear logs.";
+				resultado = "Error al actualizar los casaleros: no hay eclípenos en la base de datos.";
+			}		
 		}
-				
-		
-			
+					
 		
 		System.out.println("Poblate casaleros finalizado.");
 			

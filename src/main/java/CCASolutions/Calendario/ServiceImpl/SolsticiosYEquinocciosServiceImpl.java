@@ -138,7 +138,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 					else {
 						
 						System.out.println("No se han obtenido solsticios ni equinoccios de la API.");
-						resultado = "Error al actualizar solsticios y equinoccios, checkear logs.";
+						resultado = "Error al actualizar solsticios y equinoccios: no se han obtenido solsticios ni equinoccios de la API.";
 					}	
 				}
 				catch (Exception e) {
@@ -153,11 +153,12 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 			
 			if(apiGetSYEUrl == null) {
 				System.out.println("La URL de la API para obtener los soes es nula.");
+				resultado = "Error al actualizar los solsticios y equinoccios: la URL de la API para obtener los soes es nula..";
 			}
 			else if(!allSoes.isEmpty()) {
 				System.out.println("Ya hay soes en la base de datos.");
+				resultado = "Error al actualizar los solsticios y equinoccios: ya hay soes en la base de datos.";
 			}
-			resultado = "Error al actualizar los solsticios y equinoccios, checkear logs.";
 		}
 		
 		return resultado;

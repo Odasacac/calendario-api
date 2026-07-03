@@ -40,7 +40,7 @@ public class WeeksServiceImpl implements WeeksService{
 		}
 		else {
 			System.out.println("Ya hay semanas en la base de datos.");
-			resultado = "Error al actualizar las semanas, checkear logs.";
+			resultado = "Error al actualizar las semanas: ya hay semanas en la base de datos.";
 		}
 		System.out.println("Semanas actualizadas");
 		return resultado;

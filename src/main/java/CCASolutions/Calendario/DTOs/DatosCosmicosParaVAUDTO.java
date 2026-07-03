@@ -9,7 +9,7 @@ import CCASolutions.Calendario.Entities.LunasEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
-public class LunasSolsticiosEclipsesMetonosYEclipenosDTO {
+public class DatosCosmicosParaVAUDTO {
 
 	List<SolsticiosYEquinocciosEntity> soes;
 	List<LunasEntity> lunas;

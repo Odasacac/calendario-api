@@ -44,7 +44,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 		}
 		else {
 			System.out.println("Ya hay festividades en la base de datos.");
-			resultado = "Error al actualizar las festividades, checkear logs.";
+			resultado = "Error al actualizar las festividades: ya hay festividades en la base de datos.";
 		}
 		System.out.println("Festividades actualizadas");
 		return resultado;

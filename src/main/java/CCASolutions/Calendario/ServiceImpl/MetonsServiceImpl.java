@@ -163,32 +163,28 @@ public class MetonsServiceImpl implements MetonsService {
 								
 							}											
 						}
-					}
-					
-									
+					}									
 				}
 				
-				
 				this.metonsRepository.saveAll(metonosParaDB);				
-				
 				System.out.println("Evaluacion de métonos finalizada.");
 			}
 			else {
 				if(allLunas.isEmpty()) {
 					
 					System.out.println("No hay lunas en la base de datos.");
-					resultado = "Error al chequear metonos, chequear logs,";
+					resultado = "Error al chequear metonos: no hay lunas en la base de datos.";
 				}
 				else if (allSoes.isEmpty()){
 					
 					System.out.println("No hay soes en la base de datos.");
-					resultado = "Error al chequear metonos, chequear logs,";
+					resultado = "Error al chequear metonos: no hay soes en la base de datos.";
 				}
 			}
 		}
 		else {
 			System.out.println("Ya hay metonos en la BBDD");
-			resultado="Error a la hora de actualizar los metonos, chequear logs.";
+			resultado="Error a la hora de actualizar los metonos: Ya hay metonos en la base de datos.";
 		}
 		
 		

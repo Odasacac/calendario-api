@@ -86,13 +86,14 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 					
 					apogeosParaDB.add(apogeoParaDB);
 				}
+				System.out.println("Almacenando apoperis en la BD.");
 				this.apogeosYPerigeosLunaRepository.saveAll(apogeosParaDB);
 				apogeosYPerigeosExistentesEnBD = apogeosParaDB;
-				System.out.println("Apogeos almacenados en la BD.");
+				System.out.println("Apoperis almacenados en la BD.");
 			}	
 			else {
 				System.out.println("No se han obtenido apogeos por la API.");				
-				resultado="Error al actualizar los apogeos, chequear logs.";
+				resultado="Error al actualizar los apogeos: no se han obtenido apogeos por la API.";
 			}
 			
 		}	
@@ -173,10 +174,14 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 					}			
 				}
 			}
+			else {
+				System.out.println("No hay lunas en la base de datos.");				
+				resultado="Error al actualizar las lunas con sus apogeos: no hay lunas en la base de datos.";
+			}
 		}
 		else {
-			System.out.println("No hay lunas en la base de datos.");				
-			resultado="Error al actualizar las lunas con sus apogeos, chequear logs.";
+			System.out.println("No hay apoperis en la base de datos.");				
+			resultado="Error al actualizar las lunas con sus apogeos: no hay apoperis en la base de datos.";
 		}
 			
 		

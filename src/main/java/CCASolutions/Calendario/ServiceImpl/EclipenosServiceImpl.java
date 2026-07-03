@@ -89,12 +89,12 @@ public class EclipenosServiceImpl implements EclipenosService{
 		else {
 			if(!allEclipenos.isEmpty()) {
 				System.out.println("Ya hay eclípenos en la base de datos.");
+				resultado = "Error al actualizar los eclípenos: ya hay eclípenos en la base de datos.";
 			}
 			else if(!metonos.isEmpty()){
 				System.out.println("No hay métonos en la base de datos.");
+				resultado = "Error al actualizar los eclípenos: no hay métonos en la base de datos.";
 			}
-			
-			resultado = "Error al actualizar los eclípenos, checkear logs.";
 		}
 
 		

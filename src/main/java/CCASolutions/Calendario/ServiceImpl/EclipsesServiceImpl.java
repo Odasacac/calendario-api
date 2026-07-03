@@ -79,13 +79,13 @@ public class EclipsesServiceImpl implements EclipsesService{
 				
 			}
 			else {
-				
 				System.out.println("La URL de la API para obtener los eclipses es nula.");
+				resultado = "Error al evaluar los eclipses: la URL de la API para obtener los eclipses es nula.";
 			}
 		}
 		else {
 			System.out.println("Ya hay eclipses en la base de datos.");
-			resultado = "Error al actualizar los eclipses, checkear logs.";
+			resultado = "Error al actualizar los eclipses: ya hay eclipses en la base de datos.";
 		}
 			
 		
