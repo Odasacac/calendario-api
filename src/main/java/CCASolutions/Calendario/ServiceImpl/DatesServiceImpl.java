@@ -23,6 +23,7 @@ import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MetonIADTO;
 import CCASolutions.Calendario.DTOs.MetonINDTO;
 import CCASolutions.Calendario.DTOs.MetonoInvernalApofasalRemotoDTO;
+import CCASolutions.Calendario.DTOs.MidsisonDTO;
 import CCASolutions.Calendario.DTOs.MinimaFestividadesDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.NotableEventDTO;
@@ -377,7 +378,10 @@ public class DatesServiceImpl implements DatesService {
 		String inicioAnyoCode = "IA";
 		String despedidaVeranoCode = "DV";
 		String despedidaAnyoCode = "DA";
-		String midsisonCode = "MS";
+		String midsisonInvernalCode = "MSI";
+		String midsisonPrimaveralCode = "MSP";
+		String midsisonEstivalCode = "MSE";
+		String midsisonOtonyalCode = "MSO";
 
 		
 		// 1 - Cambio de eclipeno
@@ -472,12 +476,10 @@ public class DatesServiceImpl implements DatesService {
 		boolean esHoyMA = false;
 		
 		MinimaFestividadesDTO midsison = new MinimaFestividadesDTO();
-		midsison.setCode(midsisonCode);
 		long diasMinimosDeDiferenciaEntreLastSoeYDate =Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreNextSoeYDate =Long.MAX_VALUE;
 		SolsticiosYEquinocciosEntity lastSoe = new SolsticiosYEquinocciosEntity();
 		SolsticiosYEquinocciosEntity nextSoe = new SolsticiosYEquinocciosEntity();
-		boolean esHoyMS = false;
 		
 		SolsticiosYEquinocciosEntity sIMasCercano = new SolsticiosYEquinocciosEntity();
 		SolsticiosYEquinocciosEntity sVMasCercano = new SolsticiosYEquinocciosEntity(); // Tendra utilidad cuando haya festividades con luna en verano
@@ -597,8 +599,25 @@ public class DatesServiceImpl implements DatesService {
 		
 		LocalDateTime diaDelMidsison = lastSoe.getDate().plusSeconds((ChronoUnit.SECONDS.between(lastSoe.getDate(), nextSoe.getDate()))/2);
 		midsison.setDate(diaDelMidsison);
-		midsison.setDiasDeDiferenciaConDate(ChronoUnit.DAYS.between(date, midsison.getDate().toLocalDate()));
+		midsison.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(date, midsison.getDate().toLocalDate())));
 		
+		switch(lastSoe.getStartingSeason()) {
+			case 1:
+				midsison.setCode(midsisonInvernalCode);
+				break;
+			
+			case 2:
+				midsison.setCode(midsisonPrimaveralCode);
+				break;
+			
+			case 3:
+				midsison.setCode(midsisonEstivalCode);
+				break;
+			
+			case 4: 
+				midsison.setCode(midsisonOtonyalCode);
+				break;
+		}
 
 		
 		festividadesObtenidasDTO.add(cambioDeAnyo);
@@ -722,7 +741,7 @@ public class DatesServiceImpl implements DatesService {
 		EclipsesEntity eclipseParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipseActual();
 		EclipenosEntity eclipenoParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipenoActual();
 		ApogeosYPerigeosLunaEntity apoperiParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getApoperiActual();
-		LocalDate midsisonParaMetono = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getMidsisonActual();
+		MidsisonDTO midsisonParaMetono = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getMidsisonActual();
 	
 		eventoActual = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo, midsisonParaMetono);
 		
@@ -750,7 +769,7 @@ public class DatesServiceImpl implements DatesService {
 		}
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior() != null) {
-			diasEntreMidsisonYDate = ChronoUnit.DAYS.between(lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior(), dateO);	    
+			diasEntreMidsisonYDate = ChronoUnit.DAYS.between(lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior().getDate().toLocalDate(), dateO);	    
 		} 
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior() != null) {
@@ -774,7 +793,7 @@ public class DatesServiceImpl implements DatesService {
 			    
 		LunasEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaAnterior() : null;
 		SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getSoeAnterior() : null;
-		LocalDate midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior() : null;
+		MidsisonDTO midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior() : null;
 		List<MetonsEntity> metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior() : new ArrayList<>();
 		EclipsesEntity eclipseParaMetodo = diasEntreEclipseYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseAnterior() : null;
 		EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoAnterior() : null;
@@ -814,7 +833,7 @@ public class DatesServiceImpl implements DatesService {
 		}
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo() != null) {
-			diasEntreMidsisonYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo());	    
+			diasEntreMidsisonYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo().getDate().toLocalDate());	    
 		} 
 		
 		if(!lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo().isEmpty()) {
@@ -837,7 +856,7 @@ public class DatesServiceImpl implements DatesService {
 			    
 		LunasEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaProxima() : null;
 		SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getSoeProximo() : null;
-		LocalDate midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo() : null;
+		MidsisonDTO midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo() : null;
 		List<MetonsEntity> metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo() : new ArrayList<>();
 		EclipsesEntity eclipseParaMetodo = diasEntreEclipseYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseProximo() : null;
 		EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoProximo() : null;
@@ -1676,7 +1695,7 @@ public class DatesServiceImpl implements DatesService {
 	
 
 	
-	private String getNotableEventName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, List<MetonsEntity> meton, EclipsesEntity eclipse, EclipenosEntity eclipeno, ApogeosYPerigeosLunaEntity apoperi, LocalDate midsison) {
+	private String getNotableEventName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, List<MetonsEntity> meton, EclipsesEntity eclipse, EclipenosEntity eclipeno, ApogeosYPerigeosLunaEntity apoperi, MidsisonDTO midsison) {
 		
 		String evento = "";
 		
@@ -1902,6 +1921,26 @@ public class DatesServiceImpl implements DatesService {
 			else if(midsison != null) {
 				
 				evento = "Midsison";
+				String midsisonApellido = "";
+				switch(midsison.getLastSoeSeason()) {
+				
+					case 1:
+						midsisonApellido = " invernal";
+						break;
+						
+					case 2:
+						midsisonApellido = " primaveral";
+						break;
+						
+					case 3:
+						midsisonApellido = " estival";
+						break;
+						
+					case 4: 
+						midsisonApellido = " otoñal";
+						break;
+				}
+				evento = evento + midsisonApellido;
 			}
 			else if (luna != null) {
 
@@ -2053,7 +2092,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		List<MetonsEntity> metonActual = new ArrayList<>();
 		EclipsesEntity eclipseActual = null;
 		EclipenosEntity eclipenoActual = null;
-		LocalDate midsisonActual = null;
+		MidsisonDTO midsisonActual = null;
 		
 		LunasEntity lunaPasado = null;
 		ApogeosYPerigeosLunaEntity apoperiPasado = null;
@@ -2061,7 +2100,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		List<MetonsEntity> metonPasado = new ArrayList<>();
 		EclipsesEntity eclipsePasado = null;
 		EclipenosEntity eclipenoPasado = null;
-		LocalDate midsisonPasado = null;
+		MidsisonDTO midsisonPasado = null;
 		
 		LunasEntity lunaFuturo = null;
 		ApogeosYPerigeosLunaEntity apoperiFuturo = null;
@@ -2069,7 +2108,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		List<MetonsEntity> metonFuturo = new ArrayList<>();
 		EclipsesEntity eclipseFuturo = null;
 		EclipenosEntity eclipenoFuturo = null;	
-		LocalDate midsisonFuturo = null;
+		MidsisonDTO midsisonFuturo = null;
 		
 		long diasMinimosDeDiferenciaEntreApoperiFuturaYDate = Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreApoperiPasadaYDate = Long.MAX_VALUE;
@@ -2246,16 +2285,22 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		}
 		
 
-		LocalDate diaDelMidsison = soePasado.getDate().plusSeconds((ChronoUnit.SECONDS.between(soePasado.getDate(), soeFuturo.getDate()))/2).toLocalDate();
+		LocalDateTime diaDelMidsison = soePasado.getDate().plusSeconds((ChronoUnit.SECONDS.between(soePasado.getDate(), soeFuturo.getDate()))/2);
 		
-		if(diaDelMidsison.isBefore(dateO)) {
-			midsisonPasado = diaDelMidsison;		
+		if(diaDelMidsison.toLocalDate().isBefore(dateO)) {
+			midsisonPasado = new MidsisonDTO();
+			midsisonPasado.setDate(diaDelMidsison);
+			midsisonPasado.setLastSoeSeason(soePasado.getStartingSeason());
 		}
-		else if(diaDelMidsison.isEqual(dateO)) {
-			midsisonActual = diaDelMidsison;
+		else if(diaDelMidsison.toLocalDate().isEqual(dateO)) {
+			midsisonActual = new MidsisonDTO();
+			midsisonActual.setDate(diaDelMidsison);	
+			midsisonActual.setLastSoeSeason(soePasado.getStartingSeason());
 		}
-		else if (diaDelMidsison.isAfter(dateO)) {
-			midsisonFuturo = diaDelMidsison;
+		else if (diaDelMidsison.toLocalDate().isAfter(dateO)) {
+			midsisonFuturo = new MidsisonDTO();
+			midsisonFuturo.setDate(diaDelMidsison);	
+			midsisonFuturo.setLastSoeSeason(soePasado.getStartingSeason());
 		}
 		
 		

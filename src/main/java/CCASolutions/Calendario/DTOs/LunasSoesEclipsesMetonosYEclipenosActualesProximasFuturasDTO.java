@@ -1,6 +1,5 @@
 package CCASolutions.Calendario.DTOs;
 
-import java.time.LocalDate;
 import java.util.List;
 
 import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
@@ -24,9 +23,9 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	private SolsticiosYEquinocciosEntity soeProximo;
 	private SolsticiosYEquinocciosEntity soeAnterior;
 	
-	private LocalDate midsisonActual;
-	private LocalDate midsisonProximo;
-	private LocalDate midsisonAnterior;
+	private MidsisonDTO midsisonActual;
+	private MidsisonDTO midsisonProximo;
+	private MidsisonDTO midsisonAnterior;
 	
 	private List<MetonsEntity> metonoActual;
 	private List<MetonsEntity> metonoProximo;
@@ -45,22 +44,22 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	
 	
 	
-	public LocalDate getMidsisonActual() {
+	public MidsisonDTO getMidsisonActual() {
 		return midsisonActual;
 	}
-	public void setMidsisonActual(LocalDate midsisonActual) {
+	public void setMidsisonActual(MidsisonDTO midsisonActual) {
 		this.midsisonActual = midsisonActual;
 	}
-	public LocalDate getMidsisonProximo() {
+	public MidsisonDTO getMidsisonProximo() {
 		return midsisonProximo;
 	}
-	public void setMidsisonProximo(LocalDate midsisonProximo) {
+	public void setMidsisonProximo(MidsisonDTO midsisonProximo) {
 		this.midsisonProximo = midsisonProximo;
 	}
-	public LocalDate getMidsisonAnterior() {
+	public MidsisonDTO getMidsisonAnterior() {
 		return midsisonAnterior;
 	}
-	public void setMidsisonAnterior(LocalDate midsisonAnterior) {
+	public void setMidsisonAnterior(MidsisonDTO midsisonAnterior) {
 		this.midsisonAnterior = midsisonAnterior;
 	}
 	public LunasEntity getLunaActual() {

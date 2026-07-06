@@ -8,4 +8,8 @@ INSERT INTO calendar_db.festividades (code,lunar,nombre) VALUES
 	 ('DV',1,'Despedida del verano'),
 	 ('PO',0,'Entrada del otoño'),
 	 ('DA',1,'Despedida del año'),
-	 ('MS',0,'Midsison');
+	 ('MSI',0,'Midsison invernal');
+INSERT INTO calendar_db.festividades (code,lunar,nombre) VALUES
+	 ('MSP',0,'Midsison primaveral'),
+	 ('MSE',0,'Midsison estival'),
+	 ('MSO',0,'Midsison otoñal');
