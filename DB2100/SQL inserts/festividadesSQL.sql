@@ -1,6 +1,6 @@
 INSERT INTO calendar_db.festividades (code,lunar,nombre) VALUES
 	 ('CE',0,'Cambio de eclípeno'),
-	 ('CM',0,'Cambio de métono'),
+	 ('CMN',0,'Cambio de métono nuevo'),
 	 ('CA',0,'Cambio de año'),
 	 ('IA',1,'Inicio del primer mes del año'),
 	 ('BP',0,'Bienvenida de la primavera'),
@@ -12,4 +12,5 @@ INSERT INTO calendar_db.festividades (code,lunar,nombre) VALUES
 INSERT INTO calendar_db.festividades (code,lunar,nombre) VALUES
 	 ('MSP',0,'Midsison primaveral'),
 	 ('MSE',0,'Midsison estival'),
-	 ('MSO',0,'Midsison otoñal');
+	 ('MSO',0,'Midsison otoñal'),
+	 ('CMA',0,'Cambio de métono apórico');

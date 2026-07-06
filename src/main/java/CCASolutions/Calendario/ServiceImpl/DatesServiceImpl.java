@@ -370,7 +370,8 @@ public class DatesServiceImpl implements DatesService {
 		List<MinimaFestividadesDTO> festividadesObtenidasDTO = new ArrayList<>();
 
 		String cambioDeEclipenoCode = "CE";
-		String cambioDeMetonoCode = "CM";		 
+		String cambioDeMetonoINCode = "CMN";
+		String cambioDeMetonoIACode = "CMA";	
 		String cambioDeAnyoCode= "CA";
 		String bienvenidaPrimaveraCode = "BP";
 		String mitadAnyoCode = "MA";
@@ -420,37 +421,65 @@ public class DatesServiceImpl implements DatesService {
 		
 		
 		
-		// 2 - Cambio de metono
-		MinimaFestividadesDTO cambioDeMetono = new MinimaFestividadesDTO();
-		cambioDeMetono.setCode(cambioDeMetonoCode);		
-		long diasMinimosDeDiferenciaEntreCMYDate = Long.MAX_VALUE;
-		boolean esHoyCM = false;
+		// 2 - Cambio de metono fasal y aporico
+		MinimaFestividadesDTO cambioDeMetonoIN = new MinimaFestividadesDTO();
+		cambioDeMetonoIN.setCode(cambioDeMetonoINCode);		
+		long diasMinimosDeDiferenciaEntreCMINYDate = Long.MAX_VALUE;
+		boolean esHoyCMN = false;
+		
+		MinimaFestividadesDTO cambioDeMetonoIA = new MinimaFestividadesDTO();
+		cambioDeMetonoIA.setCode(cambioDeMetonoINCode);		
+		long diasMinimosDeDiferenciaEntreCMIAYDate = Long.MAX_VALUE;
+		boolean esHoyCMA = false;
 		
 		for(int i = 0; i<datosCosmicosParaVAUDTO.getMetons().size(); i++) {
 			
 			MetonsEntity metono = datosCosmicosParaVAUDTO.getMetons().get(i);
 			
-			if(metono.isInvernal() && metono.isNuevo()) {
+			if(metono.isInvernal()) {
 				
-				if(metono.getDate().toLocalDate().isEqual(date)) {
-					cambioDeMetono.setDate(metono.getDate());
-					cambioDeMetono.setDiasDeDiferenciaConDate(0);
-					esHoyCM=true;
-				}
-				else if(!esHoyCM) {
+				if(metono.isNuevo()) {
 					
-					long diasDeDiferenciaEntrCMYDate = Math.abs(ChronoUnit.DAYS.between(metono.getDate().toLocalDate(), date));
-					
-					if(diasDeDiferenciaEntrCMYDate < diasMinimosDeDiferenciaEntreCMYDate) {
-						diasMinimosDeDiferenciaEntreCMYDate = diasDeDiferenciaEntrCMYDate;
-						cambioDeMetono.setDate(metono.getDate());
-						cambioDeMetono.setDiasDeDiferenciaConDate(diasMinimosDeDiferenciaEntreCMYDate);
+					if(metono.getDate().toLocalDate().isEqual(date)) {
+						cambioDeMetonoIN.setDate(metono.getDate());
+						cambioDeMetonoIN.setDiasDeDiferenciaConDate(0);
+						esHoyCMN=true;
+					}
+					else if(!esHoyCMN) {
+						
+						long diasDeDiferenciaEntrCMYDate = Math.abs(ChronoUnit.DAYS.between(metono.getDate().toLocalDate(), date));
+						
+						if(diasDeDiferenciaEntrCMYDate < diasMinimosDeDiferenciaEntreCMINYDate) {
+							diasMinimosDeDiferenciaEntreCMINYDate = diasDeDiferenciaEntrCMYDate;
+							cambioDeMetonoIN.setDate(metono.getDate());
+							cambioDeMetonoIN.setDiasDeDiferenciaConDate(diasMinimosDeDiferenciaEntreCMINYDate);
+						}
 					}
 				}
+				else if (metono.isAporico()) {
+					
+					if(metono.getDate().toLocalDate().isEqual(date)) {
+						cambioDeMetonoIA.setDate(metono.getDate());
+						cambioDeMetonoIA.setDiasDeDiferenciaConDate(0);
+						esHoyCMA=true;
+					}
+					else if(!esHoyCMA) {
+						
+						long diasDeDiferenciaEntrCMIAYDate = Math.abs(ChronoUnit.DAYS.between(metono.getDate().toLocalDate(), date));
+						
+						if(diasDeDiferenciaEntrCMIAYDate < diasMinimosDeDiferenciaEntreCMIAYDate) {
+							diasMinimosDeDiferenciaEntreCMIAYDate = diasDeDiferenciaEntrCMIAYDate;
+							cambioDeMetonoIA.setDate(metono.getDate());
+							cambioDeMetonoIA.setDiasDeDiferenciaConDate(diasMinimosDeDiferenciaEntreCMIAYDate);
+						}
+					}
+				}
+				
 			}
 		}
 		
-		festividadesObtenidasDTO.add(cambioDeMetono);
+		festividadesObtenidasDTO.add(cambioDeMetonoIN);
+		festividadesObtenidasDTO.add(cambioDeMetonoIA);
 		
 		
 		
@@ -707,17 +736,23 @@ public class DatesServiceImpl implements DatesService {
 			}
 		}
 		
-		// Si hay un eclipeno no hay festividad de inicio del primer mes ni de cambio de metono
+		// Si hay un eclipeno no hay festividad de inicio del primer mes ni de cambio de metono aporico
 		// Y si hay un metono, no hay inicio del primer mes
 		if(cambioDeEclipeno.getDiasDeDiferenciaConDate() < 100) { 
 			
 			inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
-			cambioDeMetono.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+			cambioDeMetonoIN.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+			cambioDeMetonoIA.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
 		}
-		else if(cambioDeMetono.getDiasDeDiferenciaConDate() < 100) {
+		else if(cambioDeMetonoIN.getDiasDeDiferenciaConDate() < 100) {
 			
 			inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
-		}		
+			cambioDeMetonoIA.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+		}
+		else if(cambioDeMetonoIA.getDiasDeDiferenciaConDate() < 100) {
+			inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+			cambioDeMetonoIN.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+		}
 			
 		
 		festividadesObtenidasDTO.add(inicioPrimerMesAnyo);
