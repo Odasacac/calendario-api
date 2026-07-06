@@ -7,4 +7,5 @@ INSERT INTO calendar_db.festividades (code,lunar,nombre) VALUES
 	 ('MA',0,'Mitad del año'),
 	 ('DV',1,'Despedida del verano'),
 	 ('PO',0,'Entrada del otoño'),
-	 ('DA',1,'Despedida del año');
+	 ('DA',1,'Despedida del año'),
+	 ('MS',0,'Midsison');

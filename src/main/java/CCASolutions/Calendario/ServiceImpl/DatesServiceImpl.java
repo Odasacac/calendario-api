@@ -377,6 +377,7 @@ public class DatesServiceImpl implements DatesService {
 		String inicioAnyoCode = "IA";
 		String despedidaVeranoCode = "DV";
 		String despedidaAnyoCode = "DA";
+		String midsisonCode = "MS";
 
 		
 		// 1 - Cambio de eclipeno
@@ -449,7 +450,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		
 		
-		// 3 - Cambio de año, Bienvenida a la Primavera, Mitad de año y Bienvenida del otoño
+		// 3 - Cambio de año, Bienvenida a la Primavera, Mitad de año y Bienvenida del otoño y midsison
 		MinimaFestividadesDTO cambioDeAnyo = new MinimaFestividadesDTO();
 		cambioDeAnyo.setCode(cambioDeAnyoCode);		
 		long diasMinimosDeDiferenciaEntreCAYDate = Long.MAX_VALUE;
@@ -469,6 +470,14 @@ public class DatesServiceImpl implements DatesService {
 		mitadAnyo.setCode(mitadAnyoCode);		
 		long diasMinimosDeDiferenciaEntreMAYDate = Long.MAX_VALUE;
 		boolean esHoyMA = false;
+		
+		MinimaFestividadesDTO midsison = new MinimaFestividadesDTO();
+		midsison.setCode(midsisonCode);
+		long diasMinimosDeDiferenciaEntreLastSoeYDate =Long.MAX_VALUE;
+		long diasMinimosDeDiferenciaEntreNextSoeYDate =Long.MAX_VALUE;
+		SolsticiosYEquinocciosEntity lastSoe = new SolsticiosYEquinocciosEntity();
+		SolsticiosYEquinocciosEntity nextSoe = new SolsticiosYEquinocciosEntity();
+		boolean esHoyMS = false;
 		
 		SolsticiosYEquinocciosEntity sIMasCercano = new SolsticiosYEquinocciosEntity();
 		SolsticiosYEquinocciosEntity sVMasCercano = new SolsticiosYEquinocciosEntity(); // Tendra utilidad cuando haya festividades con luna en verano
@@ -514,6 +523,24 @@ public class DatesServiceImpl implements DatesService {
 			}
 			else {
 					
+				if(soe.getDate().toLocalDate().isBefore(date)) {
+					
+					long diasDeDiferenciaEntreSoeYDate = Math.abs(ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), date));
+					if(diasDeDiferenciaEntreSoeYDate < diasMinimosDeDiferenciaEntreLastSoeYDate) {
+						diasMinimosDeDiferenciaEntreLastSoeYDate=diasDeDiferenciaEntreSoeYDate;
+						lastSoe = soe;
+					}
+						
+				}
+				else if(soe.getDate().toLocalDate().isAfter(date)) {
+					
+					long diasDeDiferenciaEntreSoeYDate = Math.abs(ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), date));
+					if(diasDeDiferenciaEntreSoeYDate < diasMinimosDeDiferenciaEntreNextSoeYDate) {
+						diasMinimosDeDiferenciaEntreNextSoeYDate=diasDeDiferenciaEntreSoeYDate;
+						nextSoe = soe;
+					}
+				}
+				
 				if(soe.isSolsticioInvierno() && !esHoyCA) {
 					
 					long diasDeDiferenciaEntreCAYDate = Math.abs(ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), date));
@@ -567,10 +594,18 @@ public class DatesServiceImpl implements DatesService {
 			}
 		}
 		
+		
+		LocalDateTime diaDelMidsison = lastSoe.getDate().plusSeconds((ChronoUnit.SECONDS.between(lastSoe.getDate(), nextSoe.getDate()))/2);
+		midsison.setDate(diaDelMidsison);
+		midsison.setDiasDeDiferenciaConDate(ChronoUnit.DAYS.between(date, midsison.getDate().toLocalDate()));
+		
+
+		
 		festividadesObtenidasDTO.add(cambioDeAnyo);
 		festividadesObtenidasDTO.add(bienvenidaPrimavera);
 		festividadesObtenidasDTO.add(mitadAnyo);
 		festividadesObtenidasDTO.add(pasoOtonyo);
+		festividadesObtenidasDTO.add(midsison);
 		
 		
 		// 4 - Inicio del primer mes del año, despedida del verano y despedida del año
@@ -663,8 +698,8 @@ public class DatesServiceImpl implements DatesService {
 		else if(cambioDeMetono.getDiasDeDiferenciaConDate() < 100) {
 			
 			inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
-		}
-		
+		}		
+			
 		
 		festividadesObtenidasDTO.add(inicioPrimerMesAnyo);
 		festividadesObtenidasDTO.add(despedidaVerano);
