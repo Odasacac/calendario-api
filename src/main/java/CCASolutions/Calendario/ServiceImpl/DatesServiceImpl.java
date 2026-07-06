@@ -687,8 +687,9 @@ public class DatesServiceImpl implements DatesService {
 		EclipsesEntity eclipseParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipseActual();
 		EclipenosEntity eclipenoParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipenoActual();
 		ApogeosYPerigeosLunaEntity apoperiParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getApoperiActual();
+		LocalDate midsisonParaMetono = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getMidsisonActual();
 	
-		eventoActual = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo);
+		eventoActual = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo, midsisonParaMetono);
 		
 		return eventoActual;
 	}
@@ -703,13 +704,19 @@ public class DatesServiceImpl implements DatesService {
 		Long diasEntreEclipseYDate = Long.MAX_VALUE;
 		Long diasEntreEclipenoYDate = Long.MAX_VALUE;
 		Long diasEntreApoperiYDate = Long.MAX_VALUE;
+		Long diasEntreMidsisonYDate = Long.MAX_VALUE;
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getLunaAnterior() != null) {
 			diasEntreLunaYDate = ChronoUnit.DAYS.between(lunasSolsticiosEclipsesMetonosYEclipenos.getLunaAnterior().getDate().toLocalDate(), dateO);
 		}
+		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getSoeAnterior() != null) {
 			diasEntreSOEYDate = ChronoUnit.DAYS.between(lunasSolsticiosEclipsesMetonosYEclipenos.getSoeAnterior().getDate().toLocalDate(), dateO);
 		}
+		
+		if(lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior() != null) {
+			diasEntreMidsisonYDate = ChronoUnit.DAYS.between(lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior(), dateO);	    
+		} 
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior() != null) {
 			diasEntreMetonYDate = ChronoUnit.DAYS.between(lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior().get(0).getDate().toLocalDate(), dateO);
@@ -728,16 +735,17 @@ public class DatesServiceImpl implements DatesService {
 		} 
 				
 			  
-		long minDias = Math.min(diasEntreApoperiYDate, Math.min(diasEntreLunaYDate, Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, Math.min(diasEntreEclipseYDate, diasEntreEclipenoYDate)))));
+		long minDias = Math.min(diasEntreMidsisonYDate, Math.min(diasEntreApoperiYDate, Math.min(diasEntreLunaYDate, Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, Math.min(diasEntreEclipseYDate, diasEntreEclipenoYDate))))));
 			    
 		LunasEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaAnterior() : null;
 		SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getSoeAnterior() : null;
+		LocalDate midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior() : null;
 		List<MetonsEntity> metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior() : new ArrayList<>();
 		EclipsesEntity eclipseParaMetodo = diasEntreEclipseYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseAnterior() : null;
 		EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoAnterior() : null;
 		ApogeosYPerigeosLunaEntity apoperiParaMetodo = diasEntreApoperiYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiAnterior() : null;
 			    
-		String nombreDelEvento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo);
+		String nombreDelEvento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo, midsisonParaMetodo);
 			    
 		String dias = " días";
 		if(minDias == 1) {
@@ -760,13 +768,19 @@ public class DatesServiceImpl implements DatesService {
 		Long diasEntreEclipseYDate = Long.MAX_VALUE;
 		Long diasEntreEclipenoYDate = Long.MAX_VALUE;
 		Long diasEntreApoperiYDate = Long.MAX_VALUE;
+		Long diasEntreMidsisonYDate = Long.MAX_VALUE;
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getLunaProxima() != null) {
 			diasEntreLunaYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getLunaProxima().getDate().toLocalDate());
 		}
+		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getSoeProximo() != null) {
 			diasEntreSOEYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getSoeProximo().getDate().toLocalDate());
 		}
+		
+		if(lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo() != null) {
+			diasEntreMidsisonYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo());	    
+		} 
 		
 		if(!lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo().isEmpty()) {
 			diasEntreMetonYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo().get(0).getDate().toLocalDate());
@@ -784,16 +798,17 @@ public class DatesServiceImpl implements DatesService {
 			diasEntreApoperiYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiProximo().getDate().toLocalDate());	    
 		} 
 			  
-		long minDias = Math.min(diasEntreApoperiYDate, Math.min(diasEntreLunaYDate, Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, Math.min(diasEntreEclipseYDate, diasEntreEclipenoYDate)))));
+		long minDias = Math.min(diasEntreMidsisonYDate, Math.min(diasEntreApoperiYDate, Math.min(diasEntreLunaYDate, Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, Math.min(diasEntreEclipseYDate, diasEntreEclipenoYDate))))));
 			    
 		LunasEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaProxima() : null;
 		SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getSoeProximo() : null;
+		LocalDate midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo() : null;
 		List<MetonsEntity> metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo() : new ArrayList<>();
 		EclipsesEntity eclipseParaMetodo = diasEntreEclipseYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseProximo() : null;
 		EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoProximo() : null;
 		ApogeosYPerigeosLunaEntity apoperiParaMetodo = diasEntreApoperiYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiProximo() : null;
 			    
-		String nombreDelEvento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo);
+		String nombreDelEvento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo, midsisonParaMetodo);
 			    
 		String dias = " días";
 		if(minDias == 1) {
@@ -1626,12 +1641,12 @@ public class DatesServiceImpl implements DatesService {
 	
 
 	
-	private String getNotableEventName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, List<MetonsEntity> meton, EclipsesEntity eclipse, EclipenosEntity eclipeno, ApogeosYPerigeosLunaEntity apoperi) {
+	private String getNotableEventName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, List<MetonsEntity> meton, EclipsesEntity eclipse, EclipenosEntity eclipeno, ApogeosYPerigeosLunaEntity apoperi, LocalDate midsison) {
 		
 		String evento = "";
 		
 				
-		if(luna != null || soe!= null || !meton.isEmpty() || eclipse!= null || eclipeno!= null || apoperi != null) {
+		if(luna != null || soe!= null || !meton.isEmpty() || eclipse!= null || eclipeno!= null || apoperi != null || midsison!= null) {
 					
 			evento = "";
 					
@@ -1848,7 +1863,11 @@ public class DatesServiceImpl implements DatesService {
 				}		
 						
 				evento = evento + tipo + fase;
-			}			
+			}	
+			else if(midsison != null) {
+				
+				evento = "Midsison";
+			}
 			else if (luna != null) {
 
 				if (luna.isNueva()) {
@@ -1999,13 +2018,15 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		List<MetonsEntity> metonActual = new ArrayList<>();
 		EclipsesEntity eclipseActual = null;
 		EclipenosEntity eclipenoActual = null;
+		LocalDate midsisonActual = null;
 		
 		LunasEntity lunaPasado = null;
 		ApogeosYPerigeosLunaEntity apoperiPasado = null;
 		SolsticiosYEquinocciosEntity soePasado = null;
 		List<MetonsEntity> metonPasado = new ArrayList<>();
 		EclipsesEntity eclipsePasado = null;
-		EclipenosEntity eclipenoPasado = null;	
+		EclipenosEntity eclipenoPasado = null;
+		LocalDate midsisonPasado = null;
 		
 		LunasEntity lunaFuturo = null;
 		ApogeosYPerigeosLunaEntity apoperiFuturo = null;
@@ -2013,7 +2034,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		List<MetonsEntity> metonFuturo = new ArrayList<>();
 		EclipsesEntity eclipseFuturo = null;
 		EclipenosEntity eclipenoFuturo = null;	
-		
+		LocalDate midsisonFuturo = null;
 		
 		long diasMinimosDeDiferenciaEntreApoperiFuturaYDate = Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreApoperiPasadaYDate = Long.MAX_VALUE;
@@ -2097,6 +2118,7 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 				}
 			}
 		}
+		
 		
 		long diasMinimosDeDiferenciaEntreMetonoPasadoYDate =Long.MAX_VALUE;
 		long diasMinimosDeDiferenciaEntreMetonoFuturoYDate =Long.MAX_VALUE;
@@ -2188,6 +2210,20 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 			}
 		}
 		
+
+		LocalDate diaDelMidsison = soePasado.getDate().plusSeconds((ChronoUnit.SECONDS.between(soePasado.getDate(), soeFuturo.getDate()))/2).toLocalDate();
+		
+		if(diaDelMidsison.isBefore(dateO)) {
+			midsisonPasado = diaDelMidsison;		
+		}
+		else if(diaDelMidsison.isEqual(dateO)) {
+			midsisonActual = diaDelMidsison;
+		}
+		else if (diaDelMidsison.isAfter(dateO)) {
+			midsisonFuturo = diaDelMidsison;
+		}
+		
+		
 		
 		fenomenosParaEventosDTO.setLunaActual(lunaActual);
 		fenomenosParaEventosDTO.setLunaAnterior(lunaPasado);
@@ -2200,6 +2236,10 @@ private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomeno
 		fenomenosParaEventosDTO.setSoeActual(soeActual);
 		fenomenosParaEventosDTO.setSoeAnterior(soePasado);
 		fenomenosParaEventosDTO.setSoeProximo(soeFuturo);
+		
+		fenomenosParaEventosDTO.setMidsisonActual(midsisonActual);
+		fenomenosParaEventosDTO.setMidsisonAnterior(midsisonPasado);
+		fenomenosParaEventosDTO.setMidsisonProximo(midsisonFuturo);
 		
 		fenomenosParaEventosDTO.setMetonoActual(metonActual);
 		fenomenosParaEventosDTO.setMetonoAnterior(metonPasado);
