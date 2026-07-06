@@ -374,7 +374,7 @@ public class DatesServiceImpl implements DatesService {
 		String cambioDeAnyoCode= "CA";
 		String bienvenidaPrimaveraCode = "BP";
 		String mitadAnyoCode = "MA";
-		String pasoOtonyoCode = "PO";
+		String entradaOtonyoCode = "PO";
 		String inicioAnyoCode = "IA";
 		String despedidaVeranoCode = "DV";
 		String despedidaAnyoCode = "DA";
@@ -454,7 +454,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		
 		
-		// 3 - Cambio de año, Bienvenida a la Primavera, Mitad de año y Bienvenida del otoño y midsison
+		// 3 - Cambio de año, Bienvenida a la Primavera, Mitad de año y Entrada del otoño y midsisons
 		MinimaFestividadesDTO cambioDeAnyo = new MinimaFestividadesDTO();
 		cambioDeAnyo.setCode(cambioDeAnyoCode);		
 		long diasMinimosDeDiferenciaEntreCAYDate = Long.MAX_VALUE;
@@ -466,7 +466,7 @@ public class DatesServiceImpl implements DatesService {
 		boolean esHoyBP =false;
 		
 		MinimaFestividadesDTO pasoOtonyo = new MinimaFestividadesDTO();
-		pasoOtonyo.setCode(pasoOtonyoCode);		
+		pasoOtonyo.setCode(entradaOtonyoCode);		
 		long diasMinimosDeDiferenciaEntrePOYDate = Long.MAX_VALUE;
 		boolean esHoyBO =false;
 		
