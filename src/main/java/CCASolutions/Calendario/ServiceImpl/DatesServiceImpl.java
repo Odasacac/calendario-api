@@ -109,7 +109,7 @@ public class DatesServiceImpl implements DatesService {
 			
 			if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() != null && lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto() != null) {
 				
-				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto().getDate(), dateO.plusYears(1));
+				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto().getDate().minusYears(1), dateO.plusYears(1));
 	
 				
 				if(!allMetons.isEmpty()) {
@@ -391,7 +391,7 @@ public class DatesServiceImpl implements DatesService {
 
 		String cambioDeEclipenoCode = "CE";
 		String cambioDeEclipenoIARCode = "CEAR";
-		String cambioDeMetonoINCode = "CMN";
+		String cambioDeMetonoINCode = "CMF";
 		String cambioDeMetonoIACode = "CMA";
 		String cambioDeMetonoIARCode = "CMAR";
 		String cambioDeAnyoCode= "CA";
@@ -559,6 +559,13 @@ public class DatesServiceImpl implements DatesService {
 				}
 				
 			}
+		}
+		
+		if(cambioDeMetonoIN.getDate() == null) {
+			cambioDeMetonoIN.setDate(cambioDeMetonoIAR.getDate());
+		}
+		if(cambioDeMetonoIA.getDate() == null) {
+			cambioDeMetonoIA.setDate(cambioDeMetonoIAR.getDate());
 		}
 		
 		festividadesObtenidasDTO.add(cambioDeMetonoIN);

@@ -30,7 +30,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 			
 			festividadParaDDB.add(this.crearFestividad("CE", "Cambio de eclípeno invernal nuevo", false));
 			festividadParaDDB.add(this.crearFestividad("CEAR", "Cambio de eclípeno apofasal remoto", false));
-			festividadParaDDB.add(this.crearFestividad("CMN", "Cambio de métono invernal nuevo", false));
+			festividadParaDDB.add(this.crearFestividad("CMF", "Cambio de métono invernal fasal", false));
 			festividadParaDDB.add(this.crearFestividad("CMA", "Cambio de métono invernal apórico", false));
 			festividadParaDDB.add(this.crearFestividad("CMAR", "Cambio de métono apofasal remoto", false));
 			festividadParaDDB.add(this.crearFestividad("CA", "Cambio de año", false));
