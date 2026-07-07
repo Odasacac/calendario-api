@@ -28,8 +28,11 @@ public class FestividadesServiceImpl implements FestividadesService {
 			
 			List<FestividadesEntity> festividadParaDDB = new ArrayList<>();
 			
-			festividadParaDDB.add(this.crearFestividad("CE", "Cambio de eclípeno", false));
-			festividadParaDDB.add(this.crearFestividad("CM", "Cambio de métono", false));
+			festividadParaDDB.add(this.crearFestividad("CE", "Cambio de eclípeno invernal nuevo", false));
+			festividadParaDDB.add(this.crearFestividad("CEAR", "Cambio de eclípeno apofasal remoto", false));
+			festividadParaDDB.add(this.crearFestividad("CMN", "Cambio de métono invernal nuevo", false));
+			festividadParaDDB.add(this.crearFestividad("CMA", "Cambio de métono invernal apórico", false));
+			festividadParaDDB.add(this.crearFestividad("CMAR", "Cambio de métono apofasal remoto", false));
 			festividadParaDDB.add(this.crearFestividad("CA", "Cambio de año", false));
 			festividadParaDDB.add(this.crearFestividad("IA", "Inicio del primer mes del año", true));
 			festividadParaDDB.add(this.crearFestividad("BP", "Bienvenida de la primavera", false));
