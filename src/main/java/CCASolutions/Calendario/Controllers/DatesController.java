@@ -60,10 +60,11 @@ public class DatesController {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
 		LocalDate today = LocalDate.now();
-		System.out.println("Fecha requerida: " + today);
+		System.out.println("Fecha hoy requerida: " + today);
 		try {			
 
 			body = this.datesService.getDateVAUFromDateO(today);
+			System.out.println(today + " hoy convertida con éxito");
 				
 		} catch (Exception e) {
 				
