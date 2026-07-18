@@ -97,73 +97,17 @@ public class DatesServiceImpl implements DatesService {
 	public DateDTO getDateVAUFromDateO (LocalDate date) {
 		
 		DateDTO dateVAU = null;
-		LocalDateTime dateO = date.atTime(LocalTime.MAX);	
 		
-		List<EclipenosEntity> allEclipenos = this.eclipenosRepository.findAllByOrderByDateDesc();
+		DatosCosmicosParaVAUDTO lunasSolsticiosEclipsesMetonosYEclipenos = this.getDatosCosmicos(date);
 		
-		if(!allEclipenos.isEmpty()) {
-			DatosCosmicosParaVAUDTO lunasSolsticiosEclipsesMetonosYEclipenos = new DatosCosmicosParaVAUDTO();
-			lunasSolsticiosEclipsesMetonosYEclipenos.setEclipenos(allEclipenos);
-			lunasSolsticiosEclipsesMetonosYEclipenos.setLastEclipenoIN(this.getLastEclipenoIN(allEclipenos, date));
-			lunasSolsticiosEclipsesMetonosYEclipenos.setLastEclipenoInvernalApofasalRemoto(this.getLastEclipenoInvernalApofasalRemoto(allEclipenos, date));
-			
-			if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() != null && lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto() != null) {
-				
-				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto().getDate().minusYears(1), dateO.plusYears(1));
-	
-				
-				if(!allMetons.isEmpty()) {
-					
-					lunasSolsticiosEclipsesMetonosYEclipenos.setMetons(allMetons);
-					lunasSolsticiosEclipsesMetonosYEclipenos.setLastMetonIN(this.getLastMetonINForDate(allMetons, date));
-					lunasSolsticiosEclipsesMetonosYEclipenos.setLastMetonIApofasalRemoto(this.getLastMetonIApofasalRemoto(allMetons,date));
-					
-					if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN() != null) {									
-						
-						lunasSolsticiosEclipsesMetonosYEclipenos.setLunas(this.lunasRepository.findByDateBetween(dateO.minusYears(1), dateO.plusYears(1)));
-						lunasSolsticiosEclipsesMetonosYEclipenos.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(lunasSolsticiosEclipsesMetonosYEclipenos.getLastMetonIN().getDate().minusYears(1), dateO.plusYears(1)));
-						lunasSolsticiosEclipsesMetonosYEclipenos.setEclipses(this.eclipsesRepository.findByDateBetweenAndEsParcialIsFalseAndEsPenumbralIsFalse(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(1)));
-						lunasSolsticiosEclipsesMetonosYEclipenos.setApoperis(this.apogeosYPerigeosLunaRepository.findByDateBetween(dateO.minusMonths(3), dateO.plusMonths(3)));
-						
-						if(lunasSolsticiosEclipsesMetonosYEclipenos.getApoperis().isEmpty()){
-							System.out.println("Error al obtener dateVAU: no se han encontrado apoperis.");
-						}
-						else if(lunasSolsticiosEclipsesMetonosYEclipenos.getSoes().isEmpty()) {
-							System.out.println("Error al obtener dateVAU: no se han encontrado soes.");
-						}
-						else if(lunasSolsticiosEclipsesMetonosYEclipenos.getLunas().isEmpty()) {
-							System.out.println("Error al obtener dateVAU: no se han encontrado fases lunares.");
-						}
-						else if(lunasSolsticiosEclipsesMetonosYEclipenos.getEclipses().isEmpty()) {
-							System.out.println("Error al obtener dateVAU: no se han encontrado eclipses.");
-						}
-						else {					
-							dateVAU = this.getDateVAU(date, lunasSolsticiosEclipsesMetonosYEclipenos);									
-						}
-					}
-					else {
-						System.out.println("Error al obtener dateVAU: no se ha encontrado un métono anterior a la fecha proporcionada.");
-	
-					}				
-				}
-				else {
-					System.out.println("Error al obtener dateVAU: no se han encontrado métonos.");
-				}
-			}
-			else {
-				if(lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoIN() == null) {
-					System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno inicial nuevo anterior a la fecha proporcionada.");
-				}
-				else if (lunasSolsticiosEclipsesMetonosYEclipenos.getLastEclipenoInvernalApofasalRemoto() == null) {
-					System.out.println("Error al obtener dateVAU: no se ha encontrado un eclípeno invernal apofasal remoto anterior a la fecha proporcionada.");
-				}
-				
-			}
+		if(lunasSolsticiosEclipsesMetonosYEclipenos.isValido()) {
+			dateVAU = this.getDateVAU(date, lunasSolsticiosEclipsesMetonosYEclipenos);
 		}
 		else {
-			System.out.println("Error al obtener dateVAU: no hay eclipenos");
+			dateVAU = new DateDTO();
+			dateVAU.setMensaje(lunasSolsticiosEclipsesMetonosYEclipenos.getMensaje());
 		}
-		
+		dateVAU.setFechaO(String.valueOf(date));
 		
 		return dateVAU;
 		
@@ -172,6 +116,86 @@ public class DatesServiceImpl implements DatesService {
 
 	
 	// ========================= METODOS PRIVADOS
+	
+	private DatosCosmicosParaVAUDTO getDatosCosmicos(LocalDate date) {
+		
+		DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO = new DatosCosmicosParaVAUDTO();
+		LocalDateTime dateO = date.atTime(LocalTime.MAX);	
+		
+		List<EclipenosEntity> allEclipenos = this.eclipenosRepository.findAllByOrderByDateDesc();
+		
+		if(!allEclipenos.isEmpty()) {
+
+			datosCosmicosParaVAUDTO.setEclipenos(allEclipenos);
+			datosCosmicosParaVAUDTO.setLastEclipenoIN(this.getLastEclipenoIN(allEclipenos, date));
+			datosCosmicosParaVAUDTO.setLastEclipenoInvernalApofasalRemoto(this.getLastEclipenoInvernalApofasalRemoto(allEclipenos, date));
+			
+			if(datosCosmicosParaVAUDTO.getLastEclipenoIN() != null && datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto() != null) {
+				
+				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto().getDate().minusYears(1), dateO.plusYears(1));
+				
+				if(!allMetons.isEmpty()) {
+					
+					datosCosmicosParaVAUDTO.setMetons(allMetons);
+					datosCosmicosParaVAUDTO.setLastMetonIN(this.getLastMetonINForDate(allMetons, date));
+					datosCosmicosParaVAUDTO.setLastMetonIApofasalRemoto(this.getLastMetonIApofasalRemoto(allMetons,date));
+					
+					if(datosCosmicosParaVAUDTO.getLastMetonIN() != null) {									
+						
+						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(dateO.minusYears(1), dateO.plusYears(1)));
+						datosCosmicosParaVAUDTO.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(datosCosmicosParaVAUDTO.getLastMetonIN().getDate().minusYears(1), dateO.plusYears(1)));
+						datosCosmicosParaVAUDTO.setEclipses(this.eclipsesRepository.findByDateBetweenAndEsParcialIsFalseAndEsPenumbralIsFalse(datosCosmicosParaVAUDTO.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(1)));
+						datosCosmicosParaVAUDTO.setApoperis(this.apogeosYPerigeosLunaRepository.findByDateBetween(dateO.minusMonths(3), dateO.plusMonths(3)));
+						
+						if(datosCosmicosParaVAUDTO.getApoperis().isEmpty()){
+							datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado apoperis.");
+							System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
+						}
+						else if(datosCosmicosParaVAUDTO.getSoes().isEmpty()) {
+							datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado soes.");
+							System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
+						}
+						else if(datosCosmicosParaVAUDTO.getLunas().isEmpty()) {
+							datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado fases lunares.");
+							System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
+						}
+						else if(datosCosmicosParaVAUDTO.getEclipses().isEmpty()) {
+							datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado eclipses.");
+							System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
+						}
+						else {
+							datosCosmicosParaVAUDTO.setValido(true);
+						}
+					}
+					else {
+						datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se ha encontrado un métono anterior a la fecha proporcionada.");
+						System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
+					}				
+				}
+				else {
+					datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado métonos.");
+					System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
+				}
+			}
+			else {
+				if(datosCosmicosParaVAUDTO.getLastEclipenoIN() == null) {
+					datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se ha encontrado un eclípeno inicial nuevo anterior a la fecha proporcionada.");
+					System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
+				}
+				else if (datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto() == null) {
+					datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se ha encontrado un eclípeno invernal apofasal remoto anterior a la fecha proporcionada.");
+					System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
+				}
+				
+			}
+		}
+		else {
+			datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no hay eclipenos");
+			System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
+		}
+				
+		return datosCosmicosParaVAUDTO;
+	}
 	
 	private DateDTO getDateVAU(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
 		
@@ -196,6 +220,8 @@ public class DatesServiceImpl implements DatesService {
 		
 		dateVAU.setNotableEvent(this.getNotableEvent(date, datosCosmicosParaVAUDTO));		
 		dateVAU.setFestividades(this.getFestividades(date, datosCosmicosParaVAUDTO));
+		
+		dateVAU.setFechaEncontrada(true);
 		
 		return dateVAU;
 	}

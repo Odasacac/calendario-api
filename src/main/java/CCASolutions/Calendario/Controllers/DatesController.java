@@ -16,20 +16,21 @@ import CCASolutions.Calendario.Services.DatesService;
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/api")
+@RequestMapping("/api/conversiontovau")
 public class DatesController {
 
 	@Autowired
 	DatesService datesService;		
 	
-	@GetMapping("/conversiontovau")
+	@GetMapping("/selected")
 	public ResponseEntity<DateDTO> getDateVAU(@RequestParam LocalDate date) {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
-
+		System.out.println("Fecha requerida: " + date);
 		if(date.getYear() < 0 || 2099 < date.getYear()) {
-			
-			status = HttpStatus.BAD_REQUEST;
+			body.setFechaEncontrada(false);
+			body.setMensaje("Error al obtener dateVAU: fecha fuera del rango: " + date);
+			System.out.println(body.getMensaje());
 		}
 		else {
 			
@@ -40,15 +41,37 @@ public class DatesController {
 				if(body == null) {
 					status = HttpStatus.BAD_REQUEST;
 				}
+				System.out.println(date + " convertida con éxito");
 				
 			} catch (Exception e) {
 				
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				System.out.println(e);
+				body.setMensaje("Error:" + e);
+				System.out.println(body.getMensaje());
 			}
 		}
 		
 
+		return new ResponseEntity<DateDTO>(body, status);
+	}
+	
+	@GetMapping("/today")
+	public ResponseEntity<DateDTO> getTodayVAU() {
+		HttpStatus status = HttpStatus.OK;
+		DateDTO body = new DateDTO();
+		LocalDate today = LocalDate.now();
+		System.out.println("Fecha requerida: " + today);
+		try {			
+
+			body = this.datesService.getDateVAUFromDateO(today);
+				
+		} catch (Exception e) {
+				
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			body.setMensaje("Error:" + e);
+			System.out.println(body.getMensaje());
+		}
+		
 		return new ResponseEntity<DateDTO>(body, status);
 	}
 

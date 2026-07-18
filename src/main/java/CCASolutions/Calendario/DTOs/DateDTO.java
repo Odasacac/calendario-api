@@ -15,11 +15,35 @@ public class DateDTO {
 	private CasaleroDTO casalero;
 	private EstadoLunaDTO estadoLuna;
 	private FestividadesDTO festividades;
+	private String mensaje;
+	private boolean fechaEncontrada;
+	private String fechaO;
 	
 	
 
+	public String getFechaO() {
+		return fechaO;
+	}
 
-	
+	public void setFechaO(String fechaO) {
+		this.fechaO = fechaO;
+	}
+
+	public boolean isFechaEncontrada() {
+		return fechaEncontrada;
+	}
+
+	public void setFechaEncontrada(boolean fechaEncontrada) {
+		this.fechaEncontrada = fechaEncontrada;
+	}
+
+	public String getMensaje() {
+		return mensaje;
+	}
+
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
 
 	public MetonoInvernalApofasalRemotoDTO getMetonoInvernalApofasalRemoto() {
 		return metonoInvernalApofasalRemoto;

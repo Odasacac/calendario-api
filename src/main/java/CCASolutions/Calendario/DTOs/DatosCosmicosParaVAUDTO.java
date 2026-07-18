@@ -11,20 +11,33 @@ import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
 public class DatosCosmicosParaVAUDTO {
 
-	List<SolsticiosYEquinocciosEntity> soes;
-	List<LunasEntity> lunas;
-	List<EclipsesEntity> eclipses;
-	List<EclipenosEntity> eclipenos;
-	List<MetonsEntity> metons;
-	List<ApogeosYPerigeosLunaEntity> apoperis;
-	EclipenosEntity lastEclipenoIN;
-	EclipenosEntity lastEclipenoInvernalApofasalRemoto;
-	MetonsEntity lastMetonIN;
-	MetonsEntity lastMetonIApofasalRemoto;
-	
+	private List<SolsticiosYEquinocciosEntity> soes;
+	private List<LunasEntity> lunas;
+	private List<EclipsesEntity> eclipses;
+	private List<EclipenosEntity> eclipenos;
+	private List<MetonsEntity> metons;
+	private List<ApogeosYPerigeosLunaEntity> apoperis;
+	private EclipenosEntity lastEclipenoIN;
+	private EclipenosEntity lastEclipenoInvernalApofasalRemoto;
+	private MetonsEntity lastMetonIN;
+	private MetonsEntity lastMetonIApofasalRemoto;
+	private boolean valido;
+	private String mensaje;
 	
 
 	
+	public String getMensaje() {
+		return mensaje;
+	}
+	public void setMensaje(String mensaje) {
+		this.mensaje = mensaje;
+	}
+	public boolean isValido() {
+		return valido;
+	}
+	public void setValido(boolean valido) {
+		this.valido = valido;
+	}
 	public MetonsEntity getLastMetonIApofasalRemoto() {
 		return lastMetonIApofasalRemoto;
 	}
