@@ -30,6 +30,7 @@ public class DatesController {
 		if(date.getYear() < 0 || 2099 < date.getYear()) {
 			body.setFechaEncontrada(false);
 			body.setMensaje("Error al obtener dateVAU: fecha fuera del rango: " + date);
+			body.setFechaO(String.valueOf(date));
 			System.out.println(body.getMensaje());
 		}
 		else {
@@ -47,6 +48,7 @@ public class DatesController {
 				
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
 				body.setMensaje("Error:" + e);
+				body.setFechaO(String.valueOf(date));
 				System.out.println(body.getMensaje());
 			}
 		}
@@ -70,6 +72,7 @@ public class DatesController {
 				
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 			body.setMensaje("Error:" + e);
+			body.setFechaO(String.valueOf(today));
 			System.out.println(body.getMensaje());
 		}
 		
