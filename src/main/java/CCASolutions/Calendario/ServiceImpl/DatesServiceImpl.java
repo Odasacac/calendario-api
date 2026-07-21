@@ -341,62 +341,86 @@ public class DatesServiceImpl implements DatesService {
 			}
 			else {
 				
-				String codeCECMCA = "";
+				boolean midsison = false;
+				boolean aponovo = false;
 				
-				for(MinimaFestividadesDTO festividad : festividadesActuales) {
-					
-					switch (festividad.getCode()) {
-					
-						case "CEAR":
-							codeCECMCA = festividad.getCode();
-							break;
-							
-						case "CMAR":
-							
-							if(!codeCECMCA.equals("CEAR")) {
-								codeCECMCA = festividad.getCode();
-							}
-							break;
-							
-						case "CE":
-							if(!codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
-								codeCECMCA = festividad.getCode();
-							}
-							break;
-								
-						case "CMN":
-							
-							if(!codeCECMCA.equals("CE") && !codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
-								
-								codeCECMCA = festividad.getCode();
-							}
-							break;
-							
-						case "CMA":
-							
-							if(!codeCECMCA.equals("CMN") && !codeCECMCA.equals("CE") && !codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
-								
-								codeCECMCA = festividad.getCode();
-							}
-							break;
-						
-						case "CA":
-							
-							if(!codeCECMCA.equals("CMA") && !codeCECMCA.equals("CMN") && !codeCECMCA.equals("CE") && !codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
-								
-								codeCECMCA = festividad.getCode();
-							}
-							break;
+				for(MinimaFestividadesDTO festividades : festividadesActuales) {
+					if(festividades.getCode().equals("MSI") || festividades.getCode().equals("MSP") || festividades.getCode().equals("MSE") || festividades.getCode().equals("MSO")) {					
+						midsison = true;
+					}	
+					if(festividades.getCode().equals("LA")) {
+						aponovo = true;
 					}
 				}
 				
-				for(FestividadesEntity entity : festividadesEntities) {
-					
-					if(entity.getCode().equals(codeCECMCA)) {
-					
-						festividadActual = entity.getNombre();
-					}	
+				
+				if(festividadesActuales.size()==2 && midsison && aponovo) {
+					for(FestividadesEntity entity : festividadesEntities) {
+						
+						if(entity.getCode().equals("MAP")) {
+						
+							festividadActual = entity.getNombre();
+						}	
+					}
 				}
+				else {
+					String codeCECMCA = "";
+					
+					for(MinimaFestividadesDTO festividad : festividadesActuales) {
+						
+						switch (festividad.getCode()) {
+						
+							case "CEAR":
+								codeCECMCA = festividad.getCode();
+								break;
+								
+							case "CMAR":
+								
+								if(!codeCECMCA.equals("CEAR")) {
+									codeCECMCA = festividad.getCode();
+								}
+								break;
+								
+							case "CE":
+								if(!codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
+									codeCECMCA = festividad.getCode();
+								}
+								break;
+									
+							case "CMN":
+								
+								if(!codeCECMCA.equals("CE") && !codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
+									
+									codeCECMCA = festividad.getCode();
+								}
+								break;
+								
+							case "CMA":
+								
+								if(!codeCECMCA.equals("CMN") && !codeCECMCA.equals("CE") && !codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
+									
+									codeCECMCA = festividad.getCode();
+								}
+								break;
+							
+							case "CA":
+								
+								if(!codeCECMCA.equals("CMA") && !codeCECMCA.equals("CMN") && !codeCECMCA.equals("CE") && !codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
+									
+									codeCECMCA = festividad.getCode();
+								}
+								break;
+						}
+					}
+					
+					for(FestividadesEntity entity : festividadesEntities) {
+						
+						if(entity.getCode().equals(codeCECMCA)) {
+						
+							festividadActual = entity.getNombre();
+						}	
+					}
+				}			
 			}
 		}	
 		
@@ -480,6 +504,7 @@ public class DatesServiceImpl implements DatesService {
 		String midsisonEstivalCode = "MSE";
 		String midsisonOtonyalCode = "MSO";
 		String cambioDeAponovoCode = "LA";
+		String midsisonAponovalCode = "MAP";
 
 		
 		// 1 - Cambio de eclipeno 
@@ -833,7 +858,6 @@ public class DatesServiceImpl implements DatesService {
 		despedidaVerano.setCode(despedidaVeranoCode);		
 		long diasMinimosDeDiferenciaEntreDVYLuna = Long.MAX_VALUE;
 		
-		
 		MinimaFestividadesDTO despedidaAnyo = new MinimaFestividadesDTO();
 		despedidaAnyo.setCode(despedidaAnyoCode);		
 		long diasMinimosDeDiferenciaEntreDAYLuna = Long.MAX_VALUE;
@@ -934,10 +958,26 @@ public class DatesServiceImpl implements DatesService {
 		}
 			
 		
+		
 		festividadesObtenidasDTO.add(inicioPrimerMesAnyo);
 		festividadesObtenidasDTO.add(despedidaVerano);
 		festividadesObtenidasDTO.add(despedidaAnyo);
 		festividadesObtenidasDTO.add(cambioDeAponovo);
+		
+		
+		// 5 - Midsison aponoval		
+		
+		MinimaFestividadesDTO midsisonAponoval = new MinimaFestividadesDTO();
+		midsisonAponoval.setCode(midsisonAponovalCode);
+		midsisonAponoval.setDate(midsison.getDate());
+		midsisonAponoval.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+		
+		if(cambioDeAponovo.getDate().toLocalDate().isEqual(midsison.getDate().toLocalDate())) {
+			midsisonAponoval.setDate(midsison.getDate());
+			midsisonAponoval.setDiasDeDiferenciaConDate(midsison.getDiasDeDiferenciaConDate());
+		}
+		
+		festividadesObtenidasDTO.add(midsisonAponoval);
 		
 		
 		
@@ -1249,30 +1289,35 @@ public class DatesServiceImpl implements DatesService {
 			
 			for (EclipsesEntity eclipse : eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN){
 				
-				if(eclipse.isDeSol()) {
-					
-					eclipsesSolaresNoParcialesDesdeLastEclipenoINList.add(eclipse);
-					
-					if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
+				if(eclipse.getDate().toLocalDate().isBefore(date)) {
+					if(eclipse.isDeSol()) {
 						
-						solaresDesdeElUltimoMetonoIN = solaresDesdeElUltimoMetonoIN+1;					
+						eclipsesSolaresNoParcialesDesdeLastEclipenoINList.add(eclipse);
+						
+						if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
+							
+							solaresDesdeElUltimoMetonoIN = solaresDesdeElUltimoMetonoIN+1;					
+						}
+						
 					}
-					
-				}
-				else if (eclipse.isDeLuna()){
-					
-					eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoINList.add(eclipse);
-					
-					if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
+					else if (eclipse.isDeLuna()){
 						
-						lunaresDesdeElUltimoMetonoIN = lunaresDesdeElUltimoMetonoIN+1;				
+						eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoINList.add(eclipse);
+						
+						if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
+							
+							lunaresDesdeElUltimoMetonoIN = lunaresDesdeElUltimoMetonoIN+1;				
+						}			
 					}			
-				}						
+				}			
 			}			
 			
-			eclipsesSolaresNoParcialesDesdeLastEclipenoIN = eclipsesSolaresNoParcialesDesdeLastEclipenoINList.size()-1;
+			if(solaresDesdeElUltimoMetonoIN==-1) {
+				solaresDesdeElUltimoMetonoIN=0;
+			}
+			eclipsesSolaresNoParcialesDesdeLastEclipenoIN = eclipsesSolaresNoParcialesDesdeLastEclipenoINList.size();
 			eclipsesLunaresNoParcialesDesdeLastEclipenoIN = eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoINList.size();
-			eclipsesNoParcialesDesdeLastEclipenoIN = eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN.size()-1;
+			eclipsesNoParcialesDesdeLastEclipenoIN = eclipsesSolaresNoParcialesDesdeLastEclipenoIN + eclipsesLunaresNoParcialesDesdeLastEclipenoIN;
 			
 			
 			eclipsesSolaresNoParcialesDesdeLastMetonIN = solaresDesdeElUltimoMetonoIN;		
