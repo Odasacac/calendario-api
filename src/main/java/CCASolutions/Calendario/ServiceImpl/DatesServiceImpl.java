@@ -471,7 +471,7 @@ public class DatesServiceImpl implements DatesService {
 		String cambioDeAnyoCode= "CA";
 		String bienvenidaPrimaveraCode = "BP";
 		String mitadAnyoCode = "MA";
-		String entradaOtonyoCode = "PO";
+		String entradaOtonyoCode = "EO";
 		String inicioAnyoCode = "IA";
 		String despedidaVeranoCode = "DV";
 		String despedidaAnyoCode = "DA";
@@ -479,6 +479,7 @@ public class DatesServiceImpl implements DatesService {
 		String midsisonPrimaveralCode = "MSP";
 		String midsisonEstivalCode = "MSE";
 		String midsisonOtonyalCode = "MSO";
+		String cambioDeAponovoCode = "LA";
 
 		
 		// 1 - Cambio de eclipeno 
@@ -821,7 +822,7 @@ public class DatesServiceImpl implements DatesService {
 		festividadesObtenidasDTO.add(midsison);
 		
 		
-		// 4 - Inicio del primer mes del año, despedida del verano y despedida del año
+		// 4 - Inicio del primer mes del año, despedida del verano, despedida del año y cambio de aponovo
 		
 		MinimaFestividadesDTO inicioPrimerMesAnyo = new MinimaFestividadesDTO();
 		inicioPrimerMesAnyo.setCode(inicioAnyoCode);		
@@ -836,6 +837,10 @@ public class DatesServiceImpl implements DatesService {
 		MinimaFestividadesDTO despedidaAnyo = new MinimaFestividadesDTO();
 		despedidaAnyo.setCode(despedidaAnyoCode);		
 		long diasMinimosDeDiferenciaEntreDAYLuna = Long.MAX_VALUE;
+		
+		MinimaFestividadesDTO cambioDeAponovo = new MinimaFestividadesDTO();
+		cambioDeAponovo.setCode(cambioDeAponovoCode);		
+		long diasMinimosDeDiferenciaEntreAponovoYDate = Long.MAX_VALUE;
 
 		
 		for(LunasEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
@@ -852,6 +857,18 @@ public class DatesServiceImpl implements DatesService {
 						diasMinimosDeDiferenciaEntreLunaYSI = diasDeDiferenciaEntreLunaYSI;
 						inicioPrimerMesAnyo.setDate(luna.getDate());
 						inicioPrimerMesAnyo.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(date, luna.getDate().toLocalDate())));
+									
+					}
+				}
+				
+				if(luna.isSelecta() ) {
+					
+					long diasDeDiferenciaEntreAponovoYDate = Math.abs(ChronoUnit.DAYS.between(date, luna.getDate().toLocalDate()));
+					if(diasDeDiferenciaEntreAponovoYDate < diasMinimosDeDiferenciaEntreAponovoYDate) {
+						
+						diasMinimosDeDiferenciaEntreAponovoYDate = diasDeDiferenciaEntreAponovoYDate;
+						cambioDeAponovo.setDate(luna.getDate());
+						cambioDeAponovo.setDiasDeDiferenciaConDate(diasMinimosDeDiferenciaEntreAponovoYDate);
 									
 					}
 				}
@@ -901,6 +918,7 @@ public class DatesServiceImpl implements DatesService {
 			}
 		}
 		
+
 		// Si hay un eclipeno no hay festividad de inicio del primer mes ni de cambio de metono
 		// Y si hay un metono, no hay inicio del primer mes
 		if(cambioDeEclipeno.getDiasDeDiferenciaConDate() < 100 || cambioDeEclipenoIAR.getDiasDeDiferenciaConDate() < 100) { 
@@ -919,6 +937,7 @@ public class DatesServiceImpl implements DatesService {
 		festividadesObtenidasDTO.add(inicioPrimerMesAnyo);
 		festividadesObtenidasDTO.add(despedidaVerano);
 		festividadesObtenidasDTO.add(despedidaAnyo);
+		festividadesObtenidasDTO.add(cambioDeAponovo);
 		
 		
 		
