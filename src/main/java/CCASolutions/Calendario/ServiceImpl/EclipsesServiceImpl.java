@@ -44,7 +44,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 	private final static String CENTRAL_ANULAR = "CentralAnnularEclipse";
 	private final static String CENTRAL_TOTAL = "CentralTotalEclipse";
 	
-	public String poblateEclipses() {
+	public String poblateEclipsesFromOpale() {
 		
 		String resultado = "Eclipses actualizados sin problema.";
 		

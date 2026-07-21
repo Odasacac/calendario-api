@@ -7,6 +7,6 @@ import CCASolutions.Calendario.DTOs.FenomenoDTO;
 
 public interface SolsticiosYEquinocciosService {
 	
-	public abstract String poblateSolsticiosYEquinoccios();
+	public abstract String poblateSolsticiosYEquinocciosFromOpale();
 	public abstract List<FenomenoDTO> getSolsticiosYEquinocciosDelAnyoViaAPI(String anyo, String url);
 }

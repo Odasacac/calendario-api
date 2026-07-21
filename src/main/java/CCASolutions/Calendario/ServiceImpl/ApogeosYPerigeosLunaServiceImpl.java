@@ -52,7 +52,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 	                .optionalEnd()
 	                .toFormatter();
 	
-	public String poblateApogeos() {
+	public String poblateApogeosFromOpale() {
 		
 		String resultado = "Apogeos actualizados sin problema.";
 		

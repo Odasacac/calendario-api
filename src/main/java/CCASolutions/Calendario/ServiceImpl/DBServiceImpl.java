@@ -63,14 +63,13 @@ public class DBServiceImpl implements DBService {
 		boolean llamadasAAPis=false;
 		
 		try {
-			
 			resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos();
 			
 			if(llamadasAAPis) {
-				resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunas();
-				resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeos();
-				resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinoccios();	
-				resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipses();	
+				resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale();
+				resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeosFromOpale();
+				resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale();	
+				resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipsesFromOpale();	
 			}
 			
 			resultado = resultado + "\n - ACTUALIZAR APOPERIS Y FASES: " + this.apogeosYPerigeosLunaService.updateLunasYApoperisConSelectoOInvertido();		

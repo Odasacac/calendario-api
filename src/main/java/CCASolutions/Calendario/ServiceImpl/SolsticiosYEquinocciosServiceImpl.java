@@ -41,7 +41,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	private final static String EO = "AutumnalEquinox";
 	
 
-	public String poblateSolsticiosYEquinoccios() {
+	public String poblateSolsticiosYEquinocciosFromOpale() {
 		
 		String resultado = "Solsticios y equinoccios actualizados sin problema";
 		

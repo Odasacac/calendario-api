@@ -43,7 +43,7 @@ public class LunasServiceImpl implements LunasService {
 	// METODOS PUBLICOS
 		
 	
-	public String poblateLunas() {
+	public String poblateLunasFromOpale() {
 		
 		String resultado = "Lunas actualizadas sin problema.";
 		
