@@ -143,7 +143,7 @@ public class DatesServiceImpl implements DatesService {
 					
 					if(datosCosmicosParaVAUDTO.getLastMetonIN() != null) {									
 						
-						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(dateO.minusYears(1), dateO.plusYears(1)));
+						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getDate().minusYears(1), dateO.plusYears(1)));
 						datosCosmicosParaVAUDTO.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(datosCosmicosParaVAUDTO.getLastMetonIN().getDate().minusYears(1), dateO.plusYears(1)));
 						datosCosmicosParaVAUDTO.setEclipses(this.eclipsesRepository.findByDateBetweenAndEsParcialIsFalseAndEsPenumbralIsFalse(datosCosmicosParaVAUDTO.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(1)));
 						datosCosmicosParaVAUDTO.setApoperis(this.apogeosYPerigeosLunaRepository.findByDateBetween(dateO.minusMonths(3), dateO.plusMonths(3)));
@@ -241,7 +241,7 @@ public class DatesServiceImpl implements DatesService {
 				&& luna.isSelecta() 
 				&& luna.getDate().toLocalDate().isBefore(date)
 				&& luna.getDate().toLocalDate().isAfter(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getDate().toLocalDate()) 
-				&& luna.getId() != datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getLunaId()) {
+				&& !luna.getId().equals(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getLunaId())) {
 				
 				lunasSelectasDesdeLastMIARHastaDate.add(luna);
 				
@@ -2140,27 +2140,31 @@ public class DatesServiceImpl implements DatesService {
 			}
 			else if (luna != null) {
 
-				if (luna.isNueva()) {
-					evento = evento + "Luna nueva";
-				} 
-				else if (luna.isCuartoCreciente()) {
-					evento = evento + "Luna cuarto creciente";
-				} 
-				else if (luna.isLlena()) {
-					 evento = evento + "Luna llena";
-				} 
-				else if (luna.isCuartoMenguante()) {
-					  evento = evento + "Luna cuarto menguante";
+				if(luna.isNueva() && luna.isSelecta()) {
+					evento = "Luna aponoval";
 				}
-				
+				else {
+					if (luna.isNueva()) {
+						evento = evento + "Luna nueva";
+					} 
+					else if (luna.isCuartoCreciente()) {
+						evento = evento + "Luna cuarto creciente";
+					} 
+					else if (luna.isLlena()) {
+						 evento = evento + "Luna llena";
+					} 
+					else if (luna.isCuartoMenguante()) {
+						  evento = evento + "Luna cuarto menguante";
+					}
+					
 
-				if(luna.isSelecta()) {
-					evento = evento + " selecta";
+					if(luna.isSelecta()) {
+						evento = evento + " selecta";
+					}
+					else if(luna.isInvertida()) {
+						evento = evento + " invertida";
+					}
 				}
-				else if(luna.isInvertida()) {
-					evento = evento + " invertida";
-				}
-
 			}
 			else if (apoperi != null) {
 				
