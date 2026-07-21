@@ -18,8 +18,17 @@ public class DateDTO {
 	private String mensaje;
 	private boolean fechaEncontrada;
 	private String fechaO;
+	private AponovosDTO aponovos;
 	
 	
+
+	public AponovosDTO getAponovos() {
+		return aponovos;
+	}
+
+	public void setAponovos(AponovosDTO aponovos) {
+		this.aponovos = aponovos;
+	}
 
 	public String getFechaO() {
 		return fechaO;

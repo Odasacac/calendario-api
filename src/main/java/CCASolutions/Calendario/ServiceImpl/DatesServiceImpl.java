@@ -28,6 +28,7 @@ import CCASolutions.Calendario.DTOs.MinimaFestividadesDTO;
 import CCASolutions.Calendario.DTOs.MonthDTO;
 import CCASolutions.Calendario.DTOs.NotableEventDTO;
 import CCASolutions.Calendario.DTOs.AbsoluteEclipsesDTO;
+import CCASolutions.Calendario.DTOs.AponovosDTO;
 import CCASolutions.Calendario.DTOs.CasaleroDTO;
 import CCASolutions.Calendario.DTOs.ComportamientoLunaDTO;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
@@ -217,6 +218,7 @@ public class DatesServiceImpl implements DatesService {
 		dateVAU.setAbsoluteEclipses(this.getVAUAbsoluteEclipses(dateVAU, datosCosmicosParaVAUDTO.getEclipses(), date, datosCosmicosParaVAUDTO.getLastMetonIN()));
 		dateVAU.setCasalero(this.getCasalero(datosCosmicosParaVAUDTO.getLastEclipenoIN()));
 		dateVAU.setEstadoLuna(this.getEstadoLuna(date, datosCosmicosParaVAUDTO.getApoperis()));	
+		dateVAU.setAponovos(this.getAponovos(date, datosCosmicosParaVAUDTO));
 		
 		dateVAU.setNotableEvent(this.getNotableEvent(date, datosCosmicosParaVAUDTO));		
 		dateVAU.setFestividades(this.getFestividades(date, datosCosmicosParaVAUDTO));
@@ -226,6 +228,52 @@ public class DatesServiceImpl implements DatesService {
 		return dateVAU;
 	}
 	
+	private AponovosDTO getAponovos(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
+		
+		AponovosDTO aponovosDTO = new AponovosDTO();
+		
+		List<LunasEntity> lunasSelectasDesdeLastMIARHastaDate = new ArrayList<>();
+		LunasEntity lunaNSmasCercanaADate = null;
+		long diasMinimosEntreDateYLNS = Long.MAX_VALUE;
+		for(LunasEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
+	
+			if(luna.isNueva() 
+				&& luna.isSelecta() 
+				&& luna.getDate().toLocalDate().isBefore(date)
+				&& luna.getDate().toLocalDate().isAfter(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getDate().toLocalDate()) 
+				&& luna.getId() != datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getLunaId()) {
+				
+				lunasSelectasDesdeLastMIARHastaDate.add(luna);
+				
+				long diasEntreDateYLNS = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
+				if(diasEntreDateYLNS < diasMinimosEntreDateYLNS) {
+					diasMinimosEntreDateYLNS = diasEntreDateYLNS;
+					lunaNSmasCercanaADate=luna;
+				}
+			}
+		}
+		
+		aponovosDTO.setAponovosPasadosDesdeLastMetonoIAR(lunasSelectasDesdeLastMIARHastaDate.size());
+		aponovosDTO.setNumeroDeAponovo(aponovosDTO.getAponovosPasadosDesdeLastMetonoIAR()+1);
+		
+		int lunasNuevasDesdeLastLNSHastaDate = 0;
+		
+		if(lunaNSmasCercanaADate != null) {
+			for(LunasEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
+				
+				if(luna.isNueva() && luna.getDate().toLocalDate().isBefore(date) && luna.getDate().toLocalDate().isAfter(lunaNSmasCercanaADate.getDate().toLocalDate())) {
+					lunasNuevasDesdeLastLNSHastaDate = lunasNuevasDesdeLastLNSHastaDate+1;
+				}
+			}
+		}
+		
+		
+		
+		aponovosDTO.setLunasNuevasPasadasDesdeLastAponovo(lunasNuevasDesdeLastLNSHastaDate);
+		aponovosDTO.setMesAponoval(aponovosDTO.getLunasNuevasPasadasDesdeLastAponovo()+1);
+		
+		return aponovosDTO;
+	}
 	
 	private NotableEventDTO getNotableEvent(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
 	
