@@ -7,10 +7,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+/*
+ * EN: Eclipenos (~220 rows). Small and immutable: served from the in-memory catalog.
+ * ES: Eclipenos (~220 filas). Pequena e inmutable: se sirve desde el catalogo en memoria.
+ */
 @Entity
-@Table(name="eclipenos")
+@Table(name="eclipenos", indexes = {
+		@Index(name="idx_eclipenos_date", columnList="date")
+})
 public class EclipenosEntity implements Serializable{
 
 	private static final long serialVersionUID = 7526229837280596257L;

@@ -7,10 +7,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+/*
+ * EN: Metonic cycles (~1.800 rows). Small and immutable, so it is served from the
+ *     in-memory catalog; the index still helps the population job and ad-hoc queries.
+ * ES: Metonos (~1.800 filas). Pequena e inmutable, por lo que se sirve desde el catalogo
+ *     en memoria; el indice sigue ayudando al proceso de poblacion y a consultas puntuales.
+ */
 @Entity
-@Table(name="metons")
+@Table(name="metons", indexes = {
+		@Index(name="idx_metons_date", columnList="date")
+})
 public class MetonsEntity implements Serializable {
 
 	private static final long serialVersionUID = -310747303333504293L;

@@ -6,10 +6,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+/*
+ * EN: Configuration rows (external API URLs and the administrator password hash),
+ *     always read by their "concepto" key.
+ * ES: Filas de configuracion (URLs de la API externa y el hash de la contrasena de
+ *     administrador), siempre se leen por su clave "concepto".
+ */
 @Entity
-@Table(name="datos")
+@Table(name="datos", indexes = {
+		@Index(name="idx_datos_concepto", columnList="concepto")
+})
 public class DatosEntity implements Serializable{
 
 	private static final long serialVersionUID = 1810326363593043815L;

@@ -67,6 +67,26 @@
 			<groupId>org.springframework.security</groupId>
 		    <artifactId>spring-security-crypto</artifactId>
 		</dependency>
+
+		<!--
+			EN: Bounded in-memory cache for the converted dates. Spring's default cache
+			    manager is an unbounded map, which would grow without limit across the
+			    767.000 convertible dates; Caffeine evicts by size and usage. The starter
+			    contributes the caching abstraction and the Caffeine adapter.
+			ES: Cache en memoria acotada para las fechas convertidas. El gestor de cache
+			    por defecto de Spring es un mapa sin limite, que creceria sin freno a lo
+			    largo de las 767.000 fechas convertibles; Caffeine expulsa por tamano y uso.
+			    El starter aporta la abstraccion de cache y el adaptador de Caffeine.
+		-->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-cache</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.github.ben-manes.caffeine</groupId>
+			<artifactId>caffeine</artifactId>
+		</dependency>
 	</dependencies>
 
 	<build>

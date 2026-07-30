@@ -7,10 +7,18 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+/*
+ * EN: Solstices and equinoxes (~8.400 rows), read as a date window around the request.
+ * ES: Solsticios y equinoccios (~8.400 filas), se leen como ventana de fechas alrededor
+ *     de la peticion.
+ */
 @Entity
-@Table(name="sye")
+@Table(name="sye", indexes = {
+		@Index(name="idx_sye_date", columnList="date")
+})
 public class SolsticiosYEquinocciosEntity implements Serializable {
 
 	private static final long serialVersionUID = 2651548553460197414L;

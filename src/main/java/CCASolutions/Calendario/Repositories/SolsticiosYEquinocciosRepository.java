@@ -1,6 +1,5 @@
 package CCASolutions.Calendario.Repositories;
 
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,22 +7,42 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
-public interface SolsticiosYEquinocciosRepository extends JpaRepository <SolsticiosYEquinocciosEntity, Long> {
-	
-	public abstract SolsticiosYEquinocciosEntity findByDateBetween(LocalDateTime inicio, LocalDateTime fin);
+/*
+ * ==============================================================================
+ * EN: Solstices and equinoxes (~8.400 rows).
+ *
+ *     The window the read path asks for is naturally small (a dozen years at most,
+ *     so a few dozen rows), so it stays a database query - but it now has an index
+ *     behind it and an explicit ORDER BY.
+ *
+ *     The ordering matters: several calculators pick "the nearest solstice in either
+ *     direction", and a date exactly halfway between two of them is a genuine tie
+ *     that the original code broke by relying on the order MySQL happened to
+ *     return. Sorting by date ascending makes that deterministic.
+ *
+ *     Eight unused derived queries were removed.
+ *
+ * ES: Solsticios y equinoccios (~8.400 filas).
+ *
+ *     La ventana que pide el camino de lectura es pequena por naturaleza (una docena de
+ *     anos como maximo, o sea unas pocas decenas de filas), asi que sigue siendo una
+ *     consulta a base de datos - pero ahora tiene un indice detras y un ORDER BY
+ *     explicito.
+ *
+ *     El orden importa: varios calculadores eligen "el solsticio mas cercano en
+ *     cualquier direccion", y una fecha exactamente a mitad de camino entre dos de ellos
+ *     es un empate real que el codigo original resolvia confiando en el orden que
+ *     devolviera MySQL. Ordenar por fecha ascendente lo hace determinista.
+ *
+ *     Se han eliminado ocho consultas derivadas sin uso.
+ * ==============================================================================
+ */
+public interface SolsticiosYEquinocciosRepository extends JpaRepository<SolsticiosYEquinocciosEntity, Long> {
 
-	public abstract  List<SolsticiosYEquinocciosEntity>	findByDateAfterAndDateLessThanEqual (LocalDateTime from, LocalDateTime to);
-	
-	public abstract  List<SolsticiosYEquinocciosEntity>	findByYearBetween (int from, int to);
-	
-	public abstract  SolsticiosYEquinocciosEntity	findByYearAndStartingSeason (int year, int startingSeason);
-	
-	public abstract  List<SolsticiosYEquinocciosEntity>	findByYear (int year);
-
-	public abstract SolsticiosYEquinocciosEntity findTopByOrderByDateDesc();
-	
-	public abstract SolsticiosYEquinocciosEntity findFirstByDateAfterOrderByDateAsc(LocalDateTime date);
-	public abstract SolsticiosYEquinocciosEntity findFirstByDateBeforeOrderByDateDesc(LocalDateTime date);
-	
-
+	/*
+	 * EN: Solstices and equinoxes in (desde, hasta], oldest first.
+	 * ES: Solsticios y equinoccios en (desde, hasta], del mas antiguo al mas nuevo.
+	 */
+	List<SolsticiosYEquinocciosEntity> findByDateAfterAndDateLessThanEqualOrderByDateAsc(LocalDateTime desde,
+			LocalDateTime hasta);
 }

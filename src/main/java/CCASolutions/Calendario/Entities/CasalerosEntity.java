@@ -7,10 +7,17 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+/*
+ * EN: Casaleros (~220 rows). Looked up by eclipeno on every conversion, hence the index.
+ * ES: Casaleros (~220 filas). Se busca por eclipeno en cada conversion, de ahi el indice.
+ */
 @Entity
-@Table(name="casaleros")
+@Table(name="casaleros", indexes = {
+		@Index(name="idx_casaleros_eclipeno", columnList="eclipeno_id")
+})
 public class CasalerosEntity implements Serializable {
 	
 	/*

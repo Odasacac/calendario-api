@@ -7,10 +7,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+/*
+ * EN: Lunar apogees and perigees (~29.200 rows), only ever read as a date window
+ *     around the requested day.
+ * ES: Apogeos y perigeos lunares (~29.200 filas), solo se leen como una ventana de
+ *     fechas alrededor del dia consultado.
+ */
 @Entity
-@Table(name="apo_peri_lunas")
+@Table(name="apo_peri_lunas", indexes = {
+		@Index(name="idx_apoperis_date", columnList="date")
+})
 public class ApogeosYPerigeosLunaEntity implements Serializable {
 
 

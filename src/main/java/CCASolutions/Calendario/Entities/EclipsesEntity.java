@@ -7,10 +7,26 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+/*
+ * EN: Eclipses (~9.900 rows). The read path always discards partial and penumbral
+ *     eclipses and then filters by date, so the composite index matches that predicate
+ *     exactly; the extra "de_sol" column lets the solar/lunar counters be answered
+ *     straight from the index.
+ *
+ * ES: Eclipses (~9.900 filas). El camino de lectura descarta siempre los eclipses
+ *     parciales y penumbrales y despues filtra por fecha, asi que el indice compuesto
+ *     encaja exactamente con ese predicado; la columna extra "de_sol" permite resolver
+ *     los contadores solar/lunar directamente desde el indice.
+ */
 @Entity
-@Table(name="eclipses")
+@Table(name="eclipses", indexes = {
+		@Index(name="idx_eclipses_date", columnList="date"),
+		@Index(name="idx_eclipses_visibles_date", columnList="es_parcial,es_penumbral,date"),
+		@Index(name="idx_eclipses_visibles_sol_date", columnList="es_parcial,es_penumbral,de_sol,date")
+})
 public class EclipsesEntity implements Serializable {
 
 	private static final long serialVersionUID = -5445158608884441554L;
