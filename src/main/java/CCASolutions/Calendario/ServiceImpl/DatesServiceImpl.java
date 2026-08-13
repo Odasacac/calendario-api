@@ -90,6 +90,32 @@ public class DatesServiceImpl implements DatesService {
 	
 	@Autowired
 	private FestividadesRepository festividadesRepository;
+	
+	// ============================================================
+	// CÓDIGOS DE FESTIVIDADES
+	// ============================================================
+
+	private static final String CAMBIO_DE_ECLIPENO_CODE = "CE";
+	private static final String CAMBIO_DE_METONO_IN_CODE = "CMF";
+	private static final String CAMBIO_DE_ANYO_CODE = "CA";
+	private static final String INICIO_ANYO_CODE = "IA";
+	private static final String BIENVENIDA_PRIMAVERA_CODE = "BP";
+	private static final String MITAD_ANYO_CODE = "MA";
+	private static final String DESPEDIDA_VERANO_CODE = "DV";
+	private static final String ENTRADA_OTONYO_CODE = "EO";
+	private static final String DESPEDIDA_ANYO_CODE = "DA";
+
+	private static final String MIDISSON_INVERNAL_CODE = "MSI";
+	private static final String MIDISSON_PRIMAVERAL_CODE = "MSP";
+	private static final String MIDISSON_ESTIVAL_CODE = "MSE";
+	private static final String MIDISSON_OTONYAL_CODE = "MSO";
+
+	private static final String CAMBIO_DE_METONO_IA_CODE = "CMA";
+	private static final String CAMBIO_DE_METONO_IAR_CODE = "CMAR";
+	private static final String CAMBIO_DE_ECLIPENO_IAR_CODE = "CEAR";
+
+	private static final String CAMBIO_DE_APONOVO_CODE = "LA";
+	private static final String MIDISSON_APONOVAL_CODE = "MAP";
 
 	
 	// METODOS PUBLICOS 
@@ -323,110 +349,64 @@ public class DatesServiceImpl implements DatesService {
 		return festividades;		
 	}		
 	
-	private String getFestividadActual(List<FestividadesEntity> festividadesEntities, List<MinimaFestividadesDTO> festividadesActuales) {
-		
-		String festividadActual = "";
-		
-		if(!festividadesActuales.isEmpty()) {
-			
-			if(festividadesActuales.size()==1) {
-				
-				for(FestividadesEntity entity : festividadesEntities) {
-					
-					if(entity.getCode().equals(festividadesActuales.get(0).getCode())) {
-					
-						festividadActual = entity.getNombre();
-					}	
-				}
-			}
-			else {
-				
-				boolean midsison = false;
-				boolean aponovo = false;
-				
-				for(MinimaFestividadesDTO festividades : festividadesActuales) {
-					if(festividades.getCode().equals("MSI") || festividades.getCode().equals("MSP") || festividades.getCode().equals("MSE") || festividades.getCode().equals("MSO")) {					
-						midsison = true;
-					}	
-					if(festividades.getCode().equals("LA")) {
-						aponovo = true;
-					}
-				}
-				
-				
-				if(festividadesActuales.size()==2 && midsison && aponovo) {
-					for(FestividadesEntity entity : festividadesEntities) {
-						
-						if(entity.getCode().equals("MAP")) {
-						
-							festividadActual = entity.getNombre();
-						}	
-					}
-				}
-				else {
-					String codeCECMCA = "";
-					
-					for(MinimaFestividadesDTO festividad : festividadesActuales) {
-						
-						switch (festividad.getCode()) {
-						
-							case "CEAR":
-								codeCECMCA = festividad.getCode();
-								break;
-								
-							case "CMAR":
-								
-								if(!codeCECMCA.equals("CEAR")) {
-									codeCECMCA = festividad.getCode();
-								}
-								break;
-								
-							case "CE":
-								if(!codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
-									codeCECMCA = festividad.getCode();
-								}
-								break;
-									
-							case "CMN":
-								
-								if(!codeCECMCA.equals("CE") && !codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
-									
-									codeCECMCA = festividad.getCode();
-								}
-								break;
-								
-							case "CMA":
-								
-								if(!codeCECMCA.equals("CMN") && !codeCECMCA.equals("CE") && !codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
-									
-									codeCECMCA = festividad.getCode();
-								}
-								break;
-							
-							case "CA":
-								
-								if(!codeCECMCA.equals("CMA") && !codeCECMCA.equals("CMN") && !codeCECMCA.equals("CE") && !codeCECMCA.equals("CEAR") && !codeCECMCA.equals("CMAR")) {
-									
-									codeCECMCA = festividad.getCode();
-								}
-								break;
-						}
-					}
-					
-					for(FestividadesEntity entity : festividadesEntities) {
-						
-						if(entity.getCode().equals(codeCECMCA)) {
-						
-							festividadActual = entity.getNombre();
-						}	
-					}
-				}			
-			}
-		}	
-		
-		
-		
-		return festividadActual;
+	private String getFestividadActual(
+	        List<FestividadesEntity> festividadesEntities,
+	        List<MinimaFestividadesDTO> festividadesActuales) {
+
+	    if (festividadesActuales.isEmpty()) {
+	        return "";
+	    }
+
+	    boolean hayMidsison = false;
+	    boolean hayAponovo = false;
+
+	    for (MinimaFestividadesDTO festividad : festividadesActuales) {
+
+	        String code = festividad.getCode();
+
+	        if (MIDISSON_INVERNAL_CODE.equals(code) || MIDISSON_PRIMAVERAL_CODE.equals(code) || MIDISSON_ESTIVAL_CODE.equals(code) || MIDISSON_OTONYAL_CODE.equals(code)) {
+	        	
+	            hayMidsison = true;
+	        }
+
+	        if (CAMBIO_DE_APONOVO_CODE.equals(code)) {
+	            hayAponovo = true;
+	        }
+	    }
+
+	    if (hayMidsison && hayAponovo) {
+	        return getNombreFestividad(festividadesEntities, MIDISSON_APONOVAL_CODE);
+	    }
+
+
+	    String[] prioridad = {CAMBIO_DE_ECLIPENO_IAR_CODE, CAMBIO_DE_METONO_IAR_CODE, CAMBIO_DE_ECLIPENO_CODE, CAMBIO_DE_METONO_IN_CODE, CAMBIO_DE_METONO_IA_CODE, CAMBIO_DE_ANYO_CODE};
+
+	    for (String codigoPrioritario : prioridad) {
+
+	        for (MinimaFestividadesDTO festividad : festividadesActuales) {
+
+	            if (codigoPrioritario.equals(festividad.getCode())) {
+
+	                return getNombreFestividad(festividadesEntities, codigoPrioritario);
+	            }
+	        }
+	    }
+
+	    return "";
+	}
+	
+	private String getNombreFestividad(
+	        List<FestividadesEntity> festividadesEntities,
+	        String code) {
+
+	    for (FestividadesEntity entity : festividadesEntities) {
+
+	        if (code.equals(entity.getCode())) {
+	            return entity.getNombre();
+	        }
+	    }
+
+	    return "";
 	}
 	
 	private String getFestividadAnterior(List<FestividadesEntity> festividadesEntities, List<MinimaFestividadesDTO> festividadesPasadas) {
@@ -487,34 +467,15 @@ public class DatesServiceImpl implements DatesService {
 		
 		List<MinimaFestividadesDTO> festividadesObtenidasDTO = new ArrayList<>();
 
-		String cambioDeEclipenoCode = "CE";
-		String cambioDeEclipenoIARCode = "CEAR";
-		String cambioDeMetonoINCode = "CMF";
-		String cambioDeMetonoIACode = "CMA";
-		String cambioDeMetonoIARCode = "CMAR";
-		String cambioDeAnyoCode= "CA";
-		String bienvenidaPrimaveraCode = "BP";
-		String mitadAnyoCode = "MA";
-		String entradaOtonyoCode = "EO";
-		String inicioAnyoCode = "IA";
-		String despedidaVeranoCode = "DV";
-		String despedidaAnyoCode = "DA";
-		String midsisonInvernalCode = "MSI";
-		String midsisonPrimaveralCode = "MSP";
-		String midsisonEstivalCode = "MSE";
-		String midsisonOtonyalCode = "MSO";
-		String cambioDeAponovoCode = "LA";
-		String midsisonAponovalCode = "MAP";
-
 		
 		// 1 - Cambio de eclipeno 
 		MinimaFestividadesDTO cambioDeEclipeno = new MinimaFestividadesDTO();
-		cambioDeEclipeno.setCode(cambioDeEclipenoCode);		
+		cambioDeEclipeno.setCode(CAMBIO_DE_ECLIPENO_CODE);		
 		long diasMinimosDeDiferenciaEntreCEYDate = Long.MAX_VALUE;
 		boolean esHoyCE = false;
 		
 		MinimaFestividadesDTO cambioDeEclipenoIAR = new MinimaFestividadesDTO();
-		cambioDeEclipenoIAR.setCode(cambioDeEclipenoIARCode);		
+		cambioDeEclipenoIAR.setCode(CAMBIO_DE_ECLIPENO_IAR_CODE);		
 		long diasMinimosDeDiferenciaEntreCEARYDate = Long.MAX_VALUE;
 		boolean esHoyCEAR = false;
 		
@@ -565,17 +526,17 @@ public class DatesServiceImpl implements DatesService {
 		
 		// 2 - Cambio de metono fasal y aporico
 		MinimaFestividadesDTO cambioDeMetonoIN = new MinimaFestividadesDTO();
-		cambioDeMetonoIN.setCode(cambioDeMetonoINCode);		
+		cambioDeMetonoIN.setCode(CAMBIO_DE_METONO_IN_CODE);		
 		long diasMinimosDeDiferenciaEntreCMINYDate = Long.MAX_VALUE;
 		boolean esHoyCMN = false;
 		
 		MinimaFestividadesDTO cambioDeMetonoIA = new MinimaFestividadesDTO();
-		cambioDeMetonoIA.setCode(cambioDeMetonoIACode);		
+		cambioDeMetonoIA.setCode(CAMBIO_DE_METONO_IA_CODE);		
 		long diasMinimosDeDiferenciaEntreCMIAYDate = Long.MAX_VALUE;
 		boolean esHoyCMA = false;
 		
 		MinimaFestividadesDTO cambioDeMetonoIAR = new MinimaFestividadesDTO();
-		cambioDeMetonoIAR.setCode(cambioDeMetonoIARCode);		
+		cambioDeMetonoIAR.setCode(CAMBIO_DE_METONO_IAR_CODE);		
 		long diasMinimosDeDiferenciaEntreCMIARYDate = Long.MAX_VALUE;
 		boolean esHoyCMAR = false;
 		
@@ -676,22 +637,22 @@ public class DatesServiceImpl implements DatesService {
 		
 		// 3 - Cambio de año, Bienvenida a la Primavera, Mitad de año y Entrada del otoño y midsisons
 		MinimaFestividadesDTO cambioDeAnyo = new MinimaFestividadesDTO();
-		cambioDeAnyo.setCode(cambioDeAnyoCode);		
+		cambioDeAnyo.setCode(CAMBIO_DE_ANYO_CODE);		
 		long diasMinimosDeDiferenciaEntreCAYDate = Long.MAX_VALUE;
 		boolean esHoyCA = false;
 		
 		MinimaFestividadesDTO bienvenidaPrimavera = new MinimaFestividadesDTO();
-		bienvenidaPrimavera.setCode(bienvenidaPrimaveraCode);		
+		bienvenidaPrimavera.setCode(BIENVENIDA_PRIMAVERA_CODE);		
 		long diasMinimosDeDiferenciaEntreBPYDate = Long.MAX_VALUE;
 		boolean esHoyBP =false;
 		
 		MinimaFestividadesDTO pasoOtonyo = new MinimaFestividadesDTO();
-		pasoOtonyo.setCode(entradaOtonyoCode);		
+		pasoOtonyo.setCode(ENTRADA_OTONYO_CODE);		
 		long diasMinimosDeDiferenciaEntrePOYDate = Long.MAX_VALUE;
 		boolean esHoyBO =false;
 		
 		MinimaFestividadesDTO mitadAnyo = new MinimaFestividadesDTO();
-		mitadAnyo.setCode(mitadAnyoCode);		
+		mitadAnyo.setCode(MITAD_ANYO_CODE);		
 		long diasMinimosDeDiferenciaEntreMAYDate = Long.MAX_VALUE;
 		boolean esHoyMA = false;
 		
@@ -823,19 +784,19 @@ public class DatesServiceImpl implements DatesService {
 		
 		switch(lastSoe.getStartingSeason()) {
 			case 1:
-				midsison.setCode(midsisonInvernalCode);
+				midsison.setCode(MIDISSON_INVERNAL_CODE);
 				break;
 			
 			case 2:
-				midsison.setCode(midsisonPrimaveralCode);
+				midsison.setCode(MIDISSON_PRIMAVERAL_CODE);
 				break;
 			
 			case 3:
-				midsison.setCode(midsisonEstivalCode);
+				midsison.setCode(MIDISSON_ESTIVAL_CODE);
 				break;
 			
 			case 4: 
-				midsison.setCode(midsisonOtonyalCode);
+				midsison.setCode(MIDISSON_OTONYAL_CODE);
 				break;
 		}
 
@@ -850,20 +811,20 @@ public class DatesServiceImpl implements DatesService {
 		// 4 - Inicio del primer mes del año, despedida del verano, despedida del año y cambio de aponovo
 		
 		MinimaFestividadesDTO inicioPrimerMesAnyo = new MinimaFestividadesDTO();
-		inicioPrimerMesAnyo.setCode(inicioAnyoCode);		
+		inicioPrimerMesAnyo.setCode(INICIO_ANYO_CODE);		
 		long diasMinimosDeDiferenciaEntreLunaYSI = Long.MAX_VALUE;
 
 		
 		MinimaFestividadesDTO despedidaVerano = new MinimaFestividadesDTO();
-		despedidaVerano.setCode(despedidaVeranoCode);		
+		despedidaVerano.setCode(DESPEDIDA_VERANO_CODE);		
 		long diasMinimosDeDiferenciaEntreDVYLuna = Long.MAX_VALUE;
 		
 		MinimaFestividadesDTO despedidaAnyo = new MinimaFestividadesDTO();
-		despedidaAnyo.setCode(despedidaAnyoCode);		
+		despedidaAnyo.setCode(DESPEDIDA_ANYO_CODE);		
 		long diasMinimosDeDiferenciaEntreDAYLuna = Long.MAX_VALUE;
 		
 		MinimaFestividadesDTO cambioDeAponovo = new MinimaFestividadesDTO();
-		cambioDeAponovo.setCode(cambioDeAponovoCode);		
+		cambioDeAponovo.setCode(CAMBIO_DE_APONOVO_CODE);		
 		long diasMinimosDeDiferenciaEntreAponovoYDate = Long.MAX_VALUE;
 
 		
@@ -968,7 +929,7 @@ public class DatesServiceImpl implements DatesService {
 		// 5 - Midsison aponoval		
 		
 		MinimaFestividadesDTO midsisonAponoval = new MinimaFestividadesDTO();
-		midsisonAponoval.setCode(midsisonAponovalCode);
+		midsisonAponoval.setCode(MIDISSON_APONOVAL_CODE);
 		midsisonAponoval.setDate(midsison.getDate());
 		midsisonAponoval.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
 		
