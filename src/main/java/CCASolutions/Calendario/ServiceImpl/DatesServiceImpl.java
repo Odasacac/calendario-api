@@ -95,24 +95,29 @@ public class DatesServiceImpl implements DatesService {
 	// CÓDIGOS DE FESTIVIDADES
 	// ============================================================
 
+	private static final String CAMBIO_DE_ECLIPENO_IAR_CODE = "CEAR";	
+	
 	private static final String CAMBIO_DE_ECLIPENO_CODE = "CE";
+	private static final String CAMBIO_DE_METONO_IAR_CODE = "CMAR";
+	
 	private static final String CAMBIO_DE_METONO_IN_CODE = "CMF";
+	private static final String CAMBIO_DE_METONO_IA_CODE = "CMA";
+	
 	private static final String CAMBIO_DE_ANYO_CODE = "CA";
 	private static final String INICIO_ANYO_CODE = "IA";
+	private static final String MIDISSON_INVERNAL_CODE = "MSI";	
+	
 	private static final String BIENVENIDA_PRIMAVERA_CODE = "BP";
-	private static final String MITAD_ANYO_CODE = "MA";
-	private static final String DESPEDIDA_VERANO_CODE = "DV";
-	private static final String ENTRADA_OTONYO_CODE = "EO";
-	private static final String DESPEDIDA_ANYO_CODE = "DA";
-
-	private static final String MIDISSON_INVERNAL_CODE = "MSI";
 	private static final String MIDISSON_PRIMAVERAL_CODE = "MSP";
+	
+	private static final String MITAD_ANYO_CODE = "MA";	
 	private static final String MIDISSON_ESTIVAL_CODE = "MSE";
+	
+	private static final String DESPEDIDA_VERANO_CODE = "DV";
 	private static final String MIDISSON_OTONYAL_CODE = "MSO";
 
-	private static final String CAMBIO_DE_METONO_IA_CODE = "CMA";
-	private static final String CAMBIO_DE_METONO_IAR_CODE = "CMAR";
-	private static final String CAMBIO_DE_ECLIPENO_IAR_CODE = "CEAR";
+	private static final String ENTRADA_OTONYO_CODE = "EO";
+	private static final String DESPEDIDA_ANYO_CODE = "DA";	
 
 	private static final String CAMBIO_DE_APONOVO_CODE = "LA";
 	private static final String MIDISSON_APONOVAL_CODE = "MAP";
