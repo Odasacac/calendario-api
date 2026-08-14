@@ -1,5 +1,6 @@
 package CCASolutions.Calendario.ServiceImpl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,17 +13,21 @@ import org.springframework.web.client.RestTemplate;
 import CCASolutions.Calendario.Entities.AllEclipsesEntity;
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
+import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Repositories.AllEclipsesRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
 import CCASolutions.Calendario.Services.EclipsesService;
 import CCASolutions.Calendario.DTOs.SEPYDTO;
+import CCASolutions.Calendario.DTOs.AbsoluteEclipsesDTO;
+import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.LEPYDTO;
 import CCASolutions.Calendario.DTOs.LunarEclipseDTO;
 import CCASolutions.Calendario.DTOs.SolarEclipseDTO;
 
 @Service
 public class EclipsesServiceImpl implements EclipsesService{
+	
 	@Autowired
 	private DatosRepository datosRepository;
 	
@@ -43,6 +48,91 @@ public class EclipsesServiceImpl implements EclipsesService{
 	private final static String NON_CENTRAL_PARTIAL = "NonCentralPartialEclipse";
 	private final static String CENTRAL_ANULAR = "CentralAnnularEclipse";
 	private final static String CENTRAL_TOTAL = "CentralTotalEclipse";
+	
+	
+	
+	
+	public AbsoluteEclipsesDTO getVAUAbsoluteEclipses(DateDTO dateVAU, List<EclipsesEntity> eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN, LocalDate date, MetonsEntity lastMetonIN) {
+		
+		AbsoluteEclipsesDTO absoluteEclipses = new AbsoluteEclipsesDTO ();		
+		
+		int eclipsesNoParcialesDesdeLastEclipenoIN = 0;
+		int eclipsesSolaresNoParcialesDesdeLastEclipenoIN = 0;
+		int eclipsesLunaresNoParcialesDesdeLastEclipenoIN = 0;
+		
+		int eclipsesNoParcialesDesdeLastMetonIN = 0;
+		int eclipsesSolaresNoParcialesDesdeLastMetonIN = 0;		
+		int eclipsesLunaresNoParcialesDesdeLastMetonIN = 0;
+		
+		
+		
+		if(!dateVAU.getEclipenoVAU().isEclipenoINDay()) {
+		
+			
+			List<EclipsesEntity> eclipsesSolaresNoParcialesDesdeLastEclipenoINList = new ArrayList<>();		
+			List<EclipsesEntity> eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoINList = new ArrayList<>();
+			
+			int lunaresDesdeElUltimoMetonoIN =0;
+			int solaresDesdeElUltimoMetonoIN =0;
+			
+			//Si estamos en el primer métono, hay que restarle 1 porque viene el propio del eclípeno
+			if(dateVAU.getMetonoVAU().getMetonsIN().getMetonosINSinceLastEclipenoIN() == 0) {
+				solaresDesdeElUltimoMetonoIN=-1; 
+			}
+			
+			
+			for (EclipsesEntity eclipse : eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN){
+				
+				if(eclipse.getDate().toLocalDate().isBefore(date)) {
+					if(eclipse.isDeSol()) {
+						
+						eclipsesSolaresNoParcialesDesdeLastEclipenoINList.add(eclipse);
+						
+						if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
+							
+							solaresDesdeElUltimoMetonoIN = solaresDesdeElUltimoMetonoIN+1;					
+						}
+						
+					}
+					else if (eclipse.isDeLuna()){
+						
+						eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoINList.add(eclipse);
+						
+						if(eclipse.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate()) || eclipse.getDate().toLocalDate().isEqual(lastMetonIN.getDate().toLocalDate())) {
+							
+							lunaresDesdeElUltimoMetonoIN = lunaresDesdeElUltimoMetonoIN+1;				
+						}			
+					}			
+				}			
+			}			
+			
+			if(solaresDesdeElUltimoMetonoIN==-1) {
+				solaresDesdeElUltimoMetonoIN=0;
+			}
+			eclipsesSolaresNoParcialesDesdeLastEclipenoIN = eclipsesSolaresNoParcialesDesdeLastEclipenoINList.size();
+			eclipsesLunaresNoParcialesDesdeLastEclipenoIN = eclipsesLunaresNoParcialesNiPenumbralesDesdeLastEclipenoINList.size();
+			eclipsesNoParcialesDesdeLastEclipenoIN = eclipsesSolaresNoParcialesDesdeLastEclipenoIN + eclipsesLunaresNoParcialesDesdeLastEclipenoIN;
+			
+			
+			eclipsesSolaresNoParcialesDesdeLastMetonIN = solaresDesdeElUltimoMetonoIN;		
+			eclipsesLunaresNoParcialesDesdeLastMetonIN = lunaresDesdeElUltimoMetonoIN;
+			eclipsesNoParcialesDesdeLastMetonIN = eclipsesSolaresNoParcialesDesdeLastMetonIN + eclipsesLunaresNoParcialesDesdeLastMetonIN;
+			
+		}
+		
+		absoluteEclipses.setSolarSinceLastEclipenoIN(eclipsesSolaresNoParcialesDesdeLastEclipenoIN);
+		absoluteEclipses.setSolarSinceLastMetonoIN(eclipsesSolaresNoParcialesDesdeLastMetonIN);
+		
+		absoluteEclipses.setLunarSinceLastEclipenoIN(eclipsesLunaresNoParcialesDesdeLastEclipenoIN);
+		absoluteEclipses.setLunarSinceLastMetonoIN(eclipsesLunaresNoParcialesDesdeLastMetonIN);
+		
+		absoluteEclipses.setSinceLastEclipenoIN(eclipsesNoParcialesDesdeLastEclipenoIN);
+		absoluteEclipses.setSinceLastMetonoIN(eclipsesNoParcialesDesdeLastMetonIN);
+		
+		return absoluteEclipses;
+	}
+	
+	
 	
 	public String poblateEclipsesFromOpale() {
 		

@@ -1,5 +1,6 @@
 package CCASolutions.Calendario.ServiceImpl;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +11,11 @@ import org.springframework.web.client.RestTemplate;
 
 import CCASolutions.Calendario.DTOs.FenomenoDTO;
 import CCASolutions.Calendario.DTOs.GASYEFDTO;
+import CCASolutions.Calendario.DTOs.YearDTO;
 import CCASolutions.Calendario.Entities.AllSoEsEntity;
 import CCASolutions.Calendario.Entities.DatosEntity;
+import CCASolutions.Calendario.Entities.EclipenosEntity;
+import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Repositories.AllSoEsRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
@@ -39,6 +43,53 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	private final static String EP = "VernalEquinox";
 	private final static String SV = "SummerSolstice";
 	private final static String EO = "AutumnalEquinox";
+	
+	
+
+	public YearDTO getVAUYear(EclipenosEntity lastEclipenoIN, LocalDate date, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMetonIN) {
+		
+		YearDTO vauYear = new YearDTO();
+		
+		boolean caeEnSolsticioDeInvierno=false;
+		
+		// Hay que contar cuantos solsticios de invierno han pasado desde el métono hasta la fecha a consultar
+		// Si la fecha a consultar cae en solsticio de invierno, no corresponde a ningún añoVau
+		
+		int year = 0;
+		
+		for(int i = 0; i<soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.size() && !caeEnSolsticioDeInvierno; i++) {
+			
+			SolsticiosYEquinocciosEntity soe = soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.get(i);
+			
+			if(soe.isSolsticioInvierno()) {				
+		
+				if(soe.getDate().toLocalDate().isEqual(date)) {
+						
+					caeEnSolsticioDeInvierno=true;
+				}
+				else if (soe.getDate().toLocalDate().isBefore(date) && soe.getDate().toLocalDate().isAfter(lastMetonIN.getDate().toLocalDate())){
+					
+					year=year+1;
+				}
+			}
+			
+		}
+		
+		
+		vauYear.setEsSolsticioDeInvierno(caeEnSolsticioDeInvierno);	
+		vauYear.setSolsticiosDeInviernoSinceLastMetonIN(year);	
+		
+		int numberOfYear = year +1;
+		if(lastEclipenoIN.getDate().toLocalDate().isEqual(date) || lastMetonIN.getDate().toLocalDate().isEqual(date)) {
+			
+			numberOfYear = numberOfYear-1;
+		}
+		vauYear.setNumberOfYear(numberOfYear);
+	
+		return vauYear;
+		
+	}
+	
 	
 
 	public String poblateSolsticiosYEquinocciosFromOpale() {
