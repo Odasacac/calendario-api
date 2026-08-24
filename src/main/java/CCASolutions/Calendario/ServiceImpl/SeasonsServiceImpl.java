@@ -28,7 +28,7 @@ public class SeasonsServiceImpl implements SeasonsService{
 		
 		SolsticiosYEquinocciosEntity lastSoe  = new SolsticiosYEquinocciosEntity();
 		SolsticiosYEquinocciosEntity nextSoe = new SolsticiosYEquinocciosEntity();
-		SolsticiosYEquinocciosEntity actualSoe = null; //Por si hiciera falta saber el soe actual
+		SolsticiosYEquinocciosEntity actualSoe = null;
 		int startingSeason = 0;
 		
 		long diasMinimosDeDiferenciaEntreSoePasadoYDate = Long.MAX_VALUE;
@@ -79,6 +79,9 @@ public class SeasonsServiceImpl implements SeasonsService{
 			else if(date.isEqual(midSeasonDate)) {
 				seasonDTO.setMidsisonDay(true);
 				surname="cenítico";
+				if(actualSoe.getStartingSeason() == 2) {
+					surname="cenítica";
+				}
 			}
 			else if(date.isAfter(midSeasonDate)) {
 				seasonDTO.setPostMidsison(true);
