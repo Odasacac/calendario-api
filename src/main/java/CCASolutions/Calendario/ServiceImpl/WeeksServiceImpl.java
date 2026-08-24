@@ -28,12 +28,13 @@ public class WeeksServiceImpl implements WeeksService{
 			
 			List<WeeksEntity> weeksParaDDB = new ArrayList<>();
 			
+			weeksParaDDB.add(this.createWeek("-", 0));
 			weeksParaDDB.add(this.createWeek("Primana", 1));
 			weeksParaDDB.add(this.createWeek("Segana", 2));
 			weeksParaDDB.add(this.createWeek("Terana", 3));
 			weeksParaDDB.add(this.createWeek("Curana", 4));
 			weeksParaDDB.add(this.createWeek("Limana", 5));
-			weeksParaDDB.add(this.createWeek("Nomana", 0));
+			
 			
 			this.weeksRepository.saveAll(weeksParaDDB);
 			

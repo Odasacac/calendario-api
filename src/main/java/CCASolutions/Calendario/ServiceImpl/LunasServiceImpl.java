@@ -104,6 +104,10 @@ public class LunasServiceImpl implements LunasService {
 							
 					weekVauString = this.weeksRepository.findByWeekOfMonth("1").getName();
 				}
+				else {
+					weekVauString = this.weeksRepository.findByWeekOfMonth("0").getName();
+				}
+				
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva).getName();
 				
 			} else if (diasDesdeLaLunaNueva <= 14) {

@@ -6,6 +6,7 @@ public class DateDTO {
 	private MetonoInvernalApofasalRemotoDTO metonoInvernalApofasalRemoto;
 	private EclipenoINDTO eclipenoVAU;
 	private MetonDTO metonoVAU;
+	private SeasonDTO season;
 	private YearDTO year;
 	private MonthDTO month;
 	private String week;
@@ -21,6 +22,14 @@ public class DateDTO {
 	private AponovosDTO aponovos;
 	
 	
+
+	public SeasonDTO getSeason() {
+		return season;
+	}
+
+	public void setSeason(SeasonDTO seasonDTO) {
+		this.season = seasonDTO;
+	}
 
 	public AponovosDTO getAponovos() {
 		return aponovos;

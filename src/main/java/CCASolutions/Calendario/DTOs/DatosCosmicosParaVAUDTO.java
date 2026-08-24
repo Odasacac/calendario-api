@@ -7,6 +7,7 @@ import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
+import CCASolutions.Calendario.Entities.MidsisonEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
 public class DatosCosmicosParaVAUDTO {
@@ -17,6 +18,7 @@ public class DatosCosmicosParaVAUDTO {
 	private List<EclipenosEntity> eclipenos;
 	private List<MetonsEntity> metons;
 	private List<ApogeosYPerigeosLunaEntity> apoperis;
+	private List<MidsisonEntity> midsisons;
 	private EclipenosEntity lastEclipenoIN;
 	private EclipenosEntity lastEclipenoInvernalApofasalRemoto;
 	private MetonsEntity lastMetonIN;
@@ -26,6 +28,12 @@ public class DatosCosmicosParaVAUDTO {
 	
 
 	
+	public List<MidsisonEntity> getMidsisons() {
+		return midsisons;
+	}
+	public void setMidsisons(List<MidsisonEntity> midsisons) {
+		this.midsisons = midsisons;
+	}
 	public String getMensaje() {
 		return mensaje;
 	}
