@@ -21,6 +21,7 @@ import CCASolutions.Calendario.Entities.AllFasesLunaresEntity;
 import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Repositories.AllFasesLunaresRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.DaysRepository;
@@ -59,7 +60,7 @@ public class LunasServiceImpl implements LunasService {
 	// METODOS PUBLICOS
 	
 	
-	public VAUWeekAndDayDTO getVauWeekAndDay(LocalDate date, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente) {
+	public VAUWeekAndDayDTO getVauWeekAndDay(LocalDate date, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas) {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
 		String weekVauString = null;
@@ -96,7 +97,7 @@ public class LunasServiceImpl implements LunasService {
 			
 		if(lastLN != null) {
 			
-			// Con la luna llena más reciente y con los días que los separan, ya lo tenemos
+			// Con la luna nueva más reciente y con los días que los separan, ya lo tenemos
 			
 			if (diasDesdeLaLunaNueva <= 7) {
 				
@@ -132,7 +133,23 @@ public class LunasServiceImpl implements LunasService {
 		}
 		
 		vauWeekAndDay.setWeek(weekVauString);
-		vauWeekAndDay.setDay(dayVauString);
+		
+		String dayParaDTO = dayVauString;
+		
+		boolean caeEnSoe = false;		
+		for(int i = 0; i<soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.size() && !caeEnSoe; i++) {
+			
+			SolsticiosYEquinocciosEntity soe = soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.get(i);
+			
+			if(soe.getDate().toLocalDate().isEqual(date)) {
+				caeEnSoe = true;
+			}
+		}
+		
+		if(caeEnLunaNueva || caeEnSoe) {
+			dayParaDTO = dayParaDTO + " desdoblado";
+		}
+		vauWeekAndDay.setDay(dayParaDTO);
 		
 		return vauWeekAndDay;
 	}

@@ -87,7 +87,7 @@ public class DatesServiceImpl implements DatesService {
 		dateVAU.setSeason(this.seasonsService.getVAUSeason(date, datosCosmicosParaVAUDTO.getSoes()));
 		dateVAU.setMonth(this.monthService.getVAUMonth(date, datosCosmicosParaVAUDTO.getSoes(), datosCosmicosParaVAUDTO.getLunas()));
 		
-		VAUWeekAndDayDTO vauWeekAndDay = this.lunasService.getVauWeekAndDay(date, datosCosmicosParaVAUDTO.getLunas());
+		VAUWeekAndDayDTO vauWeekAndDay = this.lunasService.getVauWeekAndDay(date, datosCosmicosParaVAUDTO.getLunas(), datosCosmicosParaVAUDTO.getSoes());
 		dateVAU.setWeek(vauWeekAndDay.getWeek());
 		dateVAU.setDay(vauWeekAndDay.getDay());					
 		dateVAU.setLastEclipenoSelecto(this.eclipenosService.getVAUEclipenoSelecto(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), date));
