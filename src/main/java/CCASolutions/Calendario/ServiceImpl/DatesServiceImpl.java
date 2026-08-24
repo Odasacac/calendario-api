@@ -15,6 +15,7 @@ import CCASolutions.Calendario.Services.EclipsesService;
 import CCASolutions.Calendario.Services.FestividadesService;
 import CCASolutions.Calendario.Services.LunasService;
 import CCASolutions.Calendario.Services.MetonsService;
+import CCASolutions.Calendario.Services.MonthService;
 import CCASolutions.Calendario.Services.NotableEventService;
 import CCASolutions.Calendario.Services.SolsticiosYEquinocciosService;
 import CCASolutions.Calendario.Services.UtilsService;
@@ -47,6 +48,9 @@ public class DatesServiceImpl implements DatesService {
 	private SolsticiosYEquinocciosService solsticiosYEquinocciosService;
 	
 	@Autowired
+	private MonthService monthService; 
+	
+	@Autowired
 	private UtilsService utilsService;
 	
 	
@@ -76,7 +80,7 @@ public class DatesServiceImpl implements DatesService {
 		DateDTO dateVAU= new DateDTO();
 		
 		dateVAU.setYear(this.solsticiosYEquinocciosService.getVAUYear(datosCosmicosParaVAUDTO.getLastEclipenoIN(), date, datosCosmicosParaVAUDTO.getSoes(), datosCosmicosParaVAUDTO.getLastMetonIN()));					
-		dateVAU.setMonth(this.lunasService.getVAUMonth(date, datosCosmicosParaVAUDTO.getSoes(), datosCosmicosParaVAUDTO.getLunas()));
+		dateVAU.setMonth(this.monthService.getVAUMonth(date, datosCosmicosParaVAUDTO.getSoes(), datosCosmicosParaVAUDTO.getLunas()));
 		
 		VAUWeekAndDayDTO vauWeekAndDay = this.lunasService.getVauWeekAndDay(date, datosCosmicosParaVAUDTO.getLunas());
 		dateVAU.setWeek(vauWeekAndDay.getWeek());
