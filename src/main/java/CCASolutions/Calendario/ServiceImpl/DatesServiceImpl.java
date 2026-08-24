@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.DatosCosmicosParaVAUDTO;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
-import CCASolutions.Calendario.Services.CasaleroService;
+import CCASolutions.Calendario.Services.CasalerosService;
 import CCASolutions.Calendario.Services.DatesService;
 import CCASolutions.Calendario.Services.EclipenosService;
 import CCASolutions.Calendario.Services.EclipsesService;
@@ -33,7 +33,7 @@ public class DatesServiceImpl implements DatesService {
 	private FestividadesService festividadesService;
 	
 	@Autowired
-	private CasaleroService casaleroService;
+	private CasalerosService casalerosService;
 	
 	@Autowired
 	private EclipsesService eclipsesService;
@@ -92,7 +92,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		dateVAU.setEclipenoVAU(this.eclipenosService.getVAUEclipeno(datosCosmicosParaVAUDTO.getEclipenos(), datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), date));			
 		dateVAU.setAbsoluteEclipses(this.eclipsesService.getVAUAbsoluteEclipses(dateVAU, datosCosmicosParaVAUDTO.getEclipses(), date, datosCosmicosParaVAUDTO.getLastMetonIN()));
-		dateVAU.setCasalero(this.casaleroService.getCasalero(datosCosmicosParaVAUDTO.getLastEclipenoIN()));
+		dateVAU.setCasalero(this.casalerosService.getCasalero(datosCosmicosParaVAUDTO.getLastEclipenoIN()));
 		dateVAU.setEstadoLuna(this.lunasService.getEstadoLuna(date, datosCosmicosParaVAUDTO.getApoperis()));	
 		dateVAU.setAponovos(this.lunasService.getAponovos(date, datosCosmicosParaVAUDTO));
 		

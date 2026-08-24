@@ -13,6 +13,7 @@ import CCASolutions.Calendario.Services.EclipsesService;
 import CCASolutions.Calendario.Services.FestividadesService;
 import CCASolutions.Calendario.Services.LunasService;
 import CCASolutions.Calendario.Services.MetonsService;
+import CCASolutions.Calendario.Services.MidsisonService;
 import CCASolutions.Calendario.Services.MonthService;
 import CCASolutions.Calendario.Services.SolsticiosYEquinocciosService;
 import CCASolutions.Calendario.Services.WeeksService;
@@ -56,10 +57,13 @@ public class DBServiceImpl implements DBService {
 	@Autowired
 	private ApogeosYPerigeosLunaService apogeosYPerigeosLunaService;
 	
+	@Autowired
+	private MidsisonService midsisonService;
 	
 	public String poblateDB() {
 		
 		String resultado = "~ Resultados población de la Base de Datos ~";
+		boolean ejecutarSoloLoNuevo=true;
 		boolean llamadasAAPis=false;
 		
 		try {
@@ -73,6 +77,7 @@ public class DBServiceImpl implements DBService {
 			}
 			
 			resultado = resultado + "\n - ACTUALIZAR APOPERIS Y FASES: " + this.apogeosYPerigeosLunaService.updateLunasYApoperisConSelectoOInvertido();		
+			resultado = resultado + "\n - MIDSISONS: " + this.midsisonService.poblateMidsison();
 			
 			resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();			
 			resultado = resultado + "\n - ECLIPENOS: " +this.eclipenosService.poblateEclipenos();
