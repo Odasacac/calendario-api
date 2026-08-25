@@ -66,8 +66,6 @@ public class LunasServiceImpl implements LunasService {
 		String weekVauString = null;
 		String dayVauString = null;
 		
-		// Lo primero es seleccionar la luna nueva mas reciente, si cae en luna llena, no hay dias ni semanas
-		
 		LunasEntity lastLN = new LunasEntity();
 		long diasDesdeLaLunaNueva = Long.MAX_VALUE;
 		boolean caeEnLunaNueva = false;
@@ -97,8 +95,6 @@ public class LunasServiceImpl implements LunasService {
 			
 		if(lastLN != null) {
 			
-			// Con la luna nueva más reciente y con los días que los separan, ya lo tenemos
-			
 			if (diasDesdeLaLunaNueva <= 7) {
 				
 				if(!caeEnLunaNueva) {							
@@ -111,17 +107,20 @@ public class LunasServiceImpl implements LunasService {
 				
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva).getName();
 				
-			} else if (diasDesdeLaLunaNueva <= 14) {
+			} 
+			else if (diasDesdeLaLunaNueva <= 14) {
 				
 				weekVauString = this.weeksRepository.findByWeekOfMonth("2").getName();
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-7).getName();
 
-			} else if (diasDesdeLaLunaNueva <= 21) {
+			} 
+			else if (diasDesdeLaLunaNueva <= 21) {
 				
 				weekVauString = this.weeksRepository.findByWeekOfMonth("3").getName();
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-14).getName();
 
-			} else if (diasDesdeLaLunaNueva <= 28) {
+			} 
+			else if (diasDesdeLaLunaNueva <= 28) {
 				
 				weekVauString = this.weeksRepository.findByWeekOfMonth("4").getName();
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-21).getName();
