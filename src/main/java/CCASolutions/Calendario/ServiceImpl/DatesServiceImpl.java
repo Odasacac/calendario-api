@@ -61,21 +61,22 @@ public class DatesServiceImpl implements DatesService {
 	
 	public DateDTO getDateVAUFromDateO (LocalDate date) {
 		
-		DateDTO dateVAU = null;
+		DateDTO dateVAU = new DateDTO();
 		
 		DatosCosmicosParaVAUDTO lunasSolsticiosEclipsesMetonosYEclipenos = this.utilsService.getDatosCosmicos(date);
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.isValido()) {
+			
 			dateVAU = this.getDateVAU(date, lunasSolsticiosEclipsesMetonosYEclipenos);
 		}
 		else {
-			dateVAU = new DateDTO();
+			
 			dateVAU.setMensaje(lunasSolsticiosEclipsesMetonosYEclipenos.getMensaje());
 		}
+		
 		dateVAU.setFechaO(String.valueOf(date));
 		
-		return dateVAU;
-		
+		return dateVAU;	
 	}
 	
 
@@ -89,17 +90,17 @@ public class DatesServiceImpl implements DatesService {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = this.lunasService.getVauWeekAndDay(date, datosCosmicosParaVAUDTO.getLunas(), datosCosmicosParaVAUDTO.getSoes());
 		dateVAU.setWeek(vauWeekAndDay.getWeek());
-		dateVAU.setDay(vauWeekAndDay.getDay());					
-		dateVAU.setLastEclipenoSelecto(this.eclipenosService.getVAUEclipenoSelecto(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), date));
-		dateVAU.setMetonoInvernalApofasalRemoto(this.metonsService.getMetonoInvernalApofasalRemoto(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), datosCosmicosParaVAUDTO.getMetons(), date));
+		dateVAU.setDay(vauWeekAndDay.getDay());
 		
 		dateVAU.setMetonoVAU(this.metonsService.getVAUMeton(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto(), datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), datosCosmicosParaVAUDTO.getMetons(), date));
-		
 		dateVAU.setEclipenoVAU(this.eclipenosService.getVAUEclipeno(datosCosmicosParaVAUDTO.getEclipenos(), datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), date));			
+		dateVAU.setLastEclipenoSelecto(this.eclipenosService.getVAUEclipenoSelecto(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), date));
+		dateVAU.setMetonoInvernalApofasalRemoto(this.metonsService.getMetonoInvernalApofasalRemoto(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto(), datosCosmicosParaVAUDTO.getMetons(), date));
 		dateVAU.setAbsoluteEclipses(this.eclipsesService.getVAUAbsoluteEclipses(dateVAU, datosCosmicosParaVAUDTO.getEclipses(), date, datosCosmicosParaVAUDTO.getLastMetonIN()));
-		dateVAU.setCasalero(this.casalerosService.getCasalero(datosCosmicosParaVAUDTO.getLastEclipenoIN()));
+		
 		dateVAU.setEstadoLuna(this.lunasService.getEstadoLuna(date, datosCosmicosParaVAUDTO.getApoperis()));	
 		dateVAU.setAponovos(this.lunasService.getAponovos(date, datosCosmicosParaVAUDTO));
+		dateVAU.setCasalero(this.casalerosService.getCasalero(datosCosmicosParaVAUDTO.getLastEclipenoIN()));
 		
 		dateVAU.setNotableEvent(this.notableEventService.getNotableEvent(date, datosCosmicosParaVAUDTO));		
 		dateVAU.setFestividades(this.festividadesService.getFestividades(date, datosCosmicosParaVAUDTO));
