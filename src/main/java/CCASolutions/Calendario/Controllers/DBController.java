@@ -44,7 +44,7 @@ public class DBController {
 					
 					try {
 						
-						body = this.dbService.poblateDB(); //Tarda 3 horas
+						body = this.dbService.poblateDB(poblateDBDTO); 
 					}
 					catch(Exception e) {
 						

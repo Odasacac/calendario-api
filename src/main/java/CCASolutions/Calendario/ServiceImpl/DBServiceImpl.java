@@ -3,6 +3,7 @@ package CCASolutions.Calendario.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import CCASolutions.Calendario.DTOs.PoblateDBDTO;
 import CCASolutions.Calendario.Services.ApogeosYPerigeosLunaService;
 import CCASolutions.Calendario.Services.CasalerosService;
 import CCASolutions.Calendario.Services.DBService;
@@ -64,38 +65,40 @@ public class DBServiceImpl implements DBService {
 	@Autowired
 	private SeasonsService seasonsService;
 	
-	public String poblateDB() {
+	public String poblateDB(PoblateDBDTO poblateDBDTO) {
 		
 		String resultado = "~ Resultados población de la Base de Datos ~";
 		
-		boolean llamadasAAPis=false;
-		boolean ejecutarEditarExistentes=false;
-		
 		try {
-			resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos();
 			
-			if(llamadasAAPis) {
+			if(poblateDBDTO.isPoblar()) {
+				resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos();
+			}
+			
+			if(poblateDBDTO.isLlamadasAAPis() && poblateDBDTO.isPoblar()) {
 				resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale();
 				resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeosFromOpale();
 				resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale();	
 				resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipsesFromOpale();	
 			}
 			
-			if(ejecutarEditarExistentes) {
+			if(poblateDBDTO.isEditar()) {
 				resultado = resultado + "\n - ACTUALIZAR APOPERIS Y FASES: " + this.apogeosYPerigeosLunaService.updateLunasYApoperisConSelectoOInvertido();	
 			}
-				
-			resultado = resultado + "\n - MIDSISONS: " + this.midsisonService.poblateMidsison();			
-			resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();			
-			resultado = resultado + "\n - ECLIPENOS: " +this.eclipenosService.poblateEclipenos();
-			resultado = resultado + "\n - CASALEROS:" + this.casalerosService.poblateCasaleros();
 			
-			resultado = resultado + "\n - DÍAS: " + this.daysService.poblateDays();
-			resultado = resultado + "\n - SEMANAS: " + this.weeksService.poblateWeeks();
-			resultado = resultado + "\n - MESES: " + this.monthsService.poblateMonths();
-			resultado = resultado + "\n - SEASONS: " + this.seasonsService.poblateSeasons();
-			resultado = resultado + "\n - FESTIVIDADES: " +this.festividadesService.poblateFestividades();
-		}
+			if(poblateDBDTO.isPoblar()) {
+				resultado = resultado + "\n - MIDSISONS: " + this.midsisonService.poblateMidsison();			
+				resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();			
+				resultado = resultado + "\n - ECLIPENOS: " +this.eclipenosService.poblateEclipenos();
+				resultado = resultado + "\n - CASALEROS:" + this.casalerosService.poblateCasaleros();		
+				resultado = resultado + "\n - DÍAS: " + this.daysService.poblateDays();
+				resultado = resultado + "\n - SEMANAS: " + this.weeksService.poblateWeeks();
+				resultado = resultado + "\n - MESES: " + this.monthsService.poblateMonths();
+				resultado = resultado + "\n - SEASONS: " + this.seasonsService.poblateSeasons();
+				resultado = resultado + "\n - FESTIVIDADES: " +this.festividadesService.poblateFestividades();
+			}
+		}	
+			
 		catch(Exception e) {
 			
 			System.out.println("Error poblando la base de datos: " + e);
