@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import CCASolutions.Calendario.Entities.EclipsesEntity;
 
@@ -19,4 +20,18 @@ public interface EclipsesRepository extends JpaRepository <EclipsesEntity, Long>
 	
 	EclipsesEntity findFirstByDateAfterOrderByDateAsc(LocalDateTime date);
 	EclipsesEntity findFirstByDateBeforeOrderByDateDesc(LocalDateTime date);
+	
+	@Query("""
+		    SELECT e
+		    FROM EclipsesEntity e
+		    WHERE e.date BETWEEN :desde AND :hasta
+		      AND (
+		          e.deSol = true
+		          OR (e.deLuna = true AND e.esTotal = true)
+		      )
+		""")
+		List<EclipsesEntity> findEclipsesAbsoluteQuery(
+		    LocalDateTime desde,
+		    LocalDateTime hasta
+		);
 }
