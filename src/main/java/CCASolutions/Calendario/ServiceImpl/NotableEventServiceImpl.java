@@ -715,7 +715,7 @@ private String getEventoActual(LocalDate dateO, LunasSoesEclipsesMetonosYEclipen
 				String estado = "";
 				
 				if(apoperi.isEsApogeo()) {
-					estado = "durmiente";
+					estado = "distante";
 				}
 				else if (apoperi.isEsPerigeo()) {
 					estado = "presente";
