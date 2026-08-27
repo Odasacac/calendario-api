@@ -39,10 +39,17 @@ public class FestividadesEntity implements Serializable {
 	private String code;
 	private String nombre;
 	private boolean lunar;
+	private String descripcion;
 	
 	
 	
 	
+	public String getDescripcion() {
+		return descripcion;
+	}
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
 	public boolean isLunar() {
 		return lunar;
 	}

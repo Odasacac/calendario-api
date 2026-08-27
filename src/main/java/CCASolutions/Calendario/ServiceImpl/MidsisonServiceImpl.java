@@ -38,39 +38,46 @@ public class MidsisonServiceImpl implements MidsisonService{
 		
 		try {
 			
-			List<SolsticiosYEquinocciosEntity> allSoesFromDB = this.solsticiosYEquinocciosRepository.findAll();
+			List<MidsisonEntity> allMidsisonsFromDB = this.midsisonRepository.findAll();
 			
-			if(allSoesFromDB.isEmpty()) {
-				System.out.println("No hay soes en base de datos");
-				resultado = "Error al poblar los midsisons, checkear logs.";
+			if(allMidsisonsFromDB.isEmpty()) {
+				List<SolsticiosYEquinocciosEntity> allSoesFromDB = this.solsticiosYEquinocciosRepository.findAll();
+				
+				if(allSoesFromDB.isEmpty()) {
+					System.out.println("No hay soes en base de datos");
+					resultado = "Error al poblar los midsisons: no hay soes en base de datos.";
+				}
+				else {
+					
+					List<MidsisonEntity> midsisonsForDB = new ArrayList<>();
+					for(int i = 0; i<allSoesFromDB.size()-1; i++) {
+						
+						SolsticiosYEquinocciosEntity pastSoe = allSoesFromDB.get(i);
+						SolsticiosYEquinocciosEntity nextSoe = allSoesFromDB.get(i+1);	
+						
+						MidsisonEntity midsison = new MidsisonEntity();
+						
+						midsison.setPastSOEId(pastSoe.getId());
+						midsison.setNextSOEId(nextSoe.getId());
+						
+						midsison.setDate(pastSoe.getDate().plusSeconds((ChronoUnit.SECONDS.between(pastSoe.getDate(), nextSoe.getDate()))/2));
+						
+						midsison.setLastSoeInvernal(pastSoe.isSolsticioInvierno());
+						midsison.setLastSoePrimaveral(pastSoe.isEquinoccioPrimavera());
+						midsison.setLastSoeEstival(pastSoe.isSolsticioVerano());
+						midsison.setLastSoeOtonyal(pastSoe.isEquinoccioOtonyo());
+						
+						midsisonsForDB.add(midsison);					
+					}
+					
+					this.midsisonRepository.saveAll(midsisonsForDB);
+					resultado = "Midsisons poblados correctamente.";
+				}
 			}
 			else {
-				
-				List<MidsisonEntity> midsisonsForDB = new ArrayList<>();
-				for(int i = 0; i<allSoesFromDB.size()-1; i++) {
-					
-					SolsticiosYEquinocciosEntity pastSoe = allSoesFromDB.get(i);
-					SolsticiosYEquinocciosEntity nextSoe = allSoesFromDB.get(i+1);	
-					
-					MidsisonEntity midsison = new MidsisonEntity();
-					
-					midsison.setPastSOEId(pastSoe.getId());
-					midsison.setNextSOEId(nextSoe.getId());
-					
-					midsison.setDate(pastSoe.getDate().plusSeconds((ChronoUnit.SECONDS.between(pastSoe.getDate(), nextSoe.getDate()))/2));
-					
-					midsison.setLastSoeInvernal(pastSoe.isSolsticioInvierno());
-					midsison.setLastSoePrimaveral(pastSoe.isEquinoccioPrimavera());
-					midsison.setLastSoeEstival(pastSoe.isSolsticioVerano());
-					midsison.setLastSoeOtonyal(pastSoe.isEquinoccioOtonyo());
-					
-					midsisonsForDB.add(midsison);					
-				}
-				
-				this.midsisonRepository.saveAll(midsisonsForDB);
-				resultado = "Midsisons poblados correctamente.";
+				System.out.println("Ya hay midsisons en base de datos");
+				resultado = "Error al poblar los midsisons: ya hay midsisons en base de datos.";
 			}
-			
 			
 		}
 		catch (Exception e) {

@@ -38,8 +38,8 @@ public class DatosServiceImpl implements DatosService {
 			
 		}
 		else {
-			System.out.println("Ya hay datos en la base de datos.");
-			resultado = "Error al actualizar los datos, checkear logs.";
+			System.out.println("Ya hay datos en la base de datos");
+			resultado = "Error al actualizar los datos, checkear logs: ya hay datos en la base de datos.";
 		}
 		System.out.println("Datos actualizados");
 		return resultado;

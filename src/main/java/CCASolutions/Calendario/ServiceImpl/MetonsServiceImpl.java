@@ -375,7 +375,7 @@ public class MetonsServiceImpl implements MetonsService {
 		}
 		else {
 			System.out.println("Ya hay metonos en la BBDD");
-			resultado="Error a la hora de actualizar los metonos: Ya hay metonos en la base de datos.";
+			resultado="Error a la hora de actualizar los metonos: ya hay metonos en la base de datos.";
 		}
 		
 		
