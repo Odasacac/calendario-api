@@ -52,7 +52,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 	
 	
 	
-	public AbsoluteEclipsesDTO getVAUAbsoluteEclipses(DateDTO dateVAU, List<EclipsesEntity> eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN, LocalDate date, MetonsEntity lastMetonIN) {
+	public AbsoluteEclipsesDTO getVAUAbsoluteEclipses(DateDTO dateVAU, List<EclipsesEntity> eclipsesAbsolutosDesdeLastEclipenoIN, LocalDate date, MetonsEntity lastMetonIN) {
 		
 		AbsoluteEclipsesDTO absoluteEclipses = new AbsoluteEclipsesDTO ();		
 		
@@ -81,7 +81,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 			}
 			
 			
-			for (EclipsesEntity eclipse : eclipsesNoParcialesNiPenumbralesDesdeLastEclipenoIN){
+			for (EclipsesEntity eclipse : eclipsesAbsolutosDesdeLastEclipenoIN){
 				
 				if(eclipse.getDate().toLocalDate().isBefore(date)) {
 					if(eclipse.isDeSol()) {
