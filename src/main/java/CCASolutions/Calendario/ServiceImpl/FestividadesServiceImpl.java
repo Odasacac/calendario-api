@@ -90,50 +90,70 @@ public class FestividadesServiceImpl implements FestividadesService {
 		return festividades;		
 	}		
 	
-	private String getFestividadActual(
-	        List<FestividadesEntity> festividadesEntities,
-	        List<MinimaFestividadesDTO> festividadesActuales) {
+	private String getFestividadActual(List<FestividadesEntity> festividadesEntities, List<MinimaFestividadesDTO> festividadesActuales) {
 
-	    if (festividadesActuales.isEmpty()) {
-	        return "";
-	    }
+		String festividadActual = "";
+		
+	    if (!festividadesActuales.isEmpty()) {
 
-	    boolean hayMidsison = false;
-	    boolean hayAponovo = false;
+	    	boolean hayMidsison = false;
+	    	boolean hayAponovo = false;
 
-	    for (MinimaFestividadesDTO festividad : festividadesActuales) {
+	    	for (MinimaFestividadesDTO festividad : festividadesActuales) {
 
-	        String code = festividad.getCode();
+	    		String code = festividad.getCode();
 
-	        if (MIDISSON_INVERNAL_CODE.equals(code) || MIDISSON_PRIMAVERAL_CODE.equals(code) || MIDISSON_ESTIVAL_CODE.equals(code) || MIDISSON_OTONYAL_CODE.equals(code)) {
+	    		if (MIDISSON_INVERNAL_CODE.equals(code) || MIDISSON_PRIMAVERAL_CODE.equals(code) || MIDISSON_ESTIVAL_CODE.equals(code) || MIDISSON_OTONYAL_CODE.equals(code)) {
 	        	
-	            hayMidsison = true;
-	        }
+	    			hayMidsison = true;
+	    		}
 
-	        if (CAMBIO_DE_APONOVO_CODE.equals(code)) {
-	            hayAponovo = true;
-	        }
+	    		if (CAMBIO_DE_APONOVO_CODE.equals(code)) {
+	    			
+	    			hayAponovo = true;
+	    		}
+	    	}
+
+	    	if (hayMidsison && hayAponovo) {
+	    		
+	    		festividadActual = getNombreFestividad(festividadesEntities, MIDISSON_APONOVAL_CODE);
+	    	}
+
+
+	    	String[] prioridad = {
+	    		MIDISSON_APONOVAL_CODE,
+	    		CAMBIO_DE_APONOVO_CODE,
+	    		DESPEDIDA_ANYO_CODE,
+	    		ENTRADA_OTONYO_CODE,
+	    		MIDISSON_OTONYAL_CODE,
+	    		DESPEDIDA_VERANO_CODE,
+	    		MIDISSON_ESTIVAL_CODE,
+	    		MITAD_ANYO_CODE,
+	    		MIDISSON_PRIMAVERAL_CODE,
+	    		BIENVENIDA_PRIMAVERA_CODE,
+	    		MIDISSON_INVERNAL_CODE,
+	    		INICIO_ANYO_CODE,
+	    		CAMBIO_DE_ANYO_CODE,
+	    		CAMBIO_DE_METONO_IA_CODE,
+	    		CAMBIO_DE_METONO_IN_CODE,
+	    		CAMBIO_DE_ECLIPENO_CODE,
+	    		CAMBIO_DE_METONO_IAR_CODE,
+	    		CAMBIO_DE_ECLIPENO_IAR_CODE
+	    	};
+
+	    	for (String codigoPrioritario : prioridad) {
+
+	    		for (MinimaFestividadesDTO festividad : festividadesActuales) {
+
+	    			if (codigoPrioritario.equals(festividad.getCode())) {
+
+	    				festividadActual = getNombreFestividad(festividadesEntities, codigoPrioritario);
+	    			}
+	    		}
+	    	}
 	    }
-
-	    if (hayMidsison && hayAponovo) {
-	        return getNombreFestividad(festividadesEntities, MIDISSON_APONOVAL_CODE);
-	    }
-
-
-	    String[] prioridad = {CAMBIO_DE_ECLIPENO_IAR_CODE, CAMBIO_DE_METONO_IAR_CODE, CAMBIO_DE_ECLIPENO_CODE, CAMBIO_DE_METONO_IN_CODE, CAMBIO_DE_METONO_IA_CODE, CAMBIO_DE_ANYO_CODE};
-
-	    for (String codigoPrioritario : prioridad) {
-
-	        for (MinimaFestividadesDTO festividad : festividadesActuales) {
-
-	            if (codigoPrioritario.equals(festividad.getCode())) {
-
-	                return getNombreFestividad(festividadesEntities, codigoPrioritario);
-	            }
-	        }
-	    }
-
-	    return "";
+	    
+	    return festividadActual;
 	}
 	
 	private String getNombreFestividad(
