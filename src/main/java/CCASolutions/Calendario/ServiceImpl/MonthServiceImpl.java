@@ -258,18 +258,8 @@ public class MonthServiceImpl implements MonthService{
 					
 					}
 					else {											
-						// Situacion normal: sabemos cuantas lunas han pasado, y sabemos el soe que es
-						// Pero si es luna nueva, ha de indicarse el mes siguiente, es decir, coger el mes de un día mas
-							
-						if (caeEnLunaNueva) {
-							
-							MonthDTO monthIfLN = getVAUMonth(date.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasDesdeElAnyoAnteriorHastaElSiguiente);
-							vauMonth.setName(monthIfLN.getName());
-						}
-						else {
-							
-							vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), lunasNuevasPasadasDesdeLastSOEHastaDateO, false);
-						}				
+
+						vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), lunasNuevasPasadasDesdeLastSOEHastaDateO, false);			
 					}															
 				}
 				else {
@@ -279,28 +269,24 @@ public class MonthServiceImpl implements MonthService{
 			}			
 			
 			
-			// Una parte de un mes tiene apellido cuando su luna nueva es selecta o invertida
-
-		
-			if(caeEnLunaNueva) {
-				month.setSurname(surname);
-			}
-			else {
-			
+			if(!caeEnLunaNueva) {
+				month.setName(vauMonth.getName());
 				if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta()) {
+					
 					month.setSurname("selecto");
 				}
 				else if(lunaNuevaAnteriorMasCercanaALaFecha.isInvertida()) {
+					
 					month.setSurname("invertido");
 				}	
 			}
-	
+			else {
+				month.setName("-");
+			}
 
-			
 
 			month.setNewMoon(caeEnLunaNueva);	
-			month.setName(vauMonth.getName());
-				
+			
 		}
 		else {
 			

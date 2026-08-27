@@ -3,7 +3,7 @@ package CCASolutions.Calendario.DTOs;
 public class YearDTO {
 	
 	private boolean esSolsticioDeInvierno;
-	private int solsticiosDeInviernoSinceLastMetonIN;
+	private String solsticiosDeInviernoSinceLastMetonIN;
 	private int numberOfYear;
 	
 	public boolean isEsSolsticioDeInvierno() {
@@ -12,10 +12,10 @@ public class YearDTO {
 	public void setEsSolsticioDeInvierno(boolean esSolsticioDeInvierno) {
 		this.esSolsticioDeInvierno = esSolsticioDeInvierno;
 	}
-	public int getSolsticiosDeInviernoSinceLastMetonIN() {
+	public String getSolsticiosDeInviernoSinceLastMetonIN() {
 		return solsticiosDeInviernoSinceLastMetonIN;
 	}
-	public void setSolsticiosDeInviernoSinceLastMetonIN(int solsticiosDeInviernoSinceLastMetonIN) {
+	public void setSolsticiosDeInviernoSinceLastMetonIN(String solsticiosDeInviernoSinceLastMetonIN) {
 		this.solsticiosDeInviernoSinceLastMetonIN = solsticiosDeInviernoSinceLastMetonIN;
 	}
 	public int getNumberOfYear() {

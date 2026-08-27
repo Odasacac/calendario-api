@@ -135,7 +135,7 @@ public class LunasServiceImpl implements LunasService {
 		
 		String dayParaDTO = dayVauString;
 		
-		boolean caeEnSoe = false;		
+		boolean caeEnSoe = false;
 		for(int i = 0; i<soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.size() && !caeEnSoe; i++) {
 			
 			SolsticiosYEquinocciosEntity soe = soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.get(i);
@@ -145,8 +145,10 @@ public class LunasServiceImpl implements LunasService {
 			}
 		}
 		
-		if(caeEnLunaNueva || caeEnSoe) {
+		if(caeEnSoe && !caeEnLunaNueva) {
+			
 			dayParaDTO = dayParaDTO + " desdoblado";
+					
 		}
 		vauWeekAndDay.setDay(dayParaDTO);
 		

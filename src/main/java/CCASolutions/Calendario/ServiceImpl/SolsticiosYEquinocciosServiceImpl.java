@@ -76,8 +76,14 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		}
 		
 		
-		vauYear.setEsSolsticioDeInvierno(caeEnSolsticioDeInvierno);	
-		vauYear.setSolsticiosDeInviernoSinceLastMetonIN(year);	
+		vauYear.setEsSolsticioDeInvierno(caeEnSolsticioDeInvierno);
+		if(caeEnSolsticioDeInvierno){
+			vauYear.setSolsticiosDeInviernoSinceLastMetonIN("-");	
+		}
+		else {
+			vauYear.setSolsticiosDeInviernoSinceLastMetonIN(String.valueOf(year));	
+		}
+
 		
 		int numberOfYear = year +1;
 		if(lastEclipenoIN.getDate().toLocalDate().isEqual(date) || lastMetonIN.getDate().toLocalDate().isEqual(date)) {
