@@ -10,6 +10,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import CCASolutions.Calendario.DTOs.AbsoluteEclipsesDTO;
+import CCASolutions.Calendario.DTOs.DateDTO;
+import CCASolutions.Calendario.DTOs.LEPYDTO;
+import CCASolutions.Calendario.DTOs.LunarEclipseDTO;
+import CCASolutions.Calendario.DTOs.SEPYDTO;
+import CCASolutions.Calendario.DTOs.SolarEclipseDTO;
 import CCASolutions.Calendario.Entities.AllEclipsesEntity;
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
@@ -18,12 +24,7 @@ import CCASolutions.Calendario.Repositories.AllEclipsesRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
 import CCASolutions.Calendario.Services.EclipsesService;
-import CCASolutions.Calendario.DTOs.SEPYDTO;
-import CCASolutions.Calendario.DTOs.AbsoluteEclipsesDTO;
-import CCASolutions.Calendario.DTOs.DateDTO;
-import CCASolutions.Calendario.DTOs.LEPYDTO;
-import CCASolutions.Calendario.DTOs.LunarEclipseDTO;
-import CCASolutions.Calendario.DTOs.SolarEclipseDTO;
+
 
 @Service
 public class EclipsesServiceImpl implements EclipsesService{
