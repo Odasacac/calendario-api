@@ -176,18 +176,24 @@ public class MonthServiceImpl implements MonthService{
 				
 				MonthsEntity vauMonth = new MonthsEntity();
 				// Si cae en soe, pertenece al mes hibrido de ese soe.
-				// A no ser que sea luna nueva, en ese caso seria el mes siguiente
 				if(caeEnSOE) {
 
 					if(caeEnLunaNueva) {
 						
-						// Basicamente si hay un metono (da igual el tipo)
-						MonthDTO monthIfLN = getVAUMonth(date.plusDays(1), soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, lunasDesdeElAnyoAnteriorHastaElSiguiente);
-						vauMonth.setName(monthIfLN.getName());
+						vauMonth.setName("-");
 						
 					}
 					else {
 						vauMonth = this.monthsRepository.findBySeasonAndMonthOfSeasonAndLiminal(lastSOE.getStartingSeason(), 0, false);
+						month.setName(vauMonth.getName());
+						if(lunaNuevaAnteriorMasCercanaALaFecha.isSelecta()) {
+							
+							month.setSurname("selecto");
+						}
+						else if(lunaNuevaAnteriorMasCercanaALaFecha.isInvertida()) {
+							
+							month.setSurname("invertido");
+						}	
 					}
 					
 
@@ -227,9 +233,7 @@ public class MonthServiceImpl implements MonthService{
 								
 							lunasNuevasPasadasDesdeLastSOEHastaDateO = lunasNuevasPasadasDesdeLastSOEHastaDateO+1;						
 						}
-					}
-						
-					
+					}									
 						
 					if(lastLNBeforeNextSOE != null || firstLNAfterLastSOE != null) {
 						
@@ -278,11 +282,8 @@ public class MonthServiceImpl implements MonthService{
 					}
 					else {
 						System.out.println("Error, no hay lastLNBeforeNextSOE o firstLNAfterLastSOE.");
-					}
-										
-				}			
-				
-				
+					}								
+				}											
 			}
 
 			month.setNewMoon(caeEnLunaNueva);	
