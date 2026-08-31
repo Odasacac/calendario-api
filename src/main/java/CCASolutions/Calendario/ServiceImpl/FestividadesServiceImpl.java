@@ -31,11 +31,10 @@ public class FestividadesServiceImpl implements FestividadesService {
 	
 	private static final String CAMBIO_DE_ECLIPENO_CODE = "CE";
 	private static final String CAMBIO_DE_METONO_IAR_CODE = "CMAR";
-	
 	private static final String CAMBIO_DE_METONO_IN_CODE = "CMF";
 	private static final String CAMBIO_DE_METONO_IA_CODE = "CMA";
-	
 	private static final String CAMBIO_DE_ANYO_CODE = "CA";
+	
 	private static final String INICIO_ANYO_CODE = "IA";
 	private static final String MIDISSON_INVERNAL_CODE = "MSI";	
 	
@@ -44,12 +43,9 @@ public class FestividadesServiceImpl implements FestividadesService {
 	
 	private static final String MITAD_ANYO_CODE = "MA";	
 	private static final String MIDISSON_ESTIVAL_CODE = "MSE";
-	
-	private static final String DESPEDIDA_VERANO_CODE = "DV";
-	private static final String MIDISSON_OTONYAL_CODE = "MSO";
 
 	private static final String ENTRADA_OTONYO_CODE = "EO";
-	private static final String DESPEDIDA_ANYO_CODE = "DA";	
+	private static final String MIDISSON_OTONYAL_CODE = "MSO";
 
 	private static final String CAMBIO_DE_APONOVO_CODE = "LA";
 	private static final String MIDISSON_APONOVAL_CODE = "MAP";
@@ -122,8 +118,6 @@ public class FestividadesServiceImpl implements FestividadesService {
 	    		
 	    		String[] prioridad = {
 	    	    	CAMBIO_DE_APONOVO_CODE,
-	    	    	DESPEDIDA_ANYO_CODE,
-	    	    	DESPEDIDA_VERANO_CODE,
 	    	    	INICIO_ANYO_CODE,
 	    	    	MIDISSON_OTONYAL_CODE,
 	    	    	MIDISSON_ESTIVAL_CODE,
@@ -571,20 +565,12 @@ public class FestividadesServiceImpl implements FestividadesService {
 		festividadesObtenidasDTO.add(midsison);
 		
 		
-		// 4 - Inicio del primer mes del año, despedida del verano, despedida del año y cambio de aponovo
+		// 4 - Inicio del primer mes del año y cambio de aponovo
 		
 		MinimaFestividadesDTO inicioPrimerMesAnyo = new MinimaFestividadesDTO();
 		inicioPrimerMesAnyo.setCode(INICIO_ANYO_CODE);		
 		long diasMinimosDeDiferenciaEntreLunaYSI = Long.MAX_VALUE;
 
-		
-		MinimaFestividadesDTO despedidaVerano = new MinimaFestividadesDTO();
-		despedidaVerano.setCode(DESPEDIDA_VERANO_CODE);		
-		long diasMinimosDeDiferenciaEntreDVYLuna = Long.MAX_VALUE;
-		
-		MinimaFestividadesDTO despedidaAnyo = new MinimaFestividadesDTO();
-		despedidaAnyo.setCode(DESPEDIDA_ANYO_CODE);		
-		long diasMinimosDeDiferenciaEntreDAYLuna = Long.MAX_VALUE;
 		
 		MinimaFestividadesDTO cambioDeAponovo = new MinimaFestividadesDTO();
 		cambioDeAponovo.setCode(CAMBIO_DE_APONOVO_CODE);		
@@ -622,48 +608,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 				}
 				
 			}
-			else if (luna.isLlena()) {
-				
-				SolsticiosYEquinocciosEntity soeMasCercanoALaLuna = new SolsticiosYEquinocciosEntity();
-				
-				long diasMinimosDeDiferenciaEntreSoeYLuna = Long.MAX_VALUE;
-				for(SolsticiosYEquinocciosEntity soe : datosCosmicosParaVAUDTO.getSoes()) {
-					
-					long diasDeDiferenciaEntreSoeYLuna = Math.abs(ChronoUnit.DAYS.between(soe.getDate().toLocalDate(), luna.getDate().toLocalDate()));
-					
-					if(diasDeDiferenciaEntreSoeYLuna < diasMinimosDeDiferenciaEntreSoeYLuna) {
-						
-						diasMinimosDeDiferenciaEntreSoeYLuna = diasDeDiferenciaEntreSoeYLuna;
-						soeMasCercanoALaLuna=soe;
-					}					
-				}
-				
-				
-				if(soeMasCercanoALaLuna.getStartingSeason()==4 && soeMasCercanoALaLuna.getDate().toLocalDate().equals(eOMasCercano.getDate().toLocalDate()) && luna.getDate().toLocalDate().isBefore(eOMasCercano.getDate().toLocalDate())) {
-					
-					long diasDeDiferenciaEntreDVYLuna = Math.abs(ChronoUnit.DAYS.between(sIMasCercano.getDate().toLocalDate(), luna.getDate().toLocalDate()));
-						
-					if(diasDeDiferenciaEntreDVYLuna < diasMinimosDeDiferenciaEntreDVYLuna) {
-							
-						diasMinimosDeDiferenciaEntreDVYLuna = diasDeDiferenciaEntreDVYLuna;
-						despedidaVerano.setDate(luna.getDate());
-						despedidaVerano.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date)));		
-					}		
-				}
-				else if(soeMasCercanoALaLuna.getStartingSeason()==1 && soeMasCercanoALaLuna.getDate().toLocalDate().equals(sIMasCercano.getDate().toLocalDate()) && luna.getDate().toLocalDate().isBefore(sIMasCercano.getDate().toLocalDate())) {
-					
-
-					long diasDeDiferenciaEntreDAYLuna = Math.abs(ChronoUnit.DAYS.between(sIMasCercano.getDate().toLocalDate(), luna.getDate().toLocalDate()));
-						
-					if(diasDeDiferenciaEntreDAYLuna < diasMinimosDeDiferenciaEntreDAYLuna) {
-							
-						diasMinimosDeDiferenciaEntreDAYLuna = diasDeDiferenciaEntreDAYLuna;
-						despedidaAnyo.setDate(luna.getDate());
-						despedidaAnyo.setDiasDeDiferenciaConDate(Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date)));
-						
-					}			
-				}				
-			}
+			
 		}
 		
 
@@ -684,8 +629,6 @@ public class FestividadesServiceImpl implements FestividadesService {
 		
 		
 		festividadesObtenidasDTO.add(inicioPrimerMesAnyo);
-		festividadesObtenidasDTO.add(despedidaVerano);
-		festividadesObtenidasDTO.add(despedidaAnyo);
 		festividadesObtenidasDTO.add(cambioDeAponovo);
 		
 		
@@ -740,11 +683,8 @@ public class FestividadesServiceImpl implements FestividadesService {
 			festividadParaDDB.add(this.crearFestividad("MA", "Mitad del año", false, "Solsticio de verano"));
 			festividadParaDDB.add(this.crearFestividad("MSE", "Midsison estival", false, "Dia equidistante entre solsticio de verano y equinoccio de otoño"));
 			
-			festividadParaDDB.add(this.crearFestividad("DV", "Despedida del verano", true, "Última luna llena antes del equinoccio de otoño"));
-			festividadParaDDB.add(this.crearFestividad("MSO", "Midsison otoñal", false, "Dia equidistante entre equinoccio de otoño y solsticio de invierno"));
-			
 			festividadParaDDB.add(this.crearFestividad("EO", "Entrada del otoño", false, "Equinoccio de otoño"));
-			festividadParaDDB.add(this.crearFestividad("DA", "Despedida del año", true, "Última luna llena antes del solsticio de invierno"));
+			festividadParaDDB.add(this.crearFestividad("MSO", "Midsison otoñal", false, "Dia equidistante entre equinoccio de otoño y solsticio de invierno"));
 			
 			festividadParaDDB.add(this.crearFestividad("LA", "Cambio de aponovo", false, "Luna nueva en apogeo"));
 			festividadParaDDB.add(this.crearFestividad("MAP", "Midsison aponoval", false, "Midsison y cambio de aponovo"));
