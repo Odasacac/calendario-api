@@ -36,19 +36,19 @@ public class FestividadesServiceImpl implements FestividadesService {
 	private static final String CAMBIO_DE_ANYO_CODE = "CA";
 	
 	private static final String INICIO_ANYO_CODE = "IA";
-	private static final String MIDISSON_INVERNAL_CODE = "MSI";	
+	private static final String MIDSISON_INVERNAL_CODE = "MSI";	
 	
 	private static final String BIENVENIDA_PRIMAVERA_CODE = "BP";
-	private static final String MIDISSON_PRIMAVERAL_CODE = "MSP";
+	private static final String MIDSISON_PRIMAVERAL_CODE = "MSP";
 	
 	private static final String MITAD_ANYO_CODE = "MA";	
-	private static final String MIDISSON_ESTIVAL_CODE = "MSE";
+	private static final String MIDSISON_ESTIVAL_CODE = "MSE";
 
 	private static final String ENTRADA_OTONYO_CODE = "EO";
-	private static final String MIDISSON_OTONYAL_CODE = "MSO";
+	private static final String MIDSISON_OTONYAL_CODE = "MSO";
 
 	private static final String CAMBIO_DE_APONOVO_CODE = "LA";
-	private static final String MIDISSON_APONOVAL_CODE = "MAP";
+	private static final String MIDSISON_APONOVAL_CODE = "MAP";
 
 	
 	
@@ -99,7 +99,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 
 	    		String code = festividad.getCode();
 
-	    		if (MIDISSON_INVERNAL_CODE.equals(code) || MIDISSON_PRIMAVERAL_CODE.equals(code) || MIDISSON_ESTIVAL_CODE.equals(code) || MIDISSON_OTONYAL_CODE.equals(code)) {
+	    		if (MIDSISON_INVERNAL_CODE.equals(code) || MIDSISON_PRIMAVERAL_CODE.equals(code) || MIDSISON_ESTIVAL_CODE.equals(code) || MIDSISON_OTONYAL_CODE.equals(code)) {
 	        	
 	    			hayMidsison = true;
 	    		}
@@ -112,18 +112,18 @@ public class FestividadesServiceImpl implements FestividadesService {
 
 	    	if (hayMidsison && hayAponovo) {
 	    		
-	    		festividadActual = getNombreFestividad(festividadesEntities, MIDISSON_APONOVAL_CODE);
+	    		festividadActual = getNombreFestividad(festividadesEntities, MIDSISON_APONOVAL_CODE);
 	    	}
 	    	else {
 	    		
 	    		String[] prioridad = {
 	    	    	CAMBIO_DE_APONOVO_CODE,
 	    	    	INICIO_ANYO_CODE,
-	    	    	MIDISSON_OTONYAL_CODE,
-	    	    	MIDISSON_ESTIVAL_CODE,
-	    	    	MIDISSON_PRIMAVERAL_CODE,
-	    	    	MIDISSON_INVERNAL_CODE,
-	    	    	MIDISSON_APONOVAL_CODE,
+	    	    	MIDSISON_OTONYAL_CODE,
+	    	    	MIDSISON_ESTIVAL_CODE,
+	    	    	MIDSISON_PRIMAVERAL_CODE,
+	    	    	MIDSISON_INVERNAL_CODE,
+	    	    	MIDSISON_APONOVAL_CODE,
 	    	    	ENTRADA_OTONYO_CODE,
 	    	    	MITAD_ANYO_CODE,
 	    	    	BIENVENIDA_PRIMAVERA_CODE,
@@ -152,9 +152,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 	    return festividadActual;
 	}
 	
-	private String getNombreFestividad(
-	        List<FestividadesEntity> festividadesEntities,
-	        String code) {
+	private String getNombreFestividad(List<FestividadesEntity> festividadesEntities, String code) {
 
 	    for (FestividadesEntity entity : festividadesEntities) {
 
@@ -541,19 +539,19 @@ public class FestividadesServiceImpl implements FestividadesService {
 		
 		switch(lastSoe.getStartingSeason()) {
 			case 1:
-				midsison.setCode(MIDISSON_INVERNAL_CODE);
+				midsison.setCode(MIDSISON_INVERNAL_CODE);
 				break;
 			
 			case 2:
-				midsison.setCode(MIDISSON_PRIMAVERAL_CODE);
+				midsison.setCode(MIDSISON_PRIMAVERAL_CODE);
 				break;
 			
 			case 3:
-				midsison.setCode(MIDISSON_ESTIVAL_CODE);
+				midsison.setCode(MIDSISON_ESTIVAL_CODE);
 				break;
 			
 			case 4: 
-				midsison.setCode(MIDISSON_OTONYAL_CODE);
+				midsison.setCode(MIDSISON_OTONYAL_CODE);
 				break;
 		}
 
@@ -635,7 +633,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 		// 5 - Midsison aponoval		
 		
 		MinimaFestividadesDTO midsisonAponoval = new MinimaFestividadesDTO();
-		midsisonAponoval.setCode(MIDISSON_APONOVAL_CODE);
+		midsisonAponoval.setCode(MIDSISON_APONOVAL_CODE);
 		midsisonAponoval.setDate(midsison.getDate());
 		midsisonAponoval.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
 		
@@ -646,9 +644,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 		
 		festividadesObtenidasDTO.add(midsisonAponoval);
 		
-		
-		
-		
+
 		return festividadesObtenidasDTO;
 	}
 	

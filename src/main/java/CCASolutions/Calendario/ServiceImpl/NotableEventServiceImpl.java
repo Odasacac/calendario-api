@@ -292,7 +292,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			return fenomenosParaEventosDTO;
 		}
 		
-private String getEventoActual(LocalDate dateO, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas) {
+	private String getEventoActual(LocalDate dateO, LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas) {
 		
 		String eventoActual = "";	
 		
