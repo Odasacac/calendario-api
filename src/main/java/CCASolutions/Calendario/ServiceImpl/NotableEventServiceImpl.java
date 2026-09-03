@@ -442,8 +442,6 @@ private String getEventoActual(LocalDate dateO, LunasSoesEclipsesMetonosYEclipen
 				
 		if(luna != null || soe!= null || !meton.isEmpty() || eclipse!= null || eclipeno!= null || apoperi != null || midsison!= null) {
 					
-			evento = "";
-					
 			if(eclipeno != null) {
 						
 				if (eclipeno.isInvernal()) {
