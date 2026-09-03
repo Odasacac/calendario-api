@@ -660,6 +660,8 @@ public class NotableEventServiceImpl implements NotableEventService {
 				
 				evento = "Midsison";
 				String midsisonApellido = "";
+				String midsisonLunar = "";
+				
 				switch(midsison.getLastSoeSeason()) {
 				
 					case 1:
@@ -678,7 +680,16 @@ public class NotableEventServiceImpl implements NotableEventService {
 						midsisonApellido = " otoñal";
 						break;
 				}
-				evento = evento + midsisonApellido;
+				
+				if(luna != null) {
+					if (luna.isNueva()) {
+						midsisonLunar = " nuevo";
+					}
+					else if (luna.isLlena()) {
+						midsisonLunar = " lleno";
+					}
+				}
+				evento = evento + midsisonApellido + midsisonLunar;
 			}
 			else if (luna != null) {
 
