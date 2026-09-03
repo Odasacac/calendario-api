@@ -683,7 +683,12 @@ public class NotableEventServiceImpl implements NotableEventService {
 				
 				if(luna != null) {
 					if (luna.isNueva()) {
-						midsisonLunar = " nuevo";
+						if (!luna.isSelecta()){
+							midsisonLunar = " nuevo";
+						}
+						else {
+							midsisonLunar = " aponoval";
+						}
 					}
 					else if (luna.isLlena()) {
 						midsisonLunar = " lleno";
