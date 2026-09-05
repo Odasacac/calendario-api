@@ -7,8 +7,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
+import CCASolutions.Calendario.Entities.EclipsesEntity;
+import CCASolutions.Calendario.Entities.LunasEntity;
 import CCASolutions.Calendario.Entities.MidsisonEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
+import CCASolutions.Calendario.Repositories.ApogeosYPerigeosLunaRepository;
+import CCASolutions.Calendario.Repositories.EclipsesRepository;
+import CCASolutions.Calendario.Repositories.LunasRepository;
 import CCASolutions.Calendario.Repositories.MidsisonRepository;
 import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Services.MidsisonService;
@@ -18,6 +24,15 @@ public class MidsisonServiceImpl implements MidsisonService{
 
 	@Autowired
 	private MidsisonRepository midsisonRepository;
+	
+	@Autowired
+	private LunasRepository lunasRepository;
+	
+	@Autowired
+	private EclipsesRepository eclipsesRepository;
+	
+	@Autowired
+	private ApogeosYPerigeosLunaRepository apoperisRepository;
 	
 	@Autowired
 	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository;
@@ -70,8 +85,72 @@ public class MidsisonServiceImpl implements MidsisonService{
 						midsisonsForDB.add(midsison);					
 					}
 					
+					System.out.println("Midsisons poblados correctamente, ahora a ver si llenos o nuevos también.");
+					
+					List<LunasEntity> allLunasFromDB = this.lunasRepository.findAll();
+					List<ApogeosYPerigeosLunaEntity> allApoperisFromDB = this.apoperisRepository.findAll();
+					List<EclipsesEntity> allEclipsesFromDB = this.eclipsesRepository.findAll();
+					
+					if(!allLunasFromDB.isEmpty() || !allApoperisFromDB.isEmpty() || !allEclipsesFromDB.isEmpty()) {	
+						
+						for(MidsisonEntity midsison: midsisonsForDB) {
+							
+							for(LunasEntity luna: allLunasFromDB) {
+	
+								if ((luna.isNueva() || luna.isLlena()) && Math.abs(ChronoUnit.SECONDS.between(luna.getDate(), midsison.getDate())) <= 86164 ) {
+									
+									midsison.setLunaId(luna.getId());
+									midsison.setNuevo(luna.isNueva());
+									midsison.setLleno(luna.isLlena());
+									
+									if(luna.isSelecta() || luna.isInvertida()) {
+										midsison.setSelecto(luna.isSelecta());
+										midsison.setInvertido(luna.isInvertida());									
+																																																															
+									}
+								}
+							}
+							
+							for(ApogeosYPerigeosLunaEntity apoperi : allApoperisFromDB) {
+								
+								if (Math.abs(ChronoUnit.SECONDS.between(apoperi.getDate(), midsison.getDate())) <= 86164 ) {
+									
+									midsison.setAporico(apoperi.isEsApogeo());
+									midsison.setPerico(apoperi.isEsPerigeo());
+									midsison.setApoperiId(apoperi.getId());
+								}
+							}
+							
+							if(midsison.getApoperiId() != null && midsison.getLunaId() != null) {
+								midsison.setApofasal(true);
+							}
+							
+							if(midsison.isNuevo() || midsison.isLleno()) {
+								
+								
+								for(EclipsesEntity eclipse : allEclipsesFromDB) {
+		
+									if ((eclipse.isDeSol()) || (eclipse.isDeLuna() && eclipse.isEsTotal()) && Math.abs(ChronoUnit.SECONDS.between(eclipse.getDate(), midsison.getDate())) <= 86164) {						
+										midsison.setEclipse(true);
+										midsison.setEclipseId(eclipse.getId());
+									}
+								}
+							}
+							
+						}
+					}
+					else {
+						System.out.println("No hay lunas o apoperis en base de datos");
+					}
+					
 					this.midsisonRepository.saveAll(midsisonsForDB);
-					resultado = "Midsisons poblados correctamente.";
+					
+					if(allLunasFromDB.isEmpty() || allApoperisFromDB.isEmpty() || allEclipsesFromDB.isEmpty()) {
+						resultado = "Midsisons poblados parcialmente: no hay lunas, apoperis o eclipses en base de datos.";
+					}
+					else {
+						resultado = "Midsisons poblados correctamente.";
+					}	
 				}
 			}
 			else {

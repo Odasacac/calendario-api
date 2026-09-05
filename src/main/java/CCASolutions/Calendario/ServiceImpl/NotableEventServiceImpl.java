@@ -44,7 +44,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			LunasEntity lunaActual = null;
 			ApogeosYPerigeosLunaEntity apoperiActual = null;
 			SolsticiosYEquinocciosEntity soeActual = null;
-			List<MetonsEntity> metonActual = new ArrayList<>();
+			MetonsEntity metonActual = new MetonsEntity();
 			EclipsesEntity eclipseActual = null;
 			EclipenosEntity eclipenoActual = null;
 			MidsisonDTO midsisonActual = null;
@@ -52,7 +52,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			LunasEntity lunaPasado = null;
 			ApogeosYPerigeosLunaEntity apoperiPasado = null;
 			SolsticiosYEquinocciosEntity soePasado = null;
-			List<MetonsEntity> metonPasado = new ArrayList<>();
+			MetonsEntity metonPasado = new MetonsEntity();
 			EclipsesEntity eclipsePasado = null;
 			EclipenosEntity eclipenoPasado = null;
 			MidsisonDTO midsisonPasado = null;
@@ -60,7 +60,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			LunasEntity lunaFuturo = null;
 			ApogeosYPerigeosLunaEntity apoperiFuturo = null;
 			SolsticiosYEquinocciosEntity soeFuturo = null;
-			List<MetonsEntity> metonFuturo = new ArrayList<>();
+			MetonsEntity metonFuturo = new MetonsEntity();
 			EclipsesEntity eclipseFuturo = null;
 			EclipenosEntity eclipenoFuturo = null;	
 			MidsisonDTO midsisonFuturo = null;
@@ -153,7 +153,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			long diasMinimosDeDiferenciaEntreMetonoFuturoYDate =Long.MAX_VALUE;
 			for(MetonsEntity meton : datosCosmicosParaVAUDTO.getMetons()) {
 				if(meton.getDate().toLocalDate().isEqual(dateO)) {
-					metonActual.add(meton);
+					metonActual =meton;
 				}		
 				
 				else if(meton.getDate().toLocalDate().isBefore(dateO)) {
@@ -162,11 +162,10 @@ public class NotableEventServiceImpl implements NotableEventService {
 					
 					if(diasDeDiferenciaEntreMetonoPasadoYDate < diasMinimosDeDiferenciaEntreMetonoPasadoYDate) {
 						diasMinimosDeDiferenciaEntreMetonoPasadoYDate = diasDeDiferenciaEntreMetonoPasadoYDate;
-						metonPasado = new ArrayList<>();
-						metonPasado.add(meton);
+						metonPasado = meton;
 					}
 					else if(diasDeDiferenciaEntreMetonoPasadoYDate == diasMinimosDeDiferenciaEntreMetonoPasadoYDate) {
-						metonPasado.add(meton);
+						metonPasado = meton;
 					}
 				}	
 				else if(meton.getDate().toLocalDate().isAfter(dateO)) {
@@ -175,11 +174,10 @@ public class NotableEventServiceImpl implements NotableEventService {
 					
 					if(diasDeDiferenciaEntreMetonoFuturoYDate < diasMinimosDeDiferenciaEntreMetonoFuturoYDate) {
 						diasMinimosDeDiferenciaEntreMetonoFuturoYDate = diasDeDiferenciaEntreMetonoFuturoYDate;
-						metonFuturo= new ArrayList<>();
-						metonFuturo.add(meton);
+						metonFuturo= meton;
 					}
 					else if(diasDeDiferenciaEntreMetonoFuturoYDate == diasMinimosDeDiferenciaEntreMetonoFuturoYDate) {
-						metonFuturo.add(meton);
+						metonFuturo = meton;
 					}
 				}
 			}
@@ -243,22 +241,162 @@ public class NotableEventServiceImpl implements NotableEventService {
 			LocalDateTime diaDelMidsison = soePasado.getDate().plusSeconds((ChronoUnit.SECONDS.between(soePasado.getDate(), soeFuturo.getDate()))/2);
 			
 			if(diaDelMidsison.toLocalDate().isBefore(dateO)) {
+				
 				midsisonPasado = new MidsisonDTO();
 				midsisonPasado.setDate(diaDelMidsison);
 				midsisonPasado.setLastSoeSeason(soePasado.getStartingSeason());
+				
+				boolean esFasal = false;
+				boolean esApoperico = false;
+				
+				if(Math.abs(ChronoUnit.SECONDS.between(lunaPasado.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonPasado.setNuevo(lunaPasado.isNueva());
+					midsisonPasado.setLleno(lunaPasado.isLlena());
+					midsisonPasado.setSelecto(lunaPasado.isSelecta());
+					midsisonPasado.setInvertido(lunaPasado.isInvertida());
+					esFasal = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(lunaActual.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonPasado.setNuevo(lunaActual.isNueva());
+					midsisonPasado.setLleno(lunaActual.isLlena());
+					midsisonPasado.setSelecto(lunaActual.isSelecta());
+					midsisonPasado.setInvertido(lunaActual.isInvertida());
+					esFasal = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonPasado.setNuevo(lunaActual.isNueva());
+					midsisonPasado.setLleno(lunaActual.isLlena());
+					midsisonPasado.setSelecto(lunaActual.isSelecta());
+					midsisonPasado.setInvertido(lunaActual.isInvertida());
+					esFasal = true;
+				}
+				
+				if(Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonPasado.setAporico(apoperiPasado.isEsApogeo());
+					midsisonPasado.setPerico(apoperiPasado.isEsPerigeo());
+					esApoperico = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonPasado.setAporico(apoperiActual.isEsApogeo());
+					midsisonPasado.setPerico(apoperiActual.isEsPerigeo());
+					esApoperico = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonPasado.setAporico(apoperiFuturo.isEsApogeo());
+					midsisonPasado.setPerico(apoperiFuturo.isEsPerigeo());
+					esApoperico = true;
+				}
+				
+				if(esFasal && esApoperico) {
+					midsisonPasado.setApofasal(true);
+				}
+				
 			}
 			else if(diaDelMidsison.toLocalDate().isEqual(dateO)) {
+				
 				midsisonActual = new MidsisonDTO();
 				midsisonActual.setDate(diaDelMidsison);	
 				midsisonActual.setLastSoeSeason(soePasado.getStartingSeason());
+				
+				boolean esFasal = false;
+				boolean esApoperico = false;
+				
+				if(Math.abs(ChronoUnit.SECONDS.between(lunaPasado.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonActual.setNuevo(lunaPasado.isNueva());
+					midsisonActual.setLleno(lunaPasado.isLlena());
+					midsisonActual.setSelecto(lunaPasado.isSelecta());
+					midsisonActual.setInvertido(lunaPasado.isInvertida());
+					esFasal = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(lunaActual.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonActual.setNuevo(lunaActual.isNueva());
+					midsisonActual.setLleno(lunaActual.isLlena());
+					midsisonActual.setSelecto(lunaActual.isSelecta());
+					midsisonActual.setInvertido(lunaActual.isInvertida());
+					esFasal = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonActual.setNuevo(lunaActual.isNueva());
+					midsisonActual.setLleno(lunaActual.isLlena());
+					midsisonActual.setSelecto(lunaActual.isSelecta());
+					midsisonActual.setInvertido(lunaActual.isInvertida());
+					esFasal = true;
+				}
+				
+				if(Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonActual.setAporico(apoperiPasado.isEsApogeo());
+					midsisonActual.setPerico(apoperiPasado.isEsPerigeo());
+					esApoperico = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonActual.setAporico(apoperiActual.isEsApogeo());
+					midsisonActual.setPerico(apoperiActual.isEsPerigeo());
+					esApoperico = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonActual.setAporico(apoperiFuturo.isEsApogeo());
+					midsisonActual.setPerico(apoperiFuturo.isEsPerigeo());
+					esApoperico = true;
+				}
+				
+				if(esFasal && esApoperico) {
+					midsisonActual.setApofasal(true);
+				}
+				
 			}
 			else if (diaDelMidsison.toLocalDate().isAfter(dateO)) {
+				
 				midsisonFuturo = new MidsisonDTO();
 				midsisonFuturo.setDate(diaDelMidsison);	
 				midsisonFuturo.setLastSoeSeason(soePasado.getStartingSeason());
+				
+				boolean esFasal = false;
+				boolean esApoperico = false;
+				
+				if(Math.abs(ChronoUnit.SECONDS.between(lunaPasado.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonFuturo.setNuevo(lunaPasado.isNueva());
+					midsisonFuturo.setLleno(lunaPasado.isLlena());
+					midsisonFuturo.setSelecto(lunaPasado.isSelecta());
+					midsisonFuturo.setInvertido(lunaPasado.isInvertida());
+					esFasal = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(lunaActual.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonFuturo.setNuevo(lunaActual.isNueva());
+					midsisonFuturo.setLleno(lunaActual.isLlena());
+					midsisonFuturo.setSelecto(lunaActual.isSelecta());
+					midsisonFuturo.setInvertido(lunaActual.isInvertida());
+					esFasal = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonFuturo.setNuevo(lunaActual.isNueva());
+					midsisonFuturo.setLleno(lunaActual.isLlena());
+					midsisonFuturo.setSelecto(lunaActual.isSelecta());
+					midsisonFuturo.setInvertido(lunaActual.isInvertida());
+					esFasal = true;
+				}
+				
+				if(Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonFuturo.setAporico(apoperiPasado.isEsApogeo());
+					midsisonFuturo.setPerico(apoperiPasado.isEsPerigeo());
+					esApoperico = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonFuturo.setAporico(apoperiActual.isEsApogeo());
+					midsisonFuturo.setPerico(apoperiActual.isEsPerigeo());
+					esApoperico = true;
+				}
+				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
+					midsisonFuturo.setAporico(apoperiFuturo.isEsApogeo());
+					midsisonFuturo.setPerico(apoperiFuturo.isEsPerigeo());
+					esApoperico = true;
+				}
+				
+				if(esFasal && esApoperico) {
+					midsisonFuturo.setApofasal(true);
+				}
 			}
 			
-			
+	
 			
 			fenomenosParaEventosDTO.setLunaActual(lunaActual);
 			fenomenosParaEventosDTO.setLunaAnterior(lunaPasado);
@@ -298,7 +436,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 		
 		LunasEntity lunaParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getLunaActual();
 		SolsticiosYEquinocciosEntity soeParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getSoeActual();
-		List<MetonsEntity> metonParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getMetonoActual();
+		MetonsEntity metonParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getMetonoActual();
 		EclipsesEntity eclipseParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipseActual();
 		EclipenosEntity eclipenoParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipenoActual();
 		ApogeosYPerigeosLunaEntity apoperiParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getApoperiActual();
@@ -334,7 +472,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 		} 
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior() != null) {
-			diasEntreMetonYDate = ChronoUnit.DAYS.between(lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior().get(0).getDate().toLocalDate(), dateO);
+			diasEntreMetonYDate = ChronoUnit.DAYS.between(lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior().getDate().toLocalDate(), dateO);
 		}
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseAnterior() != null) {
@@ -355,7 +493,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 		LunasEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaAnterior() : null;
 		SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getSoeAnterior() : null;
 		MidsisonDTO midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior() : null;
-		List<MetonsEntity> metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior() : new ArrayList<>();
+		MetonsEntity metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior() : null;
 		EclipsesEntity eclipseParaMetodo = diasEntreEclipseYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseAnterior() : null;
 		EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoAnterior() : null;
 		ApogeosYPerigeosLunaEntity apoperiParaMetodo = diasEntreApoperiYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiAnterior() : null;
@@ -397,8 +535,8 @@ public class NotableEventServiceImpl implements NotableEventService {
 			diasEntreMidsisonYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo().getDate().toLocalDate());	    
 		} 
 		
-		if(!lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo().isEmpty()) {
-			diasEntreMetonYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo().get(0).getDate().toLocalDate());
+		if(lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo() != null) {
+			diasEntreMetonYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo().getDate().toLocalDate());
 		}
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseProximo() != null) {
@@ -418,7 +556,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 		LunasEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaProxima() : null;
 		SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getSoeProximo() : null;
 		MidsisonDTO midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo() : null;
-		List<MetonsEntity> metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo() : new ArrayList<>();
+		MetonsEntity metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo() : null;
 		EclipsesEntity eclipseParaMetodo = diasEntreEclipseYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseProximo() : null;
 		EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoProximo() : null;
 		ApogeosYPerigeosLunaEntity apoperiParaMetodo = diasEntreApoperiYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiProximo() : null;
@@ -435,12 +573,12 @@ public class NotableEventServiceImpl implements NotableEventService {
 		return eventoFuturo;
 	}
 	
-	private String getNotableEventName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, List<MetonsEntity> meton, EclipsesEntity eclipse, EclipenosEntity eclipeno, ApogeosYPerigeosLunaEntity apoperi, MidsisonDTO midsison) {
+	private String getNotableEventName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno, ApogeosYPerigeosLunaEntity apoperi, MidsisonDTO midsison) {
 		
 		String evento = "";
 		
 				
-		if(luna != null || soe!= null || !meton.isEmpty() || eclipse!= null || eclipeno!= null || apoperi != null || midsison!= null) {
+		if(luna != null || soe!= null || meton != null || eclipse!= null || eclipeno!= null || apoperi != null || midsison!= null) {
 					
 			if(eclipeno != null) {
 						
@@ -498,48 +636,48 @@ public class NotableEventServiceImpl implements NotableEventService {
 					}									
 				}			
 			}
-			else if (!meton.isEmpty()) {
+			else if (meton != null) {
 						
-				if (meton.get(0).isInvernal()) {
+				if (meton.isInvernal()) {
 							
 					evento = evento + "Métono invernal";
 				}
-				else if(meton.get(0).isPrimaveral()) {
+				else if(meton.isPrimaveral()) {
 							
 					evento = evento + "Métono primaveral";
 				}
-				else if (meton.get(0).isEstival()) {
+				else if (meton.isEstival()) {
 							
 					evento = evento + "Métono estival";
 				}
-				else if (meton.get(0).isOtonyal()) {
+				else if (meton.isOtonyal()) {
 							
 					evento = evento + "Métono otoñal";
 				}
 				
-				if(meton.get(0).isSelecto()) {
+				if(meton.isSelecto()) {
 					
-					if(meton.get(0).isApofasal()) {
+					if(meton.isApofasal()) {
 						evento = evento + " apofasal";
 						
-						if((meton.get(0).isFasal() && meton.get(0).isNuevo() || (meton.get(0).isApoperico() && meton.get(0).isAporico()))){
+						if((meton.isFasal() && meton.isNuevo() || (meton.isApoperico() && meton.isAporico()))){
 							evento = evento + " remoto";
 						}
-						else if((meton.get(0).isFasal() && meton.get(0).isLleno() || meton.get(0).isApoperico() && meton.get(0).isPerico())){
+						else if((meton.isFasal() && meton.isLleno() || meton.isApoperico() && meton.isPerico())){
 							evento = evento + " brillante";
 						}	
 					}
 					else {
-						if(meton.get(0).isFasal() && meton.get(0).isNuevo()){
+						if(meton.isFasal() && meton.isNuevo()){
 							evento = evento + " nuevo";
 						}
-						else if(meton.get(0).isFasal() && meton.get(0).isLleno()){
+						else if(meton.isFasal() && meton.isLleno()){
 							evento = evento + " lleno";
 						} 
-						else if(meton.get(0).isApoperico() && meton.get(0).isAporico()){
+						else if(meton.isApoperico() && meton.isAporico()){
 							evento = evento + " apórico";
 						}
-						else if(meton.get(0).isApoperico() && meton.get(0).isPerico()) {
+						else if(meton.isApoperico() && meton.isPerico()) {
 							evento = evento + " périco";
 						}
 						
@@ -548,29 +686,29 @@ public class NotableEventServiceImpl implements NotableEventService {
 					
 					
 				}
-				else if (meton.get(0).isInvertido()) {
+				else if (meton.isInvertido()) {
 					
-					if(meton.get(0).isApofasal()) {
+					if(meton.isApofasal()) {
 						evento = evento + " apofasal";
 						
-						if((meton.get(0).isFasal() && meton.get(0).isNuevo() || (meton.get(0).isApoperico() && meton.get(0).isPerico()))){
+						if((meton.isFasal() && meton.isNuevo() || (meton.isApoperico() && meton.isPerico()))){
 							evento = evento + " velado";
 						}
-						else if((meton.get(0).isFasal() && meton.get(0).isLleno() || meton.get(0).isApoperico() && meton.get(0).isAporico())){
+						else if((meton.isFasal() && meton.isLleno() || meton.isApoperico() && meton.isAporico())){
 							evento = evento + " tenue";
 						}	
 					}
 					else {
-						if(meton.get(0).isFasal() && meton.get(0).isNuevo()){
+						if(meton.isFasal() && meton.isNuevo()){
 							evento = evento + " nuevo";
 						}
-						else if(meton.get(0).isFasal() && meton.get(0).isLleno()){
+						else if(meton.isFasal() && meton.isLleno()){
 							evento = evento + " lleno";
 						} 
-						else if(meton.get(0).isApoperico() && meton.get(0).isAporico()){
+						else if(meton.isApoperico() && meton.isAporico()){
 							evento = evento + " apórico";
 						}
-						else if(meton.get(0).isApoperico() && meton.get(0).isPerico()) {
+						else if(meton.isApoperico() && meton.isPerico()) {
 							evento = evento + " périco";
 						}
 						evento = evento + " invertido";
@@ -579,24 +717,24 @@ public class NotableEventServiceImpl implements NotableEventService {
 				}
 				else {
 					
-					if(meton.get(0).isFasal()) {
+					if(meton.isFasal()) {
 						
-						if(meton.get(0).isNuevo()) {
+						if(meton.isNuevo()) {
 							
 							evento = evento + " nuevo";
 						}
-						else if(meton.get(0).isLleno()) {
+						else if(meton.isLleno()) {
 									
 							evento = evento + " lleno";
 						}
 					}
-					else if (meton.get(0).isApoperico()) {
+					else if (meton.isApoperico()) {
 						
-						if(meton.get(0).isAporico()) {
+						if(meton.isAporico()) {
 							
 							evento = evento + " apórico";
 						}
-						else if(meton.get(0).isPerico()) {
+						else if(meton.isPerico()) {
 									
 							evento = evento + " périco";
 						}
@@ -681,19 +819,45 @@ public class NotableEventServiceImpl implements NotableEventService {
 						break;
 				}
 				
-				if(luna != null) {
-					if (luna.isNueva()) {
-						if (!luna.isSelecta()){
-							midsisonLunar = " nuevo";
-						}
-						else {
-							midsisonLunar = " aponoval";
-						}
+				
+				if(midsison.isApofasal()) {
+					midsisonLunar = " apofasal";
+					if (midsison.isNuevo() && midsison.isAporico()) {
+						midsisonLunar = midsisonLunar + " remoto";
 					}
-					else if (luna.isLlena()) {
-						midsisonLunar = " lleno";
+					else if(midsison.isNuevo() && midsison.isPerico()) {
+						midsisonLunar = midsisonLunar + " velado";
+					}
+					else if(midsison.isLleno() && midsison.isAporico()) {
+						midsisonLunar = midsisonLunar + " tenue";
+					}
+					else if(midsison.isLleno() && midsison.isPerico()) {
+						midsisonLunar = midsisonLunar + " brillante";
 					}
 				}
+				else {
+					if (midsison.isNuevo()) {
+						midsisonLunar = " nuevo";							
+					}
+					else if (midsison.isLleno()) {
+						midsisonLunar = " lleno";
+					}
+					else if (midsison.isAporico()) {
+						midsisonLunar = " apórico";
+					}
+					else if (midsison.isPerico()) {
+						midsisonLunar = " périco";
+					}
+					
+					if(midsison.isSelecto()) {
+						midsisonLunar = midsisonLunar + " selecto";
+					}
+					else if(midsison.isInvertido()) {
+						midsisonLunar = midsisonLunar + " invertido";
+					}
+				}
+				
+				
 				evento = evento + midsisonApellido + midsisonLunar;
 			}
 			else if (luna != null) {

@@ -22,13 +22,93 @@ public class MidsisonEntity implements Serializable {
 		private LocalDateTime date;
 		private Long pastSOEId;
 		private Long nextSOEId;
+		
 		private boolean lastSoeInvernal;
 		private boolean lastSoePrimaveral;
 		private boolean lastSoeEstival;
 		private boolean lastSoeOtonyal;
 		
+		private boolean nuevo;
+		private boolean lleno;
+		private Long lunaId;
+		private boolean selecto;
+		private boolean invertido;
+		private boolean apofasal;
+		private Long apoperiId;
+		private boolean aporico;
+		private boolean perico;
+		
+		private boolean eclipse;
+		private Long eclipseId;
+				
 		
 		
+		public Long getApoperiId() {
+			return apoperiId;
+		}
+		public void setApoperiId(Long apoperiId) {
+			this.apoperiId = apoperiId;
+		}
+		public boolean isAporico() {
+			return aporico;
+		}
+		public void setAporico(boolean aporico) {
+			this.aporico = aporico;
+		}
+		public boolean isPerico() {
+			return perico;
+		}
+		public void setPerico(boolean perico) {
+			this.perico = perico;
+		}
+		public boolean isApofasal() {
+			return apofasal;
+		}
+		public void setApofasal(boolean apofasal) {
+			this.apofasal = apofasal;
+		}
+		public Long getEclipseId() {
+			return eclipseId;
+		}
+		public void setEclipseId(Long eclipseId) {
+			this.eclipseId = eclipseId;
+		}
+		public boolean isEclipse() {
+			return eclipse;
+		}
+		public void setEclipse(boolean eclipse) {
+			this.eclipse = eclipse;
+		}
+		public boolean isSelecto() {
+			return selecto;
+		}
+		public void setSelecto(boolean selecto) {
+			this.selecto = selecto;
+		}
+		public boolean isInvertido() {
+			return invertido;
+		}
+		public void setInvertido(boolean invertido) {
+			this.invertido = invertido;
+		}
+		public Long getLunaId() {
+			return lunaId;
+		}
+		public void setLunaId(Long lunaId) {
+			this.lunaId = lunaId;
+		}
+		public boolean isNuevo() {
+			return nuevo;
+		}
+		public void setNuevo(boolean nuevo) {
+			this.nuevo = nuevo;
+		}
+		public boolean isLleno() {
+			return lleno;
+		}
+		public void setLleno(boolean lleno) {
+			this.lleno = lleno;
+		}
 		public boolean isLastSoeInvernal() {
 			return lastSoeInvernal;
 		}

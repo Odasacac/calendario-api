@@ -27,9 +27,9 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	private MidsisonDTO midsisonProximo;
 	private MidsisonDTO midsisonAnterior;
 	
-	private List<MetonsEntity> metonoActual;
-	private List<MetonsEntity> metonoProximo;
-	private List<MetonsEntity> metonoAnterior;
+	private MetonsEntity metonoActual;
+	private MetonsEntity metonoProximo;
+	private MetonsEntity metonoAnterior;
 	
 	private EclipsesEntity eclipseActual;
 	private EclipsesEntity eclipseProximo;
@@ -116,22 +116,23 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	public void setSoeAnterior(SolsticiosYEquinocciosEntity soeAnterior) {
 		this.soeAnterior = soeAnterior;
 	}
-	public List<MetonsEntity> getMetonoActual() {
+	
+	public MetonsEntity getMetonoActual() {
 		return metonoActual;
 	}
-	public void setMetonoActual(List<MetonsEntity> metonoActual) {
+	public void setMetonoActual(MetonsEntity metonoActual) {
 		this.metonoActual = metonoActual;
 	}
-	public List<MetonsEntity> getMetonoProximo() {
+	public MetonsEntity getMetonoProximo() {
 		return metonoProximo;
 	}
-	public void setMetonoProximo(List<MetonsEntity> metonoProximo) {
+	public void setMetonoProximo(MetonsEntity metonoProximo) {
 		this.metonoProximo = metonoProximo;
 	}
-	public List<MetonsEntity> getMetonoAnterior() {
+	public MetonsEntity getMetonoAnterior() {
 		return metonoAnterior;
 	}
-	public void setMetonoAnterior(List<MetonsEntity> metonoAnterior) {
+	public void setMetonoAnterior(MetonsEntity metonoAnterior) {
 		this.metonoAnterior = metonoAnterior;
 	}
 	public EclipsesEntity getEclipseActual() {
