@@ -118,6 +118,12 @@ public class MidsisonServiceImpl implements MidsisonService{
 									midsison.setAporico(apoperi.isEsApogeo());
 									midsison.setPerico(apoperi.isEsPerigeo());
 									midsison.setApoperiId(apoperi.getId());
+									
+									if(apoperi.isEsSelecto() || apoperi.isEsInvertido()) {
+										midsison.setSelecto(apoperi.isEsSelecto());
+										midsison.setInvertido(apoperi.isEsInvertido());									
+																																																															
+									}
 								}
 							}
 							

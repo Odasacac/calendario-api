@@ -275,16 +275,22 @@ public class NotableEventServiceImpl implements NotableEventService {
 				if(Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonPasado.setAporico(apoperiPasado.isEsApogeo());
 					midsisonPasado.setPerico(apoperiPasado.isEsPerigeo());
+					midsisonPasado.setSelecto(apoperiPasado.isEsSelecto());
+					midsisonPasado.setInvertido(apoperiPasado.isEsInvertido());
 					esApoperico = true;
 				}
 				else if(apoperiActual != null && Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonPasado.setAporico(apoperiActual.isEsApogeo());
 					midsisonPasado.setPerico(apoperiActual.isEsPerigeo());
+					midsisonPasado.setSelecto(apoperiActual.isEsSelecto());
+					midsisonPasado.setInvertido(apoperiActual.isEsInvertido());
 					esApoperico = true;
 				}
 				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonPasado.setAporico(apoperiFuturo.isEsApogeo());
 					midsisonPasado.setPerico(apoperiFuturo.isEsPerigeo());
+					midsisonPasado.setSelecto(apoperiFuturo.isEsSelecto());
+					midsisonPasado.setInvertido(apoperiFuturo.isEsInvertido());
 					esApoperico = true;
 				}
 				
@@ -327,16 +333,22 @@ public class NotableEventServiceImpl implements NotableEventService {
 				if(Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonActual.setAporico(apoperiPasado.isEsApogeo());
 					midsisonActual.setPerico(apoperiPasado.isEsPerigeo());
+					midsisonActual.setSelecto(apoperiPasado.isEsSelecto());
+					midsisonActual.setInvertido(apoperiPasado.isEsInvertido());
 					esApoperico = true;
 				}
 				else if(apoperiActual != null && Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonActual.setAporico(apoperiActual.isEsApogeo());
 					midsisonActual.setPerico(apoperiActual.isEsPerigeo());
+					midsisonActual.setSelecto(apoperiActual.isEsSelecto());
+					midsisonActual.setInvertido(apoperiActual.isEsInvertido());
 					esApoperico = true;
 				}
 				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonActual.setAporico(apoperiFuturo.isEsApogeo());
 					midsisonActual.setPerico(apoperiFuturo.isEsPerigeo());
+					midsisonActual.setSelecto(apoperiFuturo.isEsSelecto());
+					midsisonActual.setInvertido(apoperiFuturo.isEsInvertido());
 					esApoperico = true;
 				}
 				
@@ -379,16 +391,22 @@ public class NotableEventServiceImpl implements NotableEventService {
 				if(Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonFuturo.setAporico(apoperiPasado.isEsApogeo());
 					midsisonFuturo.setPerico(apoperiPasado.isEsPerigeo());
+					midsisonFuturo.setSelecto(apoperiPasado.isEsSelecto());
+					midsisonFuturo.setInvertido(apoperiPasado.isEsInvertido());
 					esApoperico = true;
 				}
 				else if(apoperiActual != null && Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonFuturo.setAporico(apoperiActual.isEsApogeo());
 					midsisonFuturo.setPerico(apoperiActual.isEsPerigeo());
+					midsisonFuturo.setSelecto(apoperiActual.isEsSelecto());
+					midsisonFuturo.setInvertido(apoperiActual.isEsInvertido());
 					esApoperico = true;
 				}
 				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonFuturo.setAporico(apoperiFuturo.isEsApogeo());
 					midsisonFuturo.setPerico(apoperiFuturo.isEsPerigeo());
+					midsisonFuturo.setSelecto(apoperiFuturo.isEsSelecto());
+					midsisonFuturo.setInvertido(apoperiFuturo.isEsInvertido());
 					esApoperico = true;
 				}
 				
