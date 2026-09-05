@@ -44,7 +44,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			LunasEntity lunaActual = null;
 			ApogeosYPerigeosLunaEntity apoperiActual = null;
 			SolsticiosYEquinocciosEntity soeActual = null;
-			MetonsEntity metonActual = new MetonsEntity();
+			MetonsEntity metonActual = null;
 			EclipsesEntity eclipseActual = null;
 			EclipenosEntity eclipenoActual = null;
 			MidsisonDTO midsisonActual = null;
@@ -153,6 +153,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			long diasMinimosDeDiferenciaEntreMetonoFuturoYDate =Long.MAX_VALUE;
 			for(MetonsEntity meton : datosCosmicosParaVAUDTO.getMetons()) {
 				if(meton.getDate().toLocalDate().isEqual(dateO)) {
+					metonActual = new MetonsEntity();
 					metonActual =meton;
 				}		
 				
@@ -256,7 +257,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonPasado.setInvertido(lunaPasado.isInvertida());
 					esFasal = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(lunaActual.getDate(), diaDelMidsison)) <= 86164) {
+				else if(lunaActual != null && Math.abs(ChronoUnit.SECONDS.between(lunaActual.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonPasado.setNuevo(lunaActual.isNueva());
 					midsisonPasado.setLleno(lunaActual.isLlena());
 					midsisonPasado.setSelecto(lunaActual.isSelecta());
@@ -264,10 +265,10 @@ public class NotableEventServiceImpl implements NotableEventService {
 					esFasal = true;
 				}
 				else if(Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
-					midsisonPasado.setNuevo(lunaActual.isNueva());
-					midsisonPasado.setLleno(lunaActual.isLlena());
-					midsisonPasado.setSelecto(lunaActual.isSelecta());
-					midsisonPasado.setInvertido(lunaActual.isInvertida());
+					midsisonPasado.setNuevo(lunaFuturo.isNueva());
+					midsisonPasado.setLleno(lunaFuturo.isLlena());
+					midsisonPasado.setSelecto(lunaFuturo.isSelecta());
+					midsisonPasado.setInvertido(lunaFuturo.isInvertida());
 					esFasal = true;
 				}
 				
@@ -276,7 +277,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonPasado.setPerico(apoperiPasado.isEsPerigeo());
 					esApoperico = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
+				else if(apoperiActual != null && Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonPasado.setAporico(apoperiActual.isEsApogeo());
 					midsisonPasado.setPerico(apoperiActual.isEsPerigeo());
 					esApoperico = true;
@@ -308,7 +309,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonActual.setInvertido(lunaPasado.isInvertida());
 					esFasal = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(lunaActual.getDate(), diaDelMidsison)) <= 86164) {
+				else if(lunaActual != null && Math.abs(ChronoUnit.SECONDS.between(lunaActual.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonActual.setNuevo(lunaActual.isNueva());
 					midsisonActual.setLleno(lunaActual.isLlena());
 					midsisonActual.setSelecto(lunaActual.isSelecta());
@@ -316,10 +317,10 @@ public class NotableEventServiceImpl implements NotableEventService {
 					esFasal = true;
 				}
 				else if(Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
-					midsisonActual.setNuevo(lunaActual.isNueva());
-					midsisonActual.setLleno(lunaActual.isLlena());
-					midsisonActual.setSelecto(lunaActual.isSelecta());
-					midsisonActual.setInvertido(lunaActual.isInvertida());
+					midsisonActual.setNuevo(lunaFuturo.isNueva());
+					midsisonActual.setLleno(lunaFuturo.isLlena());
+					midsisonActual.setSelecto(lunaFuturo.isSelecta());
+					midsisonActual.setInvertido(lunaFuturo.isInvertida());
 					esFasal = true;
 				}
 				
@@ -328,7 +329,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonActual.setPerico(apoperiPasado.isEsPerigeo());
 					esApoperico = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
+				else if(apoperiActual != null && Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonActual.setAporico(apoperiActual.isEsApogeo());
 					midsisonActual.setPerico(apoperiActual.isEsPerigeo());
 					esApoperico = true;
@@ -360,7 +361,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonFuturo.setInvertido(lunaPasado.isInvertida());
 					esFasal = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(lunaActual.getDate(), diaDelMidsison)) <= 86164) {
+				else if(lunaActual != null && Math.abs(ChronoUnit.SECONDS.between(lunaActual.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonFuturo.setNuevo(lunaActual.isNueva());
 					midsisonFuturo.setLleno(lunaActual.isLlena());
 					midsisonFuturo.setSelecto(lunaActual.isSelecta());
@@ -368,10 +369,10 @@ public class NotableEventServiceImpl implements NotableEventService {
 					esFasal = true;
 				}
 				else if(Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
-					midsisonFuturo.setNuevo(lunaActual.isNueva());
-					midsisonFuturo.setLleno(lunaActual.isLlena());
-					midsisonFuturo.setSelecto(lunaActual.isSelecta());
-					midsisonFuturo.setInvertido(lunaActual.isInvertida());
+					midsisonFuturo.setNuevo(lunaFuturo.isNueva());
+					midsisonFuturo.setLleno(lunaFuturo.isLlena());
+					midsisonFuturo.setSelecto(lunaFuturo.isSelecta());
+					midsisonFuturo.setInvertido(lunaFuturo.isInvertida());
 					esFasal = true;
 				}
 				
@@ -380,7 +381,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonFuturo.setPerico(apoperiPasado.isEsPerigeo());
 					esApoperico = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
+				else if(apoperiActual != null && Math.abs(ChronoUnit.SECONDS.between(apoperiActual.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonFuturo.setAporico(apoperiActual.isEsApogeo());
 					midsisonFuturo.setPerico(apoperiActual.isEsPerigeo());
 					esApoperico = true;

@@ -78,7 +78,7 @@ public class SeasonsServiceImpl implements SeasonsService{
 			else if(date.isEqual(midSeasonDate)) {
 				seasonDTO.setMidsisonDay(true);
 				surname="cenítico";
-				if(actualSoe.getStartingSeason() == 2) {
+				if(lastSoe.getStartingSeason() == 2) {
 					surname="cenítica";
 				}
 			}
