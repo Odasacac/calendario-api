@@ -47,12 +47,18 @@ public class UtilsServiceImpl implements UtilsService {
 	
 	@Autowired
 	private MetonsService metonsService;
+	
+	private final static int numeroAnyosInferior = 1;
+	private final static int numeroAnyoSuperior = 1;
+	private final static int numeroMesesInferior = 3;
+	private final static int numeroMesesSuperior = 3;
 
 	
 	public DatosCosmicosParaVAUDTO getDatosCosmicos(LocalDate date) {
 		
 		DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO = new DatosCosmicosParaVAUDTO();
 		LocalDateTime dateO = date.atTime(LocalTime.MAX);	
+		
 		
 		List<EclipenosEntity> allEclipenos = this.eclipenosRepository.findAllByOrderByDateDesc();
 		
@@ -64,7 +70,7 @@ public class UtilsServiceImpl implements UtilsService {
 			
 			if(datosCosmicosParaVAUDTO.getLastEclipenoIN() != null && datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto() != null) {
 				
-				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto().getDate().minusYears(1), dateO.plusYears(1));
+				List<MetonsEntity> allMetons = this.metonsRepository.findByDateBetweenOrderByDateDesc(datosCosmicosParaVAUDTO.getLastEclipenoInvernalApofasalRemoto().getDate().minusYears(numeroAnyosInferior), dateO.plusYears(numeroAnyoSuperior));
 				
 				if(!allMetons.isEmpty()) {
 					
@@ -74,10 +80,10 @@ public class UtilsServiceImpl implements UtilsService {
 					
 					if(datosCosmicosParaVAUDTO.getLastMetonIN() != null) {									
 						
-						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(dateO.minusYears(1), dateO.plusYears(1)));
-						datosCosmicosParaVAUDTO.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(datosCosmicosParaVAUDTO.getLastMetonIN().getDate().minusYears(1), dateO.plusYears(1)));
-						datosCosmicosParaVAUDTO.setEclipses(this.eclipsesRepository.findEclipsesAbsoluteQuery(datosCosmicosParaVAUDTO.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(1)));
-						datosCosmicosParaVAUDTO.setApoperis(this.apogeosYPerigeosLunaRepository.findByDateBetween(dateO.minusMonths(3), dateO.plusMonths(3)));
+						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(dateO.minusYears(numeroAnyosInferior), dateO.plusYears(numeroAnyoSuperior)));
+						datosCosmicosParaVAUDTO.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(datosCosmicosParaVAUDTO.getLastMetonIN().getDate().minusYears(numeroAnyosInferior), dateO.plusYears(numeroAnyoSuperior)));
+						datosCosmicosParaVAUDTO.setEclipses(this.eclipsesRepository.findEclipsesAbsoluteQuery(datosCosmicosParaVAUDTO.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(numeroAnyoSuperior)));
+						datosCosmicosParaVAUDTO.setApoperis(this.apogeosYPerigeosLunaRepository.findByDateBetween(dateO.minusMonths(numeroMesesInferior), dateO.plusMonths(numeroMesesSuperior)));
 						
 						if(datosCosmicosParaVAUDTO.getApoperis().isEmpty()){
 							datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado apoperis.");
