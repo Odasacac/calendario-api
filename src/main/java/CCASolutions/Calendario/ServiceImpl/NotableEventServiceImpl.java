@@ -619,39 +619,36 @@ public class NotableEventServiceImpl implements NotableEventService {
 		String evento = "";
 		
 				
-		if(luna != null || soe!= null || meton != null || eclipse!= null || eclipeno!= null || apoperi != null || midsison!= null) {
-					
-			if(eclipeno != null) {
 		
-				evento = this.getEclipenoName(eclipeno);									
-			}
-			else if (meton != null) {
-						
-				evento = this.getMetonoName(meton);				
-			}
-			else if(soe != null) {
-						
-				evento = this.getSoeName(soe);
-			}
-			else if (eclipse != null) {				
-										
-				evento = this.getEclipseName(eclipse);
-			}	
-			else if(midsison != null) {
-				
-				evento = this.getMidsisonName(midsison);
-			}
-			else if (luna != null) {
-
-				evento = this.getLunaName(luna);
-			}
-			else if (apoperi != null) {
-				
-				evento = this.getApoperiName(apoperi);				
-			}
-			
+		if(eclipeno != null) {
+		
+			evento = this.getEclipenoName(eclipeno);									
 		}
+		else if (meton != null) {
+						
+			evento = this.getMetonoName(meton);				
+		}
+		else if(soe != null) {
+						
+			evento = this.getSoeName(soe);
+		}
+		else if (eclipse != null) {				
+										
+			evento = this.getEclipseName(eclipse);
+		}	
+		else if(midsison != null) {
+				
+			evento = this.getMidsisonName(midsison);
+		}
+		else if (luna != null) {
 
+			evento = this.getLunaName(luna);
+		}
+		else if (apoperi != null) {
+				
+			evento = this.getApoperiName(apoperi);				
+		}
+			
 		return evento;
 	}
 	
