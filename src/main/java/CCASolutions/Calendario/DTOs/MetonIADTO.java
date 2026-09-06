@@ -1,5 +1,11 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: Position within the cycle of winter aporic metons, the solstices coinciding with an
+ * apogee. Same shape as the new meton counter.
+ * ES: Posición dentro del ciclo de métonos invernales apóricos, los solsticios que coinciden
+ * con un apogeo. Misma forma que el contador de métonos nuevos.
+ */
 public class MetonIADTO {
 	
 	private boolean metonoIADay;

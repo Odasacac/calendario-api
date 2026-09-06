@@ -1,6 +1,11 @@
 package CCASolutions.Calendario.DTOs;
 
 
+/**
+ * EN: One solstice or equinox as the OPALE API returns it: instant and kind of phenomenon.
+ * ES: Un solsticio o equinoccio tal y como lo devuelve la API de OPALE: instante y tipo de
+ * fenómeno.
+ */
 public class FenomenoDTO {
 	
 	private String date;

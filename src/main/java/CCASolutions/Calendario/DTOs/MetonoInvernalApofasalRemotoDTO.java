@@ -1,5 +1,11 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: Position within the cycle of winter apofasal remote metons: a winter solstice with a
+ * new moon at apogee. It is the longest cycle below the eclipeno itself.
+ * ES: Posición dentro del ciclo de métonos invernales apofasales remotos: un solsticio de
+ * invierno con luna nueva en apogeo. Es el ciclo más largo por debajo del propio eclípeno.
+ */
 public class MetonoInvernalApofasalRemotoDTO {
 	
 	private boolean metonoInvernalApofasalRemotoDay;

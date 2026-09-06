@@ -8,6 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One VAU week, table {@code weeks}: six fixed rows, the placeholder plus Primana,
+ * Segana, Terana, Curana and Limana.
+ * ES: Una semana VAU, tabla {@code weeks}: seis filas fijas, la de relleno más Primana,
+ * Segana, Terana, Curana y Limana.
+ */
 @Entity
 @Table(name="weeks")
 public class WeeksEntity implements Serializable {

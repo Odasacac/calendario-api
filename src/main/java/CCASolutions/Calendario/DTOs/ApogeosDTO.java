@@ -1,6 +1,12 @@
 package CCASolutions.Calendario.DTOs;
 
 
+/**
+ * EN: One apogee or perigee as the OPALE API returns it: instant, kind and distance in
+ * kilometres.
+ * ES: Un apogeo o perigeo tal y como lo devuelve la API de OPALE: instante, tipo y distancia
+ * en kilómetros.
+ */
 public class ApogeosDTO {
 
     private String date;

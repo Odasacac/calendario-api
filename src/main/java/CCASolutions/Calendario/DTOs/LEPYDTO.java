@@ -3,6 +3,12 @@ package CCASolutions.Calendario.DTOs;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * EN: Raw envelope of the OPALE lunar eclipse API. Each eclipse carries several events, and
+ * the one that matters is the greatest, the instant of maximum eclipse.
+ * ES: Envoltorio en bruto de la API de eclipses lunares de OPALE. Cada eclipse trae varios
+ * eventos, y el que interesa es el greatest, el instante de máximo eclipse.
+ */
 public class LEPYDTO {
 
     private Response response;

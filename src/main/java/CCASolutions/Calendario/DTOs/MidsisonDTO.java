@@ -2,6 +2,16 @@ package CCASolutions.Calendario.DTOs;
 
 import java.time.LocalDateTime;
 
+/**
+ * EN: A midsison as the notable event calculation sees it: the instant exactly halfway
+ * between two consecutive solstices or equinoxes, the season it closes, and whichever lunar
+ * phenomena coincide with it. When a moon phase and an apogee or perigee coincide at once
+ * it is apofasal.
+ * ES: Un midsison tal y como lo ve el cálculo de eventos notables: el instante exactamente
+ * equidistante entre dos solsticios o equinoccios consecutivos, la estación que cierra, y
+ * los fenómenos lunares que coincidan con él. Cuando coinciden a la vez una fase lunar y un
+ * apogeo o perigeo, es apofasal.
+ */
 public class MidsisonDTO {
 
 		private LocalDateTime date;

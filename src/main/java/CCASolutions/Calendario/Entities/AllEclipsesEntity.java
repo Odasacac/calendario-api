@@ -8,6 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One eclipse in the historical table {@code all_eclipses}, with the date split into
+ * numeric fields. Kept as a record only; the calendar uses the eclipses table.
+ * ES: Un eclipse en la tabla histórica {@code all_eclipses}, con la fecha troceada en campos
+ * numéricos. Se conserva sólo como registro; el calendario usa la tabla de eclipses.
+ */
 @Entity
 @Table(name="all_eclipses")
 public class AllEclipsesEntity implements Serializable{

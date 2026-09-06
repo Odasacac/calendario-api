@@ -1,6 +1,10 @@
 package CCASolutions.Calendario.DTOs;
 
 
+/**
+ * EN: The three festivities around a date, already formatted as text.
+ * ES: Las tres festividades alrededor de una fecha, ya formateadas como texto.
+ */
 public class FestividadesDTO {
 	
 	private String festividadActual;

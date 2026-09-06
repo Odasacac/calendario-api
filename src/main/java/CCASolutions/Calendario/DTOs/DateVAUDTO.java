@@ -1,5 +1,11 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: A VAU date expressed as plain values, used by the reverse conversion back into a
+ * Gregorian date.
+ * ES: Una fecha VAU expresada con valores simples, que usa la conversión inversa de vuelta a
+ * una fecha gregoriana.
+ */
 public class DateVAUDTO {
 
 	private int eclipenoIN;

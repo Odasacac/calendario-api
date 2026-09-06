@@ -1,5 +1,9 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: A VAU day with its qualifier.
+ * ES: Un día VAU con su apellido.
+ */
 public class DayDTO {
 
 	private String name;

@@ -9,6 +9,14 @@ import CCASolutions.Calendario.Entities.LunasEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
+/**
+ * EN: Working set of the notable event calculation: for each of the seven kinds of
+ * phenomenon it keeps three slots, the one falling on the date, the closest previous one and
+ * the closest upcoming one. Any of the twenty-one slots may be {@code null}.
+ * ES: Conjunto de trabajo del cálculo de eventos notables: por cada uno de los siete tipos
+ * de fenómeno guarda tres huecos, el que cae en la fecha, el anterior más cercano y el
+ * próximo más cercano. Cualquiera de los veintiún huecos puede ser {@code null}.
+ */
 public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 
 	private LunasEntity lunaActual;

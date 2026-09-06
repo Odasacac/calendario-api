@@ -1,5 +1,15 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: A complete VAU date: the answer the conversion endpoint returns. It holds the whole
+ * chain of cycles (eclipeno, meton, year, season, month, week and day), the counters of
+ * absolute eclipses and aponovos, the state of the moon, the casalero, the notable events
+ * and the festivities, plus the original Gregorian date it came from.
+ * ES: Una fecha VAU completa: la respuesta que devuelve el endpoint de conversión. Contiene
+ * la cadena entera de ciclos (eclípeno, métono, año, estación, mes, semana y día), los
+ * contadores de eclipses absolutos y de aponovos, el estado de la luna, el casalero, los
+ * eventos notables y las festividades, y además la fecha gregoriana original de la que sale.
+ */
 public class DateDTO {
 
 	private EclipenoSelectoDTO lastEclipenoSelecto;

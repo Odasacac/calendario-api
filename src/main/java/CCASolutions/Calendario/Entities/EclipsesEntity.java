@@ -9,6 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One solar or lunar eclipse, table {@code eclipses}. The calendar treats as absolute
+ * every solar eclipse and the total lunar ones; partial and penumbral ones do not count.
+ * ES: Un eclipse solar o lunar, tabla {@code eclipses}. El calendario considera absolutos
+ * todos los eclipses solares y los lunares totales; los parciales y penumbrales no cuentan.
+ */
 @Entity
 @Table(name="eclipses")
 public class EclipsesEntity implements Serializable {

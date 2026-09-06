@@ -8,6 +8,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One VAU month, table {@code months}: eighteen fixed rows. Each season has three
+ * ordinary months plus a hybrid one spanning the change of season; there is also a liminal
+ * month for the stretch after the winter solstice, and Nomon, the placeholder.
+ * ES: Un mes VAU, tabla {@code months}: dieciocho filas fijas. Cada estación tiene tres meses
+ * corrientes más uno híbrido que abarca el cambio de estación; existe además un mes liminal
+ * para el tramo posterior al solsticio de invierno, y Nomon, el de relleno.
+ */
 @Entity
 @Table(name="months")
 public class MonthsEntity implements Serializable {

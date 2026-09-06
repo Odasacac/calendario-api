@@ -8,6 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One key/value entry, table {@code datos}: the OPALE API URLs and the hashed
+ * administrator password.
+ * ES: Una entrada de clave/valor, tabla {@code datos}: las URLs de las APIs de OPALE y la
+ * contraseña de administrador cifrada.
+ */
 @Entity
 @Table(name="datos")
 public class DatosEntity implements Serializable{

@@ -3,6 +3,11 @@ package CCASolutions.Calendario.DTOs;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * EN: Raw envelope of the OPALE solar eclipse API, same shape as the lunar one.
+ * ES: Envoltorio en bruto de la API de eclipses solares de OPALE, con la misma forma que la
+ * lunar.
+ */
 public class SEPYDTO {
 
     private Response response;

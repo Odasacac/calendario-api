@@ -6,6 +6,12 @@ import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.WeeksEntity;
 
+/**
+ * EN: A date resolved straight from the database entities, keeping the entities themselves
+ * instead of the presentation values.
+ * ES: Una fecha resuelta directamente a partir de las entidades de base de datos, que
+ * conserva las propias entidades en lugar de los valores de presentación.
+ */
 public class DateDTOFromDB {
 
 	private EclipenosEntity eclipeno;

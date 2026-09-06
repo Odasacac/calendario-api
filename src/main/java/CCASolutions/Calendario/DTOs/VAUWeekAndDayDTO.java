@@ -1,5 +1,9 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: The VAU week and day of a date, both counted from the last new moon.
+ * ES: La semana y el día VAU de una fecha, ambos contados desde la última luna nueva.
+ */
 public class VAUWeekAndDayDTO {
 	
 	private String week;

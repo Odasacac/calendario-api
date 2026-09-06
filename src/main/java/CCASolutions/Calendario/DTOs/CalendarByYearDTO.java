@@ -1,5 +1,11 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: Identifies one VAU year for the calendar download: the year of its eclipeno, its meton
+ * number and its year number.
+ * ES: Identifica un año VAU para la descarga del calendario: el año de su eclípeno, su número
+ * de métono y su número de año.
+ */
 public class CalendarByYearDTO {
 
 	private int yearOfEclipenoIN;

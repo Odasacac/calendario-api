@@ -9,6 +9,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One meton, table {@code metons}: a solstice or equinox coinciding, within one sidereal
+ * day, with a moon phase (fasal) or with an apogee or perigee (apoperico). When both
+ * coincide at once the meton is apofasal. It carries the date of its solstice and points
+ * back to the phenomenon that produced it.
+ * ES: Un métono, tabla {@code metons}: un solsticio o equinoccio que coincide, dentro de un
+ * día sideral, con una fase lunar (fasal) o con un apogeo o perigeo (apopérico). Cuando
+ * coinciden ambos a la vez, el métono es apofasal. Lleva la fecha de su solsticio y apunta
+ * al fenómeno que lo ha producido.
+ */
 @Entity
 @Table(name="metons")
 public class MetonsEntity implements Serializable {

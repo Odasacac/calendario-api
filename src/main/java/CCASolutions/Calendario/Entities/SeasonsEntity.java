@@ -8,6 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One VAU season, table {@code seasons}: five fixed rows, the four seasons plus the
+ * placeholder used when a date belongs to none.
+ * ES: Una estación VAU, tabla {@code seasons}: cinco filas fijas, las cuatro estaciones más
+ * la de relleno que se usa cuando una fecha no pertenece a ninguna.
+ */
 @Entity
 @Table(name="seasons")
 public class SeasonsEntity implements Serializable {

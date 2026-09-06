@@ -8,6 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One VAU day, table {@code days}: ten fixed rows, from Terra (position 0, the day of
+ * the new moon) to Caelumbra (position 9).
+ * ES: Un día VAU, tabla {@code days}: diez filas fijas, de Terra (posición 0, el día de la
+ * luna nueva) a Caelumbra (posición 9).
+ */
 @Entity
 @Table(name="days")
 public class DaysEntity implements Serializable {

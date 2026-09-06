@@ -8,6 +8,15 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One moon phase in the historical table {@code all_faseslunares}, covering year -4700
+ * to 2100. The date is stored as separate numeric fields because years before 1 do not fit
+ * into a LocalDateTime. Kept as a record only; the calendar uses the lunas table.
+ * ES: Una fase lunar en la tabla histórica {@code all_faseslunares}, que cubre del año -4700
+ * al 2100. La fecha se guarda en campos numéricos sueltos porque los años anteriores al 1 no
+ * caben en un LocalDateTime. Se conserva sólo como registro; el calendario usa la tabla de
+ * lunas.
+ */
 @Entity
 @Table(name="all_faseslunares")
 public class AllFasesLunaresEntity implements Serializable {

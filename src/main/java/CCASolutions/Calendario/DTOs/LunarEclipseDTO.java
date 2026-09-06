@@ -1,6 +1,10 @@
 package CCASolutions.Calendario.DTOs;
 
 
+/**
+ * EN: One lunar eclipse as the OPALE API returns it: instant and type.
+ * ES: Un eclipse lunar tal y como lo devuelve la API de OPALE: instante y tipo.
+ */
 public class LunarEclipseDTO {
 
 	  private String date;

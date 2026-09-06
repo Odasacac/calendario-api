@@ -10,6 +10,17 @@ import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.MidsisonEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
+/**
+ * EN: Every astronomical phenomenon the conversion of one date needs, loaded in a single
+ * pass so that no later calculation touches the database. Besides the lists it carries the
+ * four reference phenomena the VAU counters hang from. Check {@code isValido()} before
+ * using it: when it is false, {@code getMensaje()} explains what was missing.
+ * ES: Todos los fenómenos astronómicos que necesita la conversión de una fecha, cargados de
+ * una sola pasada para que ningún cálculo posterior toque la base de datos. Además de las
+ * listas lleva los cuatro fenómenos de referencia de los que cuelgan los contadores VAU.
+ * Comprobar {@code isValido()} antes de usarlo: cuando es falso, {@code getMensaje()}
+ * explica qué faltaba.
+ */
 public class DatosCosmicosParaVAUDTO {
 
 	private List<SolsticiosYEquinocciosEntity> soes;

@@ -26,6 +26,12 @@ import jakarta.persistence.Table;
  
  			
 	 */
+/**
+ * EN: One VAU festivity, table {@code festividades}: sixteen fixed rows, each identified by
+ * a short code and describing the astronomical phenomenon behind it.
+ * ES: Una festividad VAU, tabla {@code festividades}: dieciséis filas fijas, cada una
+ * identificada por un código corto y que describe el fenómeno astronómico que hay detrás.
+ */
 @Entity
 @Table(name="festividades")
 public class FestividadesEntity implements Serializable {

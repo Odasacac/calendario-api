@@ -7,10 +7,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One midsison, table {@code midsison}: the instant exactly halfway between one solstice
+ * or equinox and the next. It points to both, and marks whichever moon phase, apogee,
+ * perigee or eclipse falls within one sidereal day of it.
+ * ES: Un midsison, tabla {@code midsison}: el instante exactamente equidistante entre un
+ * solsticio o equinoccio y el siguiente. Apunta a ambos, y marca la fase lunar, el apogeo,
+ * el perigeo o el eclipse que caiga dentro de un día sideral.
+ */
 @Entity
-@Table(name="midsison")
+@Table(name="midsison", indexes = @Index(name = "idx_midsison_date", columnList = "date"))
 public class MidsisonEntity implements Serializable {
 
 		private static final long serialVersionUID = -3474625787442393891L;

@@ -1,5 +1,12 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: The VAU year, which is the number of winter solstices gone by since the reference
+ * meton. A date landing exactly on a winter solstice belongs to no year and gets a dash.
+ * ES: El año VAU, que es el número de solsticios de invierno transcurridos desde el métono
+ * de referencia. Una fecha que cae exactamente en un solsticio de invierno no pertenece a
+ * ningún año y recibe un guion.
+ */
 public class YearDTO {
 	
 	private boolean esSolsticioDeInvierno;

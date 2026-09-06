@@ -9,6 +9,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One moon phase, table {@code lunas}: new moon, first quarter, full moon or last
+ * quarter, from year 1 to 2100. The selecta and invertida flags are set later, when the
+ * phases are paired with the apogees and perigees: a full moon at perigee or a new moon at
+ * apogee is selecta, and the opposite combinations are invertida.
+ * ES: Una fase lunar, tabla {@code lunas}: luna nueva, cuarto creciente, luna llena o cuarto
+ * menguante, del año 1 al 2100. Las banderas selecta e invertida se ponen más tarde, al
+ * emparejar las fases con los apogeos y perigeos: luna llena en perigeo o luna nueva en
+ * apogeo es selecta, y las combinaciones contrarias son invertida.
+ */
 @Entity
 @Table(name="lunas")
 public class LunasEntity implements Serializable {

@@ -1,5 +1,13 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: Counters of absolute eclipses, that is, every solar eclipse plus the total lunar ones.
+ * They are counted from two origins, the reference eclipeno and the last winter new meton,
+ * and split into solar, lunar and total.
+ * ES: Contadores de eclipses absolutos, es decir, todos los solares más los lunares totales.
+ * Se cuentan desde dos orígenes, el eclípeno de referencia y el último métono invernal
+ * nuevo, y se desglosan en solares, lunares y totales.
+ */
 public class AbsoluteEclipsesDTO {
 	
 	private int sinceLastEclipenoIN;

@@ -1,0 +1,525 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Informe de refactorización — Calendario</title>
+<style>
+  @page { size: A4; margin: 18mm 16mm 16mm 16mm; }
+
+  :root {
+    --tinta: #16181d;
+    --suave: #5b6270;
+    --linea: #d8dce3;
+    --acento: #1f4e79;
+    --ok: #1e6b45;
+    --ok-bg: #eaf5ef;
+    --alerta: #8a4b00;
+    --alerta-bg: #fdf3e6;
+    --fallo: #9b2226;
+    --codigo-bg: #f4f6f8;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    color: var(--tinta);
+    font-size: 10pt;
+    line-height: 1.5;
+    margin: 0;
+  }
+
+  h1, h2, h3 { font-weight: 600; line-height: 1.25; margin: 0; }
+
+  h1 { font-size: 24pt; letter-spacing: -0.02em; }
+
+  h2 {
+    font-size: 14pt;
+    color: var(--acento);
+    margin: 26px 0 10px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid var(--acento);
+    break-after: avoid;
+  }
+
+  h3 {
+    font-size: 10.5pt;
+    margin: 16px 0 5px;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 9px; }
+
+  code, .mono {
+    font-family: "Cascadia Mono", Consolas, "Courier New", monospace;
+    font-size: 8.6pt;
+    background: var(--codigo-bg);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  pre {
+    font-family: "Cascadia Mono", Consolas, monospace;
+    font-size: 8.2pt;
+    background: var(--codigo-bg);
+    border-left: 3px solid var(--linea);
+    padding: 8px 10px;
+    margin: 8px 0 12px;
+    white-space: pre-wrap;
+    line-height: 1.4;
+  }
+
+  pre code { background: none; padding: 0; }
+
+  table { width: 100%; border-collapse: collapse; margin: 8px 0 14px; font-size: 9pt; }
+  th, td { text-align: left; padding: 5px 7px; border-bottom: 1px solid var(--linea); vertical-align: top; }
+  th { background: #eef1f5; font-weight: 600; font-size: 8.4pt; text-transform: uppercase; letter-spacing: 0.04em; color: var(--suave); }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  tbody tr:last-child td { border-bottom: 1px solid #b9bfc9; }
+
+  .portada { border-bottom: 3px solid var(--acento); padding-bottom: 16px; margin-bottom: 6px; }
+  .subtitulo { color: var(--suave); font-size: 11pt; margin-top: 6px; }
+  .meta { color: var(--suave); font-size: 8.6pt; margin-top: 12px; }
+  .meta span { display: inline-block; margin-right: 18px; }
+
+  .destacados { display: flex; gap: 10px; margin: 16px 0 4px; }
+  .kpi { flex: 1; border: 1px solid var(--linea); border-top: 3px solid var(--acento); padding: 10px 11px; }
+  .kpi .cifra { font-size: 19pt; font-weight: 600; line-height: 1.1; color: var(--acento); font-variant-numeric: tabular-nums; }
+  .kpi .etiqueta { font-size: 8pt; color: var(--suave); margin-top: 3px; line-height: 1.35; }
+
+  .nota { border-left: 3px solid var(--acento); background: #f2f6fa; padding: 9px 12px; margin: 10px 0 14px; font-size: 9pt; }
+  .nota-ok { border-left-color: var(--ok); background: var(--ok-bg); }
+  .nota-alerta { border-left-color: var(--alerta); background: var(--alerta-bg); }
+  .nota strong { display: block; margin-bottom: 3px; }
+
+  .bug { border: 1px solid var(--linea); border-left: 4px solid var(--fallo); padding: 9px 12px; margin: 0 0 10px; break-inside: avoid; }
+  .bug .cabecera { font-weight: 600; font-size: 10pt; margin-bottom: 4px; }
+  .bug .num-bug { color: var(--fallo); font-variant-numeric: tabular-nums; }
+  .bug .donde { font-size: 8.4pt; color: var(--suave); font-family: Consolas, monospace; margin-bottom: 5px; }
+  .bug p { margin: 0 0 5px; font-size: 9.2pt; }
+  .bug p:last-child { margin-bottom: 0; }
+  .bug .impacto { font-size: 8.6pt; color: var(--suave); }
+  .bug .impacto b { color: var(--tinta); }
+
+  .barra-fondo { display: block; background: #e9edf2; height: 11px; position: relative; border-radius: 2px; min-width: 30px; }
+  .barra { display: block; height: 11px; border-radius: 2px; }
+  .barra.antes { background: #b8434a; }
+  .barra.despues { background: #2f7d55; }
+
+  ul { margin: 0 0 10px; padding-left: 18px; }
+  li { margin-bottom: 4px; }
+
+  .salto { break-before: page; }
+  .juntos { break-inside: avoid; }
+
+  footer { margin-top: 26px; padding-top: 8px; border-top: 1px solid var(--linea); font-size: 8pt; color: var(--suave); }
+</style>
+</head>
+<body>
+
+<div class="portada">
+  <h1>Refactorización del backend Calendario</h1>
+  <div class="subtitulo">Optimización de rendimiento, corrección de errores y limpieza estructural</div>
+  <div class="meta">
+    <span><b>Proyecto:</b> CCASolutions / Calendario (Spring Boot 4.0.2, Java 17)</span>
+    <span><b>Rama:</b> backup_claudeveloper_2026-09-06</span>
+    <span><b>Base:</b> 6e1088f</span>
+    <span><b>Fecha:</b> 6 de septiembre de 2026</span>
+  </div>
+</div>
+
+<div class="destacados">
+  <div class="kpi"><div class="cifra">9,8&times;</div><div class="etiqueta">más rápida la conversión de una fecha actual (491&nbsp;ms &rarr; 50&nbsp;ms)</div></div>
+  <div class="kpi"><div class="cifra">16</div><div class="etiqueta">errores corregidos, uno de ellos una caída con HTTP&nbsp;500</div></div>
+  <div class="kpi"><div class="cifra">175</div><div class="etiqueta">fechas comparadas byte a byte: respuesta idéntica a la versión original</div></div>
+  <div class="kpi"><div class="cifra">~10<sup>9</sup></div><div class="etiqueta">comparaciones eliminadas en cada proceso de poblado de la BD</div></div>
+</div>
+
+<h2>1. Resumen</h2>
+
+<p>Se ha revisado el proyecto completo (29 clases de servicio, controladores, repositorios y entidades) con dos
+objetivos: hacerlo más rápido y corregir los defectos encontrados por el camino. El trabajo se ha hecho de forma
+conservadora: <strong>salvo en los puntos que se documentan como corrección de un error, la respuesta del API es
+exactamente la misma que antes</strong>, y eso se ha comprobado de forma automática comparando la salida de las dos
+versiones sobre 175 fechas repartidas entre los años 1401 y 2098.</p>
+
+<p>El resultado principal es que el endpoint de conversión de fechas ha pasado de tardar entre 25 y 492&nbsp;ms
+(según lo lejos que estuviera la fecha del año de referencia del calendario) a tardar entre 20 y 52&nbsp;ms de forma
+prácticamente plana. Para las fechas que realmente se consultan a diario, la mejora es de casi diez veces.</p>
+
+<h2>2. Cómo se ha verificado</h2>
+
+<p>Antes de tocar nada se levantó la versión original en el puerto 8082 y la refactorizada en el 8081, ambas contra
+la misma base de datos MySQL de desarrollo, y se compararon las respuestas JSON completas:</p>
+
+<table>
+  <thead><tr><th>Comprobación</th><th>Alcance</th><th class="num">Resultado</th></tr></thead>
+  <tbody>
+    <tr><td>Comparación byte a byte de la respuesta JSON</td><td>175 fechas (5 por año, en 35 años entre 1401 y 2098)</td><td class="num"><b>175 idénticas / 0 distintas</b></td></tr>
+    <tr><td>Fechas límite del rango soportado</td><td>2099-12-31, primer y último año con datos</td><td class="num">Corregida (antes HTTP&nbsp;500)</td></tr>
+    <tr><td>Tests unitarios nuevos de las utilidades de búsqueda</td><td>9 tests, contrastados contra la lógica original por fuerza bruta</td><td class="num">9 / 9 correctos</td></tr>
+    <tr><td>Suite completa (<code>mvn clean test</code>)</td><td>Incluye la carga del contexto de Spring</td><td class="num">10 / 10 correctos</td></tr>
+    <tr><td>Prueba de humo del endpoint de poblado</td><td>Con todas las tablas llenas: se ejercitan las guardas sin escribir</td><td class="num">HTTP&nbsp;200, sin escrituras</td></tr>
+  </tbody>
+</table>
+
+<div class="nota nota-alerta">
+  <strong>Lo que no se ha podido ejecutar</strong>
+  La ruta de poblado de la base de datos no se ha ejecutado de principio a fin, porque requiere partir de una base de
+  datos vacía y hacer varios miles de llamadas a la API externa de OPALE. Sus cambios están verificados por revisión,
+  por los tests de las utilidades de búsqueda en las que se apoyan y por la prueba de humo de las guardas, pero no por
+  una ejecución real. Es lo primero que conviene probar en un entorno desechable.
+</div>
+
+<h2>3. Rendimiento del endpoint de conversión</h2>
+
+<p>Medición con <code>curl</code> reutilizando conexión, media de 30 peticiones tras 10 de calentamiento, sobre la
+misma base de datos y la misma máquina. La columna «antes» es el código de <code>6e1088f</code> sin tocar.</p>
+
+<table>
+  <thead>
+    <tr><th>Fecha consultada</th><th class="num">Antes</th><th class="num">Después</th><th class="num">Mejora</th><th style="width:34%">Comparativa</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1440-06-01</td><td class="num">25 ms</td><td class="num">20 ms</td><td class="num">1,3&times;</td>
+      <td><span class="barra-fondo"><span class="barra antes" style="width:5%"></span></span><span class="barra-fondo" style="margin-top:2px"><span class="barra despues" style="width:4%"></span></span></td></tr>
+    <tr><td>1600-06-01</td><td class="num">119 ms</td><td class="num">31 ms</td><td class="num">3,8&times;</td>
+      <td><span class="barra-fondo"><span class="barra antes" style="width:24%"></span></span><span class="barra-fondo" style="margin-top:2px"><span class="barra despues" style="width:6%"></span></span></td></tr>
+    <tr><td>1700-06-01</td><td class="num">186 ms</td><td class="num">35 ms</td><td class="num">5,3&times;</td>
+      <td><span class="barra-fondo"><span class="barra antes" style="width:38%"></span></span><span class="barra-fondo" style="margin-top:2px"><span class="barra despues" style="width:7%"></span></span></td></tr>
+    <tr><td>1800-06-01</td><td class="num">440 ms</td><td class="num">50 ms</td><td class="num">8,8&times;</td>
+      <td><span class="barra-fondo"><span class="barra antes" style="width:89%"></span></span><span class="barra-fondo" style="margin-top:2px"><span class="barra despues" style="width:10%"></span></span></td></tr>
+    <tr><td>1900-06-01</td><td class="num">425 ms</td><td class="num">28 ms</td><td class="num">15,2&times;</td>
+      <td><span class="barra-fondo"><span class="barra antes" style="width:86%"></span></span><span class="barra-fondo" style="margin-top:2px"><span class="barra despues" style="width:6%"></span></span></td></tr>
+    <tr><td>2000-06-01</td><td class="num">456 ms</td><td class="num">52 ms</td><td class="num">8,8&times;</td>
+      <td><span class="barra-fondo"><span class="barra antes" style="width:93%"></span></span><span class="barra-fondo" style="margin-top:2px"><span class="barra despues" style="width:11%"></span></span></td></tr>
+    <tr><td><b>2026-09-06</b> (hoy)</td><td class="num"><b>491 ms</b></td><td class="num"><b>50 ms</b></td><td class="num"><b>9,8&times;</b></td>
+      <td><span class="barra-fondo"><span class="barra antes" style="width:100%"></span></span><span class="barra-fondo" style="margin-top:2px"><span class="barra despues" style="width:10%"></span></span></td></tr>
+    <tr><td>2099-06-01</td><td class="num">492 ms</td><td class="num">46 ms</td><td class="num">10,7&times;</td>
+      <td><span class="barra-fondo"><span class="barra antes" style="width:100%"></span></span><span class="barra-fondo" style="margin-top:2px"><span class="barra despues" style="width:9%"></span></span></td></tr>
+  </tbody>
+</table>
+
+<h3>De dónde venía el coste</h3>
+
+<p>El tiempo crecía de forma lineal con la distancia entre la fecha consultada y el métono invernal apofasal remoto
+de referencia (año 1433). El motivo estaba en <code>UtilsServiceImpl.getDatosCosmicos</code>:</p>
+
+<pre><code>datos.setLunas(lunasRepository.findByDateBetween(
+        lastMetonIApofasalRemoto.getDate().minusYears(1),   // año 1432
+        dateO.plusYears(1)));                               // año 2027</code></pre>
+
+<p>Es decir, cada petición cargaba como entidades JPA <strong>todas las fases lunares de casi seiscientos años</strong>:
+más de 72.000 filas de las 103.802 que tiene la tabla, para después recorrerlas cinco veces en memoria. De todo ese
+intervalo el cálculo sólo necesitaba dos cosas: las fases de los años inmediatamente anteriores y posteriores a la
+fecha, y las lunas nuevas selectas (los aponovos) del intervalo completo, que son unas 450 filas.</p>
+
+<p>La consulta se ha partido en esas dos piezas y el recuento de lunas nuevas desde el último aponovo se resuelve
+ahora con un <code>COUNT</code> sobre el índice <code>(nueva, date)</code> en vez de recorriendo la lista. El conjunto
+de filas que ven los cálculos es exactamente el mismo, y de ahí que las 175 respuestas comparadas sean idénticas.</p>
+
+<div class="salto"></div>
+
+<h2>4. Errores encontrados y corregidos</h2>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">01</span> &nbsp;Caída con HTTP 500 en las fechas sin solsticio posterior</div>
+  <div class="donde">SeasonsServiceImpl.getVAUSeason · FestividadesServiceImpl · NotableEventServiceImpl</div>
+  <p>Las variables <code>lastSoe</code> y <code>nextSoe</code> se inicializaban con <code>new SolsticiosYEquinocciosEntity()</code>
+  en lugar de <code>null</code>. El control <code>if (lastSoe != null &amp;&amp; nextSoe != null)</code> nunca fallaba, así que
+  cuando no había solsticio posterior se llamaba a <code>ChronoUnit.SECONDS.between()</code> con una fecha nula.</p>
+  <p class="impacto"><b>Comprobado:</b> <code>GET /api/conversiontovau/selected?date=2099-12-31</code> devolvía
+  <code>HTTP 500 — NullPointerException: temporal</code>. Tras el arreglo devuelve 200 con la conversión completa.
+  Afecta a todo el final del rango soportado.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">02</span> &nbsp;Se comprueba el apoperi anterior y se usa el próximo</div>
+  <div class="donde">NotableEventServiceImpl.getEventoProximo</div>
+  <p>El control era <code>if (…getApoperiAnterior() != null)</code> pero dentro se leía
+  <code>…getApoperiProximo().getDate()</code>. Con un apoperi anterior pero ninguno posterior, NullPointerException.</p>
+  <p class="impacto"><b>Impacto:</b> caída del endpoint en el extremo superior del rango de datos.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">03</span> &nbsp;Los eclipses solares se guardaban marcados como lunares</div>
+  <div class="donde">EclipsesServiceImpl.actualizarEclipsesSolaresDelAnyo</div>
+  <p>Al construir la fila de la tabla histórica <code>all_eclipses</code> se hacía <code>allEclipseParaDB.setDeLuna(true)</code>
+  en el método de eclipses solares (copia y pega del método lunar). Corregido a <code>setDeSol(true)</code>.</p>
+  <p class="impacto"><b>Impacto:</b> la tabla <code>all_eclipses</code> queda con <code>de_sol = 0</code> en todas sus filas.
+  Los datos ya cargados con la versión anterior están mal y habría que regenerarlos.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">04</span> &nbsp;Buscadores que devuelven una entidad vacía en vez de <code>null</code></div>
+  <div class="donde">MetonsServiceImpl.getLastMetonIApofasalRemoto / getLastMetonINForDate · LunasServiceImpl.getComportamientoLuna · MonthServiceImpl</div>
+  <p>Los buscadores partían de <code>new MetonsEntity()</code> y devolvían ese objeto vacío cuando no encontraban nada.
+  <code>UtilsServiceImpl</code> comprobaba <code>!= null</code>, el control nunca saltaba y el fallo aparecía varias
+  llamadas después, al leer <code>.getDate()</code> del objeto vacío. Ahora devuelven <code>null</code> y quien los llama lo trata.</p>
+  <p class="impacto"><b>Impacto:</b> el mismo patrón se repetía en cuatro clases; además hacía inútil todo el bloque de
+  mensajes de error de <code>getDatosCosmicos</code>.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">05</span> &nbsp;<code>||</code> donde debía ir <code>&amp;&amp;</code></div>
+  <div class="donde">MonthServiceImpl.getVAUMonth</div>
+  <p><code>if (lastLNBeforeNextSOE != null || firstLNAfterLastSOE != null)</code> y dentro se desreferencian las dos
+  variables. Basta con que una sea nula para provocar un NullPointerException.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">06</span> &nbsp;El apellido del métono apórico se decidía con el contador equivocado</div>
+  <div class="donde">MetonsServiceImpl.getVAUMeton</div>
+  <p>El bloque que asigna «(Selecto)» o «(Invertido)» al métono invernal apórico comprobaba
+  <code>yearOfTheMetonIN != 0</code> en vez de <code>yearOfTheMetonIA != 0</code>.</p>
+  <p class="impacto"><b>Impacto:</b> apellido incorrecto en el métono apórico cuando ambos contadores no coinciden.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">07</span> &nbsp;<code>setNuevo(true)</code> incondicional pisaba el valor real</div>
+  <div class="donde">CasalerosServiceImpl.getCasalero</div>
+  <p>Se hacía <code>casaleroDTO.setNuevo(metono.isNuevo())</code> y cinco líneas más abajo
+  <code>casaleroDTO.setNuevo(true)</code>, de modo que todos los casaleros metónicos salían como «nuevo».</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">08</span> &nbsp;Accesos a <code>.get(0)</code> sin comprobar la lista</div>
+  <div class="donde">EclipenosServiceImpl.getVAUEclipeno · MetonsServiceImpl.getVAUMeton y getMetonoInvernalApofasalRemoto</div>
+  <p>Tres listas se construían filtrando y se leía su primer elemento sin comprobar que no estuvieran vacías:
+  <code>IndexOutOfBoundsException</code> para cualquier fecha sin fenómenos entre el eclípeno de referencia y la fecha.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">09</span> &nbsp;Una festividad sin calcular contaba como «festividad de hoy»</div>
+  <div class="donde">FestividadesServiceImpl.getFestividades</div>
+  <p>La clasificación era <code>if (festividad.getDiasDeDiferenciaConDate() == 0) → actual</code>, y el DTO nace con
+  ese contador a cero y la fecha a <code>null</code>. Cualquier festividad que no llegara a calcularse entraba en el
+  grupo de las de hoy. Ahora se descartan las que no tienen fecha.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">10</span> &nbsp;Controles de URL de API que nunca saltaban</div>
+  <div class="donde">EclipsesServiceImpl.poblateEclipsesFromOpale</div>
+  <p><code>apiEclipsesLunares</code> y <code>apiEclipsesSolares</code> se inicializaban a <code>""</code> y luego se
+  comprobaba <code>!= null</code>. Si faltaba la fila en <code>datos</code>, se llamaba a la API con una URL vacía en
+  lugar de avisar. Ahora se inicializan a <code>null</code> y el control funciona.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">11</span> &nbsp;NullPointerException al arrancar el poblado sin la fila <code>APG</code></div>
+  <div class="donde">ApogeosYPerigeosLunaServiceImpl.poblateApogeosFromOpale</div>
+  <p>Era el único de los cinco poblados que llamaba a <code>apiGetApogeosUrl.getValor()</code> sin comprobar antes que
+  la fila existiera.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">12</span> &nbsp;<code>findAll()</code> sin <code>ORDER BY</code> usado por posición</div>
+  <div class="donde">MidsisonServiceImpl.poblateMidsison</div>
+  <p>Los midsisons se calculan emparejando cada solsticio o equinoccio con el siguiente:
+  <code>allSoesFromDB.get(i)</code> con <code>get(i+1)</code>. La lista venía de un <code>findAll()</code> sin orden
+  garantizado. Sustituido por <code>findAllByOrderByDateAsc()</code>.</p>
+  <p class="impacto"><b>Impacto:</b> latente. Hoy MySQL devuelve las filas en orden de clave primaria y coincide con el
+  cronológico, pero no está garantizado y un cambio de plan de ejecución produciría midsisons mal calculados en silencio.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">13</span> &nbsp;Los endpoints de descarga descartaban el resultado</div>
+  <div class="donde">DownloadController.getPDF y getCalendar</div>
+  <p>Se llamaba a <code>this.downloadService.getPDF()</code> sin recoger el valor devuelto y se respondía siempre
+  <code>new byte[0]</code> con HTTP 200. Además, <code>getcalendar</code> recibía el DTO como <code>@RequestParam</code>,
+  y Spring no puede construir un objeto complejo a partir de un parámetro de query. Ahora se devuelve el contenido real,
+  el DTO llega como <code>@RequestBody</code> y, mientras el servicio siga sin implementar, se responde
+  <code>501 Not Implemented</code> en vez de un 200 vacío.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">14</span> &nbsp;Semana y día sin luna nueva anterior</div>
+  <div class="donde">LunasServiceImpl.getVauWeekAndDay · DaysServiceImpl.getDiasASumarALaLunaNueva</div>
+  <p>Si no había ninguna luna nueva anterior a la fecha, el contador de días se quedaba en <code>Long.MAX_VALUE</code> y
+  se consultaba el día número <code>Long.MAX_VALUE - 21</code>, que devuelve <code>null</code> y revienta al leer su nombre.
+  Lo mismo en <code>getDiasASumarALaLunaNueva</code>, que no comprobaba ni la semana ni el día antes de usarlos.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">15</span> &nbsp;«hace 9223372036854775807 días»</div>
+  <div class="donde">NotableEventServiceImpl.getEventoPasado / getEventoProximo</div>
+  <p>Cuando no había ningún fenómeno a un lado, el mínimo se quedaba en <code>Long.MAX_VALUE</code> y se componía el
+  texto con ese número. Ahora se devuelve cadena vacía.</p>
+</div>
+
+<div class="bug">
+  <div class="cabecera"><span class="num-bug">16</span> &nbsp;Mensajes de error invertidos o equivocados</div>
+  <div class="donde">EclipenosServiceImpl.poblateEclipenos · EclipsesServiceImpl.actualizarEclipsesLunaresDelAnyo</div>
+  <p>El primero avisaba «No hay métonos en la base de datos» precisamente en la rama en la que sí los había
+  (<code>else if (!metonos.isEmpty())</code>). El segundo registraba «Actualizando los eclipses solares» dentro del
+  método de eclipses lunares, dos veces.</p>
+</div>
+
+<div class="salto"></div>
+
+<h2>5. Optimización del poblado de la base de datos</h2>
+
+<p>El proceso de poblado cruzaba tablas completas con bucles anidados. Con los recuentos reales de la base de datos
+actual (103.802 lunas, 29.196 apogeos y perigeos, 9.882 eclipses, 8.396 solsticios y equinoccios, 8.395 midsisons,
+1.755 métonos, 221 eclípenos) esos cruces suponen del orden de <strong>cinco mil millones de comparaciones</strong>.</p>
+
+<p>Como todos los cruces buscan lo mismo —fenómenos que caen dentro del mismo día sideral (86.164 s)— se han sustituido
+por un índice ordenado por fecha con búsqueda binaria (<code>IndiceTemporal</code>), que sólo recorre las pocas filas
+realmente cercanas.</p>
+
+<table>
+  <thead><tr><th>Proceso</th><th class="num">Comparaciones antes</th><th>Después</th></tr></thead>
+  <tbody>
+    <tr><td><code>updateLunasYApoperisConSelectoOInvertido</code><br><span style="font-size:8.3pt;color:#5b6270">apoperis &times; lunas</span></td><td class="num">~3.030.000.000</td><td>29.196 búsquedas binarias</td></tr>
+    <tr><td><code>poblateMidsison</code><br><span style="font-size:8.3pt;color:#5b6270">midsisons &times; (lunas + apoperis + eclipses)</span></td><td class="num">~1.200.000.000</td><td>3 &times; 8.395 búsquedas binarias</td></tr>
+    <tr><td><code>poblateMetonos</code><br><span style="font-size:8.3pt;color:#5b6270">soes &times; (lunas + apoperis)</span></td><td class="num">~1.118.000.000</td><td>2 &times; 8.396 búsquedas binarias</td></tr>
+    <tr><td><code>poblateMetonos</code> (marcado de apofasales)</td><td class="num">~51.000.000</td><td>1.755 búsquedas en ventana</td></tr>
+  </tbody>
+</table>
+
+<h3>Consultas y escrituras</h3>
+
+<table>
+  <thead><tr><th>Proceso</th><th>Antes</th><th>Después</th></tr></thead>
+  <tbody>
+    <tr><td><code>poblateEclipenos</code></td><td>1.755 <code>SELECT … findByYear</code>, uno por métono, y un <code>INSERT</code> por eclípeno</td><td>1 <code>SELECT</code> + agrupación en memoria + <code>saveAll</code></td></tr>
+    <tr><td><code>poblateCasaleros</code></td><td>~660 <code>SELECT</code> (2 ó 3 por eclípeno) + 221 <code>INSERT</code> sueltos</td><td>2 <code>SELECT</code> + búsqueda binaria + <code>saveAll</code></td></tr>
+    <tr><td><code>updateLunasYApoperis…</code></td><td>Hasta 2 <code>UPDATE</code> por coincidencia, dentro del bucle</td><td>Dos <code>saveAll</code> al final</td></tr>
+    <tr><td><code>poblateLunasFromOpale</code></td><td>Un <code>INSERT</code> por fase lunar (más de 200.000)</td><td><code>saveAll</code> por año</td></tr>
+    <tr><td><code>poblateEclipses…</code> y <code>poblateSolsticios…</code></td><td>Un <code>INSERT</code> por fila</td><td><code>saveAll</code> por año</td></tr>
+    <tr><td>Comprobación «¿ya hay datos?»</td><td><code>findAll()</code> de la tabla entera para mirar si está vacía</td><td><code>count()</code></td></tr>
+  </tbody>
+</table>
+
+<p>Además se ha activado el envío por lotes de Hibernate (<code>hibernate.jdbc.batch_size=500</code>,
+<code>order_inserts</code>, <code>order_updates</code>) y <code>rewriteBatchedStatements=true</code> en la URL de MySQL,
+sin lo cual <code>saveAll</code> seguiría enviando una sentencia por fila.</p>
+
+<h2>6. Cambios estructurales</h2>
+
+<h3>Tres utilidades que eliminan la duplicación</h3>
+<ul>
+  <li><code>Utils/Vecindad</code> — «el fenómeno de hoy, el anterior más próximo y el siguiente más próximo». Sustituye a
+  los bucles <code>diasMinimosDeDiferenciaEntreXPasadoYDate</code> que estaban repetidos catorce veces. Recorre la lista
+  una sola vez y convierte cada fecha una sola vez, en lugar de las tres o cuatro conversiones por elemento del original.</li>
+  <li><code>Utils/IndiceTemporal</code> — índice ordenado con búsqueda binaria para «qué hay a menos de un día sideral de
+  este instante» y «cuál es el primero posterior a esta fecha».</li>
+  <li><code>Utils/FechasApi</code> — troceo de las fechas ISO de OPALE, que llegan con signo para los años anteriores al 1
+  (<code>-4700-01-01T…</code>) y no se pueden parsear directamente. Estaba copiado literalmente en cuatro sitios.</li>
+</ul>
+
+<h3>Caché de las tablas de referencia</h3>
+<p>Cada conversión de fecha lanzaba entre cinco y ocho consultas a tablas de menos de veinte filas (días, semanas, meses,
+estaciones y festividades) que sólo cambian al repoblar. Se ha añadido <code>TablasReferenciaService</code> con
+<code>@Cacheable</code> sobre un <code>ConcurrentMapCacheManager</code>, y <code>DBServiceImpl</code> vacía la caché al
+terminar el poblado.</p>
+
+<h3>Simplificación de <code>NotableEventServiceImpl</code></h3>
+<p>Era la clase más grande del proyecto (1.015 líneas). Contenía seis bucles idénticos salvo por el tipo del elemento y
+<strong>tres copias literales del mismo bloque de noventa líneas</strong> que construye el midsison, una por cada caso
+(pasado, actual y futuro). Ha quedado en 651 líneas con el mismo comportamiento.</p>
+
+<table>
+  <thead><tr><th>Clase</th><th class="num">Antes</th><th class="num">Después</th></tr></thead>
+  <tbody>
+    <tr><td>NotableEventServiceImpl</td><td class="num">1.015</td><td class="num">651</td></tr>
+    <tr><td>MonthServiceImpl</td><td class="num">359</td><td class="num">285</td></tr>
+    <tr><td>DatesServiceImpl</td><td class="num">153</td><td class="num">113</td></tr>
+    <tr><td>SeasonsServiceImpl</td><td class="num">138</td><td class="num">123</td></tr>
+  </tbody>
+</table>
+
+<p>En <code>MonthServiceImpl</code> se ha eliminado además un bucle completo sobre las lunas llenas cuyos resultados no
+se usaban en ninguna parte (variables marcadas con «ya tendrá utilidad»), y dos ramas <code>if (caeEnLunaNueva)</code>
+inalcanzables porque el caso ya se había resuelto y devuelto antes.</p>
+
+<h3>Registro de trazas</h3>
+<p>Había <strong>113 llamadas a <code>System.out.println</code></strong>, algunas dentro de bucles que se ejecutan cientos de
+miles de veces durante el poblado. <code>System.out</code> está sincronizado y no se puede filtrar por nivel. Todas se han
+sustituido por SLF4J con el nivel adecuado (<code>debug</code> para las trazas de bucle, <code>info</code> para el progreso,
+<code>warn</code> y <code>error</code> para los problemas), y las excepciones se registran como excepción, con su traza,
+en lugar de concatenarlas a una cadena.</p>
+
+<h3>Persistencia y configuración</h3>
+<ul>
+  <li><code>@Transactional(readOnly = true)</code> en la ruta de lectura: evita el trabajo de <em>dirty checking</em> de
+  Hibernate sobre las miles de entidades cargadas por petición.</li>
+  <li><code>spring.jpa.open-in-view=false</code>: la conexión se devuelve al pool al salir del servicio, no al serializar
+  la respuesta.</li>
+  <li>Índice <code>idx_midsison_date</code> declarado en la entidad. Era la única tabla consultada por fecha sin índice;
+  se ha verificado que <code>ddl-auto=update</code> lo ha creado.</li>
+  <li>Usuario, contraseña, host y puerto de la base de datos leídos de variables de entorno con los valores actuales como
+  valor por defecto, para no dejar la contraseña escrita en el repositorio (<code>${DB_PASSWORD:1234}</code>).</li>
+  <li>Los controladores se han reordenado con salidas tempranas en lugar de un <code>if</code> anidado a cuatro niveles
+  con una variable de estado mutable. <strong>Los códigos HTTP no se han cambiado</strong> salvo en los dos endpoints de
+  descarga, para no romper el frontal.</li>
+</ul>
+
+<div class="salto"></div>
+
+<h2>7. Puntos que conviene revisar</h2>
+
+<div class="nota nota-alerta">
+  <strong>Prioridad de festividades cuando coinciden varias el mismo día</strong>
+  <p style="margin:0"><code>FestividadesServiceImpl.getFestividadActual</code> recorre un array llamado <code>prioridad</code>
+  sin cortar al encontrar la primera coincidencia, de modo que <em>gana la última</em>, no la primera. Puede ser
+  intencionado (el último elemento es el cambio de eclípeno invernal apofasal remoto, el fenómeno más excepcional) o puede
+  ser un bucle al que le falta el <code>break</code>. Al no poder deducirlo con certeza <strong>se ha conservado el
+  comportamiento exacto</strong>, escribiéndolo ahora de forma explícita (recorrido inverso con salida en la primera
+  coincidencia) y documentando el criterio. Conviene confirmar cuál es el orden querido.</p>
+</div>
+
+<div class="nota">
+  <strong>El midsison se calcula dos veces</strong>
+  <p style="margin:0">La tabla <code>midsison</code> tiene los 8.395 midsisons ya calculados y persistidos, y
+  <code>getDatosCosmicos</code> los carga en cada petición, pero <code>NotableEventServiceImpl</code> y
+  <code>FestividadesServiceImpl</code> los vuelven a calcular en memoria a partir de los solsticios. La lista cargada de
+  la base de datos sólo se usa para comprobar que no está vacía. Unificarlo simplificaría bastante las dos clases, pero
+  las reglas de <code>selecto</code> e <code>invertido</code> difieren ligeramente entre las dos versiones, así que no se
+  ha tocado sin poder contrastar cuál es la correcta.</p>
+</div>
+
+<div class="nota">
+  <strong>Seguridad</strong>
+  <p style="margin:0">Los tres controladores llevan <code>@CrossOrigin("*")</code>, y el endpoint de poblado se protege
+  con una única contraseña, cuyo valor por defecto (<code>admintest</code>) está escrito en el código. No es un fallo
+  introducido ni corregido aquí, pero conviene tenerlo presente antes de exponer el servicio.</p>
+</div>
+
+<div class="nota">
+  <strong>Fechas fuera de rango</strong>
+  <p style="margin:0">Una fecha fuera del rango soportado sigue devolviendo <code>HTTP 200</code> con
+  <code>fechaEncontrada: false</code>. Devolver un <code>400</code> sería más correcto, pero cambiar el código de estado
+  puede romper el frontal, así que se ha dejado como estaba.</p>
+</div>
+
+<h2>8. Ficheros tocados</h2>
+
+<table>
+  <thead><tr><th>Tipo</th><th>Ficheros</th></tr></thead>
+  <tbody>
+    <tr><td>Servicios reescritos o revisados</td><td>Los 19 <code>ServiceImpl</code></td></tr>
+    <tr><td>Controladores</td><td><code>DatesController</code>, <code>DBController</code>, <code>DownloadController</code></td></tr>
+    <tr><td>Repositorios</td><td><code>LunasRepository</code> (2 consultas nuevas), <code>SolsticiosYEquinocciosRepository</code> (1), <code>DaysRepository</code> y <code>WeeksRepository</code> (tipos de parámetro corregidos)</td></tr>
+    <tr><td>Entidades</td><td><code>MidsisonEntity</code> (índice por fecha)</td></tr>
+    <tr><td>Configuración</td><td><code>ClasesBean</code>, <code>application.properties</code></td></tr>
+    <tr><td>Clases nuevas</td><td><code>Utils/Vecindad</code>, <code>Utils/IndiceTemporal</code>, <code>Utils/FechasApi</code>, <code>TablasReferenciaService</code> y su implementación</td></tr>
+    <tr><td>Tests nuevos</td><td><code>IndiceTemporalTest</code> (5), <code>VecindadTest</code> (4)</td></tr>
+  </tbody>
+</table>
+
+<div class="nota nota-ok">
+  <strong>Estado</strong>
+  Compila, arranca contra la base de datos de desarrollo, pasa los 10 tests y devuelve exactamente la misma respuesta que
+  la versión anterior en las 175 fechas comparadas, más una fecha adicional en la que la versión anterior fallaba.
+  Nada se ha subido ni se ha hecho commit: los cambios están en el árbol de trabajo de la rama
+  <code>backup_claudeveloper_2026-09-06</code>.
+</div>
+
+<footer>
+  Informe generado el 6 de septiembre de 2026 · Mediciones tomadas con la base de datos <code>calendar_db</code>
+  (MySQL 9.4) en la máquina de desarrollo · Base de comparación: commit <code>6e1088f</code>
+</footer>
+
+</body>
+</html>

@@ -9,6 +9,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One eclipeno, table {@code eclipenos}: a fasal meton that also coincides with an
+ * eclipse. It is the rarest cycle of the calendar, around two hundred rows in two thousand
+ * years, and the origin every other VAU counter hangs from.
+ * ES: Un eclípeno, tabla {@code eclipenos}: un métono fasal que además coincide con un
+ * eclipse. Es el ciclo más excepcional del calendario, unas doscientas filas en dos mil
+ * años, y el origen del que cuelgan todos los demás contadores VAU.
+ */
 @Entity
 @Table(name="eclipenos")
 public class EclipenosEntity implements Serializable{

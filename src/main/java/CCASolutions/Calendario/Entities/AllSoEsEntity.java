@@ -8,6 +8,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One solstice or equinox in the historical table {@code all_soes}, with the date split
+ * into numeric fields. Kept as a record only; the calendar uses the sye table.
+ * ES: Un solsticio o equinoccio en la tabla histórica {@code all_soes}, con la fecha troceada
+ * en campos numéricos. Se conserva sólo como registro; el calendario usa la tabla sye.
+ */
 @Entity
 @Table(name="all_soes")
 public class AllSoEsEntity implements Serializable{

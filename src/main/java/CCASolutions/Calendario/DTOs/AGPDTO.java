@@ -3,6 +3,10 @@ package CCASolutions.Calendario.DTOs;
 import java.util.List;
 
 
+/**
+ * EN: Raw envelope of the OPALE apogee and perigee API.
+ * ES: Envoltorio en bruto de la API de apogeos y perigeos de OPALE.
+ */
 public class AGPDTO {
 
     private Response response;

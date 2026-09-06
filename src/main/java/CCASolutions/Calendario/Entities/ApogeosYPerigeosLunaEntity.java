@@ -9,6 +9,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One apogee or perigee of the moon, table {@code apo_peri_lunas}: the instant when it
+ * is farthest from or closest to the Earth, with the distance in kilometres. The selecto and
+ * invertido flags mirror those of the moon phase it is paired with.
+ * ES: Un apogeo o perigeo de la luna, tabla {@code apo_peri_lunas}: el instante en que está
+ * más lejos o más cerca de la Tierra, con la distancia en kilómetros. Las banderas selecto e
+ * invertido son el reflejo de las de la fase lunar con la que se empareja.
+ */
 @Entity
 @Table(name="apo_peri_lunas")
 public class ApogeosYPerigeosLunaEntity implements Serializable {

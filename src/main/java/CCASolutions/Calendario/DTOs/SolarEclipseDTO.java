@@ -1,5 +1,9 @@
 package CCASolutions.Calendario.DTOs;
 
+/**
+ * EN: One solar eclipse as the OPALE API returns it: instant and type.
+ * ES: Un eclipse solar tal y como lo devuelve la API de OPALE: instante y tipo.
+ */
 public class SolarEclipseDTO {
 
     private String date;

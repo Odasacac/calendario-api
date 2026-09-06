@@ -2,6 +2,12 @@ package CCASolutions.Calendario.DTOs;
 
 import java.time.LocalDate;
 
+/**
+ * EN: The casalero of an eclipeno: the name it gets from the first phenomenon happening
+ * after it. "Metónico" when that is a meton, "Eclipelar" when it is an absolute eclipse.
+ * ES: El casalero de un eclípeno: el nombre que recibe del primer fenómeno que ocurre
+ * después de él. "Metónico" cuando es un métono, "Eclipelar" cuando es un eclipse absoluto.
+ */
 public class CasaleroDTO {
 	
 	private LocalDate dateO;	

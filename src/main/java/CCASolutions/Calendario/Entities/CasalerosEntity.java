@@ -9,6 +9,14 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One casalero, table {@code casaleros}: the name an eclipeno gets from the first
+ * phenomenon happening after it, either a meton or an absolute eclipse. There is exactly one
+ * per eclipeno.
+ * ES: Un casalero, tabla {@code casaleros}: el nombre que recibe un eclípeno del primer
+ * fenómeno que ocurre después de él, sea un métono o un eclipse absoluto. Hay exactamente
+ * uno por eclípeno.
+ */
 @Entity
 @Table(name="casaleros")
 public class CasalerosEntity implements Serializable {

@@ -9,6 +9,12 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+/**
+ * EN: One solstice or equinox, table {@code sye}: four per year from year 1 to 2100. The
+ * startingSeason field says which season it opens: 1 winter, 2 spring, 3 summer, 4 autumn.
+ * ES: Un solsticio o equinoccio, tabla {@code sye}: cuatro por año del 1 al 2100. El campo
+ * startingSeason indica qué estación abre: 1 invierno, 2 primavera, 3 verano, 4 otoño.
+ */
 @Entity
 @Table(name="sye")
 public class SolsticiosYEquinocciosEntity implements Serializable {
