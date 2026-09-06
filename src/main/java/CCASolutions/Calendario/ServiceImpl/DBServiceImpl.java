@@ -67,43 +67,80 @@ public class DBServiceImpl implements DBService {
 	
 	public String poblateDB(PoblateDBDTO poblateDBDTO) {
 		
-		String resultado = "~ Resultados población de la Base de Datos ~";
+		String resultado = "";
 		
-		try {
+		boolean poblar= false;
+		boolean editar = false;
+		boolean llamadasAApis = false;
+		boolean ejecutarPoblate = false;
+		
+		if(poblateDBDTO.isVacia()) {
+			poblar = poblateDBDTO.isPoblarDesdeCero();
+			editar = poblateDBDTO.isPoblarDesdeCero();
+			llamadasAApis = poblateDBDTO.isPoblarDesdeCero();
 			
-			if(poblateDBDTO.isPoblar()) {
-				resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos();
+			if(poblateDBDTO.isPoblarDesdeCero()) {
+				System.out.println("Iniciando la población de la base de datos desde cero.");
+				ejecutarPoblate = true;
+			}
+			else {
+				System.out.println("Incluyendo base de datos SOLO adminPW.");
+				System.out.println(this.datosService.poblateSoloPassword());
+				ejecutarPoblate = false;
 			}
 			
-			if(poblateDBDTO.isLlamadasAAPis() && poblateDBDTO.isPoblar()) {
-				resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale();
-				resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeosFromOpale();
-				resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale();	
-				resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipsesFromOpale();	
-			}
-			
-			if(poblateDBDTO.isEditar()) {
-				resultado = resultado + "\n - ACTUALIZAR APOPERIS Y FASES: " + this.apogeosYPerigeosLunaService.updateLunasYApoperisConSelectoOInvertido();	
-			}
-			
-			if(poblateDBDTO.isPoblar()) {
-				resultado = resultado + "\n - MIDSISONS: " + this.midsisonService.poblateMidsison();			
-				resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();			
-				resultado = resultado + "\n - ECLIPENOS: " +this.eclipenosService.poblateEclipenos();
-				resultado = resultado + "\n - CASALEROS:" + this.casalerosService.poblateCasaleros();		
-				resultado = resultado + "\n - DÍAS: " + this.daysService.poblateDays();
-				resultado = resultado + "\n - SEMANAS: " + this.weeksService.poblateWeeks();
-				resultado = resultado + "\n - MESES: " + this.monthsService.poblateMonths();
-				resultado = resultado + "\n - SEASONS: " + this.seasonsService.poblateSeasons();
-				resultado = resultado + "\n - FESTIVIDADES: " +this.festividadesService.poblateFestividades();
-			}
-		}	
-			
-		catch(Exception e) {
-			
-			System.out.println("Error poblando la base de datos: " + e);
-			resultado = resultado + "\n - Ha habido un error poblando la base de datos: chequear logs";
 		}
+		else {
+			poblar = poblateDBDTO.isPoblar();
+			editar = poblateDBDTO.isEditar();
+			llamadasAApis = poblateDBDTO.isLlamadasAAPis();
+			System.out.println("Iniciando la actualización de la base de datos por petición externa.");
+			ejecutarPoblate = true;
+		}
+		
+		if((poblar || editar || llamadasAApis) && ejecutarPoblate) {
+			
+			try {
+				resultado = "~ Resultados población de la Base de Datos ~";
+				if(poblar) {
+					resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos(poblateDBDTO.isPoblarDesdeCero());
+				}
+				
+				if(llamadasAApis && poblar) {
+					resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale();
+					resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeosFromOpale();
+					resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale();	
+					resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipsesFromOpale();	
+				}
+				
+				if(editar) {
+					resultado = resultado + "\n - ACTUALIZAR APOPERIS Y FASES: " + this.apogeosYPerigeosLunaService.updateLunasYApoperisConSelectoOInvertido();	
+				}
+				
+				if(poblar) {
+					resultado = resultado + "\n - MIDSISONS: " + this.midsisonService.poblateMidsison();			
+					resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();			
+					resultado = resultado + "\n - ECLIPENOS: " +this.eclipenosService.poblateEclipenos();
+					resultado = resultado + "\n - CASALEROS:" + this.casalerosService.poblateCasaleros();		
+					resultado = resultado + "\n - DÍAS: " + this.daysService.poblateDays();
+					resultado = resultado + "\n - SEMANAS: " + this.weeksService.poblateWeeks();
+					resultado = resultado + "\n - MESES: " + this.monthsService.poblateMonths();
+					resultado = resultado + "\n - SEASONS: " + this.seasonsService.poblateSeasons();
+					resultado = resultado + "\n - FESTIVIDADES: " +this.festividadesService.poblateFestividades();
+				}
+			}	
+				
+			catch(Exception e) {
+				
+				System.out.println("Error poblando la base de datos: " + e);
+				resultado = resultado + "\n - Ha habido un error poblando la base de datos: chequear logs";
+			}
+		}
+		else {
+			resultado = "No se ha poblado la base de datos.";
+		}
+		
+		
 		
 		
 		return resultado;

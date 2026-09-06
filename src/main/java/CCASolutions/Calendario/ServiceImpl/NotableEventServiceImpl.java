@@ -614,9 +614,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 	
 	private String getNotableEventName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno, ApogeosYPerigeosLunaEntity apoperi, MidsisonDTO midsison) {
 		
-		String evento = "";
-		
-				
+		String evento = "";	
 		
 		if(eclipeno != null) {
 		
