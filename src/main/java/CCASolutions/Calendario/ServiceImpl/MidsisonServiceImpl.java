@@ -133,10 +133,9 @@ public class MidsisonServiceImpl implements MidsisonService{
 							
 							if(midsison.isNuevo() || midsison.isLleno()) {
 								
-								
 								for(EclipsesEntity eclipse : allEclipsesFromDB) {
 		
-									if ((eclipse.isDeSol()) || (eclipse.isDeLuna() && eclipse.isEsTotal()) && Math.abs(ChronoUnit.SECONDS.between(eclipse.getDate(), midsison.getDate())) <= 86164) {						
+									if ((eclipse.isDeSol() || (eclipse.isDeLuna() && eclipse.isEsTotal())) && Math.abs(ChronoUnit.SECONDS.between(eclipse.getDate(), midsison.getDate())) <= 86164) {						
 										midsison.setEclipse(true);
 										midsison.setEclipseId(eclipse.getId());
 									}

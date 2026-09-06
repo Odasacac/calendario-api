@@ -52,7 +52,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			LunasEntity lunaPasado = null;
 			ApogeosYPerigeosLunaEntity apoperiPasado = null;
 			SolsticiosYEquinocciosEntity soePasado = null;
-			MetonsEntity metonPasado = new MetonsEntity();
+			MetonsEntity metonPasado = null;
 			EclipsesEntity eclipsePasado = null;
 			EclipenosEntity eclipenoPasado = null;
 			MidsisonDTO midsisonPasado = null;
@@ -60,7 +60,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			LunasEntity lunaFuturo = null;
 			ApogeosYPerigeosLunaEntity apoperiFuturo = null;
 			SolsticiosYEquinocciosEntity soeFuturo = null;
-			MetonsEntity metonFuturo = new MetonsEntity();
+			MetonsEntity metonFuturo = null;
 			EclipsesEntity eclipseFuturo = null;
 			EclipenosEntity eclipenoFuturo = null;	
 			MidsisonDTO midsisonFuturo = null;
@@ -163,9 +163,11 @@ public class NotableEventServiceImpl implements NotableEventService {
 					
 					if(diasDeDiferenciaEntreMetonoPasadoYDate < diasMinimosDeDiferenciaEntreMetonoPasadoYDate) {
 						diasMinimosDeDiferenciaEntreMetonoPasadoYDate = diasDeDiferenciaEntreMetonoPasadoYDate;
+						metonPasado = new MetonsEntity();
 						metonPasado = meton;
 					}
 					else if(diasDeDiferenciaEntreMetonoPasadoYDate == diasMinimosDeDiferenciaEntreMetonoPasadoYDate) {
+						metonPasado = new MetonsEntity();
 						metonPasado = meton;
 					}
 				}	
@@ -175,9 +177,11 @@ public class NotableEventServiceImpl implements NotableEventService {
 					
 					if(diasDeDiferenciaEntreMetonoFuturoYDate < diasMinimosDeDiferenciaEntreMetonoFuturoYDate) {
 						diasMinimosDeDiferenciaEntreMetonoFuturoYDate = diasDeDiferenciaEntreMetonoFuturoYDate;
+						metonFuturo = new MetonsEntity();
 						metonFuturo= meton;
 					}
 					else if(diasDeDiferenciaEntreMetonoFuturoYDate == diasMinimosDeDiferenciaEntreMetonoFuturoYDate) {
+						metonFuturo = new MetonsEntity();
 						metonFuturo = meton;
 					}
 				}
@@ -250,7 +254,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 				boolean esFasal = false;
 				boolean esApoperico = false;
 				
-				if(Math.abs(ChronoUnit.SECONDS.between(lunaPasado.getDate(), diaDelMidsison)) <= 86164) {
+				if(lunaPasado != null && Math.abs(ChronoUnit.SECONDS.between(lunaPasado.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonPasado.setNuevo(lunaPasado.isNueva());
 					midsisonPasado.setLleno(lunaPasado.isLlena());
 					midsisonPasado.setSelecto(lunaPasado.isSelecta());
@@ -264,7 +268,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonPasado.setInvertido(lunaActual.isInvertida());
 					esFasal = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
+				else if(lunaFuturo != null && Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonPasado.setNuevo(lunaFuturo.isNueva());
 					midsisonPasado.setLleno(lunaFuturo.isLlena());
 					midsisonPasado.setSelecto(lunaFuturo.isSelecta());
@@ -272,7 +276,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					esFasal = true;
 				}
 				
-				if(Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
+				if(apoperiPasado != null && Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonPasado.setAporico(apoperiPasado.isEsApogeo());
 					midsisonPasado.setPerico(apoperiPasado.isEsPerigeo());
 					midsisonPasado.setSelecto(apoperiPasado.isEsSelecto());
@@ -286,7 +290,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonPasado.setInvertido(apoperiActual.isEsInvertido());
 					esApoperico = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
+				else if(apoperiFuturo != null && Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonPasado.setAporico(apoperiFuturo.isEsApogeo());
 					midsisonPasado.setPerico(apoperiFuturo.isEsPerigeo());
 					midsisonPasado.setSelecto(apoperiFuturo.isEsSelecto());
@@ -296,6 +300,13 @@ public class NotableEventServiceImpl implements NotableEventService {
 				
 				if(esFasal && esApoperico) {
 					midsisonPasado.setApofasal(true);
+				}
+				
+				
+				if( (eclipsePasado != null && Math.abs(ChronoUnit.SECONDS.between(eclipsePasado.getDate(), diaDelMidsison)) <= 86164)
+					|| (eclipseActual != null && Math.abs(ChronoUnit.SECONDS.between(eclipseActual.getDate(), diaDelMidsison)) <= 86164)
+					|| (eclipseFuturo != null && Math.abs(ChronoUnit.SECONDS.between(eclipseFuturo.getDate(), diaDelMidsison)) <= 86164)) {
+					midsisonPasado.setEclipse(true);
 				}
 				
 			}
@@ -308,7 +319,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 				boolean esFasal = false;
 				boolean esApoperico = false;
 				
-				if(Math.abs(ChronoUnit.SECONDS.between(lunaPasado.getDate(), diaDelMidsison)) <= 86164) {
+				if(lunaPasado != null && Math.abs(ChronoUnit.SECONDS.between(lunaPasado.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonActual.setNuevo(lunaPasado.isNueva());
 					midsisonActual.setLleno(lunaPasado.isLlena());
 					midsisonActual.setSelecto(lunaPasado.isSelecta());
@@ -322,7 +333,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonActual.setInvertido(lunaActual.isInvertida());
 					esFasal = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
+				else if(lunaFuturo != null && Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonActual.setNuevo(lunaFuturo.isNueva());
 					midsisonActual.setLleno(lunaFuturo.isLlena());
 					midsisonActual.setSelecto(lunaFuturo.isSelecta());
@@ -330,7 +341,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					esFasal = true;
 				}
 				
-				if(Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
+				if(apoperiPasado != null && Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonActual.setAporico(apoperiPasado.isEsApogeo());
 					midsisonActual.setPerico(apoperiPasado.isEsPerigeo());
 					midsisonActual.setSelecto(apoperiPasado.isEsSelecto());
@@ -344,7 +355,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonActual.setInvertido(apoperiActual.isEsInvertido());
 					esApoperico = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
+				else if(apoperiFuturo != null && Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonActual.setAporico(apoperiFuturo.isEsApogeo());
 					midsisonActual.setPerico(apoperiFuturo.isEsPerigeo());
 					midsisonActual.setSelecto(apoperiFuturo.isEsSelecto());
@@ -356,6 +367,12 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonActual.setApofasal(true);
 				}
 				
+				if( (eclipsePasado != null && Math.abs(ChronoUnit.SECONDS.between(eclipsePasado.getDate(), diaDelMidsison)) <= 86164)
+						|| (eclipseActual != null && Math.abs(ChronoUnit.SECONDS.between(eclipseActual.getDate(), diaDelMidsison)) <= 86164)
+						|| (eclipseFuturo != null && Math.abs(ChronoUnit.SECONDS.between(eclipseFuturo.getDate(), diaDelMidsison)) <= 86164)) {
+						midsisonActual.setEclipse(true);
+					}
+				
 			}
 			else if (diaDelMidsison.toLocalDate().isAfter(dateO)) {
 				
@@ -366,7 +383,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 				boolean esFasal = false;
 				boolean esApoperico = false;
 				
-				if(Math.abs(ChronoUnit.SECONDS.between(lunaPasado.getDate(), diaDelMidsison)) <= 86164) {
+				if(lunaPasado != null && Math.abs(ChronoUnit.SECONDS.between(lunaPasado.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonFuturo.setNuevo(lunaPasado.isNueva());
 					midsisonFuturo.setLleno(lunaPasado.isLlena());
 					midsisonFuturo.setSelecto(lunaPasado.isSelecta());
@@ -380,7 +397,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonFuturo.setInvertido(lunaActual.isInvertida());
 					esFasal = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
+				else if(lunaFuturo != null && Math.abs(ChronoUnit.SECONDS.between(lunaFuturo.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonFuturo.setNuevo(lunaFuturo.isNueva());
 					midsisonFuturo.setLleno(lunaFuturo.isLlena());
 					midsisonFuturo.setSelecto(lunaFuturo.isSelecta());
@@ -388,7 +405,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					esFasal = true;
 				}
 				
-				if(Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
+				if(apoperiPasado != null && Math.abs(ChronoUnit.SECONDS.between(apoperiPasado.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonFuturo.setAporico(apoperiPasado.isEsApogeo());
 					midsisonFuturo.setPerico(apoperiPasado.isEsPerigeo());
 					midsisonFuturo.setSelecto(apoperiPasado.isEsSelecto());
@@ -402,7 +419,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 					midsisonFuturo.setInvertido(apoperiActual.isEsInvertido());
 					esApoperico = true;
 				}
-				else if(Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
+				else if(apoperiFuturo != null && Math.abs(ChronoUnit.SECONDS.between(apoperiFuturo.getDate(), diaDelMidsison)) <= 86164) {
 					midsisonFuturo.setAporico(apoperiFuturo.isEsApogeo());
 					midsisonFuturo.setPerico(apoperiFuturo.isEsPerigeo());
 					midsisonFuturo.setSelecto(apoperiFuturo.isEsSelecto());
@@ -413,9 +430,14 @@ public class NotableEventServiceImpl implements NotableEventService {
 				if(esFasal && esApoperico) {
 					midsisonFuturo.setApofasal(true);
 				}
+				
+				if( (eclipsePasado != null && Math.abs(ChronoUnit.SECONDS.between(eclipsePasado.getDate(), diaDelMidsison)) <= 86164)
+						|| (eclipseActual != null && Math.abs(ChronoUnit.SECONDS.between(eclipseActual.getDate(), diaDelMidsison)) <= 86164)
+						|| (eclipseFuturo != null && Math.abs(ChronoUnit.SECONDS.between(eclipseFuturo.getDate(), diaDelMidsison)) <= 86164)) {
+						midsisonFuturo.setEclipse(true);
+					}
 			}
 			
-	
 			
 			fenomenosParaEventosDTO.setLunaActual(lunaActual);
 			fenomenosParaEventosDTO.setLunaAnterior(lunaPasado);
@@ -600,329 +622,399 @@ public class NotableEventServiceImpl implements NotableEventService {
 		if(luna != null || soe!= null || meton != null || eclipse!= null || eclipeno!= null || apoperi != null || midsison!= null) {
 					
 			if(eclipeno != null) {
-						
-				if (eclipeno.isInvernal()) {
-							
-					evento = evento + "Eclípeno invernal ";
-				}
-				else if(eclipeno.isPrimaveral()) {
-							
-					evento = evento + "Eclípeno primaveral ";
-				}
-				else if (eclipeno.isEstival()) {
-							
-					evento = evento + "Eclípeno estival ";
-				}
-				else if (eclipeno.isOtonyal()) {
-							
-					evento = evento + "Eclípeno otoñal ";
-				}
-										
-				if(eclipeno.isApofasal()) {
-					
-					evento = evento + "apofasal ";
-					
-					if(eclipeno.isSelecto() && eclipeno.isNuevo()) {
-						evento = evento + "remoto";
-					}
-					else if(eclipeno.isSelecto() && eclipeno.isLleno()) {
-						evento = evento + "brillante";
-					}
-					else if(eclipeno.isInvertido() && eclipeno.isNuevo()) {
-						evento = evento + "velado";
-					}
-					else if(eclipeno.isInvertido() && eclipeno.isLleno()) {
-						evento = evento + "tenue";
-					}
-				}
-				
-				else {
-					if(eclipeno.isNuevo()) {
-						
-						evento = evento + " nuevo";
-					}
-					else if(eclipeno.isLleno()) {
-								
-						evento = evento + " lleno";
-					}
-					if(eclipeno.isSelecto()) {
-						
-						evento = evento + " selecto";
-					}
-					else if(eclipeno.isInvertido()) {
-						
-						evento = evento + " invertido";
-					}									
-				}			
+		
+				evento = this.getEclipenoName(eclipeno);									
 			}
 			else if (meton != null) {
 						
-				if (meton.isInvernal()) {
-							
-					evento = evento + "Métono invernal";
-				}
-				else if(meton.isPrimaveral()) {
-							
-					evento = evento + "Métono primaveral";
-				}
-				else if (meton.isEstival()) {
-							
-					evento = evento + "Métono estival";
-				}
-				else if (meton.isOtonyal()) {
-							
-					evento = evento + "Métono otoñal";
-				}
-				
-				if(meton.isSelecto()) {
-					
-					if(meton.isApofasal()) {
-						evento = evento + " apofasal";
-						
-						if((meton.isFasal() && meton.isNuevo() || (meton.isApoperico() && meton.isAporico()))){
-							evento = evento + " remoto";
-						}
-						else if((meton.isFasal() && meton.isLleno() || meton.isApoperico() && meton.isPerico())){
-							evento = evento + " brillante";
-						}	
-					}
-					else {
-						if(meton.isFasal() && meton.isNuevo()){
-							evento = evento + " nuevo";
-						}
-						else if(meton.isFasal() && meton.isLleno()){
-							evento = evento + " lleno";
-						} 
-						else if(meton.isApoperico() && meton.isAporico()){
-							evento = evento + " apórico";
-						}
-						else if(meton.isApoperico() && meton.isPerico()) {
-							evento = evento + " périco";
-						}
-						
-						evento = evento + " selecto";
-					}
-					
-					
-				}
-				else if (meton.isInvertido()) {
-					
-					if(meton.isApofasal()) {
-						evento = evento + " apofasal";
-						
-						if((meton.isFasal() && meton.isNuevo() || (meton.isApoperico() && meton.isPerico()))){
-							evento = evento + " velado";
-						}
-						else if((meton.isFasal() && meton.isLleno() || meton.isApoperico() && meton.isAporico())){
-							evento = evento + " tenue";
-						}	
-					}
-					else {
-						if(meton.isFasal() && meton.isNuevo()){
-							evento = evento + " nuevo";
-						}
-						else if(meton.isFasal() && meton.isLleno()){
-							evento = evento + " lleno";
-						} 
-						else if(meton.isApoperico() && meton.isAporico()){
-							evento = evento + " apórico";
-						}
-						else if(meton.isApoperico() && meton.isPerico()) {
-							evento = evento + " périco";
-						}
-						evento = evento + " invertido";
-					}
-					
-				}
-				else {
-					
-					if(meton.isFasal()) {
-						
-						if(meton.isNuevo()) {
-							
-							evento = evento + " nuevo";
-						}
-						else if(meton.isLleno()) {
-									
-							evento = evento + " lleno";
-						}
-					}
-					else if (meton.isApoperico()) {
-						
-						if(meton.isAporico()) {
-							
-							evento = evento + " apórico";
-						}
-						else if(meton.isPerico()) {
-									
-							evento = evento + " périco";
-						}
-					}
-				}			
+				evento = this.getMetonoName(meton);				
 			}
 			else if(soe != null) {
 						
-				if(soe.isSolsticioInvierno()) {
-							
-					evento = evento + "Solsticio de invierno";
-				}
-				else if(soe.isEquinoccioPrimavera()) {
-							
-					evento = evento + "Equinoccio de primavera";
-				}
-				else if(soe.isSolsticioVerano()) {
-							
-					evento = evento + "Solsticio de verano";
-				}
-				else if (soe.isEquinoccioOtonyo()) {
-							
-					evento = evento + "Equinoccio de otoño";
-				}
-				
+				evento = this.getSoeName(soe);
 			}
 			else if (eclipse != null) {				
 										
-				String tipo = "";
-				
-				if(eclipse.isDeLuna()) {
-							
-					tipo =  "Eclipse de luna";
-				}
-				else if (eclipse.isDeSol()) {
-							
-					tipo = "Eclipse de sol";
-				}
-						
-				String fase = "";
-				
-				if(eclipse.isEsAnular()) {
-					fase = " anular";
-				}
-				else if (eclipse.isEsHibrido()) {
-					fase = " híbrido";
-				}
-				else if (eclipse.isEsParcial()) {
-					fase = " parcial";
-				}
-				else if (eclipse.isEsPenumbral()) {
-					fase = " penumbral";
-				}
-				else if (eclipse.isEsTotal()) {
-					fase = " total";
-				}		
-						
-				evento = evento + tipo + fase;
+				evento = this.getEclipseName(eclipse);
 			}	
 			else if(midsison != null) {
 				
-				evento = "Midsison";
-				String midsisonApellido = "";
-				String midsisonLunar = "";
-				
-				switch(midsison.getLastSoeSeason()) {
-				
-					case 1:
-						midsisonApellido = " invernal";
-						break;
-						
-					case 2:
-						midsisonApellido = " primaveral";
-						break;
-						
-					case 3:
-						midsisonApellido = " estival";
-						break;
-						
-					case 4: 
-						midsisonApellido = " otoñal";
-						break;
-				}
-				
-				
-				if(midsison.isApofasal()) {
-					midsisonLunar = " apofasal";
-					if (midsison.isNuevo() && midsison.isAporico()) {
-						midsisonLunar = midsisonLunar + " remoto";
-					}
-					else if(midsison.isNuevo() && midsison.isPerico()) {
-						midsisonLunar = midsisonLunar + " velado";
-					}
-					else if(midsison.isLleno() && midsison.isAporico()) {
-						midsisonLunar = midsisonLunar + " tenue";
-					}
-					else if(midsison.isLleno() && midsison.isPerico()) {
-						midsisonLunar = midsisonLunar + " brillante";
-					}
-				}
-				else {
-					if (midsison.isNuevo()) {
-						midsisonLunar = " nuevo";							
-					}
-					else if (midsison.isLleno()) {
-						midsisonLunar = " lleno";
-					}
-					else if (midsison.isAporico()) {
-						midsisonLunar = " apórico";
-					}
-					else if (midsison.isPerico()) {
-						midsisonLunar = " périco";
-					}
-					
-					if(midsison.isSelecto()) {
-						midsisonLunar = midsisonLunar + " selecto";
-					}
-					else if(midsison.isInvertido()) {
-						midsisonLunar = midsisonLunar + " invertido";
-					}
-				}
-				
-				
-				evento = evento + midsisonApellido + midsisonLunar;
+				evento = this.getMidsisonName(midsison);
 			}
 			else if (luna != null) {
 
-				if(luna.isNueva() && luna.isSelecta()) {
-					evento = "Luna aponoval";
-				}
-				else {
-					if (luna.isNueva()) {
-						evento = evento + "Luna nueva";
-					} 
-					else if (luna.isCuartoCreciente()) {
-						evento = evento + "Luna cuarto creciente";
-					} 
-					else if (luna.isLlena()) {
-						 evento = evento + "Luna llena";
-					} 
-					else if (luna.isCuartoMenguante()) {
-						  evento = evento + "Luna cuarto menguante";
-					}
-					
-
-					if(luna.isSelecta()) {
-						evento = evento + " selecta";
-					}
-					else if(luna.isInvertida()) {
-						evento = evento + " invertida";
-					}
-				}
+				evento = this.getLunaName(luna);
 			}
 			else if (apoperi != null) {
 				
-				String estado = "";
-				
-				if(apoperi.isEsApogeo()) {
-					estado = "distante";
-				}
-				else if (apoperi.isEsPerigeo()) {
-					estado = "presente";
-				}
-				evento = evento + "Luna " + estado;
-				
+				evento = this.getApoperiName(apoperi);				
 			}
 			
 		}
 
 		return evento;
+	}
+	
+	private String getEclipenoName(EclipenosEntity eclipeno) {
+		
+		String name = "";
+		
+		if (eclipeno.isInvernal()) {
+			
+			name = name + "Eclípeno invernal ";
+		}
+		else if(eclipeno.isPrimaveral()) {
+					
+			name = name + "Eclípeno primaveral ";
+		}
+		else if (eclipeno.isEstival()) {
+					
+			name = name + "Eclípeno estival ";
+		}
+		else if (eclipeno.isOtonyal()) {
+					
+			name = name + "Eclípeno otoñal ";
+		}
+								
+		if(eclipeno.isApofasal()) {
+			
+			name = name + "apofasal ";
+			
+			if(eclipeno.isSelecto() && eclipeno.isNuevo()) {
+				name = name + "remoto";
+			}
+			else if(eclipeno.isSelecto() && eclipeno.isLleno()) {
+				name = name + "brillante";
+			}
+			else if(eclipeno.isInvertido() && eclipeno.isNuevo()) {
+				name = name + "velado";
+			}
+			else if(eclipeno.isInvertido() && eclipeno.isLleno()) {
+				name = name + "tenue";
+			}
+		}
+		
+		else {
+			
+			if(eclipeno.isNuevo()) {
+				
+				name = name + " nuevo";
+			}
+			else if(eclipeno.isLleno()) {
+						
+				name = name + " lleno";
+			}
+			if(eclipeno.isSelecto()) {
+				
+				name = name + " selecto";
+			}
+			else if(eclipeno.isInvertido()) {
+				
+				name = name + " invertido";
+			}									
+		}			
+		
+		return name;
+	}
+	
+	private String getMetonoName(MetonsEntity meton) {
+		
+		String name = "";
+		
+		if (meton.isInvernal()) {
+			
+			name = name + "Métono invernal";
+		}
+		else if(meton.isPrimaveral()) {
+					
+			name = name + "Métono primaveral";
+		}
+		else if (meton.isEstival()) {
+					
+			name = name + "Métono estival";
+		}
+		else if (meton.isOtonyal()) {
+					
+			name = name + "Métono otoñal";
+		}
+		
+		if(meton.isSelecto()) {
+			
+			if(meton.isApofasal()) {
+				name = name + " apofasal";
+				
+				if((meton.isFasal() && meton.isNuevo() || (meton.isApoperico() && meton.isAporico()))){
+					name = name + " remoto";
+				}
+				else if((meton.isFasal() && meton.isLleno() || meton.isApoperico() && meton.isPerico())){
+					name = name + " brillante";
+				}	
+			}
+			else {
+				if(meton.isFasal() && meton.isNuevo()){
+					name = name + " nuevo";
+				}
+				else if(meton.isFasal() && meton.isLleno()){
+					name = name + " lleno";
+				} 
+				else if(meton.isApoperico() && meton.isAporico()){
+					name = name + " apórico";
+				}
+				else if(meton.isApoperico() && meton.isPerico()) {
+					name = name + " périco";
+				}
+				
+				name = name + " selecto";
+			}
+			
+			
+		}
+		else if (meton.isInvertido()) {
+			
+			if(meton.isApofasal()) {
+				name = name + " apofasal";
+				
+				if((meton.isFasal() && meton.isNuevo() || (meton.isApoperico() && meton.isPerico()))){
+					name = name + " velado";
+				}
+				else if((meton.isFasal() && meton.isLleno() || meton.isApoperico() && meton.isAporico())){
+					name = name + " tenue";
+				}	
+			}
+			else {
+				if(meton.isFasal() && meton.isNuevo()){
+					name = name + " nuevo";
+				}
+				else if(meton.isFasal() && meton.isLleno()){
+					name = name + " lleno";
+				} 
+				else if(meton.isApoperico() && meton.isAporico()){
+					name = name + " apórico";
+				}
+				else if(meton.isApoperico() && meton.isPerico()) {
+					name = name + " périco";
+				}
+				name = name + " invertido";
+			}
+			
+		}
+		else {
+			
+			if(meton.isFasal()) {
+				
+				if(meton.isNuevo()) {
+					
+					name = name + " nuevo";
+				}
+				else if(meton.isLleno()) {
+							
+					name = name + " lleno";
+				}
+			}
+			else if (meton.isApoperico()) {
+				
+				if(meton.isAporico()) {
+					
+					name = name + " apórico";
+				}
+				else if(meton.isPerico()) {
+							
+					name = name + " périco";
+				}
+			}
+		}			
+		
+		return name;
+	}
+	
+	private String getSoeName(SolsticiosYEquinocciosEntity soe) {
+		
+		String name = "";
+		
+		if(soe.isSolsticioInvierno()) {
+			
+			name = name + "Solsticio de invierno";
+		}
+		else if(soe.isEquinoccioPrimavera()) {
+					
+			name = name + "Equinoccio de primavera";
+		}
+		else if(soe.isSolsticioVerano()) {
+					
+			name = name + "Solsticio de verano";
+		}
+		else if (soe.isEquinoccioOtonyo()) {
+					
+			name = name + "Equinoccio de otoño";
+		}
+		
+		return name;
+	}
+	
+	private String getEclipseName (EclipsesEntity eclipse) {
+		
+		String name = "";
+		
+		if(eclipse.isDeLuna()) {
+					
+			name =  "Eclipse de luna";
+		}
+		else if (eclipse.isDeSol()) {
+					
+			name = "Eclipse de sol";
+		}
+				
+		String fase = "";
+		
+		if(eclipse.isEsAnular()) {
+			fase = " anular";
+		}
+		else if (eclipse.isEsHibrido()) {
+			fase = " híbrido";
+		}
+		else if (eclipse.isEsParcial()) {
+			fase = " parcial";
+		}
+		else if (eclipse.isEsPenumbral()) {
+			fase = " penumbral";
+		}
+		else if (eclipse.isEsTotal()) {
+			fase = " total";
+		}		
+				
+		name = name + fase;
+		
+		return name;
+	}
+	
+	private String getMidsisonName(MidsisonDTO midsison) {
+		
+		String name = "Midsison";
+		String midsisonApellido = "";
+		String midsisonLunar = "";
+		
+		switch(midsison.getLastSoeSeason()) {
+		
+			case 1:
+				midsisonApellido = " invernal";
+				break;
+				
+			case 2:
+				midsisonApellido = " primaveral";
+				break;
+				
+			case 3:
+				midsisonApellido = " estival";
+				break;
+				
+			case 4: 
+				midsisonApellido = " otoñal";
+				break;
+		}
+		
+		
+		if(midsison.isApofasal()) {
+			midsisonLunar = " apofasal";
+			if (midsison.isNuevo() && midsison.isAporico()) {
+				midsisonLunar = midsisonLunar + " remoto";
+			}
+			else if(midsison.isNuevo() && midsison.isPerico()) {
+				midsisonLunar = midsisonLunar + " velado";
+			}
+			else if(midsison.isLleno() && midsison.isAporico()) {
+				midsisonLunar = midsisonLunar + " tenue";
+			}
+			else if(midsison.isLleno() && midsison.isPerico()) {
+				midsisonLunar = midsisonLunar + " brillante";
+			}
+		}
+		else {
+			if (midsison.isNuevo()) {
+				midsisonLunar = " nuevo";							
+			}
+			else if (midsison.isLleno()) {
+				midsisonLunar = " lleno";
+			}
+			else if (midsison.isAporico()) {
+				midsisonLunar = " apórico";
+			}
+			else if (midsison.isPerico()) {
+				midsisonLunar = " périco";
+			}
+			
+			if(midsison.isSelecto()) {
+				midsisonLunar = midsisonLunar + " selecto";
+			}
+			else if(midsison.isInvertido()) {
+				midsisonLunar = midsisonLunar + " invertido";
+			}
+		}
+		
+		if(midsison.isEclipse()) {
+			midsisonLunar = midsisonLunar + " eclipsado";
+		}
+		
+		
+		name = name + midsisonApellido + midsisonLunar;
+		return name;
+	}
+	
+	private String getLunaName(LunasEntity luna) {
+		
+		String name = "";
+		
+		if(luna.isNueva() && luna.isSelecta()) {
+			name = "Luna aponoval";
+		}
+		else {
+			if (luna.isNueva()) {
+				name = "Luna nueva";
+			} 
+			else if (luna.isCuartoCreciente()) {
+				name = "Luna cuarto creciente";
+			} 
+			else if (luna.isLlena()) {
+				name = "Luna llena";
+			} 
+			else if (luna.isCuartoMenguante()) {
+				name = "Luna cuarto menguante";
+			}
+			
+
+			if(luna.isSelecta()) {
+				name = name + " selecta";
+			}
+			else if(luna.isInvertida()) {
+				name = name + " invertida";
+			}
+		}
+		
+		return name;
+	}
+	
+	private String getApoperiName(ApogeosYPerigeosLunaEntity apoperi) {
+		
+		String name = "";
+		
+		String estado = "";
+		String especial = "";
+		
+		if(apoperi.isEsApogeo()) {
+			estado = "distante";
+		}
+		else if (apoperi.isEsPerigeo()) {
+			estado = "presente";
+		}
+		
+		if(apoperi.isEsSelecto()) {
+			especial = " selecto";
+		}
+		else if(apoperi.isEsInvertido()) {
+			especial = " invertido";
+		}
+		
+		name = "Luna " + estado + especial;
+		
+		return name;
 	}
 }
