@@ -586,7 +586,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			diasEntreEclipenoYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoProximo().getDate().toLocalDate());	
 		} 
 
-		if(lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiAnterior() != null) {
+		if(lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiProximo() != null) {
 			diasEntreApoperiYDate = ChronoUnit.DAYS.between(dateO, lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiProximo().getDate().toLocalDate());	    
 		} 
 			  

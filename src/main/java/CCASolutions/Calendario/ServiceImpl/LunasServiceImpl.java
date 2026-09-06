@@ -64,9 +64,9 @@ public class LunasServiceImpl implements LunasService {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
 		String weekVauString = null;
-		String dayVauString = null;
+		String dayParaDTO = null;
 		
-		LunasEntity lastLN = new LunasEntity();
+		LunasEntity lastLN = null;
 		long diasDesdeLaLunaNueva = Long.MAX_VALUE;
 		boolean caeEnLunaNueva = false;
 		for (int i = 0; i<lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.size() && !caeEnLunaNueva; i++) {
@@ -85,7 +85,7 @@ public class LunasServiceImpl implements LunasService {
 					long diasDeDiferenciaEntreLNYDateO = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
 						
 					if(diasDeDiferenciaEntreLNYDateO < diasDesdeLaLunaNueva) {
-							
+						lastLN = new LunasEntity();
 						lastLN=luna;
 						diasDesdeLaLunaNueva = diasDeDiferenciaEntreLNYDateO;						
 					}
@@ -95,6 +95,7 @@ public class LunasServiceImpl implements LunasService {
 			
 		if(lastLN != null) {
 			
+			String dayVauString = null;
 			if (diasDesdeLaLunaNueva <= 7) {
 				
 				if(!caeEnLunaNueva) {							
@@ -129,27 +130,29 @@ public class LunasServiceImpl implements LunasService {
 				weekVauString = this.weeksRepository.findByWeekOfMonth("5").getName();
 				dayVauString = this.daysRepository.findByDayOfWeek(diasDesdeLaLunaNueva-21).getName();
 			}
+						
+			
+			dayParaDTO = dayVauString;
+			
+			boolean caeEnSoe = false;
+			for(int i = 0; i<soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.size() && !caeEnSoe; i++) {
+				
+				SolsticiosYEquinocciosEntity soe = soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.get(i);
+				
+				if(soe.getDate().toLocalDate().isEqual(date)) {
+					caeEnSoe = true;
+				}
+			}
+			
+			if(caeEnSoe && !caeEnLunaNueva) {
+				
+				dayParaDTO = dayParaDTO + " desdoblado";
+						
+			}
+			
 		}
 		
 		vauWeekAndDay.setWeek(weekVauString);
-		
-		String dayParaDTO = dayVauString;
-		
-		boolean caeEnSoe = false;
-		for(int i = 0; i<soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.size() && !caeEnSoe; i++) {
-			
-			SolsticiosYEquinocciosEntity soe = soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas.get(i);
-			
-			if(soe.getDate().toLocalDate().isEqual(date)) {
-				caeEnSoe = true;
-			}
-		}
-		
-		if(caeEnSoe && !caeEnLunaNueva) {
-			
-			dayParaDTO = dayParaDTO + " desdoblado";
-					
-		}
 		vauWeekAndDay.setDay(dayParaDTO);
 		
 		return vauWeekAndDay;
@@ -217,7 +220,7 @@ public class LunasServiceImpl implements LunasService {
 		ComportamientoLunaDTO comportamientoLuna = new ComportamientoLunaDTO();
 		
 		long diasMinimosEntreDateYApoperi = Long.MAX_VALUE;
-		ApogeosYPerigeosLunaEntity apoperiMasCercanoADate = new ApogeosYPerigeosLunaEntity();
+		ApogeosYPerigeosLunaEntity apoperiMasCercanoADate = null;
 		
 		for(ApogeosYPerigeosLunaEntity apoperi : allApoperis) {
 			
@@ -228,11 +231,13 @@ public class LunasServiceImpl implements LunasService {
 				if(diasEntreDateYApoperi < diasMinimosEntreDateYApoperi) {
 					
 					diasMinimosEntreDateYApoperi = diasEntreDateYApoperi;
+					apoperiMasCercanoADate = new ApogeosYPerigeosLunaEntity();
 					apoperiMasCercanoADate=apoperi;
 				}
 			}
 			else if(apoperi.getDate().toLocalDate().isEqual(date)) {
 				diasMinimosEntreDateYApoperi = Long.MIN_VALUE;
+				apoperiMasCercanoADate = new ApogeosYPerigeosLunaEntity();
 				apoperiMasCercanoADate=apoperi;
 			}
 		}

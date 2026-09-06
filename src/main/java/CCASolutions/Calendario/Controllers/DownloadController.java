@@ -29,7 +29,11 @@ public class DownloadController {
 		
 		try {
 			
-			this.downloadService.getPDF();
+			body = this.downloadService.getPDF();
+			if(body == null) {
+				status = HttpStatus.BAD_REQUEST;
+			}
+			
 		}
 		catch(Exception e) {
 			

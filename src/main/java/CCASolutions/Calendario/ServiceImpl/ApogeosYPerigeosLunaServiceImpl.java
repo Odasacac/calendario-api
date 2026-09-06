@@ -57,48 +57,58 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 		String resultado = "Apogeos actualizados sin problema.";
 		
 		DatosEntity apiGetApogeosUrl = datosRepository.findByConcepto(API_APOPERIS);
-		String apogeosUrl = apiGetApogeosUrl.getValor();
 		
-		List<ApogeosYPerigeosLunaEntity> apogeosYPerigeosExistentesEnBD = this.apogeosYPerigeosLunaRepository.findAll();
-		
-		if(apogeosYPerigeosExistentesEnBD.isEmpty()) {
+		if(apiGetApogeosUrl != null) {
 			
-			List<ApogeosDTO> allApogeosAPI = this.getApogeosViaAPI(apogeosUrl);
+			String apogeosUrl = apiGetApogeosUrl.getValor();
+			List<ApogeosYPerigeosLunaEntity> apogeosYPerigeosExistentesEnBD = this.apogeosYPerigeosLunaRepository.findAll();
 			
-			if(!allApogeosAPI.isEmpty()) {
+			if(apogeosYPerigeosExistentesEnBD.isEmpty()) {
 				
-				List<ApogeosYPerigeosLunaEntity> apogeosParaDB = new ArrayList<>();
-				for(ApogeosDTO apogeo : allApogeosAPI) {
-							
-					ApogeosYPerigeosLunaEntity apogeoParaDB = new ApogeosYPerigeosLunaEntity();
-					apogeoParaDB.setDate(LocalDateTime.parse(apogeo.getDate(), FORMATTER_API_RESPONSE).truncatedTo(ChronoUnit.SECONDS));
-					apogeoParaDB.setYear(apogeoParaDB.getDate().getYear());
-						
-					switch (apogeo.getPhenomena()) {
-							
-						case APOGEO:
-							apogeoParaDB.setEsApogeo(true);
-							break;
-							
-						case PERIGEO:
-							apogeoParaDB.setEsPerigeo(true);
-							break;
-					}
-					apogeoParaDB.setDistance(apogeo.getDistance());							
+				List<ApogeosDTO> allApogeosAPI = this.getApogeosViaAPI(apogeosUrl);
+				
+				if(!allApogeosAPI.isEmpty()) {
 					
-					apogeosParaDB.add(apogeoParaDB);
+					List<ApogeosYPerigeosLunaEntity> apogeosParaDB = new ArrayList<>();
+					for(ApogeosDTO apogeo : allApogeosAPI) {
+								
+						ApogeosYPerigeosLunaEntity apogeoParaDB = new ApogeosYPerigeosLunaEntity();
+						apogeoParaDB.setDate(LocalDateTime.parse(apogeo.getDate(), FORMATTER_API_RESPONSE).truncatedTo(ChronoUnit.SECONDS));
+						apogeoParaDB.setYear(apogeoParaDB.getDate().getYear());
+							
+						switch (apogeo.getPhenomena()) {
+								
+							case APOGEO:
+								apogeoParaDB.setEsApogeo(true);
+								break;
+								
+							case PERIGEO:
+								apogeoParaDB.setEsPerigeo(true);
+								break;
+						}
+						apogeoParaDB.setDistance(apogeo.getDistance());							
+						
+						apogeosParaDB.add(apogeoParaDB);
+					}
+					System.out.println("Almacenando apoperis en la BD.");
+					this.apogeosYPerigeosLunaRepository.saveAll(apogeosParaDB);
+					apogeosYPerigeosExistentesEnBD = apogeosParaDB;
+					System.out.println("Apoperis almacenados en la BD.");
+				}	
+				else {
+					System.out.println("No se han obtenido apogeos por la API.");				
+					resultado="Error al actualizar los apogeos: no se han obtenido apogeos por la API.";
 				}
-				System.out.println("Almacenando apoperis en la BD.");
-				this.apogeosYPerigeosLunaRepository.saveAll(apogeosParaDB);
-				apogeosYPerigeosExistentesEnBD = apogeosParaDB;
-				System.out.println("Apoperis almacenados en la BD.");
+				
 			}	
-			else {
-				System.out.println("No se han obtenido apogeos por la API.");				
-				resultado="Error al actualizar los apogeos: no se han obtenido apogeos por la API.";
-			}
-			
-		}	
+		}
+		else {
+			System.out.println("No existe la URL para la API en la base de datos.");				
+			resultado="Error al actualizar los apogeos: no existe la URL para la API en la base de datos.";
+		}
+		
+		
+		
 		
 		return resultado;
 	}

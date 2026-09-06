@@ -25,8 +25,8 @@ public class SeasonsServiceImpl implements SeasonsService{
 		
 		SeasonDTO seasonDTO = new SeasonDTO();
 		
-		SolsticiosYEquinocciosEntity lastSoe  = new SolsticiosYEquinocciosEntity();
-		SolsticiosYEquinocciosEntity nextSoe = new SolsticiosYEquinocciosEntity();
+		SolsticiosYEquinocciosEntity lastSoe  = null;
+		SolsticiosYEquinocciosEntity nextSoe = null;
 		SolsticiosYEquinocciosEntity actualSoe = null;
 		int startingSeason = 0;
 		

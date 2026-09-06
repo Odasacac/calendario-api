@@ -16,7 +16,6 @@ import CCASolutions.Calendario.Repositories.EclipenosRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
 import CCASolutions.Calendario.Repositories.LunasRepository;
 import CCASolutions.Calendario.Repositories.MetonsRepository;
-import CCASolutions.Calendario.Repositories.MidsisonRepository;
 import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Services.EclipenosService;
 import CCASolutions.Calendario.Services.MetonsService;
@@ -48,9 +47,6 @@ public class UtilsServiceImpl implements UtilsService {
 	
 	@Autowired
 	private MetonsService metonsService;
-	
-	@Autowired
-	private MidsisonRepository midsisonRepository;
 
 	
 	public DatosCosmicosParaVAUDTO getDatosCosmicos(LocalDate date) {
@@ -78,11 +74,10 @@ public class UtilsServiceImpl implements UtilsService {
 					
 					if(datosCosmicosParaVAUDTO.getLastMetonIN() != null) {									
 						
-						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getDate().minusYears(1), dateO.plusYears(1)));
+						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(dateO.minusYears(1), dateO.plusYears(1)));
 						datosCosmicosParaVAUDTO.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(datosCosmicosParaVAUDTO.getLastMetonIN().getDate().minusYears(1), dateO.plusYears(1)));
 						datosCosmicosParaVAUDTO.setEclipses(this.eclipsesRepository.findEclipsesAbsoluteQuery(datosCosmicosParaVAUDTO.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(1)));
 						datosCosmicosParaVAUDTO.setApoperis(this.apogeosYPerigeosLunaRepository.findByDateBetween(dateO.minusMonths(3), dateO.plusMonths(3)));
-						datosCosmicosParaVAUDTO.setMidsisons(this.midsisonRepository.findByDateBetween(dateO.minusMonths(3), dateO.plusMonths(3)));
 						
 						if(datosCosmicosParaVAUDTO.getApoperis().isEmpty()){
 							datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado apoperis.");
@@ -98,10 +93,6 @@ public class UtilsServiceImpl implements UtilsService {
 						}
 						else if(datosCosmicosParaVAUDTO.getEclipses().isEmpty()) {
 							datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado eclipses.");
-							System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
-						}
-						else if(datosCosmicosParaVAUDTO.getMidsisons().isEmpty()) {
-							datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado midsisons.");
 							System.out.println(datosCosmicosParaVAUDTO.getMensaje());	
 						}
 						else {

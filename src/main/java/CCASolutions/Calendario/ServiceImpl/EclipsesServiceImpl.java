@@ -142,8 +142,8 @@ public class EclipsesServiceImpl implements EclipsesService{
 		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList(API_LUNAR_ECLIPSES, API_SOLAR_ECLIPSES));	
 		List<EclipsesEntity> allEclipses = this.eclipsesRepository.findAll();
 		
-		String apiEclipsesLunares = "";
-		String apiEclipsesSolares = "";
+		String apiEclipsesLunares = null;
+		String apiEclipsesSolares = null;
 		
 		if(allEclipses.isEmpty()) {
 			for (DatosEntity url : urls) 
@@ -199,7 +199,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 	
 	private void actualizarEclipsesLunaresDelAnyo (String anyo, String url){
 		
-		System.out.println("Actualizando los eclipses solares del anyo: " + anyo);
+		System.out.println("Actualizando los eclipses lunares del anyo: " + anyo);
 		
 		try {
 			
@@ -326,7 +326,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 				}
 				
 				AllEclipsesEntity allEclipseParaDB = new AllEclipsesEntity();
-				allEclipseParaDB.setDeLuna(true);
+				allEclipseParaDB.setDeSol(true);
 				switch(eclipse.getType()) {
 				
 					case NON_CENTRAL_PARTIAL:

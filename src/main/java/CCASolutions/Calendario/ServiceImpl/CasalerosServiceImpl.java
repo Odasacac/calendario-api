@@ -65,7 +65,6 @@ public class CasalerosServiceImpl implements CasalerosService {
 						casaleroDTO.setPrimaveral(metono.isPrimaveral());
 						casaleroDTO.setEstival(metono.isEstival());	
 						casaleroDTO.setOtonyal(metono.isOtonyal());
-						casaleroDTO.setNuevo(true);
 					}								
 				}
 				else if (casaleroEntity.getEclipseId() != null){

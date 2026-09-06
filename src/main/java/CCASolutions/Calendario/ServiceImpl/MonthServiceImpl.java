@@ -235,7 +235,7 @@ public class MonthServiceImpl implements MonthService{
 						}
 					}									
 						
-					if(lastLNBeforeNextSOE != null || firstLNAfterLastSOE != null) {
+					if(lastLNBeforeNextSOE != null && firstLNAfterLastSOE != null) {
 						
 						// Si la fecha a consultar esta entre la ultima luna y el nextSOE, pertenece al mes hibrido de ese soe.
 						if(date.isAfter(lastLNBeforeNextSOE.getDate().toLocalDate()) && date.isBefore(nextSOE.getDate().toLocalDate())) {

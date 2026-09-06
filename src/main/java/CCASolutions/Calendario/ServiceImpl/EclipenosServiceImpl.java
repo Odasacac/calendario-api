@@ -117,32 +117,35 @@ public class EclipenosServiceImpl implements EclipenosService{
 				}
 			}
 			
-			eclipenoVAU.setYearOfCurrentEclipenoIN(eclipenosIN.get(0).getYear());
-			eclipenoVAU.setEclipenoINDay(eclipenosIN.get(0).getDate().toLocalDate().isEqual(date));
-			
-			int eclipenosDesdeElLastEclipenSelecto = (eclipenosIN.size()-1); // -1 porque incluye el del eclipeno
-			
-			// No se suma un eclipeno hasta que pase el dia del eclipeno, pero si es el dia de eclipeno no se resta, que se ha restado antes
-			
-			if(eclipenoVAU.isEclipenoINDay() && !lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) {
+			if(!eclipenosIN.isEmpty()) {
+				eclipenoVAU.setYearOfCurrentEclipenoIN(eclipenosIN.get(0).getYear());
+				eclipenoVAU.setEclipenoINDay(eclipenosIN.get(0).getDate().toLocalDate().isEqual(date));
 				
-				eclipenosDesdeElLastEclipenSelecto = eclipenosDesdeElLastEclipenSelecto-1;
+				int eclipenosDesdeElLastEclipenSelecto = (eclipenosIN.size()-1); // -1 porque incluye el del eclipeno
+				
+				// No se suma un eclipeno hasta que pase el dia del eclipeno, pero si es el dia de eclipeno no se resta, que se ha restado antes
+				
+				if(eclipenoVAU.isEclipenoINDay() && !lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) {
+					
+					eclipenosDesdeElLastEclipenSelecto = eclipenosDesdeElLastEclipenSelecto-1;
+				}
+				
+				eclipenoVAU.setEclipenosINSinceLastEclipenoINSelecto(eclipenosDesdeElLastEclipenSelecto);
+				int yearOfTheEclipeno = eclipenosDesdeElLastEclipenSelecto +1;
+				
+				if(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) { //Si es el dia del eclipeno selecto, no estamos en ningun eclipeno
+					yearOfTheEclipeno= yearOfTheEclipeno-1;
+				}
+				eclipenoVAU.setNumberOfEclipenoIN(yearOfTheEclipeno);
+				
+				if(eclipenosIN.get(0).isInvertido() && eclipenosIN.get(0).isApofasal() && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
+					eclipenoVAU.setLastEclipenoSurname("(Invertido)");
+				}
+				else if(eclipenosIN.get(0).isSelecto() && eclipenosIN.get(0).isApofasal() && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
+					eclipenoVAU.setLastEclipenoSurname("(Selecto)");
+				}
 			}
 			
-			eclipenoVAU.setEclipenosINSinceLastEclipenoINSelecto(eclipenosDesdeElLastEclipenSelecto);
-			int yearOfTheEclipeno = eclipenosDesdeElLastEclipenSelecto +1;
-			
-			if(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date)) { //Si es el dia del eclipeno selecto, no estamos en ningun eclipeno
-				yearOfTheEclipeno= yearOfTheEclipeno-1;
-			}
-			eclipenoVAU.setNumberOfEclipenoIN(yearOfTheEclipeno);
-			
-			if(eclipenosIN.get(0).isInvertido() && eclipenosIN.get(0).isApofasal() && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
-				eclipenoVAU.setLastEclipenoSurname("(Invertido)");
-			}
-			else if(eclipenosIN.get(0).isSelecto() && eclipenosIN.get(0).isApofasal() && yearOfTheEclipeno != 0 && !eclipenoVAU.isEclipenoINDay()) {
-				eclipenoVAU.setLastEclipenoSurname("(Selecto)");
-			}
 		}
 		
 		return eclipenoVAU;
@@ -214,7 +217,7 @@ public class EclipenosServiceImpl implements EclipenosService{
 				System.out.println("Ya hay eclípenos en la base de datos.");
 				resultado = "Error al actualizar los eclípenos: ya hay eclípenos en la base de datos.";
 			}
-			else if(!metonos.isEmpty()){
+			else if(metonos.isEmpty()){
 				System.out.println("No hay métonos en la base de datos.");
 				resultado = "Error al actualizar los eclípenos: no hay métonos en la base de datos.";
 			}

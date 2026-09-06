@@ -56,7 +56,7 @@ public class MidsisonServiceImpl implements MidsisonService{
 			List<MidsisonEntity> allMidsisonsFromDB = this.midsisonRepository.findAll();
 			
 			if(allMidsisonsFromDB.isEmpty()) {
-				List<SolsticiosYEquinocciosEntity> allSoesFromDB = this.solsticiosYEquinocciosRepository.findAll();
+				List<SolsticiosYEquinocciosEntity> allSoesFromDB = this.solsticiosYEquinocciosRepository.findAllByOrderByDateAsc();
 				
 				if(allSoesFromDB.isEmpty()) {
 					System.out.println("No hay soes en base de datos");
