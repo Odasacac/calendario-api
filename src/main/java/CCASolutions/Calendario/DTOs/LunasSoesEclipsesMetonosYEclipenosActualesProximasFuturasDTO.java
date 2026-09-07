@@ -1,6 +1,5 @@
 package CCASolutions.Calendario.DTOs;
 
-import java.util.List;
 
 import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
