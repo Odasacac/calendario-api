@@ -23,6 +23,7 @@ import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Repositories.AllEclipsesRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
+import CCASolutions.Calendario.Services.DatosService;
 import CCASolutions.Calendario.Services.EclipsesService;
 
 
@@ -33,15 +34,15 @@ public class EclipsesServiceImpl implements EclipsesService{
 	private DatosRepository datosRepository;
 	
 	@Autowired
+	private DatosService datosService;
+	
+	@Autowired
 	private EclipsesRepository eclipsesRepository;
 	
 	@Autowired
 	private AllEclipsesRepository allEclipsesRepository;
 	
 	private final RestTemplate restTemplate = new RestTemplate();
-	
-	private final static String API_LUNAR_ECLIPSES = "LEPY";
-	private final static String API_SOLAR_ECLIPSES = "SEPY";
 	
 	private final static String TOTAL = "TotalEclipse";
 	private final static String PARTIAL = "PartialEclipse";
@@ -139,7 +140,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 		
 		String resultado = "Eclipses actualizados sin problema.";
 		
-		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList(API_LUNAR_ECLIPSES, API_SOLAR_ECLIPSES));	
+		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList(this.datosService.getApiLunarEclipses(), this.datosService.getApiSolarEclipses()));	
 		List<EclipsesEntity> allEclipses = this.eclipsesRepository.findAll();
 		
 		String apiEclipsesLunares = null;
@@ -148,15 +149,13 @@ public class EclipsesServiceImpl implements EclipsesService{
 		if(allEclipses.isEmpty()) {
 			for (DatosEntity url : urls) 
 			{
-				switch (url.getConcepto()) {
-				
-					case API_LUNAR_ECLIPSES:					
-						apiEclipsesLunares = url.getValor();
-						break;
+				if (this.datosService.getApiLunarEclipses().equals(url.getConcepto())) {
 					
-					case API_SOLAR_ECLIPSES:					
-						apiEclipsesSolares = url.getValor();
-						break;					
+				    apiEclipsesLunares = url.getValor();
+
+				} else if (this.datosService.getApiSolarEclipses().equals(url.getConcepto())) {
+					
+				    apiEclipsesSolares = url.getValor();
 				}
 			}
 			

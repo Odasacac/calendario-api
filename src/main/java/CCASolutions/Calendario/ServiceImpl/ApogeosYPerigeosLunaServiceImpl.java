@@ -21,6 +21,7 @@ import CCASolutions.Calendario.Repositories.ApogeosYPerigeosLunaRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.LunasRepository;
 import CCASolutions.Calendario.Services.ApogeosYPerigeosLunaService;
+import CCASolutions.Calendario.Services.DatosService;
 
 @Service
 public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaService{
@@ -34,9 +35,11 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 	@Autowired
 	private ApogeosYPerigeosLunaRepository apogeosYPerigeosLunaRepository;
 	
-	private final RestTemplate restTemplate = new RestTemplate();
+	@Autowired
+	private DatosService datosService;
 	
-	private final static String API_APOPERIS = "APG";
+	private final RestTemplate restTemplate = new RestTemplate();
+
 	
 	private static final String APOGEO = "MaximalDistance";
 	private static final String PERIGEO = "MinimalDistance";
@@ -56,7 +59,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 		
 		String resultado = "Apogeos actualizados sin problema.";
 		
-		DatosEntity apiGetApogeosUrl = datosRepository.findByConcepto(API_APOPERIS);
+		DatosEntity apiGetApogeosUrl = datosRepository.findByConcepto(this.datosService.getApiApoperis());
 		
 		if(apiGetApogeosUrl != null) {
 			

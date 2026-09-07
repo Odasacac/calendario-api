@@ -27,13 +27,17 @@ import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.DaysRepository;
 import CCASolutions.Calendario.Repositories.LunasRepository;
 import CCASolutions.Calendario.Repositories.WeeksRepository;
+import CCASolutions.Calendario.Services.DatosService;
 import CCASolutions.Calendario.Services.LunasService;
 
 @Service
 public class LunasServiceImpl implements LunasService {
 	
 	@Autowired
-	private DatosRepository datosRepository;	
+	private DatosRepository datosRepository;
+	
+	@Autowired
+	private DatosService datosService;
 	
 	@Autowired
 	private LunasRepository lunasRepository;
@@ -48,8 +52,6 @@ public class LunasServiceImpl implements LunasService {
 	private AllFasesLunaresRepository allFasesLunaresRepository;
 	
 	private final RestTemplate restTemplate = new RestTemplate();
-	
-	private final static String API_LUNAR_FASES = "YLP";
 	
 	private final static String NEW_MOON = "NewMoon";
 	private final static String FIRST_QUARTER = "FirstQuarter";
@@ -282,7 +284,7 @@ public class LunasServiceImpl implements LunasService {
 		
 		String resultado = "Lunas actualizadas sin problema.";
 		
-		DatosEntity apiGetLunasUrl = datosRepository.findByConcepto(API_LUNAR_FASES);
+		DatosEntity apiGetLunasUrl = datosRepository.findByConcepto(this.datosService.getApiLunarFases());
 		
 		List<LunasEntity> allLunas = this.lunasRepository.findAll();
 		

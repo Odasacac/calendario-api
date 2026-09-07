@@ -20,6 +20,7 @@ import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Repositories.AllSoEsRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
+import CCASolutions.Calendario.Services.DatosService;
 import CCASolutions.Calendario.Services.SolsticiosYEquinocciosService;
 
 @Service
@@ -37,7 +38,8 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	
 	private final RestTemplate restTemplate = new RestTemplate();
 	
-	private final static String API_SOES = "ASYEF";
+	@Autowired
+	private DatosService datosService;
 	
 	private final static String SI = "WinterSolstice";
 	private final static String EP = "VernalEquinox";
@@ -102,7 +104,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		
 		String resultado = "Solsticios y equinoccios actualizados sin problema";
 		
-		DatosEntity apiGetSYEUrl = datosRepository.findByConcepto(API_SOES);
+		DatosEntity apiGetSYEUrl = datosRepository.findByConcepto(this.datosService.getApiSoes());
 		
 		List<SolsticiosYEquinocciosEntity> allSoes = this.solsticiosYEquinocciosRepository.findAll();
 		
