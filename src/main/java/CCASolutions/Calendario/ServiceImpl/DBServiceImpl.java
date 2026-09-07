@@ -65,59 +65,49 @@ public class DBServiceImpl implements DBService {
 	@Autowired
 	private SeasonsService seasonsService;
 	
+	public String  poblateDBDesdeArranque(boolean poblarBaseDeDatosAlArrancar) {
+		
+		String resultado = "";
+		
+		if(poblarBaseDeDatosAlArrancar) {
+			
+			System.out.println("Iniciando la población de la base de datos desde cero.");
+			PoblateDBDTO poblateDBDTO = new PoblateDBDTO(poblarBaseDeDatosAlArrancar);
+			resultado = this.poblateDB(poblateDBDTO);
+		}
+		else {
+			
+			System.out.println("Incluyendo base de datos SOLO adminPW.");
+			resultado = this.datosService.poblateSoloPassword();		
+		}
+			
+		return resultado;
+	}
+	
 	public String poblateDB(PoblateDBDTO poblateDBDTO) {
 		
 		String resultado = "";
 		
-		boolean poblar= false;
-		boolean editar = false;
-		boolean llamadasAApis = false;
-		boolean ejecutarPoblate = false;
-		
-		if(poblateDBDTO.isVacia()) {
-			poblar = poblateDBDTO.isPoblarDesdeCero();
-			editar = poblateDBDTO.isPoblarDesdeCero();
-			llamadasAApis = poblateDBDTO.isPoblarDesdeCero();
-			
-			if(poblateDBDTO.isPoblarDesdeCero()) {
-				System.out.println("Iniciando la población de la base de datos desde cero.");
-				ejecutarPoblate = true;
-			}
-			else {
-				System.out.println("Incluyendo base de datos SOLO adminPW.");
-				System.out.println(this.datosService.poblateSoloPassword());
-				ejecutarPoblate = false;
-			}
-			
-		}
-		else {
-			poblar = poblateDBDTO.isPoblar();
-			editar = poblateDBDTO.isEditar();
-			llamadasAApis = poblateDBDTO.isLlamadasAAPis();
-			System.out.println("Iniciando la actualización de la base de datos por petición externa.");
-			ejecutarPoblate = true;
-		}
-		
-		if((poblar || editar || llamadasAApis) && ejecutarPoblate) {
+		if(poblateDBDTO.isPoblar() || poblateDBDTO.isEditar() || poblateDBDTO.isLlamadasAAPis()) {
 			
 			try {
 				resultado = "~ Resultados población de la Base de Datos ~";
-				if(poblar) {
-					resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos(poblateDBDTO.isPoblarDesdeCero());
+				if(poblateDBDTO.isPoblar()) {
+					resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos();
 				}
 				
-				if(llamadasAApis && poblar) {
+				if(poblateDBDTO.isLlamadasAAPis() && poblateDBDTO.isPoblar()) {
 					resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale();
 					resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeosFromOpale();
 					resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale();	
 					resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipsesFromOpale();	
 				}
 				
-				if(editar) {
+				if(poblateDBDTO.isEditar()) {
 					resultado = resultado + "\n - ACTUALIZAR APOPERIS Y FASES: " + this.apogeosYPerigeosLunaService.updateLunasYApoperisConSelectoOInvertido();	
 				}
 				
-				if(poblar) {
+				if(poblateDBDTO.isPoblar()) {
 					resultado = resultado + "\n - MIDSISONS: " + this.midsisonService.poblateMidsison();			
 					resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();			
 					resultado = resultado + "\n - ECLIPENOS: " +this.eclipenosService.poblateEclipenos();

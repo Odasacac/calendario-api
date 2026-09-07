@@ -38,48 +38,43 @@ public class DBController {
 		HttpStatus status = HttpStatus.OK;
 		String body = "Error al actualizar la base de datos.";
 		
-		if(poblateDBDTO.isPoblarDesdeCero()) {
-			body = "No se puede poblar desde cero por petición.";
-			status = HttpStatus.FORBIDDEN;
-		}
-		else {
-			
-			try {
+
+		try {
 				
-				DatosEntity dbPassword = this.datosRepository.findByConcepto(this.datosService.getPWCode());
+			DatosEntity dbPassword = this.datosRepository.findByConcepto(this.datosService.getPWCode());
 				
-				if(dbPassword != null) {
+			if(dbPassword != null) {
 					
-					if(encoder.matches(poblateDBDTO.getPassword(), dbPassword.getValor())) {
+				if(encoder.matches(poblateDBDTO.getPassword(), dbPassword.getValor())) {
 						
-						try {
-							
-							body = this.dbService.poblateDB(poblateDBDTO); 
-						}
-						catch(Exception e) {
-							
-							status = HttpStatus.INTERNAL_SERVER_ERROR;
-							System.out.println(e);
-						}
-					}
-					else {
+					try {
 						
-						body = "No tienes permisos para realizar esta acción.";
-						status = HttpStatus.UNAUTHORIZED;
+						System.out.println("Iniciando la actualización de la base de datos por petición externa.");
+						body = this.dbService.poblateDB(poblateDBDTO); 
 					}
-					
-				}			
+					catch(Exception e) {
+							
+						status = HttpStatus.INTERNAL_SERVER_ERROR;
+						System.out.println(e);
+					}
+				}
 				else {
+						
+					body = "No tienes permisos para realizar esta acción.";
+					status = HttpStatus.UNAUTHORIZED;
+				}
 					
-					System.out.println("No se ha encontrado la PW en la BD.");
-					status = HttpStatus.INTERNAL_SERVER_ERROR;
-				}		
-			} 
-			catch (Exception e) {
-			
+			}			
+			else {
+					
+				System.out.println("No se ha encontrado la PW en la BD.");
 				status = HttpStatus.INTERNAL_SERVER_ERROR;
-				System.out.println(e);
-			}
+			}		
+		} 
+		catch (Exception e) {
+			
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			System.out.println(e);
 		}
 
 		return new ResponseEntity<String>(body, status);

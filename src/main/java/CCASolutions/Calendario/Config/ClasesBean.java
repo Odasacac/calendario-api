@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import CCASolutions.Calendario.DTOs.PoblateDBDTO;
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Services.DBService;
@@ -39,10 +38,8 @@ public class ClasesBean
     	
     	if(dbPassword == null) {    
     		
-    		System.out.println("Base de datos vacía.");
-    		PoblateDBDTO poblateDBDTO = new PoblateDBDTO(poblarBaseDeDatosAlArrancar, true);  
-    		System.out.println(this.dbService.poblateDB(poblateDBDTO)); 
- 		 	
+    		System.out.println("Base de datos vacía.");  
+    		System.out.println(this.dbService.poblateDBDesdeArranque(poblarBaseDeDatosAlArrancar)); 	
     	}
     }
 }
