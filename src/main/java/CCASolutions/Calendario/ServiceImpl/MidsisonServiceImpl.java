@@ -108,6 +108,8 @@ public class MidsisonServiceImpl implements MidsisonService{
 										midsison.setInvertido(luna.isInvertida());									
 																																																															
 									}
+									
+									System.out.println("Midsison nuevo o lleno encontrado, año: " + midsison.getDate().getYear());
 								}
 							}
 							
@@ -124,6 +126,8 @@ public class MidsisonServiceImpl implements MidsisonService{
 										midsison.setInvertido(apoperi.isEsInvertido());									
 																																																															
 									}
+									
+									System.out.println("Midsison apopérico encontrado, año: " + midsison.getDate().getYear());
 								}
 							}
 							
@@ -138,6 +142,8 @@ public class MidsisonServiceImpl implements MidsisonService{
 									if ((eclipse.isDeSol() || (eclipse.isDeLuna() && eclipse.isEsTotal())) && Math.abs(ChronoUnit.SECONDS.between(eclipse.getDate(), midsison.getDate())) <= 86164) {						
 										midsison.setEclipse(true);
 										midsison.setEclipseId(eclipse.getId());
+										
+										System.out.println("Midsison eclipsado, año: " + midsison.getDate().getYear());
 									}
 								}
 							}

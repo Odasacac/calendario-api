@@ -1,5 +1,8 @@
 package CCASolutions.Calendario.ServiceImpl;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -22,6 +25,7 @@ import CCASolutions.Calendario.Services.WeeksService;
 
 @Service
 public class DBServiceImpl implements DBService {
+
 	
 	@Autowired
 	private LunasService lunasService;
@@ -65,6 +69,9 @@ public class DBServiceImpl implements DBService {
 	@Autowired
 	private SeasonsService seasonsService;
 	
+	private static final int numeroDeHorasQueTardaEnFullPoblate = 0;
+
+	
 	public String  poblateDBDesdeArranque(boolean poblarBaseDeDatosAlArrancar) {
 		
 		String resultado = "";
@@ -72,8 +79,15 @@ public class DBServiceImpl implements DBService {
 		if(poblarBaseDeDatosAlArrancar) {
 			
 			System.out.println("Iniciando la población de la base de datos desde cero.");
+			System.out.println("Suele tardar algo más de " + numeroDeHorasQueTardaEnFullPoblate + " horas.");
 			PoblateDBDTO poblateDBDTO = new PoblateDBDTO(poblarBaseDeDatosAlArrancar);
-			resultado = this.poblateDB(poblateDBDTO);
+			
+			LocalDateTime startingPoblate = LocalDateTime.now();
+			resultado = this.poblateDB(poblateDBDTO);	
+			LocalDateTime finishingPoblate = LocalDateTime.now();			
+			
+			Duration duration = Duration.between(startingPoblate, finishingPoblate);		
+			System.out.println("Ha tardado: " + duration.toHours() + " horas y " + duration.toMinutesPart() + " minutos.");
 		}
 		else {
 			
@@ -86,17 +100,21 @@ public class DBServiceImpl implements DBService {
 	
 	public String poblateDB(PoblateDBDTO poblateDBDTO) {
 		
-		String resultado = "";
+		System.out.println("Iniciando poblateDB.");
+		String resultado = "";				
 		
 		if(poblateDBDTO.isPoblar() || poblateDBDTO.isEditar() || poblateDBDTO.isLlamadasAAPis()) {
 			
 			try {
+				
 				resultado = "~ Resultados población de la Base de Datos ~";
 				if(poblateDBDTO.isPoblar()) {
+					
 					resultado = resultado + "\n - DATOS: " + this.datosService.poblateDatos();
 				}
 				
 				if(poblateDBDTO.isLlamadasAAPis() && poblateDBDTO.isPoblar()) {
+					
 					resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale();
 					resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeosFromOpale();
 					resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale();	
@@ -104,10 +122,12 @@ public class DBServiceImpl implements DBService {
 				}
 				
 				if(poblateDBDTO.isEditar()) {
+					
 					resultado = resultado + "\n - ACTUALIZAR APOPERIS Y FASES: " + this.apogeosYPerigeosLunaService.updateLunasYApoperisConSelectoOInvertido();	
 				}
 				
 				if(poblateDBDTO.isPoblar()) {
+					
 					resultado = resultado + "\n - MIDSISONS: " + this.midsisonService.poblateMidsison();			
 					resultado = resultado + "\n - METONOS: " + this.metonsService.poblateMetonos();			
 					resultado = resultado + "\n - ECLIPENOS: " +this.eclipenosService.poblateEclipenos();
@@ -127,12 +147,11 @@ public class DBServiceImpl implements DBService {
 			}
 		}
 		else {
+			
 			resultado = "No se ha poblado la base de datos.";
-		}
+		}		
 		
-		
-		
-		
+		System.out.println("PoblateDB finalizado.");
 		return resultado;
 	}
 

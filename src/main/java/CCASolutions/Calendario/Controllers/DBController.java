@@ -35,9 +35,9 @@ public class DBController {
 
 	@PostMapping("/poblatedb")
 	public ResponseEntity<String> poblateDB(@RequestBody PoblateDBDTO poblateDBDTO) {
-		HttpStatus status = HttpStatus.OK;
-		String body = "Error al actualizar la base de datos.";
 		
+		HttpStatus status = HttpStatus.OK;
+		String body = "Error al actualizar la base de datos.";		
 
 		try {
 				

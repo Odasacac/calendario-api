@@ -38,9 +38,11 @@ public class ClasesBean
     		System.out.println(this.dbService.poblateDBDesdeArranque(poblarBaseDeDatosAlArrancar)); 	
     	}
     	else if(soloEstaLaPassword) {
+    		
     		System.out.println("Sólo está la adminPW en la base de datos, está pendiente poblar.");  
     	}
     	else {
+    		
     		System.out.println("Base de datos poblada."); 
     	}
     }
