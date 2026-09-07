@@ -1,9 +1,9 @@
 package CCASolutions.Calendario.Config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import CCASolutions.Calendario.Entities.DatosEntity;
 import CCASolutions.Calendario.Repositories.DatosRepository;
@@ -23,23 +23,25 @@ public class ClasesBean
 	@Autowired
 	private DatosService datosService;
 	
-	private final static boolean poblarBaseDeDatosAlArrancar = false;
+	private final static boolean poblarBaseDeDatosAlArrancar = true;
 	
-    @Bean
-    BCryptPasswordEncoder passwordEncoder() 
-	{
-		return new BCryptPasswordEncoder();
-    }
     
     @PostConstruct
-    void construirBaseDeDatos() {
+    void checkearBaseDeDatos() {
     	
-    	DatosEntity dbPassword = this.datosRepository.findByConcepto(this.datosService.getPWCode());
+    	List<DatosEntity> allDatos = this.datosRepository.findAll();
+		boolean soloEstaLaPassword = allDatos.size() == 1 && allDatos.get(0).getConcepto().equals(this.datosService.getPWCode());
     	
-    	if(dbPassword == null) {    
+    	if(allDatos.isEmpty()) {    
     		
     		System.out.println("Base de datos vacía.");  
     		System.out.println(this.dbService.poblateDBDesdeArranque(poblarBaseDeDatosAlArrancar)); 	
+    	}
+    	else if(soloEstaLaPassword) {
+    		System.out.println("Sólo está la adminPW en la base de datos, está pendiente poblar.");  
+    	}
+    	else {
+    		System.out.println("Base de datos poblada."); 
     	}
     }
 }
