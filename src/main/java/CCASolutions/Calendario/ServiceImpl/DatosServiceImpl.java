@@ -24,7 +24,8 @@ public class DatosServiceImpl implements DatosService {
 	private final static String API_APOPERIS = "APG";
 	private final static String API_SOES = "ASYEF";
 	private final static String API_LUNAR_ECLIPSES = "LEPY";
-	private final static String API_SOLAR_ECLIPSES = "SEPY";	
+	private final static String API_SOLAR_ECLIPSES = "SEPY";
+	private final String[] fechasInvalidas = {"0600-03-01"};
 	
 	public String getPWCode() {		
 		return PW_CODE;
@@ -48,6 +49,10 @@ public class DatosServiceImpl implements DatosService {
 
 	public String getApiSolarEclipses() {
 		return API_SOLAR_ECLIPSES;
+	}
+	
+	public String[] getFechasInvalidas() {
+		return fechasInvalidas;
 	}
 
 	public String poblateSoloPassword() {

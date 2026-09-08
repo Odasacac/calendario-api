@@ -305,7 +305,7 @@ public class LunasServiceImpl implements LunasService {
 						
 						for(LunarPhaseDTO faseLunarAPI : fasesLunaresDelAnyo) {
 							
-							if(i > 0) {
+							if(LocalDateTime.parse(faseLunarAPI.getDate()).isAfter(LocalDateTime.of(1, 1, 1, 0, 0))) {
 								
 								LunasEntity lunaParaDB = new LunasEntity();
 								
@@ -332,7 +332,22 @@ public class LunasServiceImpl implements LunasService {
 								lunaParaDB.setDate(LocalDateTime.parse(faseLunarAPI.getDate()));									
 								lunaParaDB.setSelecta(false);
 								lunaParaDB.setInvertida(false);
-								lunasForDB.add(lunaParaDB);								
+								
+								boolean esFechaInvalida = false;
+
+								for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
+
+								    if (lunaParaDB.getDate().toLocalDate().toString().equals(fechaInvalida)) {
+								    	
+								        esFechaInvalida = true;
+								        break;
+								    }
+								}
+
+								if (!esFechaInvalida) {
+								    lunasForDB.add(lunaParaDB);
+								}								
+														
 							}
 		
 							AllFasesLunaresEntity allFaseLunarParaDB = new AllFasesLunaresEntity();
@@ -399,13 +414,17 @@ public class LunasServiceImpl implements LunasService {
 				
 			}
 			
+			System.out.println("Almacenando lunas...");
 			if(!lunasForDB.isEmpty()) {
 				
 				this.lunasRepository.saveAll(lunasForDB);
 			}
 			
 			if(!allFasesLunaresForDB.isEmpty()) {
-				this.allFasesLunaresRepository.saveAll(allFasesLunaresForDB);			}
+				this.allFasesLunaresRepository.saveAll(allFasesLunaresForDB);			
+			}
+			
+			System.out.println("Lunas almacenadas.");
 			
 			
 		}	

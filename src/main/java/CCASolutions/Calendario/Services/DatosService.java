@@ -10,4 +10,5 @@ public interface DatosService {
 	public abstract String getApiLunarEclipses();
 	public abstract String getApiSolarEclipses();
 	public abstract String poblateSoloPassword();
+	public abstract String[] getFechasInvalidas();
 }

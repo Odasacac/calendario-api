@@ -23,7 +23,7 @@ public class ClasesBean
 	@Autowired
 	private DatosService datosService;
 	
-	private final static boolean poblarBaseDeDatosAlArrancar = true;
+	private final static boolean poblarBaseDeDatosAlArrancar = false;
 	
     
     @PostConstruct

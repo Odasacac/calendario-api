@@ -21,8 +21,7 @@ import CCASolutions.Calendario.Services.DatosService;
 @RequestMapping("/api")
 public class DBController {
 	
-	@Autowired
-	private BCryptPasswordEncoder encoder;
+	private BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
 	
 	@Autowired
 	private DBService dbService;

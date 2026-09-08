@@ -124,7 +124,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 						
 						for(FenomenoDTO soeAPI : solsticiosYEquinocciosDelAnyo) {
 							
-							if(i > 0) {
+							if(LocalDateTime.parse(soeAPI.getDate()).isAfter(LocalDateTime.of(1, 1, 1, 0, 0))) {
 								
 								SolsticiosYEquinocciosEntity soeParaDB = new SolsticiosYEquinocciosEntity();
 							
@@ -154,7 +154,22 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 								soeParaDB.setYear(LocalDateTime.parse(soeAPI.getDate()).getYear());
 								soeParaDB.setDate(LocalDateTime.parse(soeAPI.getDate()));
 								
-								soesForDB.add(soeParaDB);								
+								boolean esFechaInvalida = false;
+
+								for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
+
+								    if (soeParaDB.getDate().toLocalDate().toString().equals(fechaInvalida)) {
+								    	
+								        esFechaInvalida = true;
+								        break;
+								    }
+								}
+
+								if (!esFechaInvalida) {
+									soesForDB.add(soeParaDB);
+								}							
+																
+																
 							}
 							
 							AllSoEsEntity allSoEsParaDB = new AllSoEsEntity();
@@ -219,7 +234,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 				
 			}	
 			
-			
+			System.out.println("Almacenando Soes...");
 			if(!soesForDB.isEmpty()) {
 				
 				this.solsticiosYEquinocciosRepository.saveAll(soesForDB);
@@ -229,6 +244,8 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 				
 				this.allSoEsRepository.saveAll(allSoesForDB);
 			}			
+			
+			System.out.println("Soes almacenados.");
 			
 		}
 		else {

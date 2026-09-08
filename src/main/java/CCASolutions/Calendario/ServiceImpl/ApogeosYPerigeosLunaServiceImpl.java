@@ -91,7 +91,21 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 						}
 						apogeoParaDB.setDistance(apogeo.getDistance());							
 						
-						apogeosParaDB.add(apogeoParaDB);
+						boolean esFechaInvalida = false;
+
+						for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
+
+						    if (apogeoParaDB.getDate().toLocalDate().toString().equals(fechaInvalida)) {
+						    	
+						        esFechaInvalida = true;
+						        break;
+						    }
+						}
+
+						if (!esFechaInvalida) {
+							apogeosParaDB.add(apogeoParaDB);
+						}		
+						
 					}
 					System.out.println("Almacenando apoperis en la BD.");
 					this.apogeosYPerigeosLunaRepository.saveAll(apogeosParaDB);

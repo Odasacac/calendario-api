@@ -179,6 +179,8 @@ public class EclipsesServiceImpl implements EclipsesService{
 						allEclipsesParaDB.add(eclipsesSolares.getAllEclipse());												
 					}
 					
+					System.out.println("Almacenando eclipses...");
+					
 					if(!eclipsesParaDB.isEmpty()) {
 						
 						this.eclipsesRepository.saveAll(eclipsesParaDB);
@@ -188,6 +190,8 @@ public class EclipsesServiceImpl implements EclipsesService{
 						
 						this.allEclipsesRepository.saveAll(allEclipsesParaDB);
 					}
+					
+					System.out.println("Eclipses almacenados.");
 				}
 				catch (Exception e)
 				{
@@ -250,7 +254,22 @@ public class EclipsesServiceImpl implements EclipsesService{
 								break;
 						}
 						
-						eclipsesLunares.setEclipse(eclipseParaBD);
+
+						boolean esFechaInvalida = false;
+
+						for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
+
+						    if (eclipseParaBD.getDate().toLocalDate().toString().equals(fechaInvalida)) {
+						    	
+						        esFechaInvalida = true;
+						        break;
+						    }
+						}
+
+						if (!esFechaInvalida) {
+							eclipsesLunares.setEclipse(eclipseParaBD);
+						}		
+						
 					}
 					
 					
@@ -343,7 +362,20 @@ public class EclipsesServiceImpl implements EclipsesService{
 							break;
 					}
 				
-					eclipsesSolares.setEclipse(eclipseParaBD);
+					boolean esFechaInvalida = false;
+
+					for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
+
+					    if (eclipseParaBD.getDate().toLocalDate().toString().equals(fechaInvalida)) {
+					    	
+					        esFechaInvalida = true;
+					        break;
+					    }
+					}
+
+					if (!esFechaInvalida) {
+						eclipsesSolares.setEclipse(eclipseParaBD);
+					}		
 				}
 				
 				AllEclipsesEntity allEclipseParaDB = new AllEclipsesEntity();
