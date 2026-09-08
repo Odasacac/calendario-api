@@ -12,6 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 import CCASolutions.Calendario.DTOs.AbsoluteEclipsesDTO;
 import CCASolutions.Calendario.DTOs.DateDTO;
+import CCASolutions.Calendario.DTOs.EclipsesParaDBDTO;
 import CCASolutions.Calendario.DTOs.LEPYDTO;
 import CCASolutions.Calendario.DTOs.LunarEclipseDTO;
 import CCASolutions.Calendario.DTOs.SEPYDTO;
@@ -141,12 +142,16 @@ public class EclipsesServiceImpl implements EclipsesService{
 		String resultado = "Eclipses actualizados sin problema.";
 		
 		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList(this.datosService.getApiLunarEclipses(), this.datosService.getApiSolarEclipses()));	
-		List<EclipsesEntity> allEclipses = this.eclipsesRepository.findAll();
+		List<EclipsesEntity> eclipses = this.eclipsesRepository.findAll();
+		List<AllEclipsesEntity> allEclipses = this.allEclipsesRepository.findAll();
+		
+		List<EclipsesEntity> eclipsesParaDB = new ArrayList<>();
+		List<AllEclipsesEntity> allEclipsesParaDB = new ArrayList<>();
 		
 		String apiEclipsesLunares = null;
 		String apiEclipsesSolares = null;
 		
-		if(allEclipses.isEmpty()) {
+		if(eclipses.isEmpty() && allEclipses.isEmpty()) {
 			for (DatosEntity url : urls) 
 			{
 				if (this.datosService.getApiLunarEclipses().equals(url.getConcepto())) {
@@ -164,11 +169,24 @@ public class EclipsesServiceImpl implements EclipsesService{
 				try {
 					
 					for (int i = -4700; i <= 2100; i++) {
-															
-						this.actualizarEclipsesLunaresDelAnyo(String.valueOf(i), apiEclipsesLunares);
+										
+						EclipsesParaDBDTO eclipsesLunares = this.actualizarEclipsesLunaresDelAnyo(String.valueOf(i), apiEclipsesLunares);
+						EclipsesParaDBDTO eclipsesSolares = this.actualizarEclipsesSolaresDelAnyo(String.valueOf(i), apiEclipsesSolares);	
 						
-						this.actualizarEclipsesSolaresDelAnyo(String.valueOf(i), apiEclipsesSolares);				
+						eclipsesParaDB.add(eclipsesLunares.getEclipse());
+						eclipsesParaDB.add(eclipsesSolares.getEclipse());
+						allEclipsesParaDB.add(eclipsesLunares.getAllEclipse());
+						allEclipsesParaDB.add(eclipsesSolares.getAllEclipse());												
+					}
 					
+					if(!eclipsesParaDB.isEmpty()) {
+						
+						this.eclipsesRepository.saveAll(eclipsesParaDB);
+					}
+					
+					if(!allEclipsesParaDB.isEmpty()) {
+						
+						this.allEclipsesRepository.saveAll(allEclipsesParaDB);
 					}
 				}
 				catch (Exception e)
@@ -196,7 +214,9 @@ public class EclipsesServiceImpl implements EclipsesService{
 	
 	// PRIVATE METHODS
 	
-	private void actualizarEclipsesLunaresDelAnyo (String anyo, String url){
+	private EclipsesParaDBDTO actualizarEclipsesLunaresDelAnyo (String anyo, String url){
+		
+		EclipsesParaDBDTO eclipsesLunares = new EclipsesParaDBDTO();
 		
 		System.out.println("Actualizando los eclipses lunares del anyo: " + anyo);
 		
@@ -230,7 +250,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 								break;
 						}
 						
-						this.eclipsesRepository.save(eclipseParaBD);
+						eclipsesLunares.setEclipse(eclipseParaBD);
 					}
 					
 					
@@ -271,8 +291,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 					allEclipseParaDB.setMinute(Integer.parseInt(timeParts[1]));
 					allEclipseParaDB.setSecond(Integer.parseInt(timeParts[2]));
 					
-					this.allEclipsesRepository.save(allEclipseParaDB);
-					
+					eclipsesLunares.setAllEclipse(allEclipseParaDB);										
 				}
 			}
 		}
@@ -284,6 +303,8 @@ public class EclipsesServiceImpl implements EclipsesService{
 		
 		
 		System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
+		
+		return eclipsesLunares;
 	}
 	
 	
@@ -291,8 +312,9 @@ public class EclipsesServiceImpl implements EclipsesService{
 	
 	
 
-	 private void actualizarEclipsesSolaresDelAnyo (String anyo, String url){
+	 private EclipsesParaDBDTO actualizarEclipsesSolaresDelAnyo (String anyo, String url){
 		
+		EclipsesParaDBDTO eclipsesSolares = new EclipsesParaDBDTO();
 		System.out.println("Actualizando los eclipses solares del anyo: " + anyo);
 		
 		try {
@@ -321,7 +343,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 							break;
 					}
 				
-					this.eclipsesRepository.save(eclipseParaBD);
+					eclipsesSolares.setEclipse(eclipseParaBD);
 				}
 				
 				AllEclipsesEntity allEclipseParaDB = new AllEclipsesEntity();
@@ -361,9 +383,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 				allEclipseParaDB.setMinute(Integer.parseInt(timeParts[1]));
 				allEclipseParaDB.setSecond(Integer.parseInt(timeParts[2]));
 				
-				this.allEclipsesRepository.save(allEclipseParaDB);
-				
-		
+				eclipsesSolares.setAllEclipse(allEclipseParaDB);					
 			}
 		}
 		catch (Exception e) {
@@ -371,7 +391,9 @@ public class EclipsesServiceImpl implements EclipsesService{
 		}
 		
 		
-		System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
+		System.out.println("Actualizados los eclipses solares del anyo: " + anyo);	
+		
+		return eclipsesSolares;
 	}
 	
 	private List<SolarEclipseDTO> getEclipsesSolaresDelAnyoViaAPI(String anyo, String url) {

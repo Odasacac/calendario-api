@@ -106,9 +106,12 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		
 		DatosEntity apiGetSYEUrl = datosRepository.findByConcepto(this.datosService.getApiSoes());
 		
-		List<SolsticiosYEquinocciosEntity> allSoes = this.solsticiosYEquinocciosRepository.findAll();
+		List<SolsticiosYEquinocciosEntity> soes = this.solsticiosYEquinocciosRepository.findAll();
+		List<SolsticiosYEquinocciosEntity> soesForDB = new ArrayList<>();
+		List<AllSoEsEntity> allSoes = this.allSoEsRepository.findAll();
+		List<AllSoEsEntity> allSoesForDB = new ArrayList<>();
 		
-		if(apiGetSYEUrl != null && allSoes.isEmpty()) {	
+		if(apiGetSYEUrl != null && soes.isEmpty() && allSoes.isEmpty()) {	
 			
 			for (int i = -4700; i < 2100; i++) {
 				
@@ -151,7 +154,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 								soeParaDB.setYear(LocalDateTime.parse(soeAPI.getDate()).getYear());
 								soeParaDB.setDate(LocalDateTime.parse(soeAPI.getDate()));
 								
-								this.solsticiosYEquinocciosRepository.save(soeParaDB);
+								soesForDB.add(soeParaDB);								
 							}
 							
 							AllSoEsEntity allSoEsParaDB = new AllSoEsEntity();
@@ -194,8 +197,9 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 							allSoEsParaDB.setHour(Integer.parseInt(timeParts[0]));
 							allSoEsParaDB.setMinute(Integer.parseInt(timeParts[1]));
 							allSoEsParaDB.setSecond(Integer.parseInt(timeParts[2]));
-										
-							this.allSoEsRepository.save(allSoEsParaDB);
+									
+							allSoesForDB.add(allSoEsParaDB);
+							
 						}						
 						
 						System.out.println("Actualizados los solsticios y equinoccios del anyo: " + i);
@@ -213,15 +217,29 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 				}
 				
 				
-			}				
+			}	
+			
+			
+			if(!soesForDB.isEmpty()) {
+				
+				this.solsticiosYEquinocciosRepository.saveAll(soesForDB);
+			}
+			
+			if(!allSoesForDB.isEmpty()) {
+				
+				this.allSoEsRepository.saveAll(allSoesForDB);
+			}			
+			
 		}
 		else {
 			
 			if(apiGetSYEUrl == null) {
+				
 				System.out.println("La URL de la API para obtener los soes es nula.");
 				resultado = "Error al actualizar los solsticios y equinoccios: la URL de la API para obtener los soes es nula..";
 			}
-			else if(!allSoes.isEmpty()) {
+			else if(!soes.isEmpty() || !allSoes.isEmpty()) {
+				
 				System.out.println("Ya hay soes en la base de datos.");
 				resultado = "Error al actualizar los solsticios y equinoccios: ya hay soes en la base de datos.";
 			}

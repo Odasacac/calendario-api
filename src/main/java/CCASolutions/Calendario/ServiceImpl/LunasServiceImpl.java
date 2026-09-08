@@ -287,8 +287,12 @@ public class LunasServiceImpl implements LunasService {
 		DatosEntity apiGetLunasUrl = datosRepository.findByConcepto(this.datosService.getApiLunarFases());
 		
 		List<LunasEntity> allLunas = this.lunasRepository.findAll();
+		List<AllFasesLunaresEntity> allFasesLunares = this.allFasesLunaresRepository.findAll();
 		
-		if(apiGetLunasUrl != null && allLunas.isEmpty()) {	
+		if(apiGetLunasUrl != null && allLunas.isEmpty() && allFasesLunares.isEmpty()) {	
+			
+			List<LunasEntity> lunasForDB = new ArrayList<>();
+			List<AllFasesLunaresEntity> allFasesLunaresForDB = new ArrayList<>();
 			
 			for (int i = -4700; i < 2100; i++) {
 				
@@ -328,8 +332,7 @@ public class LunasServiceImpl implements LunasService {
 								lunaParaDB.setDate(LocalDateTime.parse(faseLunarAPI.getDate()));									
 								lunaParaDB.setSelecta(false);
 								lunaParaDB.setInvertida(false);
-								
-								this.lunasRepository.save(lunaParaDB);;
+								lunasForDB.add(lunaParaDB);								
 							}
 		
 							AllFasesLunaresEntity allFaseLunarParaDB = new AllFasesLunaresEntity();
@@ -359,11 +362,13 @@ public class LunasServiceImpl implements LunasService {
 							String[] timeParts = parts[1].split(":");
 
 							if(String.valueOf(faseLunarAPI.getDate()).startsWith("-")) {
+								
 								allFaseLunarParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
 								allFaseLunarParaDB.setMonth(Integer.parseInt(dateParts[2]));
 								allFaseLunarParaDB.setDay(Integer.parseInt(dateParts[3]));
 							}
 							else {
+								
 								allFaseLunarParaDB.setYear(Integer.parseInt(dateParts[0]));
 								allFaseLunarParaDB.setMonth(Integer.parseInt(dateParts[1]));
 								allFaseLunarParaDB.setDay(Integer.parseInt(dateParts[2]));
@@ -374,7 +379,7 @@ public class LunasServiceImpl implements LunasService {
 							allFaseLunarParaDB.setMinute(Integer.parseInt(timeParts[1]));
 							allFaseLunarParaDB.setSecond(Integer.parseInt(timeParts[2]));
 							
-							this.allFasesLunaresRepository.save(allFaseLunarParaDB);
+							allFasesLunaresForDB.add(allFaseLunarParaDB);
 						}					
 						
 						
@@ -387,11 +392,22 @@ public class LunasServiceImpl implements LunasService {
 					}					
 				}
 				catch(Exception e) {
+					
 					System.out.println("Error al actualizar lunas del anyo " + i  +": "+ e);
 					resultado = "Error al actualizar lunas, checkear logs.";
 				}
 				
 			}
+			
+			if(!lunasForDB.isEmpty()) {
+				
+				this.lunasRepository.saveAll(lunasForDB);
+			}
+			
+			if(!allFasesLunaresForDB.isEmpty()) {
+				this.allFasesLunaresRepository.saveAll(allFasesLunaresForDB);			}
+			
+			
 		}	
 		
 		else {
@@ -401,7 +417,7 @@ public class LunasServiceImpl implements LunasService {
 				System.out.println("La URL de la API para obtener las lunas es nula.");
 				resultado = "Error al actualizar lunas: la URL de la API para obtener las lunas es nula.";
 			}
-			else if(!allLunas.isEmpty()) {
+			else if(!allLunas.isEmpty() || !allFasesLunares.isEmpty()) {
 				
 				System.out.println("Ya hay lunas en la base de datos.");
 				resultado = "Error al actualizar lunas: ya hay lunas en la base de datos.";
