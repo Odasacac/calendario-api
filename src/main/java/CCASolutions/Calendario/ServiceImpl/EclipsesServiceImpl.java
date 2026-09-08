@@ -173,10 +173,29 @@ public class EclipsesServiceImpl implements EclipsesService{
 						EclipsesParaDBDTO eclipsesLunares = this.actualizarEclipsesLunaresDelAnyo(String.valueOf(i), apiEclipsesLunares);
 						EclipsesParaDBDTO eclipsesSolares = this.actualizarEclipsesSolaresDelAnyo(String.valueOf(i), apiEclipsesSolares);	
 						
-						eclipsesParaDB.add(eclipsesLunares.getEclipse());
-						eclipsesParaDB.add(eclipsesSolares.getEclipse());
-						allEclipsesParaDB.add(eclipsesLunares.getAllEclipse());
-						allEclipsesParaDB.add(eclipsesSolares.getAllEclipse());												
+						if(eclipsesLunares.getEclipse() != null) {
+							
+							eclipsesParaDB.add(eclipsesLunares.getEclipse());
+						}
+						
+						if(eclipsesSolares.getEclipse() != null) {
+							
+							eclipsesParaDB.add(eclipsesSolares.getEclipse());
+						}
+						
+						if(eclipsesLunares.getAllEclipse() != null) {
+							
+							allEclipsesParaDB.add(eclipsesLunares.getAllEclipse());
+						}
+						
+						if(eclipsesSolares.getAllEclipse() != null) {
+							
+							allEclipsesParaDB.add(eclipsesSolares.getAllEclipse());									
+						}
+						
+						
+						
+																
 					}
 					
 					System.out.println("Almacenando eclipses...");
@@ -290,38 +309,29 @@ public class EclipsesServiceImpl implements EclipsesService{
 							break;
 					}
 					
-					String[] parts = String.valueOf(eclipse.getDate()).split("T");
-					String[] dateParts = parts[0].split("-");
-					String[] timeParts = parts[1].split(":");
+					LocalDateTime fecha = LocalDateTime.parse(eclipse.getDate());
 
-					if(String.valueOf(eclipse.getDate()).startsWith("-")) {
-						allEclipseParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
-						allEclipseParaDB.setMonth(Integer.parseInt(dateParts[2]));
-						allEclipseParaDB.setDay(Integer.parseInt(dateParts[3]));
-					}
-					else {
-						allEclipseParaDB.setYear(Integer.parseInt(dateParts[0]));
-						allEclipseParaDB.setMonth(Integer.parseInt(dateParts[1]));
-						allEclipseParaDB.setDay(Integer.parseInt(dateParts[2]));
-					}
+					allEclipseParaDB.setYear(fecha.getYear());
+					allEclipseParaDB.setMonth(fecha.getMonthValue());
+					allEclipseParaDB.setDay(fecha.getDayOfMonth());
+					allEclipseParaDB.setHour(fecha.getHour());
+					allEclipseParaDB.setMinute(fecha.getMinute());
+					allEclipseParaDB.setSecond(fecha.getSecond());
 					
-
-					allEclipseParaDB.setHour(Integer.parseInt(timeParts[0]));
-					allEclipseParaDB.setMinute(Integer.parseInt(timeParts[1]));
-					allEclipseParaDB.setSecond(Integer.parseInt(timeParts[2]));
+					eclipsesLunares.setAllEclipse(allEclipseParaDB);
 					
-					eclipsesLunares.setAllEclipse(allEclipseParaDB);										
+					
+					System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
 				}
 			}
 		}
 		catch (Exception e) {
 			
 			System.out.println("Error al actualizar los eclipses lunares del anyo " + anyo  +": "+ e);
+			e.printStackTrace();
 		}
 		
-		
-		
-		System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
+	
 		
 		return eclipsesLunares;
 	}
@@ -395,35 +405,22 @@ public class EclipsesServiceImpl implements EclipsesService{
 						break;
 					}
 				
-				String[] parts = String.valueOf(eclipse.getDate()).split("T");
-				String[] dateParts = parts[0].split("-");
-				String[] timeParts = parts[1].split(":");
+				LocalDateTime fecha = LocalDateTime.parse(eclipse.getDate());
 
-				if(String.valueOf(eclipse.getDate()).startsWith("-")) {
-					allEclipseParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
-					allEclipseParaDB.setMonth(Integer.parseInt(dateParts[2]));
-					allEclipseParaDB.setDay(Integer.parseInt(dateParts[3]));
-				}
-				else {
-					allEclipseParaDB.setYear(Integer.parseInt(dateParts[0]));
-					allEclipseParaDB.setMonth(Integer.parseInt(dateParts[1]));
-					allEclipseParaDB.setDay(Integer.parseInt(dateParts[2]));
-				}
+				allEclipseParaDB.setYear(fecha.getYear());
+				allEclipseParaDB.setMonth(fecha.getMonthValue());
+				allEclipseParaDB.setDay(fecha.getDayOfMonth());
+				allEclipseParaDB.setHour(fecha.getHour());
+				allEclipseParaDB.setMinute(fecha.getMinute());
+				allEclipseParaDB.setSecond(fecha.getSecond());
 				
-
-				allEclipseParaDB.setHour(Integer.parseInt(timeParts[0]));
-				allEclipseParaDB.setMinute(Integer.parseInt(timeParts[1]));
-				allEclipseParaDB.setSecond(Integer.parseInt(timeParts[2]));
-				
-				eclipsesSolares.setAllEclipse(allEclipseParaDB);					
+				eclipsesSolares.setAllEclipse(allEclipseParaDB);			
+				System.out.println("Actualizados los eclipses solares del anyo: " + anyo);	
 			}
 		}
 		catch (Exception e) {
 			System.out.println("Error al actualizar los eclipses solares del anyo " + anyo  +": "+ e);
 		}
-		
-		
-		System.out.println("Actualizados los eclipses solares del anyo: " + anyo);	
 		
 		return eclipsesSolares;
 	}
