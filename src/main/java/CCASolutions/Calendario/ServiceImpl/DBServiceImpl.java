@@ -115,9 +115,9 @@ public class DBServiceImpl implements DBService {
 				
 				if(poblateDBDTO.isLlamadasAAPis() && poblateDBDTO.isPoblar()) {
 					
-					//resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale();
-					//resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeosFromOpale();
-					//resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale();	
+					resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale();
+					resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeosFromOpale();
+					resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale();	
 					resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipsesFromOpale();	
 				}
 				
