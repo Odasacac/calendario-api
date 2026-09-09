@@ -43,8 +43,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 	
 	private static final String APOGEO = "MaximalDistance";
 	private static final String PERIGEO = "MinimalDistance";
-	private static final DateTimeFormatter FORMATTER_API_REQUEST =
-	        DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+	private static final DateTimeFormatter FORMATTER_API_REQUEST = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
 	private static final DateTimeFormatter FORMATTER_API_RESPONSE =
 	        new DateTimeFormatterBuilder()
@@ -54,6 +53,10 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 	                .appendFraction(ChronoField.NANO_OF_SECOND, 0, 9, true)
 	                .optionalEnd()
 	                .toFormatter();
+	
+	private static LocalDateTime fechaParaLlamada = LocalDateTime.parse("1000-01-01T00:00:00.000");
+	private static LocalDateTime fechaTope = LocalDateTime.parse("2100-01-01T00:00:00.000");
+	
 	
 	public String poblateApogeosFromOpale() {
 		
@@ -223,10 +226,6 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 		List<ApogeosDTO> allApogeos = new ArrayList<>();
 		
 		// https://opale.imcce.fr/api/v1/phenomena/distances?date={{YYYY-MM-DD}}&nbd={{DDDD}}&bodies=399,301&calendar=gregorian		
-		
-		LocalDateTime fechaParaLlamada = LocalDateTime.parse("1000-01-01T00:00:00.000");
-
-		LocalDateTime fechaTope = LocalDateTime.parse("2100-01-01T00:00:00.000");
 
 		String urlConDias = url.replace("{{DDDD}}", "500");
 

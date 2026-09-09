@@ -52,6 +52,8 @@ public class EclipsesServiceImpl implements EclipsesService{
 	private final static String CENTRAL_ANULAR = "CentralAnnularEclipse";
 	private final static String CENTRAL_TOTAL = "CentralTotalEclipse";
 	
+	private final static int anyoMinimo = -4700;
+	private final static int anyoMaximo = 2100;
 	
 	
 	
@@ -168,7 +170,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 				
 				try {
 					
-					for (int i = -4700; i <= 2100; i++) {
+					for (int i = anyoMinimo; i <= anyoMaximo; i++) {
 										
 						EclipsesParaDBDTO eclipsesLunares = this.actualizarEclipsesLunaresDelAnyo(String.valueOf(i), apiEclipsesLunares);
 						EclipsesParaDBDTO eclipsesSolares = this.actualizarEclipsesSolaresDelAnyo(String.valueOf(i), apiEclipsesSolares);	

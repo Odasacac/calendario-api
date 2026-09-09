@@ -58,6 +58,8 @@ public class LunasServiceImpl implements LunasService {
 	private final static String FULLMOON = "FullMoon";
 	private final static String LAST_QUARTER = "LastQuarter";
 	
+	private final static int anyoMinimo = -4700;
+	private final static int anyoMaximo = 2100;
 	
 	// METODOS PUBLICOS
 	
@@ -294,7 +296,7 @@ public class LunasServiceImpl implements LunasService {
 			List<LunasEntity> lunasForDB = new ArrayList<>();
 			List<AllFasesLunaresEntity> allFasesLunaresForDB = new ArrayList<>();
 			
-			for (int i = -4700; i < 2100; i++) {
+			for (int i = anyoMinimo; i < anyoMaximo; i++) {
 				
 				System.out.println("Actualizando lunas del anyo: " + i);
 				

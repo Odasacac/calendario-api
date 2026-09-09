@@ -46,6 +46,8 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	private final static String SV = "SummerSolstice";
 	private final static String EO = "AutumnalEquinox";
 	
+	private final static int anyoMinimo = -4700;
+	private final static int anyoMaximo = 2100;
 	
 
 	public YearDTO getVAUYear(EclipenosEntity lastEclipenoIN, LocalDate date, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMetonIN) {
@@ -111,9 +113,9 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		List<AllSoEsEntity> allSoes = this.allSoEsRepository.findAll();
 		List<AllSoEsEntity> allSoesForDB = new ArrayList<>();
 		
-		if(apiGetSYEUrl != null && soes.isEmpty() && allSoes.isEmpty()) {	
+		if(apiGetSYEUrl != null && soes.isEmpty()) {	
 			
-			for (int i = -4700; i < 2100; i++) {
+			for (int i = anyoMinimo; i < anyoMaximo; i++) {
 				
 				System.out.println("Actualizando los solsticios y equinoccios del anyo: " + i);
 				
@@ -235,12 +237,12 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 			}	
 			
 			System.out.println("Almacenando Soes...");
-			if(!soesForDB.isEmpty()) {
+			if(!soesForDB.isEmpty() && soes.isEmpty()) {
 				
 				this.solsticiosYEquinocciosRepository.saveAll(soesForDB);
 			}
 			
-			if(!allSoesForDB.isEmpty()) {
+			if(!allSoesForDB.isEmpty() && allSoes.isEmpty()) {
 				
 				this.allSoEsRepository.saveAll(allSoesForDB);
 			}			
@@ -255,7 +257,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 				System.out.println("La URL de la API para obtener los soes es nula.");
 				resultado = "Error al actualizar los solsticios y equinoccios: la URL de la API para obtener los soes es nula..";
 			}
-			else if(!soes.isEmpty() || !allSoes.isEmpty()) {
+			else if(!soes.isEmpty()) {
 				
 				System.out.println("Ya hay soes en la base de datos.");
 				resultado = "Error al actualizar los solsticios y equinoccios: ya hay soes en la base de datos.";
