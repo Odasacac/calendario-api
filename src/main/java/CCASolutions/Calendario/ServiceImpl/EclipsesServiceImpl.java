@@ -52,8 +52,8 @@ public class EclipsesServiceImpl implements EclipsesService{
 	private final static String CENTRAL_ANULAR = "CentralAnnularEclipse";
 	private final static String CENTRAL_TOTAL = "CentralTotalEclipse";
 	
-	private final static int anyoMinimo = -4700;
-	private final static int anyoMaximo = 2100;
+	private int anyoMinimo = -4700;
+	private int anyoMaximo = 2100;
 	
 	
 	
@@ -139,9 +139,16 @@ public class EclipsesServiceImpl implements EclipsesService{
 	
 	
 	
-	public String poblateEclipsesFromOpale() {
+	public String poblateEclipsesFromOpale(boolean poblarTablasExtra) {
 		
 		String resultado = "Eclipses actualizados sin problema.";
+		
+		int anyoMinimoParaAPI = this.anyoMinimo;
+		int anyoMaximoParaAPI = this.anyoMaximo;
+		
+		if(!poblarTablasExtra) {
+			anyoMinimoParaAPI = 0;
+		}
 		
 		List<DatosEntity> urls = datosRepository.findByConceptoIn(Arrays.asList(this.datosService.getApiLunarEclipses(), this.datosService.getApiSolarEclipses()));	
 		List<EclipsesEntity> eclipses = this.eclipsesRepository.findAll();
@@ -170,10 +177,10 @@ public class EclipsesServiceImpl implements EclipsesService{
 				
 				try {
 					
-					for (int i = anyoMinimo; i <= anyoMaximo; i++) {
+					for (int i = anyoMinimoParaAPI; i <= anyoMaximoParaAPI; i++) {
 										
-						EclipsesParaDBDTO eclipsesLunares = this.actualizarEclipsesLunaresDelAnyo(String.valueOf(i), apiEclipsesLunares);
-						EclipsesParaDBDTO eclipsesSolares = this.actualizarEclipsesSolaresDelAnyo(String.valueOf(i), apiEclipsesSolares);	
+						EclipsesParaDBDTO eclipsesLunares = this.actualizarEclipsesLunaresDelAnyo(String.valueOf(i), apiEclipsesLunares, poblarTablasExtra);
+						EclipsesParaDBDTO eclipsesSolares = this.actualizarEclipsesSolaresDelAnyo(String.valueOf(i), apiEclipsesSolares, poblarTablasExtra);	
 						
 						if(eclipsesLunares.getEclipse() != null) {
 							
@@ -185,19 +192,18 @@ public class EclipsesServiceImpl implements EclipsesService{
 							eclipsesParaDB.add(eclipsesSolares.getEclipse());
 						}
 						
-						if(eclipsesLunares.getAllEclipse() != null) {
+						if(poblarTablasExtra) {
 							
-							allEclipsesParaDB.add(eclipsesLunares.getAllEclipse());
-						}
-						
-						if(eclipsesSolares.getAllEclipse() != null) {
+							if(eclipsesLunares.getAllEclipse() != null) {
+								
+								allEclipsesParaDB.add(eclipsesLunares.getAllEclipse());
+							}
 							
-							allEclipsesParaDB.add(eclipsesSolares.getAllEclipse());									
-						}
-						
-						
-						
-																
+							if(eclipsesSolares.getAllEclipse() != null) {
+								
+								allEclipsesParaDB.add(eclipsesSolares.getAllEclipse());									
+							}
+						}												
 					}
 					
 					System.out.println("Almacenando eclipses...");
@@ -214,19 +220,21 @@ public class EclipsesServiceImpl implements EclipsesService{
 					
 					System.out.println("Eclipses almacenados.");
 				}
-				catch (Exception e)
-				{
+				catch (Exception e)	{
+					
 					System.out.println("Error al evaluar los eclipses: " + e);
 					resultado = "Error al evaluar los eclipses, revisar logs";
 				}
 				
 			}
 			else {
+				
 				System.out.println("La URL de la API para obtener los eclipses es nula.");
 				resultado = "Error al evaluar los eclipses: la URL de la API para obtener los eclipses es nula.";
 			}
 		}
 		else {
+			
 			System.out.println("Ya hay eclipses en la base de datos.");
 			resultado = "Error al actualizar los eclipses: ya hay eclipses en la base de datos.";
 		}
@@ -239,7 +247,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 	
 	// PRIVATE METHODS
 	
-	private EclipsesParaDBDTO actualizarEclipsesLunaresDelAnyo (String anyo, String url){
+	private EclipsesParaDBDTO actualizarEclipsesLunaresDelAnyo (String anyo, String url, boolean poblarTablasExtra){
 		
 		EclipsesParaDBDTO eclipsesLunares = new EclipsesParaDBDTO();
 		
@@ -253,63 +261,33 @@ public class EclipsesServiceImpl implements EclipsesService{
 				
 				for(LunarEclipseDTO eclipse : eclipsesLunaresDelAnyo) {
 					
-					if(Integer.valueOf(anyo) > 0) {
-						
-						EclipsesEntity eclipseParaBD = new EclipsesEntity();
-						eclipseParaBD.setDeLuna(true);
-						eclipseParaBD.setDate(LocalDateTime.parse(eclipse.getDate()));
-						eclipseParaBD.setYear(Integer.valueOf(anyo));
-						
-						switch(eclipse.getType()) {
-						
-							case TOTAL:
-								eclipseParaBD.setEsTotal(true);
-								break;
-								
-							case PARTIAL:
-								eclipseParaBD.setEsParcial(true);
-								break;
-								
-							case PENUMBRAL:
-								eclipseParaBD.setEsPenumbral(true);
-								break;
-						}
-						
-
-						boolean esFechaInvalida = false;
-
-						for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
-
-						    if (eclipseParaBD.getDate().toLocalDate().toString().equals(fechaInvalida)) {
-						    	
-						        esFechaInvalida = true;
-						        break;
-						    }
-						}
-
-						if (!esFechaInvalida) {
-							eclipsesLunares.setEclipse(eclipseParaBD);
-						}		
-						
-					}
-					
-					
+					EclipsesEntity eclipseParaBD = new EclipsesEntity();
 					AllEclipsesEntity allEclipseParaDB = new AllEclipsesEntity();
-					allEclipseParaDB.setDeLuna(true);
+					
+					eclipseParaBD.setDeLuna(true);
+					eclipseParaBD.setDate(LocalDateTime.parse(eclipse.getDate()));
+					eclipseParaBD.setYear(Integer.valueOf(anyo));
+					
 					switch(eclipse.getType()) {
 					
 						case TOTAL:
+							eclipseParaBD.setEsTotal(true);
 							allEclipseParaDB.setTotal(true);
 							break;
-						
+							
 						case PARTIAL:
+							eclipseParaBD.setEsParcial(true);
 							allEclipseParaDB.setParcial(true);
 							break;
-						
+							
 						case PENUMBRAL:
+							eclipseParaBD.setEsPenumbral(true);
 							allEclipseParaDB.setPenumbral(true);
 							break;
 					}
+					
+					
+					allEclipseParaDB.setDeLuna(true);
 					
 					LocalDateTime fecha = LocalDateTime.parse(eclipse.getDate());
 
@@ -319,12 +297,31 @@ public class EclipsesServiceImpl implements EclipsesService{
 					allEclipseParaDB.setHour(fecha.getHour());
 					allEclipseParaDB.setMinute(fecha.getMinute());
 					allEclipseParaDB.setSecond(fecha.getSecond());
+
+					boolean esFechaInvalida = false;
+
+					for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
+
+					    if (eclipseParaBD.getDate().toLocalDate().toString().equals(fechaInvalida)) {
+					    	
+					        esFechaInvalida = true;
+					        break;
+					    }
+					}
 					
-					eclipsesLunares.setAllEclipse(allEclipseParaDB);
+					if(Integer.valueOf(anyo) > 0 &&!esFechaInvalida) {
+						
+						eclipsesLunares.setEclipse(eclipseParaBD);
+					}		
 					
+					if(poblarTablasExtra) {
+						
+						eclipsesLunares.setAllEclipse(allEclipseParaDB);
+					}		
 					
-					System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
 				}
+				
+				System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
 			}
 		}
 		catch (Exception e) {
@@ -343,7 +340,7 @@ public class EclipsesServiceImpl implements EclipsesService{
 	
 	
 
-	 private EclipsesParaDBDTO actualizarEclipsesSolaresDelAnyo (String anyo, String url){
+	 private EclipsesParaDBDTO actualizarEclipsesSolaresDelAnyo (String anyo, String url, boolean poblarTablasExtra){
 		
 		EclipsesParaDBDTO eclipsesSolares = new EclipsesParaDBDTO();
 		System.out.println("Actualizando los eclipses solares del anyo: " + anyo);
@@ -353,60 +350,33 @@ public class EclipsesServiceImpl implements EclipsesService{
 			
 			for(SolarEclipseDTO eclipse : eclipsesSolaresDelAnyo) {
 				
-				if(Integer.valueOf(anyo) > 0) {
-					EclipsesEntity eclipseParaBD = new EclipsesEntity();
-					eclipseParaBD.setDeSol(true);
-					eclipseParaBD.setDate(LocalDateTime.parse(eclipse.getDate()));
-					eclipseParaBD.setYear(Integer.valueOf(anyo));
-					
-					switch(eclipse.getType()) {
-					
-						case NON_CENTRAL_PARTIAL:
-							eclipseParaBD.setEsParcial(true);
-							break;
-						
-						case CENTRAL_ANULAR:
-							eclipseParaBD.setEsAnular(true);
-							break;
-							
-						case CENTRAL_TOTAL:
-							eclipseParaBD.setEsTotal(true);
-							break;
-					}
-				
-					boolean esFechaInvalida = false;
-
-					for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
-
-					    if (eclipseParaBD.getDate().toLocalDate().toString().equals(fechaInvalida)) {
-					    	
-					        esFechaInvalida = true;
-					        break;
-					    }
-					}
-
-					if (!esFechaInvalida) {
-						eclipsesSolares.setEclipse(eclipseParaBD);
-					}		
-				}
-				
+				EclipsesEntity eclipseParaBD = new EclipsesEntity();
 				AllEclipsesEntity allEclipseParaDB = new AllEclipsesEntity();
-				allEclipseParaDB.setDeSol(true);
+				
+				eclipseParaBD.setDeSol(true);
+				eclipseParaBD.setDate(LocalDateTime.parse(eclipse.getDate()));
+				eclipseParaBD.setYear(Integer.valueOf(anyo));
+				
 				switch(eclipse.getType()) {
 				
 					case NON_CENTRAL_PARTIAL:
+						eclipseParaBD.setEsParcial(true);
 						allEclipseParaDB.setParcial(true);
 						break;
-				
+					
 					case CENTRAL_ANULAR:
+						eclipseParaBD.setEsAnular(true);
 						allEclipseParaDB.setAnular(true);
 						break;
-					
+						
 					case CENTRAL_TOTAL:
+						eclipseParaBD.setEsTotal(true);
 						allEclipseParaDB.setTotal(true);
 						break;
-					}
+				}
 				
+				
+				allEclipseParaDB.setDeSol(true);
 				LocalDateTime fecha = LocalDateTime.parse(eclipse.getDate());
 
 				allEclipseParaDB.setYear(fecha.getYear());
@@ -415,12 +385,36 @@ public class EclipsesServiceImpl implements EclipsesService{
 				allEclipseParaDB.setHour(fecha.getHour());
 				allEclipseParaDB.setMinute(fecha.getMinute());
 				allEclipseParaDB.setSecond(fecha.getSecond());
+			
+				boolean esFechaInvalida = false;
+
+				for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
+
+				    if (eclipseParaBD.getDate().toLocalDate().toString().equals(fechaInvalida)) {
+				    	
+				        esFechaInvalida = true;
+				        break;
+				    }
+				}
 				
-				eclipsesSolares.setAllEclipse(allEclipseParaDB);			
-				System.out.println("Actualizados los eclipses solares del anyo: " + anyo);	
+				if(Integer.valueOf(anyo) > 0 && !esFechaInvalida) {
+					
+					eclipsesSolares.setEclipse(eclipseParaBD);
+				}		
+
+				
+				if(poblarTablasExtra) {
+					
+					eclipsesSolares.setAllEclipse(allEclipseParaDB);	
+				
+				}			
 			}
+			
+			System.out.println("Actualizados los eclipses solares del anyo: " + anyo);	
+			
 		}
 		catch (Exception e) {
+			
 			System.out.println("Error al actualizar los eclipses solares del anyo " + anyo  +": "+ e);
 		}
 		

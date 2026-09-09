@@ -46,8 +46,8 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	private final static String SV = "SummerSolstice";
 	private final static String EO = "AutumnalEquinox";
 	
-	private final static int anyoMinimo = -4700;
-	private final static int anyoMaximo = 2100;
+	private int anyoMinimo = -4700;
+	private int anyoMaximo = 2100;
 	
 
 	public YearDTO getVAUYear(EclipenosEntity lastEclipenoIN, LocalDate date, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMetonIN) {
@@ -102,9 +102,16 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 	
 	
 
-	public String poblateSolsticiosYEquinocciosFromOpale() {
+	public String poblateSolsticiosYEquinocciosFromOpale(boolean poblarTablasExtra) {
 		
 		String resultado = "Solsticios y equinoccios actualizados sin problema";
+		
+		int anyoMinimoParaAPI = this.anyoMinimo;
+		int anyoMaximoParaAPI = this.anyoMaximo;
+		
+		if(!poblarTablasExtra) {
+			anyoMinimoParaAPI = 0;
+		}
 		
 		DatosEntity apiGetSYEUrl = datosRepository.findByConcepto(this.datosService.getApiSoes());
 		
@@ -115,7 +122,7 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 		
 		if(apiGetSYEUrl != null && soes.isEmpty()) {	
 			
-			for (int i = anyoMinimo; i < anyoMaximo; i++) {
+			for (int i = anyoMinimoParaAPI; i < anyoMaximoParaAPI; i++) {
 				
 				System.out.println("Actualizando los solsticios y equinoccios del anyo: " + i);
 				
@@ -126,98 +133,85 @@ public class SolsticiosYEquinocciosServiceImpl implements SolsticiosYEquinoccios
 						
 						for(FenomenoDTO soeAPI : solsticiosYEquinocciosDelAnyo) {
 							
-							if(LocalDateTime.parse(soeAPI.getDate()).isAfter(LocalDateTime.of(1, 1, 1, 0, 0))) {
-								
-								SolsticiosYEquinocciosEntity soeParaDB = new SolsticiosYEquinocciosEntity();
-							
-								switch (soeAPI.getPhenomena()) {
-							
-									case SI:
-										soeParaDB.setSolsticioInvierno(true);
-										soeParaDB.setStartingSeason(1);
-										break;
-									
-									case EP:
-										soeParaDB.setEquinoccioPrimavera(true);
-										soeParaDB.setStartingSeason(2);
-										break;
-									
-									case SV:
-										soeParaDB.setSolsticioVerano(true);
-										soeParaDB.setStartingSeason(3);
-										break;
-									
-									case EO:
-										soeParaDB.setEquinoccioOtonyo(true);
-										soeParaDB.setStartingSeason(4);
-										break;
-								}
-							
-								soeParaDB.setYear(LocalDateTime.parse(soeAPI.getDate()).getYear());
-								soeParaDB.setDate(LocalDateTime.parse(soeAPI.getDate()));
-								
-								boolean esFechaInvalida = false;
-
-								for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
-
-								    if (soeParaDB.getDate().toLocalDate().toString().equals(fechaInvalida)) {
-								    	
-								        esFechaInvalida = true;
-								        break;
-								    }
-								}
-
-								if (!esFechaInvalida) {
-									soesForDB.add(soeParaDB);
-								}							
-																
-																
-							}
-							
+							SolsticiosYEquinocciosEntity soeParaDB = new SolsticiosYEquinocciosEntity();
 							AllSoEsEntity allSoEsParaDB = new AllSoEsEntity();
 							
 							switch (soeAPI.getPhenomena()) {
 							
 								case SI:
+									soeParaDB.setSolsticioInvierno(true);
+									soeParaDB.setStartingSeason(1);
 									allSoEsParaDB.setSolsticioInvierno(true);
 									break;
 							
 								case EP:
+									soeParaDB.setEquinoccioPrimavera(true);
+									soeParaDB.setStartingSeason(2);
 									allSoEsParaDB.setEquinoccioPrimavera(true);
 									break;
 							
 								case SV:
+									soeParaDB.setSolsticioVerano(true);
+									soeParaDB.setStartingSeason(3);
 									allSoEsParaDB.setSolsticioVerano(true);
 									break;
 							
 								case EO:
+									soeParaDB.setEquinoccioOtonyo(true);
+									soeParaDB.setStartingSeason(4);
 									allSoEsParaDB.setEquinoccioOtonyo(true);
 									break;
-							}
+								}
 							
-							String[] parts = String.valueOf(soeAPI.getDate()).split("T");
-							String[] dateParts = parts[0].split("-");
-							String[] timeParts = parts[1].split(":");
+							
+							soeParaDB.setYear(LocalDateTime.parse(soeAPI.getDate()).getYear());
+							soeParaDB.setDate(LocalDateTime.parse(soeAPI.getDate()));
+							
+							boolean esFechaInvalida = false;
 
-							if(String.valueOf(soeAPI.getDate()).startsWith("-")) {
-								allSoEsParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
-								allSoEsParaDB.setMonth(Integer.parseInt(dateParts[2]));
-								allSoEsParaDB.setDay(Integer.parseInt(dateParts[3]));
-							}
-							else {
-								allSoEsParaDB.setYear(Integer.parseInt(dateParts[0]));
-								allSoEsParaDB.setMonth(Integer.parseInt(dateParts[1]));
-								allSoEsParaDB.setDay(Integer.parseInt(dateParts[2]));
-							}
-							
+							for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
 
-							allSoEsParaDB.setHour(Integer.parseInt(timeParts[0]));
-							allSoEsParaDB.setMinute(Integer.parseInt(timeParts[1]));
-							allSoEsParaDB.setSecond(Integer.parseInt(timeParts[2]));
-									
-							allSoesForDB.add(allSoEsParaDB);
+							    if (soeParaDB.getDate().toLocalDate().toString().equals(fechaInvalida)) {
+							    	
+							        esFechaInvalida = true;
+							        break;
+							    }
+							}
 							
-						}						
+							if(LocalDateTime.parse(soeAPI.getDate()).isAfter(LocalDateTime.of(1, 1, 1, 0, 0)) && !esFechaInvalida) {
+								
+								soesForDB.add(soeParaDB);		
+							}
+
+							
+							if(poblarTablasExtra) {
+								
+			
+								String[] parts = String.valueOf(soeAPI.getDate()).split("T");
+								String[] dateParts = parts[0].split("-");
+								String[] timeParts = parts[1].split(":");
+
+								if(String.valueOf(soeAPI.getDate()).startsWith("-")) {
+									allSoEsParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
+									allSoEsParaDB.setMonth(Integer.parseInt(dateParts[2]));
+									allSoEsParaDB.setDay(Integer.parseInt(dateParts[3]));
+								}
+								else {
+									allSoEsParaDB.setYear(Integer.parseInt(dateParts[0]));
+									allSoEsParaDB.setMonth(Integer.parseInt(dateParts[1]));
+									allSoEsParaDB.setDay(Integer.parseInt(dateParts[2]));
+								}
+								
+
+								allSoEsParaDB.setHour(Integer.parseInt(timeParts[0]));
+								allSoEsParaDB.setMinute(Integer.parseInt(timeParts[1]));
+								allSoEsParaDB.setSecond(Integer.parseInt(timeParts[2]));
+										
+								allSoesForDB.add(allSoEsParaDB);
+								
+							}						
+						}							
+							
 						
 						System.out.println("Actualizados los solsticios y equinoccios del anyo: " + i);
 													

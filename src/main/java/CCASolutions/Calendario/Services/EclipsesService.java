@@ -10,6 +10,6 @@ import CCASolutions.Calendario.Entities.MetonsEntity;
 
 public interface EclipsesService {
 	
-	public abstract String poblateEclipsesFromOpale();
+	public abstract String poblateEclipsesFromOpale(boolean poblarTablasExtrass);
 	public abstract AbsoluteEclipsesDTO getVAUAbsoluteEclipses(DateDTO dateVAU, List<EclipsesEntity> eclipsesAbsolutosDesdeLastEclipenoIN, LocalDate date, MetonsEntity lastMetonIN);
 }

@@ -23,8 +23,8 @@ public class ClasesBean
 	@Autowired
 	private DatosService datosService;
 	
-	private final static boolean poblarBaseDeDatosAlArrancar = true;
-	
+	private final static boolean poblarBaseDeDatosAlArrancar = false;
+	private static final boolean poblarTablasExtra = false;
     
     @PostConstruct
     void checkearBaseDeDatos() {
@@ -35,7 +35,7 @@ public class ClasesBean
     	if(allDatos.isEmpty()) {    
     		
     		System.out.println("Base de datos vacía.");  
-    		System.out.println(this.dbService.poblateDBDesdeArranque(poblarBaseDeDatosAlArrancar)); 	
+    		System.out.println(this.dbService.poblateDBDesdeArranque(poblarBaseDeDatosAlArrancar, poblarTablasExtra)); 	
     	}
     	else if(soloEstaLaPassword) {
     		

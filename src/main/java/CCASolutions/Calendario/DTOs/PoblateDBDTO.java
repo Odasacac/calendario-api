@@ -6,14 +6,23 @@ public class PoblateDBDTO {
 	private boolean llamadasAAPis;
 	private boolean editar;
 	private boolean poblar;
+	private boolean poblarTablasExtras;
 	
-	public PoblateDBDTO (boolean todo) {
+	public PoblateDBDTO (boolean todo, boolean tablasExtras) {
 		
 		this.setEditar(todo);
 		this.setLlamadasAAPis(todo);
 		this.setPoblar(todo);
+		this.setPoblarTablasExtras(tablasExtras);
 	}
 
+	
+	public boolean isPoblarTablasExtras() {
+		return poblarTablasExtras;
+	}
+	public void setPoblarTablasExtras(boolean poblarTablasExtras) {
+		this.poblarTablasExtras = poblarTablasExtras;
+	}
 	public String getPassword() {
 		return password;
 	}

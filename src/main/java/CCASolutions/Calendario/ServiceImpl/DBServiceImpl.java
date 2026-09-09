@@ -69,10 +69,10 @@ public class DBServiceImpl implements DBService {
 	@Autowired
 	private SeasonsService seasonsService;
 	
-	private static final int numeroDeHorasQueTardaEnFullPoblate = 0;
-
+	private static final int numeroDeHorasQueTardaEnFullPoblate = 11;
 	
-	public String  poblateDBDesdeArranque(boolean poblarBaseDeDatosAlArrancar) {
+	
+	public String  poblateDBDesdeArranque(boolean poblarBaseDeDatosAlArrancar, boolean poblarTablasExtra) {
 		
 		String resultado = "";
 		
@@ -80,7 +80,18 @@ public class DBServiceImpl implements DBService {
 			
 			System.out.println("Iniciando la población de la base de datos desde cero.");
 			System.out.println("Suele tardar algo más de " + numeroDeHorasQueTardaEnFullPoblate + " horas.");
-			PoblateDBDTO poblateDBDTO = new PoblateDBDTO(poblarBaseDeDatosAlArrancar);
+			String texto = "";
+			
+			if(poblarTablasExtra) {
+				texto="Se poblarán las tablas extra.";
+			}
+			else {
+				texto="No se poblarán las tablas extra";
+			}
+			
+			System.out.println(texto);
+			
+			PoblateDBDTO poblateDBDTO = new PoblateDBDTO(poblarBaseDeDatosAlArrancar, poblarTablasExtra);
 			
 			LocalDateTime startingPoblate = LocalDateTime.now();
 			resultado = this.poblateDB(poblateDBDTO);	
@@ -115,10 +126,10 @@ public class DBServiceImpl implements DBService {
 				
 				if(poblateDBDTO.isLlamadasAAPis() && poblateDBDTO.isPoblar()) {
 					
-					resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale();
+					resultado = resultado + "\n - LUNAS: " + this.lunasService.poblateLunasFromOpale(poblateDBDTO.isPoblarTablasExtras());
 					resultado = resultado + "\n - APOPERI LUNARES: " + this.apogeosYPerigeosLunaService.poblateApogeosFromOpale();
-					resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale();	
-					resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipsesFromOpale();	
+					resultado = resultado + "\n - SOES: " + this.solsticiosYEquinocciosService.poblateSolsticiosYEquinocciosFromOpale(poblateDBDTO.isPoblarTablasExtras());	
+					resultado = resultado + "\n - ECLIPSES: " +this.eclipsesService.poblateEclipsesFromOpale(poblateDBDTO.isPoblarTablasExtras());	
 				}
 				
 				if(poblateDBDTO.isEditar()) {

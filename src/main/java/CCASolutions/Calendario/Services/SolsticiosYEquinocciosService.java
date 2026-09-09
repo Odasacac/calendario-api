@@ -12,7 +12,7 @@ import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
 public interface SolsticiosYEquinocciosService {
 	
-	public abstract String poblateSolsticiosYEquinocciosFromOpale();
+	public abstract String poblateSolsticiosYEquinocciosFromOpale(boolean poblarTablasExtras);
 	public abstract List<FenomenoDTO> getSolsticiosYEquinocciosDelAnyoViaAPI(String anyo, String url);
 	public abstract YearDTO getVAUYear(EclipenosEntity lastEclipenoIN, LocalDate date, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, MetonsEntity lastMetonIN);
 }

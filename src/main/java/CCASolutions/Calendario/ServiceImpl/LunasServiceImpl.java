@@ -58,8 +58,8 @@ public class LunasServiceImpl implements LunasService {
 	private final static String FULLMOON = "FullMoon";
 	private final static String LAST_QUARTER = "LastQuarter";
 	
-	private final static int anyoMinimo = -4700;
-	private final static int anyoMaximo = 2100;
+	private int anyoMinimo = -4700;
+	private int anyoMaximo = 2100;
 	
 	// METODOS PUBLICOS
 	
@@ -282,9 +282,16 @@ public class LunasServiceImpl implements LunasService {
 	
 	
 	
-	public String poblateLunasFromOpale() {
+	public String poblateLunasFromOpale(boolean poblarTablasExtra) {
 		
 		String resultado = "Lunas actualizadas sin problema.";
+		
+		int anyoMinimoParaAPI = this.anyoMinimo;
+		int anyoMaximoParaAPI = this.anyoMaximo;
+		
+		if(!poblarTablasExtra) {
+			anyoMinimoParaAPI = 0;
+		}
 		
 		DatosEntity apiGetLunasUrl = datosRepository.findByConcepto(this.datosService.getApiLunarFases());
 		
@@ -296,7 +303,7 @@ public class LunasServiceImpl implements LunasService {
 			List<LunasEntity> lunasForDB = new ArrayList<>();
 			List<AllFasesLunaresEntity> allFasesLunaresForDB = new ArrayList<>();
 			
-			for (int i = anyoMinimo; i < anyoMaximo; i++) {
+			for (int i = anyoMinimoParaAPI; i < anyoMaximoParaAPI; i++) {
 				
 				System.out.println("Actualizando lunas del anyo: " + i);
 				
@@ -307,97 +314,80 @@ public class LunasServiceImpl implements LunasService {
 						
 						for(LunarPhaseDTO faseLunarAPI : fasesLunaresDelAnyo) {
 							
-							if(LocalDateTime.parse(faseLunarAPI.getDate()).isAfter(LocalDateTime.of(1, 1, 1, 0, 0))) {
-								
-								LunasEntity lunaParaDB = new LunasEntity();
-								
-								switch (faseLunarAPI.getMoonPhase()){
-								
-									case NEW_MOON:
-										lunaParaDB.setNueva(true);
-										break;
-										
-									case FIRST_QUARTER:
-										lunaParaDB.setCuartoCreciente(true);
-										break;
-										
-									case FULLMOON:
-										lunaParaDB.setLlena(true);
-										break;
-										
-									case LAST_QUARTER:
-										lunaParaDB.setCuartoMenguante(true);
-										break;
-								}
-								
-								lunaParaDB.setYear(LocalDateTime.parse(faseLunarAPI.getDate()).getYear());
-								lunaParaDB.setDate(LocalDateTime.parse(faseLunarAPI.getDate()));									
-								lunaParaDB.setSelecta(false);
-								lunaParaDB.setInvertida(false);
-								
-								boolean esFechaInvalida = false;
-
-								for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
-
-								    if (lunaParaDB.getDate().toLocalDate().toString().equals(fechaInvalida)) {
-								    	
-								        esFechaInvalida = true;
-								        break;
-								    }
-								}
-
-								if (!esFechaInvalida) {
-								    lunasForDB.add(lunaParaDB);
-								}								
-														
-							}
-		
+							LunasEntity lunaParaDB = new LunasEntity();
 							AllFasesLunaresEntity allFaseLunarParaDB = new AllFasesLunaresEntity();
 							
 							switch (faseLunarAPI.getMoonPhase()){
 							
 								case NEW_MOON:
+									lunaParaDB.setNueva(true);
 									allFaseLunarParaDB.setNueva(true);
 									break;
 								
 								case FIRST_QUARTER:
+									lunaParaDB.setCuartoCreciente(true);
 									allFaseLunarParaDB.setCuartoCreciente(true);
 									break;
 								
 								case FULLMOON:
+									lunaParaDB.setLlena(true);
 									allFaseLunarParaDB.setLlena(true);
 									break;
 								
 								case LAST_QUARTER:
+									lunaParaDB.setCuartoMenguante(true);
 									allFaseLunarParaDB.setCuartoMenguante(true);
 									break;
 							}
 							
+							lunaParaDB.setYear(LocalDateTime.parse(faseLunarAPI.getDate()).getYear());
+							lunaParaDB.setDate(LocalDateTime.parse(faseLunarAPI.getDate()));									
+							lunaParaDB.setSelecta(false);
+							lunaParaDB.setInvertida(false);
+							
+							boolean esFechaInvalida = false;
 
-							String[] parts = String.valueOf(faseLunarAPI.getDate()).split("T");
-							String[] dateParts = parts[0].split("-");
-							String[] timeParts = parts[1].split(":");
+							for (String fechaInvalida : this.datosService.getFechasInvalidas()) {
 
-							if(String.valueOf(faseLunarAPI.getDate()).startsWith("-")) {
-								
-								allFaseLunarParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
-								allFaseLunarParaDB.setMonth(Integer.parseInt(dateParts[2]));
-								allFaseLunarParaDB.setDay(Integer.parseInt(dateParts[3]));
-							}
-							else {
-								
-								allFaseLunarParaDB.setYear(Integer.parseInt(dateParts[0]));
-								allFaseLunarParaDB.setMonth(Integer.parseInt(dateParts[1]));
-								allFaseLunarParaDB.setDay(Integer.parseInt(dateParts[2]));
+							    if (lunaParaDB.getDate().toLocalDate().toString().equals(fechaInvalida)) {
+							    	
+							        esFechaInvalida = true;
+							        break;
+							    }
 							}
 							
-
-							allFaseLunarParaDB.setHour(Integer.parseInt(timeParts[0]));
-							allFaseLunarParaDB.setMinute(Integer.parseInt(timeParts[1]));
-							allFaseLunarParaDB.setSecond(Integer.parseInt(timeParts[2]));
+							if(LocalDateTime.parse(faseLunarAPI.getDate()).isAfter(LocalDateTime.of(1, 1, 1, 0, 0)) && !esFechaInvalida) {
 							
-							allFasesLunaresForDB.add(allFaseLunarParaDB);
-						}					
+								lunasForDB.add(lunaParaDB);								
+							}
+		
+							if(poblarTablasExtra) {
+
+								String[] parts = String.valueOf(faseLunarAPI.getDate()).split("T");
+								String[] dateParts = parts[0].split("-");
+								String[] timeParts = parts[1].split(":");
+
+								if(String.valueOf(faseLunarAPI.getDate()).startsWith("-")) {
+									
+									allFaseLunarParaDB.setYear(Integer.parseInt("-" + dateParts[1]));
+									allFaseLunarParaDB.setMonth(Integer.parseInt(dateParts[2]));
+									allFaseLunarParaDB.setDay(Integer.parseInt(dateParts[3]));
+								}
+								else {
+									
+									allFaseLunarParaDB.setYear(Integer.parseInt(dateParts[0]));
+									allFaseLunarParaDB.setMonth(Integer.parseInt(dateParts[1]));
+									allFaseLunarParaDB.setDay(Integer.parseInt(dateParts[2]));
+								}
+								
+
+								allFaseLunarParaDB.setHour(Integer.parseInt(timeParts[0]));
+								allFaseLunarParaDB.setMinute(Integer.parseInt(timeParts[1]));
+								allFaseLunarParaDB.setSecond(Integer.parseInt(timeParts[2]));
+								
+								allFasesLunaresForDB.add(allFaseLunarParaDB);
+							}					
+						}							
 						
 						
 						System.out.println("Actualizadas las lunas del anyo: " + i);

@@ -16,7 +16,7 @@ import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
 public interface LunasService {
 	
-	public abstract String poblateLunasFromOpale();
+	public abstract String poblateLunasFromOpale(boolean poblarTablasExtras);
 	public abstract List<LunarPhaseDTO> getFasesLunaresDelAnyoViaAPI(String anyo, String url);
 	public abstract AponovosDTO getAponovos(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO);
 	public abstract EstadoLunaDTO getEstadoLuna(LocalDate date, List<ApogeosYPerigeosLunaEntity> allApoperis);
