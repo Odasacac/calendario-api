@@ -69,27 +69,33 @@ public class DBServiceImpl implements DBService {
 	@Autowired
 	private SeasonsService seasonsService;
 	
-	private static final int numeroDeHorasQueTardaEnFullPoblate = 11;
+	private static final int numeroDeHorasQueTardaEnPoblateConTablasExtras = 11;
+	private static final int numeroDeHorasQueTardaEnPoblateSinTablasExtras = 4;
 	
 	
-	public String  poblateDBDesdeArranque(boolean poblarBaseDeDatosAlArrancar, boolean poblarTablasExtra) {
+	public String  poblateDBDesdeArranque(boolean poblarBaseDeDatosAlArrancar, boolean poblarTablasExtra, boolean poblarSoloAdminPW) {
 		
 		String resultado = "";
 		
 		if(poblarBaseDeDatosAlArrancar) {
 			
 			System.out.println("Iniciando la población de la base de datos desde cero.");
-			System.out.println("Suele tardar algo más de " + numeroDeHorasQueTardaEnFullPoblate + " horas.");
+			
 			String texto = "";
+			int tiempo = 0;
 			
 			if(poblarTablasExtra) {
+				
 				texto="Se poblarán las tablas extra.";
+				tiempo = numeroDeHorasQueTardaEnPoblateConTablasExtras;
 			}
 			else {
-				texto="No se poblarán las tablas extra";
+				
+				texto="No se poblarán las tablas extra.";
+				tiempo = numeroDeHorasQueTardaEnPoblateSinTablasExtras;
 			}
 			
-			System.out.println(texto);
+			System.out.println(texto + " Suele tardar algo más de " + tiempo + " horas.");
 			
 			PoblateDBDTO poblateDBDTO = new PoblateDBDTO(poblarBaseDeDatosAlArrancar, poblarTablasExtra);
 			
@@ -100,10 +106,13 @@ public class DBServiceImpl implements DBService {
 			Duration duration = Duration.between(startingPoblate, finishingPoblate);		
 			System.out.println("Ha tardado: " + duration.toHours() + " horas y " + duration.toMinutesPart() + " minutos.");
 		}
-		else {
+		else if (poblarSoloAdminPW){
 			
-			System.out.println("Incluyendo base de datos SOLO adminPW.");
+			System.out.println("Incluyendo base de datos SOLO adminPW, lista para /poblatedb.");
 			resultado = this.datosService.poblateSoloPassword();		
+		}
+		else {
+			System.out.println("Estructura de la base de datos creada, está completamente vacía, lista para hacer el dump.");
 		}
 			
 		return resultado;
