@@ -80,7 +80,7 @@ public class UtilsServiceImpl implements UtilsService {
 					
 					if(datosCosmicosParaVAUDTO.getLastMetonIN() != null) {									
 						
-						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(dateO.minusYears(numeroAnyosInferior), dateO.plusYears(numeroAnyoSuperior)));
+						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getDate(), dateO.plusYears(numeroAnyoSuperior)));
 						datosCosmicosParaVAUDTO.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(datosCosmicosParaVAUDTO.getLastMetonIN().getDate().minusYears(numeroAnyosInferior), dateO.plusYears(numeroAnyoSuperior)));
 						datosCosmicosParaVAUDTO.setEclipses(this.eclipsesRepository.findEclipsesAbsoluteQuery(datosCosmicosParaVAUDTO.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(numeroAnyoSuperior)));
 						datosCosmicosParaVAUDTO.setApoperis(this.apogeosYPerigeosLunaRepository.findByDateBetween(dateO.minusMonths(numeroMesesInferior), dateO.plusMonths(numeroMesesSuperior)));
