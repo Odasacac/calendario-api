@@ -25,7 +25,7 @@ public class ClasesBean
 	
 	private final static boolean poblarBaseDeDatosAlArrancar = true;
 	private final static boolean poblarSoloAdminPW = false;
-	private static final boolean poblarTablasExtra = false;
+	private static final boolean poblarTablasExtra = true;
     
     @PostConstruct
     void checkearBaseDeDatos() {
