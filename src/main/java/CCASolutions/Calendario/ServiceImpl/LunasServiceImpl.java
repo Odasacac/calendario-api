@@ -202,8 +202,6 @@ public class LunasServiceImpl implements LunasService {
 			}
 		}
 		
-		
-		
 		aponovosDTO.setLunasNuevasPasadasDesdeLastAponovo(lunasNuevasDesdeLastLNSHastaDate);
 		aponovosDTO.setMesAponoval(aponovosDTO.getLunasNuevasPasadasDesdeLastAponovo()+1);
 		

@@ -86,7 +86,7 @@ public class EclipenosServiceImpl implements EclipenosService{
 		
 		EclipenoSelectoDTO eclipenoSelectoVAU = new EclipenoSelectoDTO();
 		
-		eclipenoSelectoVAU.setDaysSinceCurrentEclipenoSelectoIN("hace " + ChronoUnit.DAYS.between(lastEclipenoSelecto.getDate().toLocalDate(), date) + " días");
+		eclipenoSelectoVAU.setDaysSinceCurrentEclipenoSelectoIN("Hace " + ChronoUnit.DAYS.between(lastEclipenoSelecto.getDate().toLocalDate(), date) + " días");
 		eclipenoSelectoVAU.setEclipenoINSelectoDay(lastEclipenoSelecto.getDate().toLocalDate().isEqual(date));
 		
 		
