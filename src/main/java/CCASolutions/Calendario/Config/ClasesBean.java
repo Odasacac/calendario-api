@@ -23,20 +23,21 @@ public class ClasesBean
 	@Autowired
 	private DatosService datosService;
 	
-	private final static boolean poblarBaseDeDatosAlArrancar = true;
-	private final static boolean poblarSoloAdminPW = false;
-	private static final boolean poblarTablasExtra = true;
+	private final static boolean poblarConDUMP = true;
+	private final static boolean poblarConRequest = false;
+	private final static boolean poblarAlArrancarDesdeCeroConTablasExtra = false;
+	private final static boolean poblarAlArrancarDesdeCeroSinTablasExtra = false;
+
     
     @PostConstruct
     void checkearBaseDeDatos() {
     	
     	List<DatosEntity> allDatos = this.datosRepository.findAll();
 		boolean soloEstaLaPassword = allDatos.size() == 1 && allDatos.get(0).getConcepto().equals(this.datosService.getPWCode());
-    	
+		
     	if(allDatos.isEmpty()) {    
     		
-    		System.out.println("Base de datos vacía.");
-    		System.out.println(this.dbService.poblateDBDesdeArranque(poblarBaseDeDatosAlArrancar, poblarTablasExtra, poblarSoloAdminPW)); 	
+        	System.out.println(this.dbService.poblateDBDesdeArranque(poblarConDUMP, poblarConRequest, poblarAlArrancarDesdeCeroConTablasExtra, poblarAlArrancarDesdeCeroSinTablasExtra)); 		
     	}
     	else if(soloEstaLaPassword) {
     		

@@ -73,52 +73,57 @@ public class DBServiceImpl implements DBService {
 	private static final int numeroDeHorasQueTardaEnPoblateSinTablasExtras = 4;
 	
 	
-	public String  poblateDBDesdeArranque(boolean poblarBaseDeDatosAlArrancar, boolean poblarTablasExtra, boolean poblarSoloAdminPW) {
+	public String  poblateDBDesdeArranque(boolean poblarConDUMP, boolean poblarConRequest, boolean poblarAlArrancarDesdeCeroConTablasExtra, boolean poblarAlArrancarDesdeCeroSinTablasExtra) {
 		
 		String resultado = "";
 		
-		if(poblarBaseDeDatosAlArrancar) {
+		if(poblarConDUMP && !poblarConRequest && !poblarAlArrancarDesdeCeroConTablasExtra && !poblarAlArrancarDesdeCeroSinTablasExtra) {
 			
-			if(poblarSoloAdminPW) {
-				
-				System.out.println("Incluyendo base de datos SOLO adminPW, lista para /poblatedb.");
-				resultado = this.datosService.poblateSoloPassword();	
-			}
-			else {
-				
-				System.out.println("Iniciando la población de la base de datos desde cero.");
-				
-				String texto = "";
-				int tiempo = 0;
-				
-				if(poblarTablasExtra) {
-					
-					texto="Se poblarán las tablas extra.";
-					tiempo = numeroDeHorasQueTardaEnPoblateConTablasExtras;
-				}
-				else {
-					
-					texto="No se poblarán las tablas extra.";
-					tiempo = numeroDeHorasQueTardaEnPoblateSinTablasExtras;
-				}
-				
-				System.out.println(texto + " Suele tardar algo más de " + tiempo + " horas.");
-				
-				PoblateDBDTO poblateDBDTO = new PoblateDBDTO(poblarBaseDeDatosAlArrancar, poblarTablasExtra);
-				
-				LocalDateTime startingPoblate = LocalDateTime.now();
-				resultado = this.poblateDB(poblateDBDTO);	
-				LocalDateTime finishingPoblate = LocalDateTime.now();			
-				
-				Duration duration = Duration.between(startingPoblate, finishingPoblate);		
-				System.out.println("Ha tardado: " + duration.toHours() + " horas y " + duration.toMinutesPart() + " minutos.");		
-			}
-			
-		}
-		else {
 			System.out.println("Estructura de la base de datos creada, está completamente vacía, lista para hacer el dump.");
 		}
+		else if(poblarConRequest && !poblarConDUMP && !poblarAlArrancarDesdeCeroConTablasExtra && !poblarAlArrancarDesdeCeroSinTablasExtra) {
 			
+			System.out.println("Incluyendo base de datos SOLO adminPW, lista para /poblatedb.");
+			resultado = this.datosService.poblateSoloPassword();	
+		}
+		else if((poblarAlArrancarDesdeCeroConTablasExtra || poblarAlArrancarDesdeCeroSinTablasExtra) && !poblarConRequest && !poblarConDUMP) {
+			
+			System.out.println("Iniciando la población de la base de datos desde cero.");
+			boolean poblarTablasExtra = false;
+			
+			String texto = "";
+			int tiempo = 0;
+			
+			if(poblarAlArrancarDesdeCeroConTablasExtra) {
+				
+				texto="Se poblarán las tablas extra.";
+				tiempo = numeroDeHorasQueTardaEnPoblateConTablasExtras;
+				poblarTablasExtra = true;
+			}
+			else if (poblarAlArrancarDesdeCeroSinTablasExtra){
+				
+				texto="No se poblarán las tablas extra.";
+				tiempo = numeroDeHorasQueTardaEnPoblateSinTablasExtras;
+			}
+			
+			System.out.println(texto + " Suele tardar algo más de " + tiempo + " horas.");
+			
+			PoblateDBDTO poblateDBDTO = new PoblateDBDTO(true, poblarTablasExtra);
+			
+			LocalDateTime startingPoblate = LocalDateTime.now();
+			resultado = this.poblateDB(poblateDBDTO);	
+			LocalDateTime finishingPoblate = LocalDateTime.now();			
+			
+			Duration duration = Duration.between(startingPoblate, finishingPoblate);		
+			System.out.println("Ha tardado: " + duration.toHours() + " horas y " + duration.toMinutesPart() + " minutos.");		
+
+		}
+		
+		else {
+			System.out.println("Parámetros incoherentes.");  
+		}
+		
+
 		return resultado;
 	}
 	
