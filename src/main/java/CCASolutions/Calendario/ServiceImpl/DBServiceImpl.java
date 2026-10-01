@@ -147,7 +147,7 @@ public class DBServiceImpl implements DBService {
 		System.out.println("Iniciando poblateDB.");
 		String resultado = "";				
 		
-		if(poblateDBDTO.isPoblar() || poblateDBDTO.isEditar() || poblateDBDTO.isLlamadasAAPis()) {
+		if(validateDTO(poblateDBDTO)) {
 			
 			try {
 				
@@ -192,11 +192,38 @@ public class DBServiceImpl implements DBService {
 		}
 		else {
 			
-			resultado = "No se ha poblado la base de datos.";
+			resultado = "No se ha poblado la base de datos, parámetros incoherentes.";
 		}		
 		
 		System.out.println("PoblateDB finalizado.");
 		return resultado;
+	}
+	
+	
+	private boolean validateDTO(PoblateDBDTO poblateDBDTO) {
+
+		boolean dtoValido = true;
+		
+		if (poblateDBDTO == null) {
+			
+			dtoValido = false;
+		}
+		else {
+			
+			if (poblateDBDTO.isLlamadasAAPis() && !poblateDBDTO.isPoblar()) {
+				
+				dtoValido = false;
+			}
+
+			if (poblateDBDTO.isPoblarTablasExtras() && !poblateDBDTO.isLlamadasAAPis()) {
+				
+				dtoValido = false;
+			}
+		}
+
+		
+
+	    return dtoValido;
 	}
 
 }
