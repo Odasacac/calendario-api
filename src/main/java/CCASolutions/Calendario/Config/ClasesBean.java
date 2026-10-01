@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 import CCASolutions.Calendario.Entities.DatosEntity;
+import CCASolutions.Calendario.Enums.ModoPoblacionEnum;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Services.DBService;
 import CCASolutions.Calendario.Services.DatosService;
@@ -23,10 +24,7 @@ public class ClasesBean
 	@Autowired
 	private DatosService datosService;
 	
-	private final static boolean poblarConDUMP = true;
-	private final static boolean poblarConRequest = false;
-	private final static boolean poblarAlArrancarDesdeCeroConTablasExtra = false;
-	private final static boolean poblarAlArrancarDesdeCeroSinTablasExtra = false;
+	private static final ModoPoblacionEnum MODO_POBLACION = ModoPoblacionEnum.DUMP;
 
     
     @PostConstruct
@@ -37,7 +35,7 @@ public class ClasesBean
 		
     	if(allDatos.isEmpty()) {    
     		
-        	System.out.println(this.dbService.poblateDBDesdeArranque(poblarConDUMP, poblarConRequest, poblarAlArrancarDesdeCeroConTablasExtra, poblarAlArrancarDesdeCeroSinTablasExtra)); 		
+        	System.out.println(this.dbService.poblateDBDesdeArranque(MODO_POBLACION)); 		
     	}
     	else if(soloEstaLaPassword) {
     		
