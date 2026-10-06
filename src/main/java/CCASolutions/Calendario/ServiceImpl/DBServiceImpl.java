@@ -77,18 +77,18 @@ public class DBServiceImpl implements DBService {
 	public String poblateDBDesdeArranque(ModoPoblacionEnum modo) {
 
 	    String resultado = "";
-
+	    System.out.println("Estructura de la base de datos creada.");
 	    switch (modo) {
 
 	        case DUMP:
 
-	            System.out.println("Estructura de la base de datos creada, " +  "está completamente vacía, lista para hacer el dump.");
+	            System.out.println("Está completamente vacía, lista para hacer el dump.");
 	            break;
 
 	        case REQUEST:
 
-	            System.out.println( "Incluyendo base de datos SOLO adminPW, " + "lista para /poblatedb.");
 	            resultado = this.datosService.poblateSoloPassword();
+	            System.out.println("Incluida SOLO la adminPW, lista para /poblatedb.");
 	            break;
 
 	        case DESDE_CERO_CON_TABLAS_EXTRA:
@@ -103,7 +103,7 @@ public class DBServiceImpl implements DBService {
 
 	        default:
 
-	            System.out.println("Modo de población no reconocido.");
+	            System.out.println("Modo de población no reconocido: " + modo);
 	            break;
 	    }
 
@@ -113,15 +113,10 @@ public class DBServiceImpl implements DBService {
 	
 	private String poblateDesdeCero(boolean poblarTablasExtra) {
 
-	    String texto;
-	    int tiempo;
+	    String texto ="Se poblarán las tablas extra." ;
+	    int tiempo = numeroDeHorasQueTardaEnPoblateConTablasExtras;
 
-	    if (poblarTablasExtra) {
-	    	
-	        texto = "Se poblarán las tablas extra.";
-	        tiempo = numeroDeHorasQueTardaEnPoblateConTablasExtras;
-	    } 
-	    else {
+	    if (!poblarTablasExtra) {    		   
 	    	
 	        texto = "No se poblarán las tablas extra.";
 	        tiempo = numeroDeHorasQueTardaEnPoblateSinTablasExtras;
