@@ -554,6 +554,15 @@ public class FestividadesServiceImpl implements FestividadesService {
 				midsison.setCode(MIDSISON_OTONYAL_CODE);
 				break;
 		}
+		
+		boolean esSoe = (lastSoe.getStartingSeason() == 1 && nextSoe.getStartingSeason() == 3) 
+				|| (lastSoe.getStartingSeason() == 2 && nextSoe.getStartingSeason() == 4)	             
+				|| (lastSoe.getStartingSeason() == 3 && nextSoe.getStartingSeason() == 1)
+	            || (lastSoe.getStartingSeason() == 4 && nextSoe.getStartingSeason() == 2);
+		
+		if(esSoe) {
+			midsison.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
+		}
 
 		
 		festividadesObtenidasDTO.add(cambioDeAnyo);
