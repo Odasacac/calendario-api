@@ -670,29 +670,29 @@ public class FestividadesServiceImpl implements FestividadesService {
 			
 			List<FestividadesEntity> festividadParaDDB = new ArrayList<>();
 			
-			festividadParaDDB.add(this.crearFestividad("CEAR", "Cambio de eclípeno invernal apofasal remoto", false, "Eclipse, solsticio de invierno, apogeo y luna nueva"));
+			festividadParaDDB.add(this.crearFestividad(CAMBIO_DE_ECLIPENO_IAR_CODE, "Cambio de eclípeno invernal apofasal remoto", false, "Eclipse, solsticio de invierno, apogeo y luna nueva"));
 			
-			festividadParaDDB.add(this.crearFestividad("CE", "Cambio de eclípeno invernal nuevo", false, "Eclipse, solsticio de invierno, luna nueva"));			
-			festividadParaDDB.add(this.crearFestividad("CMAR", "Cambio de métono invernal apofasal remoto", false, "Solsticio de invierno, apogeo y luna nueva"));
+			festividadParaDDB.add(this.crearFestividad(CAMBIO_DE_ECLIPENO_CODE, "Cambio de eclípeno invernal nuevo", false, "Eclipse, solsticio de invierno, luna nueva"));			
+			festividadParaDDB.add(this.crearFestividad(CAMBIO_DE_METONO_IAR_CODE, "Cambio de métono invernal apofasal remoto", false, "Solsticio de invierno, apogeo y luna nueva"));
 			
-			festividadParaDDB.add(this.crearFestividad("CMF", "Cambio de métono invernal nuevo", false, "Solsticio de invierno, luna nueva"));
-			festividadParaDDB.add(this.crearFestividad("CMA", "Cambio de métono invernal apórico", false, "Solsticio de invierno y apogeo"));
+			festividadParaDDB.add(this.crearFestividad(CAMBIO_DE_METONO_IN_CODE, "Cambio de métono invernal nuevo", false, "Solsticio de invierno, luna nueva"));
+			festividadParaDDB.add(this.crearFestividad(CAMBIO_DE_METONO_IA_CODE, "Cambio de métono invernal apórico", false, "Solsticio de invierno y apogeo"));
 			
-			festividadParaDDB.add(this.crearFestividad("CA", "Cambio de año", false, "Solsticio de invierno"));
-			festividadParaDDB.add(this.crearFestividad("IA", "Inicio del primer mes del año", true, "Primera luna nueva despues de solsticio de invierno"));
-			festividadParaDDB.add(this.crearFestividad("MSI", "Midsison invernal", false, "Dia equidistante entre solsticio de invierno y equinoccio de primavera"));
+			festividadParaDDB.add(this.crearFestividad(CAMBIO_DE_ANYO_CODE, "Cambio de año", false, "Solsticio de invierno"));
+			festividadParaDDB.add(this.crearFestividad(INICIO_ANYO_CODE, "Inicio del primer mes del año", true, "Primera luna nueva despues de solsticio de invierno"));
+			festividadParaDDB.add(this.crearFestividad(MIDSISON_INVERNAL_CODE, "Midsison invernal", false, "Dia equidistante entre solsticio de invierno y equinoccio de primavera"));
 			
-			festividadParaDDB.add(this.crearFestividad("BP", "Bienvenida de la primavera", false, "Equinoccio de primavera"));
-			festividadParaDDB.add(this.crearFestividad("MSP", "Midsison primaveral", false, "Dia equidistante entre sequinoccio de primavera y solsticio de verano"));
+			festividadParaDDB.add(this.crearFestividad(BIENVENIDA_PRIMAVERA_CODE, "Bienvenida de la primavera", false, "Equinoccio de primavera"));
+			festividadParaDDB.add(this.crearFestividad(MIDSISON_PRIMAVERAL_CODE, "Midsison primaveral", false, "Dia equidistante entre sequinoccio de primavera y solsticio de verano"));
 			
-			festividadParaDDB.add(this.crearFestividad("MA", "Mitad del año", false, "Solsticio de verano"));
-			festividadParaDDB.add(this.crearFestividad("MSE", "Midsison estival", false, "Dia equidistante entre solsticio de verano y equinoccio de otoño"));
+			festividadParaDDB.add(this.crearFestividad(MITAD_ANYO_CODE, "Mitad del año", false, "Solsticio de verano"));
+			festividadParaDDB.add(this.crearFestividad(MIDSISON_ESTIVAL_CODE, "Midsison estival", false, "Dia equidistante entre solsticio de verano y equinoccio de otoño"));
 			
-			festividadParaDDB.add(this.crearFestividad("EO", "Entrada del otoño", false, "Equinoccio de otoño"));
-			festividadParaDDB.add(this.crearFestividad("MSO", "Midsison otoñal", false, "Dia equidistante entre equinoccio de otoño y solsticio de invierno"));
+			festividadParaDDB.add(this.crearFestividad(ENTRADA_OTONYO_CODE, "Entrada del otoño", false, "Equinoccio de otoño"));
+			festividadParaDDB.add(this.crearFestividad(MIDSISON_OTONYAL_CODE, "Midsison otoñal", false, "Dia equidistante entre equinoccio de otoño y solsticio de invierno"));
 			
-			festividadParaDDB.add(this.crearFestividad("LA", "Cambio de aponovo", false, "Luna nueva en apogeo"));
-			festividadParaDDB.add(this.crearFestividad("MAP", "Midsison aponoval", false, "Midsison y cambio de aponovo"));
+			festividadParaDDB.add(this.crearFestividad(CAMBIO_DE_APONOVO_CODE, "Cambio de aponovo", false, "Luna nueva en apogeo"));
+			festividadParaDDB.add(this.crearFestividad(MIDSISON_APONOVAL_CODE, "Midsison aponoval", false, "Midsison y cambio de aponovo"));
 			
 			this.festividadesRepository.saveAll(festividadParaDDB);
 		}
