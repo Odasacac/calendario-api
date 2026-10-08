@@ -9,7 +9,7 @@ import CCASolutions.Calendario.Services.DownloadService;
 public class DownloadServiceImpl implements DownloadService {
 
 
-	public byte[] getPDF() {
+	public byte[] getManual() {
 		
 		return null;
 	}

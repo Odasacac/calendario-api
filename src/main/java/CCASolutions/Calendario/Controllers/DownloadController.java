@@ -22,14 +22,14 @@ public class DownloadController {
 	private DownloadService downloadService;
 	
 	@GetMapping("/getpdf")
-	public ResponseEntity<byte[]> getPDF() {
+	public ResponseEntity<byte[]> getManual() {
 		
 		HttpStatus status = HttpStatus.OK;
 		byte[] body = new byte[0];
 		
 		try {
 			
-			body = this.downloadService.getPDF();
+			body = this.downloadService.getManual();
 			if(body == null) {
 				status = HttpStatus.BAD_REQUEST;
 			}

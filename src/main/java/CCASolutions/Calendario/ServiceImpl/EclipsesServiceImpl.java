@@ -184,24 +184,24 @@ public class EclipsesServiceImpl implements EclipsesService{
 						
 						if(eclipsesLunares.getEclipse() != null) {
 							
-							eclipsesParaDB.add(eclipsesLunares.getEclipse());
+							eclipsesParaDB.addAll(eclipsesLunares.getEclipse());
 						}
 						
 						if(eclipsesSolares.getEclipse() != null) {
 							
-							eclipsesParaDB.add(eclipsesSolares.getEclipse());
+							eclipsesParaDB.addAll(eclipsesSolares.getEclipse());
 						}
 						
 						if(poblarTablasExtra) {
 							
 							if(eclipsesLunares.getAllEclipse() != null) {
 								
-								allEclipsesParaDB.add(eclipsesLunares.getAllEclipse());
+								allEclipsesParaDB.addAll(eclipsesLunares.getAllEclipse());
 							}
 							
 							if(eclipsesSolares.getAllEclipse() != null) {
 								
-								allEclipsesParaDB.add(eclipsesSolares.getAllEclipse());									
+								allEclipsesParaDB.addAll(eclipsesSolares.getAllEclipse());									
 							}
 						}												
 					}
@@ -250,6 +250,9 @@ public class EclipsesServiceImpl implements EclipsesService{
 	private EclipsesParaDBDTO actualizarEclipsesLunaresDelAnyo (String anyo, String url, boolean poblarTablasExtra){
 		
 		EclipsesParaDBDTO eclipsesLunares = new EclipsesParaDBDTO();
+		
+		List<EclipsesEntity> eclipseList = new ArrayList<>();
+		List<AllEclipsesEntity> allEclipseList = new ArrayList<>();
 		
 		System.out.println("Actualizando los eclipses lunares del anyo: " + anyo);
 		
@@ -311,15 +314,20 @@ public class EclipsesServiceImpl implements EclipsesService{
 					
 					if(Integer.valueOf(anyo) > 0 &&!esFechaInvalida) {
 						
-						eclipsesLunares.setEclipse(eclipseParaBD);
+						eclipseList.add(eclipseParaBD);
+						
 					}		
 					
 					if(poblarTablasExtra) {
 						
-						eclipsesLunares.setAllEclipse(allEclipseParaDB);
+						allEclipseList.add(allEclipseParaDB);
+						
 					}		
 					
 				}
+				
+				eclipsesLunares.setEclipse(eclipseList);
+				eclipsesLunares.setAllEclipse(allEclipseList);
 				
 				System.out.println("Actualizados los eclipses lunares del anyo: " + anyo);	
 			}
@@ -344,6 +352,10 @@ public class EclipsesServiceImpl implements EclipsesService{
 		
 		EclipsesParaDBDTO eclipsesSolares = new EclipsesParaDBDTO();
 		System.out.println("Actualizando los eclipses solares del anyo: " + anyo);
+		
+
+		List<EclipsesEntity> eclipseList = new ArrayList<>();
+		List<AllEclipsesEntity> allEclipseList = new ArrayList<>();
 		
 		try {
 			List<SolarEclipseDTO> eclipsesSolaresDelAnyo = this.getEclipsesSolaresDelAnyoViaAPI(anyo, url);
@@ -399,16 +411,19 @@ public class EclipsesServiceImpl implements EclipsesService{
 				
 				if(Integer.valueOf(anyo) > 0 && !esFechaInvalida) {
 					
-					eclipsesSolares.setEclipse(eclipseParaBD);
+					eclipseList.add(eclipseParaBD);
+					
 				}		
 
-				
 				if(poblarTablasExtra) {
 					
-					eclipsesSolares.setAllEclipse(allEclipseParaDB);	
-				
+					allEclipseList.add(allEclipseParaDB);
+								
 				}			
 			}
+			
+			eclipsesSolares.setEclipse(eclipseList);
+			eclipsesSolares.setAllEclipse(allEclipseList);	
 			
 			System.out.println("Actualizados los eclipses solares del anyo: " + anyo);	
 			
