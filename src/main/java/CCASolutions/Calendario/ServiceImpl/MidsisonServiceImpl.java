@@ -95,10 +95,15 @@ public class MidsisonServiceImpl implements MidsisonService{
 						
 						for(MidsisonEntity midsison: midsisonsForDB) {
 							
+							LunasEntity lunaDelMidsison = null;
+							ApogeosYPerigeosLunaEntity apoperiDelMidsison = null;
+							
 							for(LunasEntity luna: allLunasFromDB) {
 	
 								if ((luna.isNueva() || luna.isLlena()) && Math.abs(ChronoUnit.SECONDS.between(luna.getDate(), midsison.getDate())) <= 86164 ) {
 									
+									midsison.setLunaId(luna.getId());
+									lunaDelMidsison = luna;
 									midsison.setLunaId(luna.getId());
 									midsison.setNuevo(luna.isNueva());
 									midsison.setLleno(luna.isLlena());
@@ -117,6 +122,9 @@ public class MidsisonServiceImpl implements MidsisonService{
 								
 								if (Math.abs(ChronoUnit.SECONDS.between(apoperi.getDate(), midsison.getDate())) <= 86164 ) {
 									
+									midsison.setApoperiId(apoperi.getId());
+									apoperiDelMidsison = apoperi;
+									
 									midsison.setAporico(apoperi.isEsApogeo());
 									midsison.setPerico(apoperi.isEsPerigeo());
 									midsison.setApoperiId(apoperi.getId());
@@ -131,7 +139,8 @@ public class MidsisonServiceImpl implements MidsisonService{
 								}
 							}
 							
-							if(midsison.getApoperiId() != null && midsison.getLunaId() != null) {
+							if(lunaDelMidsison != null && apoperiDelMidsison != null && Math.abs(ChronoUnit.SECONDS.between(lunaDelMidsison.getDate(), apoperiDelMidsison.getDate())) <= 86164) {
+								
 								midsison.setApofasal(true);
 							}
 							
