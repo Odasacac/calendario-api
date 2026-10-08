@@ -70,6 +70,19 @@
 	</dependencies>
 
 	<build>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<!-- El manual del calendario se empaqueta en el classpath para poder descargarlo -->
+			<resource>
+				<directory>Documentacion</directory>
+				<targetPath>Documentacion</targetPath>
+				<includes>
+					<include>*.pdf</include>
+				</includes>
+			</resource>
+		</resources>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>

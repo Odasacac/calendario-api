@@ -24,7 +24,7 @@ public class ClasesBean
 	@Autowired
 	private DatosService datosService;
 	
-	private static final ModoPoblacionEnum MODO_POBLACION = ModoPoblacionEnum.DUMP;
+	private static final ModoPoblacionEnum MODO_POBLACION = ModoPoblacionEnum.DESDE_CERO_SIN_TABLAS_EXTRA;
 
     
     @PostConstruct
