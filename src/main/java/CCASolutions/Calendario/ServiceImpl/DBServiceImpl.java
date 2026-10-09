@@ -70,8 +70,12 @@ public class DBServiceImpl implements DBService {
 	@Autowired
 	private SeasonsService seasonsService;
 	
-	private static final int numeroDeHorasQueTardaEnPoblateConTablasExtras = 13;
-	private static final int numeroDeHorasQueTardaEnPoblateSinTablasExtras = 4;
+	
+	private static final int numeroDeHorasMinimasQueTardaEnPoblateConTablasExtras = 7;
+	private static final int numeroDeHorasMaximasQueTardaEnPoblateConTablasExtras = 13;
+	
+	private static final int numeroDeHorasMinimasQueTardaEnPoblateSinTablasExtras = 2;
+	private static final int numeroDeHorasMaximasQueTardaEnPoblateSinTablasExtras = 4;
 	
 	
 	public String poblateDBDesdeArranque(ModoPoblacionEnum modo) {
@@ -113,16 +117,18 @@ public class DBServiceImpl implements DBService {
 	
 	private String poblateDesdeCero(boolean poblarTablasExtra) {
 
-	    String texto ="Se poblarán las tablas extra." ;
-	    int tiempo = numeroDeHorasQueTardaEnPoblateConTablasExtras;
+		String texto = "Se poblarán las tablas extra.";
+		int horasMinimas = numeroDeHorasMinimasQueTardaEnPoblateConTablasExtras;
+		int horasMaximas = numeroDeHorasMaximasQueTardaEnPoblateConTablasExtras;
 
-	    if (!poblarTablasExtra) {    		   
-	    	
-	        texto = "No se poblarán las tablas extra.";
-	        tiempo = numeroDeHorasQueTardaEnPoblateSinTablasExtras;
-	    }
+		if (!poblarTablasExtra) {
 
-	    System.out.println(texto + " Suele tardar algo más de " + tiempo + " horas.");
+		    texto = "No se poblarán las tablas extra.";
+		    horasMinimas = numeroDeHorasMinimasQueTardaEnPoblateSinTablasExtras;
+		    horasMaximas = numeroDeHorasMaximasQueTardaEnPoblateSinTablasExtras;
+		}
+
+		System.out.println(texto + "\nTardará entre " + horasMinimas + " y " + horasMaximas + " horas.");
 
 	    PoblateDBDTO poblateDBDTO = new PoblateDBDTO(true, poblarTablasExtra);
 
