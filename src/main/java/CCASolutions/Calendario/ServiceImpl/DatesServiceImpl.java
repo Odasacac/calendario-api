@@ -1,12 +1,14 @@
 package CCASolutions.Calendario.ServiceImpl;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.DTOs.DatosCosmicosParaVAUDTO;
+import CCASolutions.Calendario.DTOs.DatosCosmicosRangoDTO;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
 import CCASolutions.Calendario.Services.CasalerosService;
 import CCASolutions.Calendario.Services.DatesService;
@@ -19,7 +21,7 @@ import CCASolutions.Calendario.Services.MonthService;
 import CCASolutions.Calendario.Services.NotableEventService;
 import CCASolutions.Calendario.Services.SeasonsService;
 import CCASolutions.Calendario.Services.SolsticiosYEquinocciosService;
-import CCASolutions.Calendario.Services.UtilsService;
+import CCASolutions.Calendario.Services.DatosCosmicosService;
 
 @Service
 public class DatesServiceImpl implements DatesService {	
@@ -52,7 +54,7 @@ public class DatesServiceImpl implements DatesService {
 	private MonthService monthService; 
 	
 	@Autowired
-	private UtilsService utilsService;
+	private DatosCosmicosService datosCosmicosService;
 	
 	@Autowired
 	private SeasonsService seasonsService;
@@ -63,7 +65,7 @@ public class DatesServiceImpl implements DatesService {
 		
 		DateDTO dateVAU = new DateDTO();
 		
-		DatosCosmicosParaVAUDTO lunasSolsticiosEclipsesMetonosYEclipenos = this.utilsService.getDatosCosmicos(date);
+		DatosCosmicosParaVAUDTO lunasSolsticiosEclipsesMetonosYEclipenos = this.datosCosmicosService.getDatosCosmicos(date);
 		
 		if(lunasSolsticiosEclipsesMetonosYEclipenos.isValido()) {
 			
@@ -75,10 +77,50 @@ public class DatesServiceImpl implements DatesService {
 		}
 		
 		dateVAU.setFechaO(String.valueOf(date));
-		
-		return dateVAU;	
+
+		return dateVAU;
 	}
-	
+
+
+	public List<DateDTO> getDatesVAUFromRange (LocalDate desde, LocalDate hasta) {
+
+		DatosCosmicosRangoDTO datosCosmicosRango = this.datosCosmicosService.getDatosCosmicosRango(desde, hasta);
+
+		return desde.datesUntil(hasta.plusDays(1))
+				.parallel()
+				.map(date -> this.getDateVAUFromRango(date, datosCosmicosRango))
+				.toList();
+	}
+
+	private DateDTO getDateVAUFromRango(LocalDate date, DatosCosmicosRangoDTO datosCosmicosRango) {
+
+		DateDTO dateVAU = new DateDTO();
+
+		try {
+
+			DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO = this.datosCosmicosService.getDatosCosmicos(date, datosCosmicosRango);
+
+			if(datosCosmicosParaVAUDTO.isValido()) {
+
+				dateVAU = this.getDateVAU(date, datosCosmicosParaVAUDTO);
+			}
+			else {
+
+				dateVAU.setMensaje(datosCosmicosParaVAUDTO.getMensaje());
+			}
+		}
+		catch(Exception e) {
+
+			dateVAU = new DateDTO();
+			dateVAU.setMensaje("Error al obtener dateVAU: " + e);
+			System.out.println(date + " " + dateVAU.getMensaje());
+		}
+
+		dateVAU.setFechaO(String.valueOf(date));
+
+		return dateVAU;
+	}
+
 
 	private DateDTO getDateVAU(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
 		
