@@ -28,6 +28,7 @@ import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPCellEvent;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfPageEventHelper;
+import com.lowagie.text.pdf.PdfShading;
 import com.lowagie.text.pdf.PdfWriter;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
@@ -38,13 +39,19 @@ public class CalendarioAnualPdf {
 	private static final Color TINTA_SUAVE = new Color(0x5F, 0x6B, 0x7A);
 	private static final Color LINEA = new Color(0xC4, 0xCB, 0xD3);
 	private static final Color FONDO_CABECERA = new Color(0xEE, 0xF1, 0xF4);
-	private static final Color FONDO_FESTIVO = new Color(0xFF, 0xF1, 0xCC);
+	private static final Color FONDO_FESTIVO = new Color(0xFF, 0xEB, 0x80);
 	private static final Color TEXTO_FESTIVO = new Color(0x8A, 0x52, 0x00);
-	private static final Color FONDO_EVENTO = new Color(0xDB, 0xEA, 0xFB);
-	private static final Color TEXTO_EVENTO = new Color(0x1C, 0x4E, 0x8A);
-	private static final Color FONDO_FESTIVO_Y_EVENTO = new Color(0xFF, 0xD8, 0xB0);
-	private static final Color TEXTO_FESTIVO_Y_EVENTO = new Color(0x9C, 0x3D, 0x00);
-	private static final Color FONDO_SEGUNDO_MES = new Color(0xF1, 0xED, 0xF8);
+	private static final Color FONDO_EVENTO = new Color(0xD9, 0xC2, 0xF0);
+	private static final Color TEXTO_EVENTO = new Color(0x5B, 0x2A, 0x86);
+	// No se pinta tal cual: marca las celdas que llevan el degradado de FONDO_FESTIVO a FONDO_EVENTO (pintarMezcla)
+	private static final Color FONDO_FESTIVO_Y_EVENTO = new Color(0xEC, 0xD6, 0xB8);
+	private static final Color TEXTO_FESTIVO_Y_EVENTO = new Color(0x2E, 0x0B, 0x52);
+	// Fondo de las celdas del calendario según su estación. Los días de solsticio o equinoccio no tienen estación y quedan en blanco
+	private static final Map<Integer, Color> FONDO_ESTACION = Map.of(
+			1, new Color(0xDD, 0xEB, 0xF7),
+			2, new Color(0xE2, 0xF0, 0xD9),
+			3, new Color(0xFB, 0xE3, 0xE3),
+			4, new Color(0xF3, 0xE6, 0xD8));
 	private static final Map<Integer, Color> COLOR_ESTACION = Map.of(
 			0, TINTA_SUAVE,
 			1, new Color(0x2F, 0x5F, 0x98),
@@ -67,10 +74,11 @@ public class CalendarioAnualPdf {
 	private static final String DESTINO_EVENTOS = "eventos";
 
 	private static final String SIN_DATOS = "Sin datos VAU";
-	private static final String SIN_VALOR = "-";
+	private static final String SIN_VALOR = "-";	private static final int SIN_ESTACION = 0;
 	private static final int DIAS_POR_SEMANA = 7;
 	private static final int PRIMER_DIA_LIMANA = 8;
 	private static final float ANCHO_ETIQUETA_SEMANA = 62f;
+	private static final float GROSOR_BORDE_DESTACADO = 2.2f;
 	private static final float TAMANYO_MAXIMO_ESTRUCTURA = 8.5f;
 	private static final float TAMANYO_MINIMO_ESTRUCTURA = 5f;
 	private static final float ESPACIO_ENTRE_SECCIONES = 18f;
@@ -164,6 +172,11 @@ public class CalendarioAnualPdf {
 			}
 			mesActual.dias.add(i);
 
+			// El día del SoE no entra en ningún tramo: el de la estación saliente acaba el día antes y el de la entrante empieza el día después
+			if(this.esDiaSinEstacion(i)) {
+				continue;
+			}
+
 			if(tramoActual == null || tramoActual.mes != mesActual || tramoActual.estacion != this.estacionDeCadaDia[i]) {
 				tramoActual = new TramoDeEstacion(mesActual, this.estacionDeCadaDia[i]);
 				mesActual.tramos++;
@@ -231,7 +244,8 @@ public class CalendarioAnualPdf {
 		return this.tieneDatos(dia) && dia.getMonth().isNewMoon();
 	}
 
-	// Los meses híbridos se reparten entre dos estaciones: cada día lleva la suya y el día del solsticio o equinoccio abre la nueva
+	// Los meses híbridos se reparten entre dos estaciones: cada día lleva la suya. El día del solsticio o equinoccio
+	// no pertenece a ninguna estación (SIN_ESTACION) y la nueva empieza al día siguiente
 	private void calcularEstaciones() {
 
 		Map<String, Integer> numeroPorNombre = new HashMap<>();
@@ -244,9 +258,6 @@ public class CalendarioAnualPdf {
 
 			if(this.tieneDatos(dia) && dia.getSeason() != null && dia.getSeason().getName() != null) {
 				estacionDelDTO[i] = numeroPorNombre.get(dia.getSeason().getName());
-			}
-			if(estacionDelDTO[i] != null && estacionDelDTO[i] == 0) {
-				estacionDelDTO[i] = null;
 			}
 		}
 
@@ -266,19 +277,12 @@ public class CalendarioAnualPdf {
 		}
 	}
 
-	private boolean empiezaEstacion(int indice) {
-		return indice > 0 && this.estacionDeCadaDia[indice] != this.estacionDeCadaDia[indice - 1];
+	private boolean esDiaSinEstacion(int indice) {
+		return this.estacionDeCadaDia[indice] == SIN_ESTACION;
 	}
 
 	private String getNombreEstacion(int estacion) {
 		return this.estacionesPorNumero.getOrDefault(estacion, SIN_VALOR);
-	}
-
-	private String getNombreConArticulo(int estacion) {
-
-		String nombre = this.getNombreEstacion(estacion);
-
-		return (nombre.endsWith("a") ? "la " : "el ") + nombre;
 	}
 
 	private String getNombreDelTramo(TramoDeEstacion tramo) {
@@ -415,20 +419,48 @@ public class CalendarioAnualPdf {
 
 		PdfPTable tabla = new PdfPTable(new float[] {2.5f, 15f, 2.5f, 31f, 2.5f, 22f, 2.5f, 22f});
 
+		for(int estacion = 1; estacion <= 4; estacion++) {
+			this.filaLeyenda(tabla, FONDO_ESTACION.get(estacion), this.getNombreEstacion(estacion));
+		}
+
 		this.filaLeyenda(tabla, FONDO_FESTIVO, "Festividad");
-		this.filaLeyenda(tabla, FONDO_EVENTO, "Evento reseñable: métono, eclípeno o eclipse");
-		this.filaLeyenda(tabla, FONDO_FESTIVO_Y_EVENTO, "Festividad y evento reseñable");
-		this.filaLeyenda(tabla, FONDO_SEGUNDO_MES, "Segundo mes de la lunación");
+		this.filaLeyenda(tabla, FONDO_EVENTO, "Eclipse, métono o eclípeno");
+		this.filaLeyenda(tabla, FONDO_FESTIVO_Y_EVENTO, "Festividad con eclipse, métono o eclípeno");
+		// PdfPTable no dibuja filas incompletas: se rellena el último hueco con celdas vacías
+		tabla.addCell(celdaSinBorde());
+		tabla.addCell(celdaSinBorde());
 
 		return tabla;
 	}
 
 	private void filaLeyenda(PdfPTable tabla, Color color, String texto) {
 
-		PdfPCell muestra = new PdfPCell();
-		muestra.setFixedHeight(12);
-		muestra.setBackgroundColor(color);
-		muestra.setBorderColor(LINEA);
+		// La muestra se dibuja más pequeña que su celda para que quede separada de las demás
+		PdfPCell muestra = celdaSinBorde();
+		muestra.setFixedHeight(20);
+		muestra.setCellEvent((celda, posicion, lienzos) -> {
+
+			Rectangle cuadrado = new Rectangle(posicion.getLeft() + 2, posicion.getBottom() + 4, posicion.getRight() - 2, posicion.getTop() - 4);
+			PdfContentByte lienzo = lienzos[PdfPTable.BACKGROUNDCANVAS];
+
+			if(color == FONDO_FESTIVO_Y_EVENTO) {
+				pintarMezcla(lienzo, cuadrado);
+			}
+			else {
+				lienzo.saveState();
+				lienzo.setColorFill(color);
+				lienzo.rectangle(cuadrado.getLeft(), cuadrado.getBottom(), cuadrado.getWidth(), cuadrado.getHeight());
+				lienzo.fill();
+				lienzo.restoreState();
+			}
+
+			lienzo.saveState();
+			lienzo.setColorStroke(LINEA);
+			lienzo.setLineWidth(0.5f);
+			lienzo.rectangle(cuadrado.getLeft(), cuadrado.getBottom(), cuadrado.getWidth(), cuadrado.getHeight());
+			lienzo.stroke();
+			lienzo.restoreState();
+		});
 		tabla.addCell(muestra);
 
 		PdfPCell descripcion = celdaSinBorde();
@@ -494,13 +526,12 @@ public class CalendarioAnualPdf {
 			DateDTO dia = this.dias.get(indice);
 
 			PdfPCell[] fila = {
-					celdaTabla(new Phrase(texto.apply(dia), fuente(9, Font.BOLD, this.getColorTexto(dia, TINTA)))),
+					celdaTabla(new Phrase(texto.apply(dia), fuente(9, Font.BOLD, TINTA))),
 					celdaTabla(new Phrase(this.getFechaVAU(indice), fuente(9, Font.NORMAL, TINTA))),
 					celdaTabla(new Phrase(fechaMedia(this.getFecha(indice)), fuente(9, Font.NORMAL, TINTA)))
 			};
 
 			for(PdfPCell celda : fila) {
-				celda.setBackgroundColor(this.getColorFondo(dia));
 				tabla.addCell(celda);
 			}
 		}
@@ -529,6 +560,26 @@ public class CalendarioAnualPdf {
 			return FONDO_FESTIVO;
 		}
 		return evento ? FONDO_EVENTO : null;
+	}
+
+	// En el calendario las festividades y eventos tienen su propio fondo (y borde grueso); el resto de días, el de su estación.
+	// Los solsticios y equinoccios cuentan siempre como festividad
+	private Color getColorFondoCalendario(DateDTO dia, int indice) {
+
+		Color fondo = this.getColorFondo(dia);
+
+		if(this.esDiaSinEstacion(indice) && fondo == null) {
+			return FONDO_FESTIVO;
+		}
+		if(this.esDiaSinEstacion(indice) && fondo == FONDO_EVENTO) {
+			return FONDO_FESTIVO_Y_EVENTO;
+		}
+
+		return fondo != null ? fondo : FONDO_ESTACION.get(this.estacionDeCadaDia[indice]);
+	}
+
+	private boolean esDestacado(DateDTO dia, int indice) {
+		return this.getColorFondo(dia) != null || this.esDiaSinEstacion(indice);
 	}
 
 	private Color getColorTexto(DateDTO dia, Color porDefecto) {
@@ -569,11 +620,9 @@ public class CalendarioAnualPdf {
 			}
 		}
 
-		String mesPrincipal = mesesDeLaLunacion.isEmpty() ? SIN_DATOS : mesesDeLaLunacion.get(0).nombre;
-
 		List<Integer> estacionesDeLaLunacion = new ArrayList<>();
 		for(int indice : lunacion) {
-			if(!estacionesDeLaLunacion.contains(this.estacionDeCadaDia[indice])) {
+			if(!this.esDiaSinEstacion(indice) && !estacionesDeLaLunacion.contains(this.estacionDeCadaDia[indice])) {
 				estacionesDeLaLunacion.add(this.estacionDeCadaDia[indice]);
 			}
 		}
@@ -614,7 +663,7 @@ public class CalendarioAnualPdf {
 		subtitulo.setSpacingAfter(8);
 		documento.add(subtitulo);
 
-		documento.add(this.tablaLunacion(lunacion, mesPrincipal));
+		documento.add(this.tablaLunacion(lunacion));
 	}
 
 	private String getApellidoDelMes(MesDelCalendario mes) {
@@ -670,7 +719,7 @@ public class CalendarioAnualPdf {
 		return subtitulo.toString();
 	}
 
-	private PdfPTable tablaLunacion(List<Integer> lunacion, String mesPrincipal) {
+	private PdfPTable tablaLunacion(List<Integer> lunacion) {
 
 		Integer terra = null;
 		Map<Integer, Integer> posiciones = new LinkedHashMap<>();
@@ -727,7 +776,7 @@ public class CalendarioAnualPdf {
 				if(indice != null) {
 					this.anyadirHueco(tabla, huecos, altoFila);
 					huecos = 0;
-					tabla.addCell(this.celdaDia(indice, mesPrincipal, altoFila));
+					tabla.addCell(this.celdaDia(indice, altoFila));
 				}
 				else {
 					huecos++;
@@ -831,24 +880,22 @@ public class CalendarioAnualPdf {
 		if(festividad != null) {
 			texto.add(new Chunk("   ·   " + festividad, fuente(9, Font.BOLD, this.getColorTexto(dia, TEXTO_FESTIVO))));
 		}
-		if(this.empiezaEstacion(indice)) {
-			texto.add(new Chunk("   ·   Empieza " + this.getNombreConArticulo(this.estacionDeCadaDia[indice]), fuente(9, Font.BOLD, COLOR_ESTACION.getOrDefault(this.estacionDeCadaDia[indice], TINTA))));
-		}
-		celda.setBackgroundColor(this.getColorFondo(dia));
+		Color fondo = this.getColorFondoCalendario(dia, indice);
+		celda.setBackgroundColor(fondo == FONDO_FESTIVO_Y_EVENTO ? null : fondo);
 		celda.setPhrase(texto);
-		celda.setCellEvent(new EsquinaDelDia(null, true));
+		celda.setPaddingLeft(8);
+		celda.setCellEvent(new EsquinaDelDia(null, true, this.esDestacado(dia, indice), fondo == FONDO_FESTIVO_Y_EVENTO));
 
 		return celda;
 	}
 
-	private PdfPCell celdaDia(int indice, String mesPrincipal, float alto) {
+	private PdfPCell celdaDia(int indice, float alto) {
 
 		DateDTO dia = this.dias.get(indice);
 		LocalDate fecha = this.getFecha(indice);
 		String festividad = this.getFestividad(dia);
 		String evento = this.getEvento(dia);
-		boolean segundoMes = !mesPrincipal.equals(this.mesDeCadaDia[indice]);
-		boolean empiezaMes = segundoMes && (indice == 0 || !this.mesDeCadaDia[indice].equals(this.mesDeCadaDia[indice - 1]));
+		Color fondo = this.getColorFondoCalendario(dia, indice);
 
 		PdfPCell celda = new PdfPCell();
 		celda.setFixedHeight(alto);
@@ -856,9 +903,7 @@ public class CalendarioAnualPdf {
 		celda.setPadding(4);
 		celda.setPaddingLeft(5);
 		celda.setUseAscender(true);
-
-		Color fondo = this.getColorFondo(dia);
-		celda.setBackgroundColor(fondo == null && segundoMes ? FONDO_SEGUNDO_MES : fondo);
+		celda.setBackgroundColor(fondo == FONDO_FESTIVO_Y_EVENTO ? null : fondo);
 
 		String[] partesDelDia = dia.getDay().split(" ", 2);
 		Paragraph nombre = new Paragraph(partesDelDia[0], fuente(11, Font.BOLD, TINTA));
@@ -867,14 +912,6 @@ public class CalendarioAnualPdf {
 
 		if(partesDelDia.length > 1) {
 			celda.addElement(lineaPequenya(partesDelDia[1], Font.ITALIC, TINTA_SUAVE));
-		}
-
-		if(this.empiezaEstacion(indice)) {
-			celda.addElement(lineaPequenya("Empieza " + this.getNombreConArticulo(this.estacionDeCadaDia[indice]), Font.BOLD, COLOR_ESTACION.getOrDefault(this.estacionDeCadaDia[indice], TINTA)));
-		}
-
-		if(empiezaMes) {
-			celda.addElement(lineaPequenya("Empieza " + this.mesDeCadaDia[indice], Font.BOLD, COLOR_ESTACION.getOrDefault(this.estacionDeCadaDia[indice], TINTA)));
 		}
 
 		if(festividad != null) {
@@ -888,7 +925,7 @@ public class CalendarioAnualPdf {
 			celda.addElement(lineaPequenya(evento, Font.NORMAL, TINTA_SUAVE));
 		}
 
-		celda.setCellEvent(new EsquinaDelDia(fechaCorta(fecha), true));
+		celda.setCellEvent(new EsquinaDelDia(fechaCorta(fecha), true, this.esDestacado(dia, indice), fondo == FONDO_FESTIVO_Y_EVENTO));
 
 		return celda;
 	}
@@ -901,7 +938,7 @@ public class CalendarioAnualPdf {
 		celda.setVerticalAlignment(Element.ALIGN_BOTTOM);
 		celda.setPaddingBottom(6);
 		celda.setPaddingLeft(5);
-		celda.setCellEvent(new EsquinaDelDia(fechaCorta(this.getFecha(indice)), true));
+		celda.setCellEvent(new EsquinaDelDia(fechaCorta(this.getFecha(indice)), true, false, false));
 		return celda;
 	}
 
@@ -1005,6 +1042,19 @@ public class CalendarioAnualPdf {
 		return celda;
 	}
 
+	// Festividad y evento reseñable a la vez: degradado del amarillo de la festividad al lila del evento
+	private static void pintarMezcla(PdfContentByte lienzo, Rectangle zona) {
+
+		PdfShading degradado = PdfShading.simpleAxial(lienzo.getPdfWriter(), zona.getLeft(), zona.getTop(), zona.getRight(), zona.getBottom(), FONDO_FESTIVO, FONDO_EVENTO);
+
+		lienzo.saveState();
+		lienzo.rectangle(zona.getLeft(), zona.getBottom(), zona.getWidth(), zona.getHeight());
+		lienzo.clip();
+		lienzo.newPath();
+		lienzo.paintShading(degradado);
+		lienzo.restoreState();
+	}
+
 	private static Font fuente(float tamanyo, int estilo, Color color) {
 		return new Font(Font.HELVETICA, tamanyo, estilo, color);
 	}
@@ -1058,21 +1108,40 @@ public class CalendarioAnualPdf {
 		}
 	}
 
-	// Fecha civil en la esquina superior derecha y casilla para marcar el día en la inferior
+	// Fecha civil en la esquina superior derecha, casilla para marcar el día en la inferior y borde negro en festividades y eventos
 	private static class EsquinaDelDia implements PdfPCellEvent {
 
 		private final String fechaCivil;
 		private final boolean casilla;
+		private final boolean destacado;
+		private final boolean mezcla;
 
-		private EsquinaDelDia(String fechaCivil, boolean casilla) {
+		private EsquinaDelDia(String fechaCivil, boolean casilla, boolean destacado, boolean mezcla) {
 			this.fechaCivil = fechaCivil;
 			this.casilla = casilla;
+			this.destacado = destacado;
+			this.mezcla = mezcla;
 		}
 
 		@Override
 		public void cellLayout(PdfPCell cell, Rectangle posicion, PdfContentByte[] lienzos) {
 
 			PdfContentByte lienzo = lienzos[PdfPTable.TEXTCANVAS];
+
+			if(this.mezcla) {
+				pintarMezcla(lienzos[PdfPTable.BACKGROUNDCANVAS], posicion);
+			}
+
+			// Se dibuja sobre el texto para que los bordes grises de las celdas vecinas no lo tapen
+			if(this.destacado) {
+				float mitad = GROSOR_BORDE_DESTACADO / 2;
+				lienzo.saveState();
+				lienzo.setColorStroke(Color.BLACK);
+				lienzo.setLineWidth(GROSOR_BORDE_DESTACADO);
+				lienzo.rectangle(posicion.getLeft() + mitad, posicion.getBottom() + mitad, posicion.getWidth() - GROSOR_BORDE_DESTACADO, posicion.getHeight() - GROSOR_BORDE_DESTACADO);
+				lienzo.stroke();
+				lienzo.restoreState();
+			}
 
 			if(this.fechaCivil != null) {
 				ColumnText.showTextAligned(lienzo, Element.ALIGN_RIGHT, new Phrase(this.fechaCivil, fuente(7.5f, Font.NORMAL, TINTA_SUAVE)),

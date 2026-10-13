@@ -241,13 +241,16 @@ public class NotableEventServiceImpl implements NotableEventService {
 			}
 			
 
-			LocalDateTime diaDelMidsison = soePasado.getDate().plusSeconds((ChronoUnit.SECONDS.between(soePasado.getDate(), soeFuturo.getDate()))/2);
+			// El día de un SoE, soePasado y soeFuturo no son consecutivos: el midsison se calcula desde el SoE del propio día
+			SolsticiosYEquinocciosEntity soeInicioMidsison = soeActual != null ? soeActual : soePasado;
+
+			LocalDateTime diaDelMidsison = soeInicioMidsison.getDate().plusSeconds((ChronoUnit.SECONDS.between(soeInicioMidsison.getDate(), soeFuturo.getDate()))/2);
 			
 			if(diaDelMidsison.toLocalDate().isBefore(dateO)) {
 				
 				midsisonPasado = new MidsisonDTO();
 				midsisonPasado.setDate(diaDelMidsison);
-				midsisonPasado.setLastSoeSeason(soePasado.getStartingSeason());
+				midsisonPasado.setLastSoeSeason(soeInicioMidsison.getStartingSeason());
 				
 				boolean esFasal = false;
 				boolean esApoperico = false;
@@ -312,7 +315,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 				
 				midsisonActual = new MidsisonDTO();
 				midsisonActual.setDate(diaDelMidsison);	
-				midsisonActual.setLastSoeSeason(soePasado.getStartingSeason());
+				midsisonActual.setLastSoeSeason(soeInicioMidsison.getStartingSeason());
 				
 				boolean esFasal = false;
 				boolean esApoperico = false;
@@ -376,7 +379,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 				
 				midsisonFuturo = new MidsisonDTO();
 				midsisonFuturo.setDate(diaDelMidsison);	
-				midsisonFuturo.setLastSoeSeason(soePasado.getStartingSeason());
+				midsisonFuturo.setLastSoeSeason(soeInicioMidsison.getStartingSeason());
 				
 				boolean esFasal = false;
 				boolean esApoperico = false;
