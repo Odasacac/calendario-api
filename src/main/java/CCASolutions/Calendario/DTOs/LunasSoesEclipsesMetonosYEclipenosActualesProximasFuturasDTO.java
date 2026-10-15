@@ -1,22 +1,22 @@
 package CCASolutions.Calendario.DTOs;
 
 
-import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
+import CCASolutions.Calendario.Entities.ApoperisLunaresEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
 public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 
-	private LunasEntity lunaActual;
-	private LunasEntity lunaProxima;
-	private LunasEntity lunaAnterior;
+	private FasesLunaresEntity lunaActual;
+	private FasesLunaresEntity lunaProxima;
+	private FasesLunaresEntity lunaAnterior;
 	
-	private ApogeosYPerigeosLunaEntity apoperiActual;
-	private ApogeosYPerigeosLunaEntity apoperiProximo;
-	private ApogeosYPerigeosLunaEntity apoperiAnterior;
+	private ApoperisLunaresEntity apoperiActual;
+	private ApoperisLunaresEntity apoperiProximo;
+	private ApoperisLunaresEntity apoperiAnterior;
 	
 	private SolsticiosYEquinocciosEntity soeActual;
 	private SolsticiosYEquinocciosEntity soeProximo;
@@ -61,40 +61,40 @@ public class LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO {
 	public void setMidsisonAnterior(MidsisonDTO midsisonAnterior) {
 		this.midsisonAnterior = midsisonAnterior;
 	}
-	public LunasEntity getLunaActual() {
+	public FasesLunaresEntity getLunaActual() {
 		return lunaActual;
 	}
-	public void setLunaActual(LunasEntity lunaActual) {
+	public void setLunaActual(FasesLunaresEntity lunaActual) {
 		this.lunaActual = lunaActual;
 	}
-	public LunasEntity getLunaProxima() {
+	public FasesLunaresEntity getLunaProxima() {
 		return lunaProxima;
 	}
-	public void setLunaProxima(LunasEntity lunaProxima) {
+	public void setLunaProxima(FasesLunaresEntity lunaProxima) {
 		this.lunaProxima = lunaProxima;
 	}
-	public LunasEntity getLunaAnterior() {
+	public FasesLunaresEntity getLunaAnterior() {
 		return lunaAnterior;
 	}
-	public void setLunaAnterior(LunasEntity lunaAnterior) {
+	public void setLunaAnterior(FasesLunaresEntity lunaAnterior) {
 		this.lunaAnterior = lunaAnterior;
 	}
-	public ApogeosYPerigeosLunaEntity getApoperiActual() {
+	public ApoperisLunaresEntity getApoperiActual() {
 		return apoperiActual;
 	}
-	public void setApoperiActual(ApogeosYPerigeosLunaEntity apoperiActual) {
+	public void setApoperiActual(ApoperisLunaresEntity apoperiActual) {
 		this.apoperiActual = apoperiActual;
 	}
-	public ApogeosYPerigeosLunaEntity getApoperiProximo() {
+	public ApoperisLunaresEntity getApoperiProximo() {
 		return apoperiProximo;
 	}
-	public void setApoperiProximo(ApogeosYPerigeosLunaEntity apoperiProximo) {
+	public void setApoperiProximo(ApoperisLunaresEntity apoperiProximo) {
 		this.apoperiProximo = apoperiProximo;
 	}
-	public ApogeosYPerigeosLunaEntity getApoperiAnterior() {
+	public ApoperisLunaresEntity getApoperiAnterior() {
 		return apoperiAnterior;
 	}
-	public void setApoperiAnterior(ApogeosYPerigeosLunaEntity apoperiAnterior) {
+	public void setApoperiAnterior(ApoperisLunaresEntity apoperiAnterior) {
 		this.apoperiAnterior = apoperiAnterior;
 	}
 	public SolsticiosYEquinocciosEntity getSoeActual() {

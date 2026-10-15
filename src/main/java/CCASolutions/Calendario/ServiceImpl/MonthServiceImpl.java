@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.MonthDTO;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.MonthsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Repositories.MonthsRepository;
@@ -21,14 +21,14 @@ public class MonthServiceImpl implements MonthService{
 	@Autowired
 	private MonthsRepository monthsRepository;
 	
-	public MonthDTO getVAUMonth (LocalDate date, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, List<LunasEntity> lunasDesdeElAnyoAnteriorHastaElSiguiente) {
+	public MonthDTO getVAUMonth (LocalDate date, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas, List<FasesLunaresEntity> lunasDesdeElAnyoAnteriorHastaElSiguiente) {
 		
 		MonthDTO month = new MonthDTO();
 		
-		List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente = new ArrayList<>();
-		List<LunasEntity> lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente = new ArrayList<>();
+		List<FasesLunaresEntity> lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente = new ArrayList<>();
+		List<FasesLunaresEntity> lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente = new ArrayList<>();
 		
-		for(LunasEntity luna : lunasDesdeElAnyoAnteriorHastaElSiguiente) {
+		for(FasesLunaresEntity luna : lunasDesdeElAnyoAnteriorHastaElSiguiente) {
 			if(luna.isNueva()) {
 				lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente.add(luna);
 			}
@@ -81,17 +81,17 @@ public class MonthServiceImpl implements MonthService{
 			// Luego, coger las lunas nuevas que se encuentran entre ambos lastSOE y nextSOE
 			// Si cae en Luna nueva, ya tenemos el mes
 			
-			LunasEntity lunaNuevaAnteriorMasCercanaALaFecha = new LunasEntity();
-			LunasEntity lunaNuevaPosteriorMasCercanaALaFecha = new LunasEntity(); // Ya tendra utilidad
+			FasesLunaresEntity lunaNuevaAnteriorMasCercanaALaFecha = new FasesLunaresEntity();
+			FasesLunaresEntity lunaNuevaPosteriorMasCercanaALaFecha = new FasesLunaresEntity(); // Ya tendra utilidad
 			Long numeroMinimoDeDiasEntreLunaNuevaAnteriorYDate = Long.MAX_VALUE;	
 			Long numeroMinimoDeDiasEntreLunaNuevaSiguienteYDate = Long.MAX_VALUE;	
 			
-			List<LunasEntity> lunasNuevasEntreLastSOEYNextSOE = new ArrayList<>();
+			List<FasesLunaresEntity> lunasNuevasEntreLastSOEYNextSOE = new ArrayList<>();
 			boolean caeEnLunaNueva = false;
 			String surname = "";
 			for(int i = 0; i<lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente.size(); i++) {
 				
-				LunasEntity luna = lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente.get(i);
+				FasesLunaresEntity luna = lunasNuevasDesdeElAnyoAnteriorHastaElSiguiente.get(i);
 	
 				if(luna.getDate().toLocalDate().isEqual(date)) {
 						
@@ -138,15 +138,15 @@ public class MonthServiceImpl implements MonthService{
 				month.setName("-");
 			}
 			else {
-				LunasEntity lunaLlenaAnteriorMasCercanaALaFecha = new LunasEntity(); // Ya tendra utilidad
-				LunasEntity lunaLlenaPosteriorMasCercanaALaFecha = new LunasEntity(); // Ya tendra utilidad
+				FasesLunaresEntity lunaLlenaAnteriorMasCercanaALaFecha = new FasesLunaresEntity(); // Ya tendra utilidad
+				FasesLunaresEntity lunaLlenaPosteriorMasCercanaALaFecha = new FasesLunaresEntity(); // Ya tendra utilidad
 				Long numeroMinimoDeDiasEntreLunaLlenaAnteriorYDate = Long.MAX_VALUE;	
 				Long numeroMinimoDeDiasEntreLunaLlenaSiguienteYDate = Long.MAX_VALUE;	
 				boolean caeEnLunaLlena = false;  // Ya tendra utilidad
 				
 				for(int i = 0; i<lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente.size(); i++) {
 					
-					LunasEntity luna = lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente.get(i);
+					FasesLunaresEntity luna = lunasLlenasDesdeElAnyoAnteriorHastaElSiguiente.get(i);
 					
 					if(luna.getDate().toLocalDate().isBefore(date)) {
 						
@@ -205,12 +205,12 @@ public class MonthServiceImpl implements MonthService{
 					int lunasNuevasPasadasDesdeLastSOEHastaDateO = 0;
 					
 					long diasMinimosDeDiferenciaLunaNuevaConNextSOE = Long.MAX_VALUE;
-					LunasEntity lastLNBeforeNextSOE = null;
+					FasesLunaresEntity lastLNBeforeNextSOE = null;
 					
 					long diasMinimosDeDiferenciaLunaNuevaConLastSOE = Long.MAX_VALUE;
-					LunasEntity firstLNAfterLastSOE = null;
+					FasesLunaresEntity firstLNAfterLastSOE = null;
 						
-					for(LunasEntity luna : lunasNuevasEntreLastSOEYNextSOE) {
+					for(FasesLunaresEntity luna : lunasNuevasEntreLastSOEYNextSOE) {
 							
 						long diasDeDiferenciaEntreNextSOEYLN = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), nextSOE.getDate().toLocalDate());
 						long diasDeDiferenciaEntreLastSOEYLN = ChronoUnit.DAYS.between(lastSOE.getDate().toLocalDate(), luna.getDate().toLocalDate());

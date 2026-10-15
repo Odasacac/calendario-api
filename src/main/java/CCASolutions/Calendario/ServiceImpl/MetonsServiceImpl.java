@@ -14,14 +14,14 @@ import CCASolutions.Calendario.DTOs.MetonDTO;
 import CCASolutions.Calendario.DTOs.MetonIADTO;
 import CCASolutions.Calendario.DTOs.MetonINDTO;
 import CCASolutions.Calendario.DTOs.MetonoInvernalApofasalRemotoDTO;
-import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
+import CCASolutions.Calendario.Entities.ApoperisLunaresEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
-import CCASolutions.Calendario.Repositories.ApogeosYPerigeosLunaRepository;
+import CCASolutions.Calendario.Repositories.ApoperisLunaresRepository;
 import CCASolutions.Calendario.Repositories.MetonsRepository;
-import CCASolutions.Calendario.Repositories.LunasRepository;
+import CCASolutions.Calendario.Repositories.FasesLunaresRepository;
 import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Services.MetonsService;
 
@@ -33,13 +33,13 @@ public class MetonsServiceImpl implements MetonsService {
 	private MetonsRepository metonsRepository;
 	
 	@Autowired
-	private LunasRepository lunasRepository;
+	private FasesLunaresRepository lunasRepository;
 	
 	@Autowired
 	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository;
 	
 	@Autowired
-	private ApogeosYPerigeosLunaRepository apogeosYPerigeosLunaRepository;
+	private ApoperisLunaresRepository apogeosYPerigeosLunaRepository;
 	
 	public MetonsEntity getLastMetonIApofasalRemoto(List<MetonsEntity> allMetons, LocalDate date) {
 		
@@ -242,8 +242,8 @@ public class MetonsServiceImpl implements MetonsService {
 		List<MetonsEntity> metonosEnBBDD = this.metonsRepository.findAll();
 		
 		if(metonosEnBBDD.isEmpty()) {
-			List<LunasEntity> allLunas = this.lunasRepository.findAll();
-			List<ApogeosYPerigeosLunaEntity> allApoperis = this.apogeosYPerigeosLunaRepository.findAll();
+			List<FasesLunaresEntity> allLunas = this.lunasRepository.findAll();
+			List<ApoperisLunaresEntity> allApoperis = this.apogeosYPerigeosLunaRepository.findAll();
 			List<SolsticiosYEquinocciosEntity> allSoes = this.solsticiosYEquinocciosRepository.findAll();
 			
 			if(!allLunas.isEmpty() && ! allSoes.isEmpty()) {
@@ -251,7 +251,7 @@ public class MetonsServiceImpl implements MetonsService {
 				List<MetonsEntity> metonosParaDB = new ArrayList<>();
 				for(SolsticiosYEquinocciosEntity soe : allSoes) {
 					
-					for (LunasEntity luna : allLunas) {
+					for (FasesLunaresEntity luna : allLunas) {
 						
 						if((luna.isNueva() || luna.isLlena()) && Math.abs(ChronoUnit.SECONDS.between(luna.getDate(), soe.getDate())) <= 86164) {
 							
@@ -280,7 +280,7 @@ public class MetonsServiceImpl implements MetonsService {
 					}
 					
 					
-					for(ApogeosYPerigeosLunaEntity apoperi : allApoperis) {
+					for(ApoperisLunaresEntity apoperi : allApoperis) {
 						
 						if((apoperi.isEsApogeo() || apoperi.isEsPerigeo()) && Math.abs(ChronoUnit.SECONDS.between(apoperi.getDate(), soe.getDate())) <= 86164) {
 							
@@ -312,18 +312,18 @@ public class MetonsServiceImpl implements MetonsService {
 				}
 				
 				System.out.println("Actualizando métonos apofasales");
-				Map<Long, LunasEntity> lunasMap = allLunas.stream().collect(Collectors.toMap(LunasEntity::getId, l -> l));
-				Map<Long, ApogeosYPerigeosLunaEntity> apoperiMap = allApoperis.stream().collect(Collectors.toMap(ApogeosYPerigeosLunaEntity::getId, a -> a));
+				Map<Long, FasesLunaresEntity> lunasMap = allLunas.stream().collect(Collectors.toMap(FasesLunaresEntity::getId, l -> l));
+				Map<Long, ApoperisLunaresEntity> apoperiMap = allApoperis.stream().collect(Collectors.toMap(ApoperisLunaresEntity::getId, a -> a));
 				
 				for(MetonsEntity meton : metonosParaDB) {
 					
 					if(meton.isSelecto() || meton.isInvertido()) {
 						if(meton.getLunaId() != null) {
 							
-							ApogeosYPerigeosLunaEntity apoperiMasCercano = new ApogeosYPerigeosLunaEntity();
+							ApoperisLunaresEntity apoperiMasCercano = new ApoperisLunaresEntity();
 							Long minimosDiasDeDiferenciaEntreLunaYApoperi = Long.MAX_VALUE;
 							
-							for(ApogeosYPerigeosLunaEntity apoperi : allApoperis) {
+							for(ApoperisLunaresEntity apoperi : allApoperis) {
 								
 								Long diasDeDiferenciaEntreLunaYApoperi = Math.abs(ChronoUnit.DAYS.between(apoperi.getDate().toLocalDate(), lunasMap.get(meton.getLunaId()).getDate().toLocalDate()));
 								
@@ -340,9 +340,9 @@ public class MetonsServiceImpl implements MetonsService {
 						}
 						else if (meton.getApoperiId() != null) {
 							
-							LunasEntity lunaMasCercana = new LunasEntity();
+							FasesLunaresEntity lunaMasCercana = new FasesLunaresEntity();
 							Long minimosDiasDeDiferenciaEntreLunaYApoperi = Long.MAX_VALUE;
-							for(LunasEntity luna : allLunas) {
+							for(FasesLunaresEntity luna : allLunas) {
 								
 								if(luna.isNueva() || luna.isLlena()) {
 									Long diasDeDiferenciaEntreLunaYApoperi = Math.abs(ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), apoperiMap.get(meton.getApoperiId()).getDate().toLocalDate()));

@@ -14,7 +14,7 @@ import CCASolutions.Calendario.DTOs.FestividadesDTO;
 import CCASolutions.Calendario.DTOs.MinimaFestividadesDTO;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.FestividadesEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Repositories.FestividadesRepository;
@@ -584,7 +584,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 		long diasMinimosDeDiferenciaEntreAponovoYDate = Long.MAX_VALUE;
 
 		
-		for(LunasEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
+		for(FasesLunaresEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
 			
 	
 			if(luna.isNueva()) {

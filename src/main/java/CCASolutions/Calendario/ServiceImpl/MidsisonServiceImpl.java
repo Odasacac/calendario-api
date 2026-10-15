@@ -7,14 +7,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
+import CCASolutions.Calendario.Entities.ApoperisLunaresEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.MidsisonEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
-import CCASolutions.Calendario.Repositories.ApogeosYPerigeosLunaRepository;
+import CCASolutions.Calendario.Repositories.ApoperisLunaresRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
-import CCASolutions.Calendario.Repositories.LunasRepository;
+import CCASolutions.Calendario.Repositories.FasesLunaresRepository;
 import CCASolutions.Calendario.Repositories.MidsisonRepository;
 import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Services.MidsisonService;
@@ -26,13 +26,13 @@ public class MidsisonServiceImpl implements MidsisonService{
 	private MidsisonRepository midsisonRepository;
 	
 	@Autowired
-	private LunasRepository lunasRepository;
+	private FasesLunaresRepository lunasRepository;
 	
 	@Autowired
 	private EclipsesRepository eclipsesRepository;
 	
 	@Autowired
-	private ApogeosYPerigeosLunaRepository apoperisRepository;
+	private ApoperisLunaresRepository apoperisRepository;
 	
 	@Autowired
 	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository;
@@ -87,18 +87,18 @@ public class MidsisonServiceImpl implements MidsisonService{
 					
 					System.out.println("Midsisons poblados correctamente, ahora a ver si llenos o nuevos también.");
 					
-					List<LunasEntity> allLunasFromDB = this.lunasRepository.findAll();
-					List<ApogeosYPerigeosLunaEntity> allApoperisFromDB = this.apoperisRepository.findAll();
+					List<FasesLunaresEntity> allLunasFromDB = this.lunasRepository.findAll();
+					List<ApoperisLunaresEntity> allApoperisFromDB = this.apoperisRepository.findAll();
 					List<EclipsesEntity> allEclipsesFromDB = this.eclipsesRepository.findAll();
 					
 					if(!allLunasFromDB.isEmpty() || !allApoperisFromDB.isEmpty() || !allEclipsesFromDB.isEmpty()) {	
 						
 						for(MidsisonEntity midsison: midsisonsForDB) {
 							
-							LunasEntity lunaDelMidsison = null;
-							ApogeosYPerigeosLunaEntity apoperiDelMidsison = null;
+							FasesLunaresEntity lunaDelMidsison = null;
+							ApoperisLunaresEntity apoperiDelMidsison = null;
 							
-							for(LunasEntity luna: allLunasFromDB) {
+							for(FasesLunaresEntity luna: allLunasFromDB) {
 	
 								if ((luna.isNueva() || luna.isLlena()) && Math.abs(ChronoUnit.SECONDS.between(luna.getDate(), midsison.getDate())) <= 86164 ) {
 									
@@ -118,7 +118,7 @@ public class MidsisonServiceImpl implements MidsisonService{
 								}
 							}
 							
-							for(ApogeosYPerigeosLunaEntity apoperi : allApoperisFromDB) {
+							for(ApoperisLunaresEntity apoperi : allApoperisFromDB) {
 								
 								if (Math.abs(ChronoUnit.SECONDS.between(apoperi.getDate(), midsison.getDate())) <= 86164 ) {
 									

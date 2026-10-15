@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DateDTO;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Repositories.EclipenosRepository;
-import CCASolutions.Calendario.Repositories.LunasRepository;
+import CCASolutions.Calendario.Repositories.FasesLunaresRepository;
 import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Services.CalendarioPdfService;
 import CCASolutions.Calendario.Services.DatesService;
@@ -33,7 +33,7 @@ public class DownloadServiceImpl implements DownloadService {
 	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository;
 
 	@Autowired
-	private LunasRepository lunasRepository;
+	private FasesLunaresRepository lunasRepository;
 
 	@Autowired
 	private CalendarioPdfService calendarioPdfService;
@@ -122,7 +122,7 @@ public class DownloadServiceImpl implements DownloadService {
 	// El Oterno empieza con la última luna nueva anterior al solsticio de invierno
 	private LocalDate getInicioDelOterno(SolsticiosYEquinocciosEntity solsticioDeInvierno) {
 
-		LunasEntity lunaNuevaAnterior = this.lunasRepository.findFirstByDateBeforeAndNuevaIsTrueOrderByDateDesc(solsticioDeInvierno.getDate().toLocalDate().atStartOfDay());
+		FasesLunaresEntity lunaNuevaAnterior = this.lunasRepository.findFirstByDateBeforeAndNuevaIsTrueOrderByDateDesc(solsticioDeInvierno.getDate().toLocalDate().atStartOfDay());
 
 		return lunaNuevaAnterior != null ? lunaNuevaAnterior.getDate().toLocalDate() : solsticioDeInvierno.getDate().toLocalDate();
 	}
@@ -130,7 +130,7 @@ public class DownloadServiceImpl implements DownloadService {
 	// El Oterno liminal termina el día antes de la primera luna nueva desde el solsticio de invierno
 	private LocalDate getFinDelOternoLiminal(SolsticiosYEquinocciosEntity solsticioDeInvierno) {
 
-		LunasEntity lunaNuevaSiguiente = this.lunasRepository.findTopByDateGreaterThanEqualAndNuevaIsTrueOrderByDateAsc(solsticioDeInvierno.getDate().toLocalDate().atStartOfDay());
+		FasesLunaresEntity lunaNuevaSiguiente = this.lunasRepository.findTopByDateGreaterThanEqualAndNuevaIsTrueOrderByDateAsc(solsticioDeInvierno.getDate().toLocalDate().atStartOfDay());
 
 		return lunaNuevaSiguiente != null ? lunaNuevaSiguiente.getDate().toLocalDate().minusDays(1) : solsticioDeInvierno.getDate().toLocalDate();
 	}

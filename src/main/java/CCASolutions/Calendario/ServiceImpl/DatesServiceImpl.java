@@ -15,7 +15,7 @@ import CCASolutions.Calendario.Services.DatesService;
 import CCASolutions.Calendario.Services.EclipenosService;
 import CCASolutions.Calendario.Services.EclipsesService;
 import CCASolutions.Calendario.Services.FestividadesService;
-import CCASolutions.Calendario.Services.LunasService;
+import CCASolutions.Calendario.Services.FasesLunaresService;
 import CCASolutions.Calendario.Services.MetonsService;
 import CCASolutions.Calendario.Services.MonthService;
 import CCASolutions.Calendario.Services.NotableEventService;
@@ -27,7 +27,7 @@ import CCASolutions.Calendario.Services.DatosCosmicosService;
 public class DatesServiceImpl implements DatesService {	
 	
 	@Autowired
-	private LunasService lunasService;
+	private FasesLunaresService lunasService;
 	
 	@Autowired
 	private NotableEventService notableEventService;

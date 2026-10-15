@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.PoblateDBDTO;
 import CCASolutions.Calendario.Enums.ModoPoblacionEnum;
-import CCASolutions.Calendario.Services.ApogeosYPerigeosLunaService;
+import CCASolutions.Calendario.Services.ApoperisLunaresService;
 import CCASolutions.Calendario.Services.CasalerosService;
 import CCASolutions.Calendario.Services.DBService;
 import CCASolutions.Calendario.Services.DatosService;
@@ -16,7 +16,7 @@ import CCASolutions.Calendario.Services.DaysService;
 import CCASolutions.Calendario.Services.EclipenosService;
 import CCASolutions.Calendario.Services.EclipsesService;
 import CCASolutions.Calendario.Services.FestividadesService;
-import CCASolutions.Calendario.Services.LunasService;
+import CCASolutions.Calendario.Services.FasesLunaresService;
 import CCASolutions.Calendario.Services.MetonsService;
 import CCASolutions.Calendario.Services.MidsisonService;
 import CCASolutions.Calendario.Services.MonthService;
@@ -29,7 +29,7 @@ public class DBServiceImpl implements DBService {
 
 	
 	@Autowired
-	private LunasService lunasService;
+	private FasesLunaresService lunasService;
 	
 	@Autowired
 	private SolsticiosYEquinocciosService solsticiosYEquinocciosService;
@@ -62,7 +62,7 @@ public class DBServiceImpl implements DBService {
 	private FestividadesService festividadesService;
 	
 	@Autowired
-	private ApogeosYPerigeosLunaService apogeosYPerigeosLunaService;
+	private ApoperisLunaresService apogeosYPerigeosLunaService;
 	
 	@Autowired
 	private MidsisonService midsisonService;

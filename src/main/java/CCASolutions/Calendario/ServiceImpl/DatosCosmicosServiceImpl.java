@@ -12,16 +12,16 @@ import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DatosCosmicosParaVAUDTO;
 import CCASolutions.Calendario.DTOs.DatosCosmicosRangoDTO;
-import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
+import CCASolutions.Calendario.Entities.ApoperisLunaresEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
-import CCASolutions.Calendario.Repositories.ApogeosYPerigeosLunaRepository;
+import CCASolutions.Calendario.Repositories.ApoperisLunaresRepository;
 import CCASolutions.Calendario.Repositories.EclipenosRepository;
 import CCASolutions.Calendario.Repositories.EclipsesRepository;
-import CCASolutions.Calendario.Repositories.LunasRepository;
+import CCASolutions.Calendario.Repositories.FasesLunaresRepository;
 import CCASolutions.Calendario.Repositories.MetonsRepository;
 import CCASolutions.Calendario.Repositories.SolsticiosYEquinocciosRepository;
 import CCASolutions.Calendario.Services.EclipenosService;
@@ -38,7 +38,7 @@ public class DatosCosmicosServiceImpl implements DatosCosmicosService {
 	private SolsticiosYEquinocciosRepository solsticiosYEquinocciosRepository; 
 	
 	@Autowired
-	private LunasRepository lunasRepository;
+	private FasesLunaresRepository lunasRepository;
 	
 	@Autowired
 	private EclipenosRepository eclipenosRepository;
@@ -47,7 +47,7 @@ public class DatosCosmicosServiceImpl implements DatosCosmicosService {
 	private EclipsesRepository eclipsesRepository;
 	
 	@Autowired
-	private ApogeosYPerigeosLunaRepository apogeosYPerigeosLunaRepository;
+	private ApoperisLunaresRepository apogeosYPerigeosLunaRepository;
 	
 	@Autowired
 	private EclipenosService eclipenosService;
@@ -243,10 +243,10 @@ public class DatosCosmicosServiceImpl implements DatosCosmicosService {
 						return this.getDatosCosmicos(date);
 					}
 
-					datosCosmicosParaVAUDTO.setLunas(this.filtrarPorFecha(datosCosmicosRango.getLunas(), LunasEntity::getDate, lunasDesde, true, dateO.plusYears(numeroAnyoSuperior)));
+					datosCosmicosParaVAUDTO.setLunas(this.filtrarPorFecha(datosCosmicosRango.getLunas(), FasesLunaresEntity::getDate, lunasDesde, true, dateO.plusYears(numeroAnyoSuperior)));
 					datosCosmicosParaVAUDTO.setSoes(this.filtrarPorFecha(datosCosmicosRango.getSoes(), SolsticiosYEquinocciosEntity::getDate, soesDesde, false, dateO.plusYears(numeroAnyoSuperior)));
 					datosCosmicosParaVAUDTO.setEclipses(this.filtrarPorFecha(datosCosmicosRango.getEclipses(), EclipsesEntity::getDate, eclipsesDesde, true, dateO.plusYears(numeroAnyoSuperior)));
-					datosCosmicosParaVAUDTO.setApoperis(this.filtrarPorFecha(datosCosmicosRango.getApoperis(), ApogeosYPerigeosLunaEntity::getDate, apoperisDesde, true, dateO.plusMonths(numeroMesesSuperior)));
+					datosCosmicosParaVAUDTO.setApoperis(this.filtrarPorFecha(datosCosmicosRango.getApoperis(), ApoperisLunaresEntity::getDate, apoperisDesde, true, dateO.plusMonths(numeroMesesSuperior)));
 
 					if(datosCosmicosParaVAUDTO.getApoperis().isEmpty()){
 						datosCosmicosParaVAUDTO.setMensaje("Error al obtener dateVAU: no se han encontrado apoperis.");

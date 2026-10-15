@@ -14,26 +14,26 @@ import org.springframework.web.client.RestTemplate;
 
 import CCASolutions.Calendario.DTOs.AGPDTO;
 import CCASolutions.Calendario.DTOs.ApogeosDTO;
-import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
+import CCASolutions.Calendario.Entities.ApoperisLunaresEntity;
 import CCASolutions.Calendario.Entities.DatosEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
-import CCASolutions.Calendario.Repositories.ApogeosYPerigeosLunaRepository;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
+import CCASolutions.Calendario.Repositories.ApoperisLunaresRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
-import CCASolutions.Calendario.Repositories.LunasRepository;
-import CCASolutions.Calendario.Services.ApogeosYPerigeosLunaService;
+import CCASolutions.Calendario.Repositories.FasesLunaresRepository;
+import CCASolutions.Calendario.Services.ApoperisLunaresService;
 import CCASolutions.Calendario.Services.DatosService;
 
 @Service
-public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaService{
+public class ApoperisLunaresServiceImpl implements ApoperisLunaresService{
 
 	@Autowired
 	private DatosRepository datosRepository;	
 	
 	@Autowired
-	private LunasRepository lunasRepository;
+	private FasesLunaresRepository lunasRepository;
 	
 	@Autowired
-	private ApogeosYPerigeosLunaRepository apogeosYPerigeosLunaRepository;
+	private ApoperisLunaresRepository apogeosYPerigeosLunaRepository;
 	
 	@Autowired
 	private DatosService datosService;
@@ -67,7 +67,7 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 		if(apiGetApogeosUrl != null) {
 			
 			String apogeosUrl = apiGetApogeosUrl.getValor();
-			List<ApogeosYPerigeosLunaEntity> apogeosYPerigeosExistentesEnBD = this.apogeosYPerigeosLunaRepository.findAll();
+			List<ApoperisLunaresEntity> apogeosYPerigeosExistentesEnBD = this.apogeosYPerigeosLunaRepository.findAll();
 			
 			if(apogeosYPerigeosExistentesEnBD.isEmpty()) {
 				
@@ -75,10 +75,10 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 				
 				if(!allApogeosAPI.isEmpty()) {
 					
-					List<ApogeosYPerigeosLunaEntity> apogeosParaDB = new ArrayList<>();
+					List<ApoperisLunaresEntity> apogeosParaDB = new ArrayList<>();
 					for(ApogeosDTO apogeo : allApogeosAPI) {
 								
-						ApogeosYPerigeosLunaEntity apogeoParaDB = new ApogeosYPerigeosLunaEntity();
+						ApoperisLunaresEntity apogeoParaDB = new ApoperisLunaresEntity();
 						apogeoParaDB.setDate(LocalDateTime.parse(apogeo.getDate(), FORMATTER_API_RESPONSE).truncatedTo(ChronoUnit.SECONDS));
 						apogeoParaDB.setYear(apogeoParaDB.getDate().getYear());
 							
@@ -138,18 +138,18 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 		
 		String resultado = "Lunas y apoperis actualizados correctamente";
 		
-		List<ApogeosYPerigeosLunaEntity> apogeosYPerigeosExistentesEnBD = this.apogeosYPerigeosLunaRepository.findAll();
+		List<ApoperisLunaresEntity> apogeosYPerigeosExistentesEnBD = this.apogeosYPerigeosLunaRepository.findAll();
 		
 		if (!apogeosYPerigeosExistentesEnBD.isEmpty()) {
 			
 			System.out.println("Comparando lunas con apogeos...");
-			List<LunasEntity> allLunas = this.lunasRepository.findAll();
+			List<FasesLunaresEntity> allLunas = this.lunasRepository.findAll();
 			
 			if(!allLunas.isEmpty()) {
 				
-				for (ApogeosYPerigeosLunaEntity apoperi : apogeosYPerigeosExistentesEnBD)
+				for (ApoperisLunaresEntity apoperi : apogeosYPerigeosExistentesEnBD)
 				{
-					for(LunasEntity luna : allLunas) {
+					for(FasesLunaresEntity luna : allLunas) {
 						
 						long segundosDeDiferencia = Math.abs(ChronoUnit.SECONDS.between(luna.getDate(), apoperi.getDate()));
 									

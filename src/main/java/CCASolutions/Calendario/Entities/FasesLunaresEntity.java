@@ -10,8 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="lunas")
-public class LunasEntity implements Serializable {
+@Table(name="fases_lunares")
+public class FasesLunaresEntity implements Serializable {
 
 	private static final long serialVersionUID = -7995525595322744836L;
 

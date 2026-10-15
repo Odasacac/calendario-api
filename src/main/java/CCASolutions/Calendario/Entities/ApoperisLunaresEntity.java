@@ -10,8 +10,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="apo_peri_lunas")
-public class ApogeosYPerigeosLunaEntity implements Serializable {
+@Table(name="apoperis_lunares")
+public class ApoperisLunaresEntity implements Serializable {
 
 
 	private static final long serialVersionUID = 4648719388199771942L;

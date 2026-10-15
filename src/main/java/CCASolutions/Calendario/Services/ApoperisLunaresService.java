@@ -1,6 +1,6 @@
 package CCASolutions.Calendario.Services;
 
-public interface ApogeosYPerigeosLunaService {
+public interface ApoperisLunaresService {
 	
 	public abstract String poblateApogeosFromOpale();
 	public abstract String updateLunasYApoperisConSelectoOInvertido();

@@ -10,10 +10,10 @@ import CCASolutions.Calendario.DTOs.DatosCosmicosParaVAUDTO;
 import CCASolutions.Calendario.DTOs.LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO;
 import CCASolutions.Calendario.DTOs.MidsisonDTO;
 import CCASolutions.Calendario.DTOs.NotableEventDTO;
-import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
+import CCASolutions.Calendario.Entities.ApoperisLunaresEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Services.NotableEventService;
@@ -39,24 +39,24 @@ public class NotableEventServiceImpl implements NotableEventService {
 		
 		LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosParaEventosDTO = new LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO();
 			
-			LunasEntity lunaActual = null;
-			ApogeosYPerigeosLunaEntity apoperiActual = null;
+			FasesLunaresEntity lunaActual = null;
+			ApoperisLunaresEntity apoperiActual = null;
 			SolsticiosYEquinocciosEntity soeActual = null;
 			MetonsEntity metonActual = null;
 			EclipsesEntity eclipseActual = null;
 			EclipenosEntity eclipenoActual = null;
 			MidsisonDTO midsisonActual = null;
 			
-			LunasEntity lunaPasado = null;
-			ApogeosYPerigeosLunaEntity apoperiPasado = null;
+			FasesLunaresEntity lunaPasado = null;
+			ApoperisLunaresEntity apoperiPasado = null;
 			SolsticiosYEquinocciosEntity soePasado = null;
 			MetonsEntity metonPasado = null;
 			EclipsesEntity eclipsePasado = null;
 			EclipenosEntity eclipenoPasado = null;
 			MidsisonDTO midsisonPasado = null;
 			
-			LunasEntity lunaFuturo = null;
-			ApogeosYPerigeosLunaEntity apoperiFuturo = null;
+			FasesLunaresEntity lunaFuturo = null;
+			ApoperisLunaresEntity apoperiFuturo = null;
 			SolsticiosYEquinocciosEntity soeFuturo = null;
 			MetonsEntity metonFuturo = null;
 			EclipsesEntity eclipseFuturo = null;
@@ -65,7 +65,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			
 			long diasMinimosDeDiferenciaEntreApoperiFuturaYDate = Long.MAX_VALUE;
 			long diasMinimosDeDiferenciaEntreApoperiPasadaYDate = Long.MAX_VALUE;
-			for(ApogeosYPerigeosLunaEntity apoperi : datosCosmicosParaVAUDTO.getApoperis()) {
+			for(ApoperisLunaresEntity apoperi : datosCosmicosParaVAUDTO.getApoperis()) {
 				
 				if (apoperi.getDate().toLocalDate().isEqual(dateO)) {
 					apoperiActual=apoperi;
@@ -92,7 +92,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 			
 			long diasMinimosDeDiferenciaEntreLunaFuturaYDate = Long.MAX_VALUE;
 			long diasMinimosDeDiferenciaEntreLunaPasadaYDate = Long.MAX_VALUE;
-			for(LunasEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
+			for(FasesLunaresEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
 				
 				if (luna.getDate().toLocalDate().isEqual(dateO)) {
 					lunaActual=luna;
@@ -476,12 +476,12 @@ public class NotableEventServiceImpl implements NotableEventService {
 		
 		String eventoActual = "";	
 		
-		LunasEntity lunaParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getLunaActual();
+		FasesLunaresEntity lunaParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getLunaActual();
 		SolsticiosYEquinocciosEntity soeParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getSoeActual();
 		MetonsEntity metonParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getMetonoActual();
 		EclipsesEntity eclipseParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipseActual();
 		EclipenosEntity eclipenoParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getEclipenoActual();
-		ApogeosYPerigeosLunaEntity apoperiParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getApoperiActual();
+		ApoperisLunaresEntity apoperiParaMetodo = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getApoperiActual();
 		MidsisonDTO midsisonParaMetono = LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturas.getMidsisonActual();
 	
 		eventoActual = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo, midsisonParaMetono);
@@ -532,13 +532,13 @@ public class NotableEventServiceImpl implements NotableEventService {
 			  
 		long minDias = Math.min(diasEntreMidsisonYDate, Math.min(diasEntreApoperiYDate, Math.min(diasEntreLunaYDate, Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, Math.min(diasEntreEclipseYDate, diasEntreEclipenoYDate))))));
 			    
-		LunasEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaAnterior() : null;
+		FasesLunaresEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaAnterior() : null;
 		SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getSoeAnterior() : null;
 		MidsisonDTO midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonAnterior() : null;
 		MetonsEntity metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoAnterior() : null;
 		EclipsesEntity eclipseParaMetodo = diasEntreEclipseYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseAnterior() : null;
 		EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoAnterior() : null;
-		ApogeosYPerigeosLunaEntity apoperiParaMetodo = diasEntreApoperiYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiAnterior() : null;
+		ApoperisLunaresEntity apoperiParaMetodo = diasEntreApoperiYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiAnterior() : null;
 			    
 		String nombreDelEvento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo, midsisonParaMetodo);
 			    
@@ -595,13 +595,13 @@ public class NotableEventServiceImpl implements NotableEventService {
 			  
 		long minDias = Math.min(diasEntreMidsisonYDate, Math.min(diasEntreApoperiYDate, Math.min(diasEntreLunaYDate, Math.min(diasEntreSOEYDate, Math.min(diasEntreMetonYDate, Math.min(diasEntreEclipseYDate, diasEntreEclipenoYDate))))));
 			    
-		LunasEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaProxima() : null;
+		FasesLunaresEntity lunaParaMetodo = diasEntreLunaYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getLunaProxima() : null;
 		SolsticiosYEquinocciosEntity soeParaMetodo = diasEntreSOEYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getSoeProximo() : null;
 		MidsisonDTO midsisonParaMetodo = diasEntreMidsisonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMidsisonProximo() : null;
 		MetonsEntity metonParaMetodo = diasEntreMetonYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getMetonoProximo() : null;
 		EclipsesEntity eclipseParaMetodo = diasEntreEclipseYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipseProximo() : null;
 		EclipenosEntity eclipenoParaMetodo = diasEntreEclipenoYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getEclipenoProximo() : null;
-		ApogeosYPerigeosLunaEntity apoperiParaMetodo = diasEntreApoperiYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiProximo() : null;
+		ApoperisLunaresEntity apoperiParaMetodo = diasEntreApoperiYDate == minDias ? lunasSolsticiosEclipsesMetonosYEclipenos.getApoperiProximo() : null;
 			    
 		String nombreDelEvento = this.getNotableEventName(lunaParaMetodo, soeParaMetodo, metonParaMetodo, eclipseParaMetodo, eclipenoParaMetodo, apoperiParaMetodo, midsisonParaMetodo);
 			    
@@ -615,7 +615,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 		return eventoFuturo;
 	}
 	
-	private String getNotableEventName(LunasEntity luna, SolsticiosYEquinocciosEntity soe, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno, ApogeosYPerigeosLunaEntity apoperi, MidsisonDTO midsison) {
+	private String getNotableEventName(FasesLunaresEntity luna, SolsticiosYEquinocciosEntity soe, MetonsEntity meton, EclipsesEntity eclipse, EclipenosEntity eclipeno, ApoperisLunaresEntity apoperi, MidsisonDTO midsison) {
 		
 		String evento = "";	
 		
@@ -955,7 +955,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 		return name;
 	}
 	
-	private String getLunaName(LunasEntity luna) {
+	private String getLunaName(FasesLunaresEntity luna) {
 		
 		String name = "";
 		
@@ -996,7 +996,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 		return name;
 	}
 	
-	private String getApoperiName(ApogeosYPerigeosLunaEntity apoperi) {
+	private String getApoperiName(ApoperisLunaresEntity apoperi) {
 		
 		String name = "";
 		

@@ -18,20 +18,20 @@ import CCASolutions.Calendario.DTOs.LunarPhaseDTO;
 import CCASolutions.Calendario.DTOs.VAUWeekAndDayDTO;
 import CCASolutions.Calendario.DTOs.YLPDTO;
 import CCASolutions.Calendario.Entities.AllFasesLunaresEntity;
-import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
+import CCASolutions.Calendario.Entities.ApoperisLunaresEntity;
 import CCASolutions.Calendario.Entities.DatosEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 import CCASolutions.Calendario.Repositories.AllFasesLunaresRepository;
 import CCASolutions.Calendario.Repositories.DatosRepository;
 import CCASolutions.Calendario.Repositories.DaysRepository;
-import CCASolutions.Calendario.Repositories.LunasRepository;
+import CCASolutions.Calendario.Repositories.FasesLunaresRepository;
 import CCASolutions.Calendario.Repositories.WeeksRepository;
 import CCASolutions.Calendario.Services.DatosService;
-import CCASolutions.Calendario.Services.LunasService;
+import CCASolutions.Calendario.Services.FasesLunaresService;
 
 @Service
-public class LunasServiceImpl implements LunasService {
+public class FasesLunaresServiceImpl implements FasesLunaresService {
 	
 	@Autowired
 	private DatosRepository datosRepository;
@@ -40,7 +40,7 @@ public class LunasServiceImpl implements LunasService {
 	private DatosService datosService;
 	
 	@Autowired
-	private LunasRepository lunasRepository;
+	private FasesLunaresRepository lunasRepository;
 	
 	@Autowired
 	private WeeksRepository weeksRepository;
@@ -64,18 +64,18 @@ public class LunasServiceImpl implements LunasService {
 	// METODOS PUBLICOS
 	
 	
-	public VAUWeekAndDayDTO getVauWeekAndDay(LocalDate date, List<LunasEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas) {
+	public VAUWeekAndDayDTO getVauWeekAndDay(LocalDate date, List<FasesLunaresEntity> lunasNuevasDesdeElAnyoAnteriorHasElSiguiente, List<SolsticiosYEquinocciosEntity> soesDesdeElAnyoAnteriorAlMetonoHastaUnAnyoMas) {
 		
 		VAUWeekAndDayDTO vauWeekAndDay = new VAUWeekAndDayDTO();
 		String weekVauString = null;
 		String dayParaDTO = null;
 		
-		LunasEntity lastLN = null;
+		FasesLunaresEntity lastLN = null;
 		long diasDesdeLaLunaNueva = Long.MAX_VALUE;
 		boolean caeEnLunaNueva = false;
 		for (int i = 0; i<lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.size() && !caeEnLunaNueva; i++) {
 			
-			LunasEntity luna = lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.get(i);
+			FasesLunaresEntity luna = lunasNuevasDesdeElAnyoAnteriorHasElSiguiente.get(i);
 			
 			if(luna.isNueva()) {
 				
@@ -89,7 +89,7 @@ public class LunasServiceImpl implements LunasService {
 					long diasDeDiferenciaEntreLNYDateO = ChronoUnit.DAYS.between(luna.getDate().toLocalDate(), date);
 						
 					if(diasDeDiferenciaEntreLNYDateO < diasDesdeLaLunaNueva) {
-						lastLN = new LunasEntity();
+						lastLN = new FasesLunaresEntity();
 						lastLN=luna;
 						diasDesdeLaLunaNueva = diasDeDiferenciaEntreLNYDateO;						
 					}
@@ -167,10 +167,10 @@ public class LunasServiceImpl implements LunasService {
 		
 		AponovosDTO aponovosDTO = new AponovosDTO();
 		
-		List<LunasEntity> lunasSelectasDesdeLastMIARHastaDate = new ArrayList<>();
-		LunasEntity lunaNSmasCercanaADate = null;
+		List<FasesLunaresEntity> lunasSelectasDesdeLastMIARHastaDate = new ArrayList<>();
+		FasesLunaresEntity lunaNSmasCercanaADate = null;
 		long diasMinimosEntreDateYLNS = Long.MAX_VALUE;
-		for(LunasEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
+		for(FasesLunaresEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
 	
 			if(luna.isNueva() 
 				&& luna.isSelecta() 
@@ -194,7 +194,7 @@ public class LunasServiceImpl implements LunasService {
 		int lunasNuevasDesdeLastLNSHastaDate = 0;
 		
 		if(lunaNSmasCercanaADate != null) {
-			for(LunasEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
+			for(FasesLunaresEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
 				
 				if(luna.isNueva() && luna.getDate().toLocalDate().isBefore(date) && luna.getDate().toLocalDate().isAfter(lunaNSmasCercanaADate.getDate().toLocalDate())) {
 					lunasNuevasDesdeLastLNSHastaDate = lunasNuevasDesdeLastLNSHastaDate+1;
@@ -208,7 +208,7 @@ public class LunasServiceImpl implements LunasService {
 		return aponovosDTO;
 	}
 	
-	public EstadoLunaDTO getEstadoLuna(LocalDate date, List<ApogeosYPerigeosLunaEntity> allApoperis) {
+	public EstadoLunaDTO getEstadoLuna(LocalDate date, List<ApoperisLunaresEntity> allApoperis) {
 		
 		EstadoLunaDTO estadoLuna = new EstadoLunaDTO();
 		
@@ -217,14 +217,14 @@ public class LunasServiceImpl implements LunasService {
 		return estadoLuna;
 	}
 	
-	private ComportamientoLunaDTO getComportamientoLuna(LocalDate date, List<ApogeosYPerigeosLunaEntity> allApoperis) {
+	private ComportamientoLunaDTO getComportamientoLuna(LocalDate date, List<ApoperisLunaresEntity> allApoperis) {
 		
 		ComportamientoLunaDTO comportamientoLuna = new ComportamientoLunaDTO();
 		
 		long diasMinimosEntreDateYApoperi = Long.MAX_VALUE;
-		ApogeosYPerigeosLunaEntity apoperiMasCercanoADate = null;
+		ApoperisLunaresEntity apoperiMasCercanoADate = null;
 		
-		for(ApogeosYPerigeosLunaEntity apoperi : allApoperis) {
+		for(ApoperisLunaresEntity apoperi : allApoperis) {
 			
 			if(apoperi.getDate().toLocalDate().isBefore(date)) {
 				
@@ -233,13 +233,13 @@ public class LunasServiceImpl implements LunasService {
 				if(diasEntreDateYApoperi < diasMinimosEntreDateYApoperi) {
 					
 					diasMinimosEntreDateYApoperi = diasEntreDateYApoperi;
-					apoperiMasCercanoADate = new ApogeosYPerigeosLunaEntity();
+					apoperiMasCercanoADate = new ApoperisLunaresEntity();
 					apoperiMasCercanoADate=apoperi;
 				}
 			}
 			else if(apoperi.getDate().toLocalDate().isEqual(date)) {
 				diasMinimosEntreDateYApoperi = Long.MIN_VALUE;
-				apoperiMasCercanoADate = new ApogeosYPerigeosLunaEntity();
+				apoperiMasCercanoADate = new ApoperisLunaresEntity();
 				apoperiMasCercanoADate=apoperi;
 			}
 		}
@@ -293,12 +293,12 @@ public class LunasServiceImpl implements LunasService {
 		
 		DatosEntity apiGetLunasUrl = datosRepository.findByConcepto(this.datosService.getApiLunarFases());
 		
-		List<LunasEntity> allLunas = this.lunasRepository.findAll();
+		List<FasesLunaresEntity> allLunas = this.lunasRepository.findAll();
 		List<AllFasesLunaresEntity> allFasesLunares = this.allFasesLunaresRepository.findAll();
 		
 		if(apiGetLunasUrl != null && allLunas.isEmpty() && allFasesLunares.isEmpty()) {	
 			
-			List<LunasEntity> lunasForDB = new ArrayList<>();
+			List<FasesLunaresEntity> lunasForDB = new ArrayList<>();
 			List<AllFasesLunaresEntity> allFasesLunaresForDB = new ArrayList<>();
 			
 			for (int i = anyoMinimoParaAPI; i < anyoMaximoParaAPI; i++) {
@@ -312,7 +312,7 @@ public class LunasServiceImpl implements LunasService {
 						
 						for(LunarPhaseDTO faseLunarAPI : fasesLunaresDelAnyo) {
 							
-							LunasEntity lunaParaDB = new LunasEntity();
+							FasesLunaresEntity lunaParaDB = new FasesLunaresEntity();
 							AllFasesLunaresEntity allFaseLunarParaDB = new AllFasesLunaresEntity();
 							
 							switch (faseLunarAPI.getMoonPhase()){

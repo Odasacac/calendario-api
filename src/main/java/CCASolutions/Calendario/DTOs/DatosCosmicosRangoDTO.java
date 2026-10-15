@@ -3,10 +3,10 @@ package CCASolutions.Calendario.DTOs;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import CCASolutions.Calendario.Entities.ApogeosYPerigeosLunaEntity;
+import CCASolutions.Calendario.Entities.ApoperisLunaresEntity;
 import CCASolutions.Calendario.Entities.EclipenosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
-import CCASolutions.Calendario.Entities.LunasEntity;
+import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
 
@@ -14,10 +14,10 @@ public class DatosCosmicosRangoDTO {
 
 	private List<EclipenosEntity> eclipenos;
 	private List<MetonsEntity> metons;
-	private List<LunasEntity> lunas;
+	private List<FasesLunaresEntity> lunas;
 	private List<SolsticiosYEquinocciosEntity> soes;
 	private List<EclipsesEntity> eclipses;
-	private List<ApogeosYPerigeosLunaEntity> apoperis;
+	private List<ApoperisLunaresEntity> apoperis;
 
 	private LocalDateTime metonsDesde;
 	private LocalDateTime lunasDesde;
@@ -40,10 +40,10 @@ public class DatosCosmicosRangoDTO {
 	public void setMetons(List<MetonsEntity> metons) {
 		this.metons = metons;
 	}
-	public List<LunasEntity> getLunas() {
+	public List<FasesLunaresEntity> getLunas() {
 		return lunas;
 	}
-	public void setLunas(List<LunasEntity> lunas) {
+	public void setLunas(List<FasesLunaresEntity> lunas) {
 		this.lunas = lunas;
 	}
 	public List<SolsticiosYEquinocciosEntity> getSoes() {
@@ -58,10 +58,10 @@ public class DatosCosmicosRangoDTO {
 	public void setEclipses(List<EclipsesEntity> eclipses) {
 		this.eclipses = eclipses;
 	}
-	public List<ApogeosYPerigeosLunaEntity> getApoperis() {
+	public List<ApoperisLunaresEntity> getApoperis() {
 		return apoperis;
 	}
-	public void setApoperis(List<ApogeosYPerigeosLunaEntity> apoperis) {
+	public void setApoperis(List<ApoperisLunaresEntity> apoperis) {
 		this.apoperis = apoperis;
 	}
 	public LocalDateTime getMetonsDesde() {
