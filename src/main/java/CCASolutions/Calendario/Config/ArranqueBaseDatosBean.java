@@ -13,7 +13,7 @@ import CCASolutions.Calendario.Services.DatosService;
 import jakarta.annotation.PostConstruct;
 
 @Configuration
-public class ClasesBean 
+public class ArranqueBaseDatosBean 
 {
 	@Autowired
 	private DatosRepository datosRepository;

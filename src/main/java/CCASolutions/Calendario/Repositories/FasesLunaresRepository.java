@@ -53,7 +53,7 @@ public interface FasesLunaresRepository extends JpaRepository <FasesLunaresEntit
 	
 	@Query("""
 		    SELECT l
-		    FROM LunasEntity l
+		    FROM FasesLunaresEntity l
 		    WHERE l.date BETWEEN :startDate AND :endDate
 		    AND (l.nueva = true OR l.llena = true)
 		""")
