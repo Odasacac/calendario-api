@@ -155,24 +155,27 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 									
 						if(segundosDeDiferencia <= 86164) {								
 								
+							apoperi.setLunaId(luna.getId());
+							luna.setApoperiId(apoperi.getId());
+							
 							if(luna.isLlena()) {
 									
 								if(apoperi.isEsApogeo()) {
+									
 									apoperi.setEsInvertido(true);
-									luna.setInvertida(true);
-									apoperi.setLunaId(luna.getId());
-									luna.setApoperiId(apoperi.getId());
+									luna.setInvertida(true);	
+									luna.setConApogeo(true);
 									
 									this.apogeosYPerigeosLunaRepository.save(apoperi);
 									this.lunasRepository.save(luna);
-									System.out.println("Luna transicional encontrada en " + luna.getDate().toLocalDate());
+									System.out.println("Luna invertida encontrada en " + luna.getDate().toLocalDate());
 								}
 								else if(apoperi.isEsPerigeo()) {
+									
 									apoperi.setEsSelecto(true);
 									luna.setSelecta(true);
-									apoperi.setLunaId(luna.getId());
-									luna.setApoperiId(apoperi.getId());
-									
+									luna.setConPerigeo(true);
+																		
 									this.apogeosYPerigeosLunaRepository.save(apoperi);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna selecta encontrada en " + luna.getDate().toLocalDate());
@@ -181,26 +184,49 @@ public class ApogeosYPerigeosLunaServiceImpl implements ApogeosYPerigeosLunaServ
 							else if (luna.isNueva()){
 									
 								if(apoperi.isEsPerigeo()) {
+									
 									apoperi.setEsInvertido(true);
 									luna.setInvertida(true);
-									apoperi.setLunaId(luna.getId());
-									luna.setApoperiId(apoperi.getId());
+									luna.setConPerigeo(true);
 									
 									this.apogeosYPerigeosLunaRepository.save(apoperi);
 									this.lunasRepository.save(luna);
-									System.out.println("Luna transicional encontrada en " + luna.getDate().toLocalDate());
+									System.out.println("Luna invertida encontrada en " + luna.getDate().toLocalDate());
 								}
 								else if(apoperi.isEsApogeo()) {
+									
 									apoperi.setEsSelecto(true);
 									luna.setSelecta(true);
-									apoperi.setLunaId(luna.getId());
-									luna.setApoperiId(apoperi.getId());
+									luna.setConApogeo(true);
 									
 									this.apogeosYPerigeosLunaRepository.save(apoperi);
 									this.lunasRepository.save(luna);
 									System.out.println("Luna selecta encontrada en " + luna.getDate().toLocalDate());
 								}
 										
+							}
+							else {
+	
+								if(apoperi.isEsApogeo()) {
+									
+									apoperi.setEsInvertido(true);
+									luna.setInvertida(true);
+									luna.setConApogeo(true);
+									
+									this.apogeosYPerigeosLunaRepository.save(apoperi);
+									this.lunasRepository.save(luna);
+									System.out.println("Luna con apogeo encontrada en " + luna.getDate().toLocalDate());
+								}
+								else if(apoperi.isEsPerigeo()) {
+									
+									apoperi.setEsSelecto(true);
+									luna.setSelecta(true);
+									luna.setConPerigeo(true);
+									
+									this.apogeosYPerigeosLunaRepository.save(apoperi);
+									this.lunasRepository.save(luna);
+									System.out.println("Luna con perigeo encontrada en " + luna.getDate().toLocalDate());
+								}								
 							}
 						}			
 					}			

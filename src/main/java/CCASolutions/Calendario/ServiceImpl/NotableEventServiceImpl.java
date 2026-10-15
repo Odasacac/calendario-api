@@ -960,9 +960,11 @@ public class NotableEventServiceImpl implements NotableEventService {
 		String name = "";
 		
 		if(luna.isNueva() && luna.isSelecta()) {
+			
 			name = "Luna aponoval";
 		}
 		else {
+			
 			if (luna.isNueva()) {
 				name = "Luna nueva";
 			} 
@@ -982,6 +984,12 @@ public class NotableEventServiceImpl implements NotableEventService {
 			}
 			else if(luna.isInvertida()) {
 				name = name + " invertida";
+			}
+			else if(luna.isConApogeo()){
+				name = name + " distate";
+			}
+			else if(luna.isConPerigeo()) {
+				name = name + " presente";
 			}
 		}
 		

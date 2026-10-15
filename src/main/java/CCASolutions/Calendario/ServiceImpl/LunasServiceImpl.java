@@ -342,6 +342,8 @@ public class LunasServiceImpl implements LunasService {
 							lunaParaDB.setDate(LocalDateTime.parse(faseLunarAPI.getDate()));									
 							lunaParaDB.setSelecta(false);
 							lunaParaDB.setInvertida(false);
+							lunaParaDB.setConApogeo(false);
+							lunaParaDB.setConPerigeo(false);
 							
 							boolean esFechaInvalida = false;
 

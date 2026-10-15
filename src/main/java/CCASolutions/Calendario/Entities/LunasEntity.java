@@ -29,9 +29,23 @@ public class LunasEntity implements Serializable {
 	
 	private boolean selecta;
 	private boolean invertida;
+	private boolean conApogeo;
+	private boolean conPerigeo;
 	private Long apoperiId;
 
 	
+	public boolean isConApogeo() {
+		return conApogeo;
+	}
+	public void setConApogeo(boolean conApogeo) {
+		this.conApogeo = conApogeo;
+	}
+	public boolean isConPerigeo() {
+		return conPerigeo;
+	}
+	public void setConPerigeo(boolean conPerigeo) {
+		this.conPerigeo = conPerigeo;
+	}
 	public Long getApoperiId() {
 		return apoperiId;
 	}
