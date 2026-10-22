@@ -24,7 +24,7 @@ public class ArranqueBaseDatosBean
 	@Autowired
 	private DatosService datosService;
 	
-	private static final ModoPoblacionEnum MODO_POBLACION = ModoPoblacionEnum.DUMP;
+	private static final ModoPoblacionEnum MODO_POBLACION = ModoPoblacionEnum.DESDE_CERO_CON_TABLAS_EXTRA;
 
     
     @PostConstruct

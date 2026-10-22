@@ -72,10 +72,10 @@ public class DBServiceImpl implements DBService {
 	
 	
 	private static final int numeroDeHorasMinimasQueTardaEnPoblateConTablasExtras = 7;
-	private static final int numeroDeHorasMaximasQueTardaEnPoblateConTablasExtras = 13;
+	private static final int numeroDeHorasMaximasQueTardaEnPoblateConTablasExtras = 16;
 	
 	private static final int numeroDeHorasMinimasQueTardaEnPoblateSinTablasExtras = 2;
-	private static final int numeroDeHorasMaximasQueTardaEnPoblateSinTablasExtras = 4;
+	private static final int numeroDeHorasMaximasQueTardaEnPoblateSinTablasExtras = 5;
 	
 	
 	public String poblateDBDesdeArranque(ModoPoblacionEnum modo) {

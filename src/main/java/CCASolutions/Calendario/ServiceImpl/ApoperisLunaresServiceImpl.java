@@ -209,8 +209,6 @@ public class ApoperisLunaresServiceImpl implements ApoperisLunaresService{
 	
 								if(apoperi.isEsApogeo()) {
 									
-									apoperi.setEsInvertido(true);
-									luna.setInvertida(true);
 									luna.setConApogeo(true);
 									
 									this.apogeosYPerigeosLunaRepository.save(apoperi);
@@ -219,8 +217,6 @@ public class ApoperisLunaresServiceImpl implements ApoperisLunaresService{
 								}
 								else if(apoperi.isEsPerigeo()) {
 									
-									apoperi.setEsSelecto(true);
-									luna.setSelecta(true);
 									luna.setConPerigeo(true);
 									
 									this.apogeosYPerigeosLunaRepository.save(apoperi);
