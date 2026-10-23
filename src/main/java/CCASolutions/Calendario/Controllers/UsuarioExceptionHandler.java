@@ -9,12 +9,13 @@ import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import CCASolutions.Calendario.DTOs.ErrorUsuarioDTO;
 import CCASolutions.Calendario.Exceptions.UsuarioException;
 
-/** Respuestas de error con forma {codigo, mensaje, detalles}. Solo afecta a UsuarioController. */
-@RestControllerAdvice(assignableTypes = UsuarioController.class)
+/** Respuestas de error con forma {codigo, mensaje, detalles}. Solo afecta a los controladores de usuario. */
+@RestControllerAdvice(assignableTypes = { UsuarioController.class, AcontecimientoDestacadoController.class })
 public class UsuarioExceptionHandler {
 
 	public static final String VALIDACION = "VALIDACION";
@@ -34,8 +35,9 @@ public class UsuarioExceptionHandler {
 		return respuesta(HttpStatus.BAD_REQUEST, VALIDACION, "Hay campos con valores no válidos.", campos);
 	}
 
-	@ExceptionHandler(HttpMessageNotReadableException.class)
-	public ResponseEntity<ErrorUsuarioDTO> cuerpoIlegible(HttpMessageNotReadableException e) {
+	/** Cuerpo JSON ilegible o parámetro de la URL con un tipo incorrecto (p. ej. una fecha mal escrita). */
+	@ExceptionHandler({ HttpMessageNotReadableException.class, MethodArgumentTypeMismatchException.class })
+	public ResponseEntity<ErrorUsuarioDTO> peticionIlegible(Exception e) {
 		return respuesta(HttpStatus.BAD_REQUEST, VALIDACION, "La petición no tiene un formato válido.", Map.of());
 	}
 

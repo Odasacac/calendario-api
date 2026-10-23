@@ -211,14 +211,14 @@ public class UsuarioServiceImpl implements UsuarioService {
 
 	@Override
 	public PerfilUsuarioDTO getPerfil(Long idUsuario) {
-		return this.perfil(this.usuarioConSesion(idUsuario));
+		return this.perfil(this.getUsuarioConSesion(idUsuario));
 	}
 
 	@Override
 	@Transactional
 	public PerfilUsuarioDTO editarPerfil(Long idUsuario, EdicionPerfilDTO edicion) {
 
-		UsuarioEntity usuario = this.usuarioConSesion(idUsuario);
+		UsuarioEntity usuario = this.getUsuarioConSesion(idUsuario);
 		String nombre = normalizarTexto(edicion.getNombre());
 		String apellido = normalizarTexto(edicion.getApellido());
 		LocalDate fechaNacimiento = this.validarFechaNacimiento(edicion.getFechaNacimiento());
@@ -243,7 +243,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Transactional
 	public void cambiarContrasenya(Long idUsuario, CambioContrasenyaDTO cambio) {
 
-		UsuarioEntity usuario = this.usuarioConSesion(idUsuario);
+		UsuarioEntity usuario = this.getUsuarioConSesion(idUsuario);
 		this.comprobarContrasenyaActual(usuario, cambio.getActual());
 
 		if(this.passwordEncoder.matches(cambio.getNueva(), usuario.getContrasenya())) {
@@ -259,7 +259,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Transactional
 	public void suspenderCuenta(Long idUsuario) {
 
-		UsuarioEntity usuario = this.usuarioConSesion(idUsuario);
+		UsuarioEntity usuario = this.getUsuarioConSesion(idUsuario);
 		usuario.setEstado(EstadoUsuarioEnum.SUSPENDIDO);
 		usuario.setMotivoSuspension(MotivoSuspensionEnum.USUARIO);
 		usuario.setFechaSuspension(LocalDateTime.now(this.reloj));
@@ -271,7 +271,7 @@ public class UsuarioServiceImpl implements UsuarioService {
 	@Transactional
 	public void eliminarCuenta(Long idUsuario, EliminacionCuentaDTO eliminacion) {
 
-		UsuarioEntity usuario = this.usuarioConSesion(idUsuario);
+		UsuarioEntity usuario = this.getUsuarioConSesion(idUsuario);
 		this.comprobarContrasenyaActual(usuario, eliminacion.getContrasenya());
 
 		usuario.setEstado(EstadoUsuarioEnum.ELIMINADO);
@@ -339,7 +339,8 @@ public class UsuarioServiceImpl implements UsuarioService {
 	// ------------------------------------------------------------------
 
 	/** Usuario del token; si ya no puede usar la cuenta, la sesión deja de valer aunque el JWT no haya caducado. */
-	private UsuarioEntity usuarioConSesion(Long idUsuario) {
+	@Override
+	public UsuarioEntity getUsuarioConSesion(Long idUsuario) {
 
 		return this.usuarioRepository.findById(idUsuario)
 				.filter(u -> u.getEstado() == EstadoUsuarioEnum.ACTIVO || u.getEstado() == EstadoUsuarioEnum.INACTIVO)
@@ -419,9 +420,24 @@ public class UsuarioServiceImpl implements UsuarioService {
 		return correo.trim().toLowerCase(Locale.ROOT);
 	}
 
-	/** Quita espacios sobrantes: "  Carlos   José " -> "Carlos José". */
-	private static String normalizarTexto(String texto) {
-		return texto.trim().replaceAll("\\s+", " ");
+	private static final Locale ESPANYOL = Locale.forLanguageTag("es");
+
+	/**
+	 * Quita espacios sobrantes y deja cada palabra con la primera letra en
+	 * mayúscula y el resto en minúscula, también en compuestos con guion:
+	 * "  mARÍA-josé   CASADO " -> "María-José Casado".
+	 */
+	static String normalizarTexto(String texto) {
+
+		StringBuilder resultado = new StringBuilder();
+		boolean inicioDePalabra = true;
+
+		for(char c : texto.trim().replaceAll("\\s+", " ").toLowerCase(ESPANYOL).toCharArray()) {
+			resultado.append(inicioDePalabra ? Character.toUpperCase(c) : c);
+			inicioDePalabra = c == ' ' || c == '-';
+		}
+
+		return resultado.toString();
 	}
 
 	private static String fechaIso(LocalDateTime fecha) {

@@ -26,6 +26,9 @@ public class UsuarioException extends RuntimeException {
 	public static final String CONTRASENYA_REPETIDA = "CONTRASENYA_REPETIDA";
 	public static final String FECHA_NACIMIENTO_INVALIDA = "FECHA_NACIMIENTO_INVALIDA";
 	public static final String SESION_NO_VALIDA = "SESION_NO_VALIDA";
+	public static final String ACONTECIMIENTO_DUPLICADO = "ACONTECIMIENTO_DUPLICADO";
+	public static final String ACONTECIMIENTO_NO_ENCONTRADO = "ACONTECIMIENTO_NO_ENCONTRADO";
+	public static final String FECHA_FUERA_DE_RANGO = "FECHA_FUERA_DE_RANGO";
 
 	private final HttpStatus status;
 	private final String codigo;

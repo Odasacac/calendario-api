@@ -10,6 +10,7 @@ import CCASolutions.Calendario.DTOs.RestablecimientoContrasenyaDTO;
 import CCASolutions.Calendario.DTOs.SesionDTO;
 import CCASolutions.Calendario.DTOs.TokenRecuperacionDTO;
 import CCASolutions.Calendario.DTOs.VerificacionRecuperacionDTO;
+import CCASolutions.Calendario.Entities.UsuarioEntity;
 
 public interface UsuarioService {
 
@@ -26,6 +27,12 @@ public interface UsuarioService {
 	public abstract void restablecerContrasenya(RestablecimientoContrasenyaDTO restablecimiento);
 
 	public abstract PerfilUsuarioDTO getPerfil(Long idUsuario);
+
+	/**
+	 * Usuario dueño de la sesión, siempre que pueda seguir usando la cuenta
+	 * (activo o inactivo); si no, lanza SESION_NO_VALIDA.
+	 */
+	public abstract UsuarioEntity getUsuarioConSesion(Long idUsuario);
 
 	/** Cambiar nombre, apellido o fecha de nacimiento recalcula el código de usuario. */
 	public abstract PerfilUsuarioDTO editarPerfil(Long idUsuario, EdicionPerfilDTO edicion);

@@ -141,6 +141,41 @@ class UsuarioServiceImplTest {
 	}
 
 	@Test
+	void nombreYApellidoQuedanConMayusculaInicialYElRestoEnMinuscula() {
+
+		assertEquals("María-José", UsuarioServiceImpl.normalizarTexto("  mARÍA-josé "));
+		assertEquals("Casado Aguilera", UsuarioServiceImpl.normalizarTexto("CASADO   aguilera"));
+		assertEquals("Ñúñez", UsuarioServiceImpl.normalizarTexto("ñÚÑEZ"));
+	}
+
+	@Test
+	void registraYEditaConElNombreCapitalizado() {
+
+		RegistroUsuarioDTO registro = new RegistroUsuarioDTO();
+		registro.setNombre("cARLOS");
+		registro.setApellido("CASADO");
+		registro.setFechaNacimiento(LocalDate.of(1993, 5, 10));
+		registro.setCorreo("c@vau.com");
+		registro.setContrasenya(CONTRASENYA);
+		when(this.codigoUsuarioService.generar("Carlos", "Casado", 1993, null)).thenReturn("ccasado");
+
+		PerfilUsuarioDTO perfil = this.servicio.registrar(registro).getUsuario();
+		assertEquals("Carlos", perfil.getNombre());
+		assertEquals("Casado", perfil.getApellido());
+
+		UsuarioEntity u = this.usuario(EstadoUsuarioEnum.ACTIVO);
+		when(this.usuarioRepository.findById(1L)).thenReturn(Optional.of(u));
+		EdicionPerfilDTO e = new EdicionPerfilDTO();
+		e.setNombre("carlos");
+		e.setApellido("casado");
+		e.setFechaNacimiento(u.getFechaNacimiento());
+
+		// Mismo nombre tras capitalizar: no cambia el código.
+		assertEquals("Carlos", this.servicio.editarPerfil(1L, e).getNombre());
+		verify(this.codigoUsuarioService, never()).generar("Carlos", "Casado", 1993, 1L);
+	}
+
+	@Test
 	void rechazaCorreoRepetido() {
 
 		RegistroUsuarioDTO registro = new RegistroUsuarioDTO();

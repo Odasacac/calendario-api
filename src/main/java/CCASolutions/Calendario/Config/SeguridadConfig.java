@@ -118,7 +118,7 @@ public class SeguridadConfig {
 
 		CorsConfiguration usuarios = new CorsConfiguration();
 		usuarios.setAllowedOrigins(this.origenesUsuarios);
-		usuarios.setAllowedMethods(List.of("GET", "POST", "PUT", "OPTIONS"));
+		usuarios.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
 		usuarios.setAllowedHeaders(List.of(HttpHeaders.AUTHORIZATION, HttpHeaders.CONTENT_TYPE));
 		usuarios.setMaxAge(3600L);
 

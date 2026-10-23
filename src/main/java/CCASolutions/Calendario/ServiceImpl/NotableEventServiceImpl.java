@@ -7,6 +7,7 @@ import java.time.temporal.ChronoUnit;
 import org.springframework.stereotype.Service;
 
 import CCASolutions.Calendario.DTOs.DatosCosmicosParaVAUDTO;
+import CCASolutions.Calendario.DTOs.EventoDelDiaDTO;
 import CCASolutions.Calendario.DTOs.LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO;
 import CCASolutions.Calendario.DTOs.MidsisonDTO;
 import CCASolutions.Calendario.DTOs.NotableEventDTO;
@@ -32,9 +33,27 @@ public class NotableEventServiceImpl implements NotableEventService {
 		notableEventDTO.setPrevious(this.getEventoPasado(date, fenomenosPPPFecha));
 		notableEventDTO.setNext(this.getEventoProximo(date, fenomenosPPPFecha));
 		
-		return notableEventDTO;		
+		return notableEventDTO;
 	}
-	
+
+	@Override
+	public EventoDelDiaDTO getEventoDelDia(LocalDate date, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
+
+		LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosPPPFecha = this.getFenomenosPPPFecha(date, datosCosmicosParaVAUDTO);
+
+		EventoDelDiaDTO eventoDelDia = new EventoDelDiaDTO();
+		eventoDelDia.setNombre(this.getEventoActual(date, fenomenosPPPFecha).trim());
+		eventoDelDia.setLuna(fenomenosPPPFecha.getLunaActual());
+		eventoDelDia.setApoperi(fenomenosPPPFecha.getApoperiActual());
+		eventoDelDia.setSoe(fenomenosPPPFecha.getSoeActual());
+		eventoDelDia.setMeton(fenomenosPPPFecha.getMetonoActual());
+		eventoDelDia.setEclipse(fenomenosPPPFecha.getEclipseActual());
+		eventoDelDia.setEclipeno(fenomenosPPPFecha.getEclipenoActual());
+		eventoDelDia.setMidsison(fenomenosPPPFecha.getMidsisonActual() != null);
+
+		return eventoDelDia;
+	}
+
 	private LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO getFenomenosPPPFecha(LocalDate dateO, DatosCosmicosParaVAUDTO datosCosmicosParaVAUDTO) {
 		
 		LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO fenomenosParaEventosDTO = new LunasSoesEclipsesMetonosYEclipenosActualesProximasFuturasDTO();
