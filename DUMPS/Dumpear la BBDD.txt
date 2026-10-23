@@ -1,0 +1,3 @@
+Ejecutar el siguiente comando via cmd:
+
+mysql -u root -p --default-character-set=utf8mb4 calendar_db < "X:\WorkSpaces\workspaceSpring\calendario-back\DUMPS\DUMP_Sin_Tablas_Extra.sql"
