@@ -11,7 +11,7 @@ public class FormularioAcontecimientoDTO {
 
 	@NotNull
 	private LocalDate fecha;
-	@NotBlank @Size(max=500)
+	@NotBlank @Size(max=1000)
 	private String descripcion;
 
 	public LocalDate getFecha() {

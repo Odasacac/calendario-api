@@ -33,7 +33,7 @@ public class AcontecimientoDestacadoEntity implements Serializable {
 	@Column(nullable=false)
 	private LocalDate fecha;
 
-	@Column(nullable=false, length=500)
+	@Column(nullable=false, length=1000)
 	private String descripcion;
 
 	@Column(nullable=false)
