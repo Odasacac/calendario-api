@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -27,6 +28,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.util.ReflectionTestUtils;
 
@@ -34,6 +37,7 @@ import CCASolutions.Calendario.DTOs.AcontecimientoDestacadoDTO;
 import CCASolutions.Calendario.DTOs.DatosCosmicosParaVAUDTO;
 import CCASolutions.Calendario.DTOs.EventoDelDiaDTO;
 import CCASolutions.Calendario.DTOs.FormularioAcontecimientoDTO;
+import CCASolutions.Calendario.DTOs.PaginaDTO;
 import CCASolutions.Calendario.Entities.AcontecimientoDestacadoEntity;
 import CCASolutions.Calendario.Entities.CasalerosEntity;
 import CCASolutions.Calendario.Entities.EclipsesEntity;
@@ -264,13 +268,52 @@ class AcontecimientoDestacadoServiceImplTest {
 	}
 
 	@Test
-	void listaYBuscaPorFecha() {
+	void listaPorPaginasYBuscaPorFecha() {
 
-		when(this.repositorio.findByUsuarioIdOrderByFechaDesc(1L)).thenReturn(List.of(this.acontecimiento(2L, DIA), this.acontecimiento(1L, DIA.minusDays(3))));
+		when(this.repositorio.findByUsuarioIdOrderByFechaDesc(1L, PageRequest.of(1, 5)))
+				.thenReturn(new PageImpl<>(List.of(this.acontecimiento(2L, DIA), this.acontecimiento(1L, DIA.minusDays(3))), PageRequest.of(1, 5), 7));
 		when(this.repositorio.findByUsuarioIdAndFecha(1L, DIA.minusDays(1))).thenReturn(Optional.empty());
 
-		assertEquals(2, this.servicio.listar(1L).size());
+		PaginaDTO<AcontecimientoDestacadoDTO> pagina = this.servicio.listar(1L, 1, 5);
+		assertEquals(2, pagina.getContenido().size());
+		assertEquals(1, pagina.getPagina());
+		assertEquals(5, pagina.getTamanyo());
+		assertEquals(7, pagina.getTotalElementos());
+		assertEquals(2, pagina.getTotalPaginas());
 		assertTrue(this.servicio.buscarPorFecha(1L, DIA.minusDays(1)).isEmpty());
+	}
+
+	@Test
+	void elTamanyoDePaginaSeAjustaEntre5Y50() {
+
+		when(this.repositorio.findByUsuarioIdOrderByFechaDesc(eq(1L), any()))
+				.thenAnswer(i -> new PageImpl<>(List.of(), i.getArgument(1), 0));
+
+		assertEquals(5, this.servicio.listar(1L, 0, 1).getTamanyo());
+		assertEquals(50, this.servicio.listar(1L, 0, 1000).getTamanyo());
+		assertEquals(20, this.servicio.listar(1L, -3, 20).getTamanyo());
+		verify(this.repositorio).findByUsuarioIdOrderByFechaDesc(1L, PageRequest.of(0, 20));
+	}
+
+	@Test
+	void unaPaginaPasadaDeLaUltimaDevuelveLaUltima() {
+
+		// 6 elementos de 5 en 5: la página 2 ya no existe (p. ej. tras borrar el único de la página 2)
+		when(this.repositorio.findByUsuarioIdOrderByFechaDesc(1L, PageRequest.of(2, 5)))
+				.thenReturn(new PageImpl<>(List.of(), PageRequest.of(2, 5), 6));
+		when(this.repositorio.findByUsuarioIdOrderByFechaDesc(1L, PageRequest.of(1, 5)))
+				.thenReturn(new PageImpl<>(List.of(this.acontecimiento(1L, DIA)), PageRequest.of(1, 5), 6));
+
+		PaginaDTO<AcontecimientoDestacadoDTO> pagina = this.servicio.listar(1L, 2, 5);
+		assertEquals(1, pagina.getPagina());
+		assertEquals(1, pagina.getContenido().size());
+	}
+
+	@Test
+	void devuelveSoloLasFechasParaLosCalendarios() {
+
+		when(this.repositorio.findFechasByUsuarioId(1L)).thenReturn(List.of(DIA, DIA.minusDays(3)));
+		assertEquals(List.of(DIA, DIA.minusDays(3)), this.servicio.fechas(1L));
 	}
 
 	@Test
@@ -279,7 +322,8 @@ class AcontecimientoDestacadoServiceImplTest {
 		when(this.usuarioService.getUsuarioConSesion(2L)).thenThrow(
 				new UsuarioException(HttpStatus.UNAUTHORIZED, UsuarioException.SESION_NO_VALIDA, ""));
 
-		assertThrows(UsuarioException.class, () -> this.servicio.listar(2L));
-		verify(this.repositorio, never()).findByUsuarioIdOrderByFechaDesc(any());
+		assertThrows(UsuarioException.class, () -> this.servicio.listar(2L, 0, 10));
+		assertThrows(UsuarioException.class, () -> this.servicio.fechas(2L));
+		verify(this.repositorio, never()).findByUsuarioIdOrderByFechaDesc(any(), any());
 	}
 }

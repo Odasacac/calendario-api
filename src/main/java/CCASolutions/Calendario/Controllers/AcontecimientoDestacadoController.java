@@ -16,9 +16,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import CCASolutions.Calendario.DTOs.FormularioAcontecimientoDTO;
+import CCASolutions.Calendario.DTOs.PaginaDTO;
 import CCASolutions.Calendario.DTOs.AcontecimientoDestacadoDTO;
 import CCASolutions.Calendario.Services.AcontecimientoDestacadoService;
 import jakarta.validation.Valid;
@@ -34,9 +36,16 @@ public class AcontecimientoDestacadoController {
 	@Autowired
 	private AcontecimientoDestacadoService acontecimientoDestacadoService;
 
+	/** Paginado: pagina desde 0 y tamanyo entre 5 y 50 (fuera de ese rango se ajusta). */
 	@GetMapping
-	public ResponseEntity<List<AcontecimientoDestacadoDTO>> listar(@AuthenticationPrincipal Jwt jwt) {
-		return ResponseEntity.ok(this.acontecimientoDestacadoService.listar(idUsuario(jwt)));
+	public ResponseEntity<PaginaDTO<AcontecimientoDestacadoDTO>> listar(@AuthenticationPrincipal Jwt jwt,
+			@RequestParam(defaultValue = "0") int pagina, @RequestParam(defaultValue = "10") int tamanyo) {
+		return ResponseEntity.ok(this.acontecimientoDestacadoService.listar(idUsuario(jwt), pagina, tamanyo));
+	}
+
+	@GetMapping("/fechas")
+	public ResponseEntity<List<LocalDate>> fechas(@AuthenticationPrincipal Jwt jwt) {
+		return ResponseEntity.ok(this.acontecimientoDestacadoService.fechas(idUsuario(jwt)));
 	}
 
 	/** 200 con el acontecimiento de ese día, o 204 si no hay ninguno. */

@@ -9,6 +9,8 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import CCASolutions.Calendario.DTOs.AcontecimientoDestacadoDTO;
 import CCASolutions.Calendario.DTOs.DatosCosmicosParaVAUDTO;
 import CCASolutions.Calendario.DTOs.EventoDelDiaDTO;
 import CCASolutions.Calendario.DTOs.FormularioAcontecimientoDTO;
+import CCASolutions.Calendario.DTOs.PaginaDTO;
 import CCASolutions.Calendario.Entities.AcontecimientoDestacadoEntity;
 import CCASolutions.Calendario.Entities.UsuarioEntity;
 import CCASolutions.Calendario.Exceptions.UsuarioException;
@@ -54,12 +57,33 @@ public class AcontecimientoDestacadoServiceImpl implements AcontecimientoDestaca
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<AcontecimientoDestacadoDTO> listar(Long idUsuario) {
+	public PaginaDTO<AcontecimientoDestacadoDTO> listar(Long idUsuario, int pagina, int tamanyo) {
 
 		this.usuarioService.getUsuarioConSesion(idUsuario);
-		return this.acontecimientoDestacadoRepository.findByUsuarioIdOrderByFechaDesc(idUsuario).stream()
-				.map(AcontecimientoDestacadoServiceImpl::aDTO)
-				.toList();
+		int tamanyoValido = Math.max(TAMANYO_MINIMO, Math.min(TAMANYO_MAXIMO, tamanyo));
+		Page<AcontecimientoDestacadoEntity> resultado = this.acontecimientoDestacadoRepository
+				.findByUsuarioIdOrderByFechaDesc(idUsuario, PageRequest.of(Math.max(0, pagina), tamanyoValido));
+
+		if(resultado.getTotalPages() > 0 && resultado.getNumber() >= resultado.getTotalPages()) {
+			resultado = this.acontecimientoDestacadoRepository
+					.findByUsuarioIdOrderByFechaDesc(idUsuario, PageRequest.of(resultado.getTotalPages() - 1, tamanyoValido));
+		}
+
+		PaginaDTO<AcontecimientoDestacadoDTO> dto = new PaginaDTO<>();
+		dto.setContenido(resultado.getContent().stream().map(AcontecimientoDestacadoServiceImpl::aDTO).toList());
+		dto.setPagina(resultado.getNumber());
+		dto.setTamanyo(tamanyoValido);
+		dto.setTotalElementos(resultado.getTotalElements());
+		dto.setTotalPaginas(resultado.getTotalPages());
+		return dto;
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<LocalDate> fechas(Long idUsuario) {
+
+		this.usuarioService.getUsuarioConSesion(idUsuario);
+		return this.acontecimientoDestacadoRepository.findFechasByUsuarioId(idUsuario);
 	}
 
 	@Override
