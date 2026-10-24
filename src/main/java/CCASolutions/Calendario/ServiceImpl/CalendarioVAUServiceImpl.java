@@ -87,16 +87,17 @@ public class CalendarioVAUServiceImpl implements CalendarioVAUService {
 
 		CompletableFuture.runAsync(() -> {
 			try {
+				System.out.println("Iniciando el cálculo anticipado del Calendario VAU (mes actual e índice de métonos)");
 				// Primero lo que verá el usuario al abrir el calendario.
 				LocalDate hoy = LocalDate.now(ZoneOffset.UTC);
 				if(!hoy.isBefore(FECHA_MINIMA) && !hoy.isAfter(FECHA_MAXIMA)) {
 					this.getLunacion(hoy);
 				}
 				this.getMetonos();
-				System.out.println("Calendario VAU precalentado.");
+				System.out.println("Cálculo anticipado del Calendario VAU finalizado");
 			}
 			catch(Exception e) {
-				System.out.println("No se ha podido precalentar el calendario VAU: " + e);
+				System.out.println("Cálculo anticipado del Calendario VAU fallido: " + e);
 			}
 		});
 	}
