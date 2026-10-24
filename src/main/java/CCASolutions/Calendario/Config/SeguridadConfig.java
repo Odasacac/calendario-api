@@ -106,7 +106,7 @@ public class SeguridadConfig {
 
 	@Bean
 	Clock reloj() {
-		return Clock.systemDefaultZone();
+		return Clock.systemUTC();
 	}
 
 	/**

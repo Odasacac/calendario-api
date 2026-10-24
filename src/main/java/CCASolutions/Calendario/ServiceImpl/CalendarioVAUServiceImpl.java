@@ -1,6 +1,7 @@
 package CCASolutions.Calendario.ServiceImpl;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -87,7 +88,7 @@ public class CalendarioVAUServiceImpl implements CalendarioVAUService {
 		CompletableFuture.runAsync(() -> {
 			try {
 				// Primero lo que verá el usuario al abrir el calendario.
-				LocalDate hoy = LocalDate.now();
+				LocalDate hoy = LocalDate.now(ZoneOffset.UTC);
 				if(!hoy.isBefore(FECHA_MINIMA) && !hoy.isAfter(FECHA_MAXIMA)) {
 					this.getLunacion(hoy);
 				}

@@ -110,11 +110,11 @@ public class DatosServiceImpl implements DatosService {
 		
 		List<DatosEntity> datos = new ArrayList<>();
 		
-		datos.add(this.createDato(API_SOES, "https://opale.imcce.fr/api/v1/phenomena/equinoxessolstices/399?year={{YYYY}}&nbd={{NNNN}}"));
-		datos.add(this.createDato(API_LUNAR_FASES, "https://opale.imcce.fr/api/v1/phenomena/moonphases?year={{YYYY}}"));
-		datos.add(this.createDato(API_LUNAR_ECLIPSES, "https://opale.imcce.fr/api/v1/phenomena/eclipses/301/{{YYYY}}"));
-		datos.add(this.createDato(API_SOLAR_ECLIPSES, "https://opale.imcce.fr/api/v1/phenomena/eclipses/10/{{YYYY}}"));
-		datos.add(this.createDato(API_APOPERIS, "https://opale.imcce.fr/api/v1/phenomena/distances?date={{YYYY-MM-DD}}&nbd={{DDDD}}&bodies=399,301&calendar=gregorian"));						
+		datos.add(this.createDato(API_SOES, "https://opale.imcce.fr/api/v1/phenomena/equinoxessolstices/399?year={{YYYY}}&nbd={{NNNN}}&timescale=UTC"));
+		datos.add(this.createDato(API_LUNAR_FASES, "https://opale.imcce.fr/api/v1/phenomena/moonphases?year={{YYYY}}&timescale=UTC"));
+		datos.add(this.createDato(API_LUNAR_ECLIPSES, "https://opale.imcce.fr/api/v1/phenomena/eclipses/301/{{YYYY}}?timescale=UTC"));
+		datos.add(this.createDato(API_SOLAR_ECLIPSES, "https://opale.imcce.fr/api/v1/phenomena/eclipses/10/{{YYYY}}?timescale=UTC"));
+		datos.add(this.createDato(API_APOPERIS, "https://opale.imcce.fr/api/v1/phenomena/distances?date={{YYYY-MM-DD}}&nbd={{DDDD}}&bodies=399,301&calendar=gregorian&timescale=UTC"));						
 
 		return datos;
 	}

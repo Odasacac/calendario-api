@@ -1,6 +1,7 @@
 package CCASolutions.Calendario.Controllers;
 
 import java.time.LocalDate;
+import java.time.ZoneOffset;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -61,7 +62,7 @@ public class DatesController {
 	public ResponseEntity<DateDTO> getTodayVAU() {
 		HttpStatus status = HttpStatus.OK;
 		DateDTO body = new DateDTO();
-		LocalDate today = LocalDate.now();
+		LocalDate today = LocalDate.now(ZoneOffset.UTC);
 		System.out.println("Fecha hoy requerida: " + today);
 		try {			
 

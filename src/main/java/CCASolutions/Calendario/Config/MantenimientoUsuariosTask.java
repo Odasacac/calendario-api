@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 
+import CCASolutions.Calendario.CalendarioApplication;
 import CCASolutions.Calendario.Services.UsuarioService;
 
 /** Cron diario que actualiza el estado de las cuentas (ver UsuarioService#mantenimientoDiario). */
@@ -15,7 +16,7 @@ public class MantenimientoUsuariosTask {
 	@Autowired
 	private UsuarioService usuarioService;
 
-	@Scheduled(cron = "${vau.usuarios.cron}")
+	@Scheduled(cron = "${vau.usuarios.cron}", zone = CalendarioApplication.ZONA)
 	void revisarUsuarios() {
 
 		try {
