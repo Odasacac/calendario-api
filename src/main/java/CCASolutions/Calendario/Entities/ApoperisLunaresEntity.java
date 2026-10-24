@@ -3,6 +3,8 @@ package CCASolutions.Calendario.Entities;
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.FractionalSeconds;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -20,6 +22,7 @@ public class ApoperisLunaresEntity implements Serializable {
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long id;
 
+	@FractionalSeconds(0)
 	private LocalDateTime date;
 	private int year;
 	

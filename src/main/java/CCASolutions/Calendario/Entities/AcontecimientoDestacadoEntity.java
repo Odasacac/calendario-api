@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.FractionalSeconds;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -37,9 +39,11 @@ public class AcontecimientoDestacadoEntity implements Serializable {
 	private String descripcion;
 
 	@Column(nullable=false)
+	@FractionalSeconds(0)
 	private LocalDateTime fechaCreacion;
 
 	@Column(nullable=false)
+	@FractionalSeconds(0)
 	private LocalDateTime fechaModificacion;
 
 	/*

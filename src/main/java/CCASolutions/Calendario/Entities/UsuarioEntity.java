@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.hibernate.annotations.FractionalSeconds;
+
 import CCASolutions.Calendario.Enums.EstadoUsuarioEnum;
 import CCASolutions.Calendario.Enums.MotivoSuspensionEnum;
 import CCASolutions.Calendario.Enums.RolUsuarioEnum;
@@ -59,10 +61,14 @@ public class UsuarioEntity implements Serializable {
 	private RolUsuarioEnum rol = RolUsuarioEnum.USER;
 
 	@Column(nullable=false)
+	@FractionalSeconds(0)
 	private LocalDateTime fechaCreacion;
 
+	@FractionalSeconds(0)
 	private LocalDateTime fechaLastLogin;
+	@FractionalSeconds(0)
 	private LocalDateTime fechaEliminacion;
+	@FractionalSeconds(0)
 	private LocalDateTime fechaSuspension;
 
 	@Enumerated(EnumType.STRING)

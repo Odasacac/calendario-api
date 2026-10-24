@@ -1,6 +1,7 @@
 package CCASolutions.Calendario.Config;
 
 import java.time.Clock;
+import java.time.Duration;
 import java.util.Base64;
 import java.util.List;
 
@@ -104,9 +105,10 @@ public class SeguridadConfig {
 		return new BCryptPasswordEncoder(12);
 	}
 
+	/** Reloj UTC con precisión de segundos: las fechas no necesitan fracciones de segundo. */
 	@Bean
 	Clock reloj() {
-		return Clock.systemUTC();
+		return Clock.tick(Clock.systemUTC(), Duration.ofSeconds(1));
 	}
 
 	/**

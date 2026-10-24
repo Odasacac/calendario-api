@@ -1005,7 +1005,7 @@ public class NotableEventServiceImpl implements NotableEventService {
 				name = name + " invertida";
 			}
 			else if(luna.isConApogeo()){
-				name = name + " distate";
+				name = name + " distante";
 			}
 			else if(luna.isConPerigeo()) {
 				name = name + " presente";
@@ -1030,10 +1030,10 @@ public class NotableEventServiceImpl implements NotableEventService {
 		}
 		
 		if(apoperi.isEsSelecto()) {
-			especial = " selecto";
+			especial = " selecta";
 		}
 		else if(apoperi.isEsInvertido()) {
-			especial = " invertido";
+			especial = " invertida";
 		}
 		
 		name = "Luna " + estado + especial;
