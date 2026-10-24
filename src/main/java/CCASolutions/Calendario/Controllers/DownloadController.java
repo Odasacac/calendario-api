@@ -1,5 +1,7 @@
 package CCASolutions.Calendario.Controllers;
 
+import java.util.function.Supplier;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
@@ -23,11 +25,25 @@ public class DownloadController {
 	private DownloadService downloadService;
 
 	private final static String MANUAL_FILENAME = "Manual_Calendario.pdf";
+	private final static String MANUAL_DESPLIEGUE_FILENAME = "Manual_de_despliegue.pdf";
 	private final static String CALENDAR_FILENAME_PREFIX = "Calendario_VAU_";
 
 	@GetMapping("/getpdf")
 	@CrossOrigin(origins = "*", exposedHeaders = HttpHeaders.CONTENT_DISPOSITION)
 	public ResponseEntity<byte[]> getManual() {
+
+		return this.documentoPdf(this.downloadService::getManual, MANUAL_FILENAME);
+	}
+
+	@GetMapping("/getdeploymentpdf")
+	@CrossOrigin(origins = "*", exposedHeaders = HttpHeaders.CONTENT_DISPOSITION)
+	public ResponseEntity<byte[]> getManualDespliegue() {
+
+		return this.documentoPdf(this.downloadService::getManualDespliegue, MANUAL_DESPLIEGUE_FILENAME);
+	}
+
+	/** Un PDF fijo de la carpeta Documentacion como descarga; 404 si no está empaquetado. */
+	private ResponseEntity<byte[]> documentoPdf(Supplier<byte[]> documento, String filename) {
 
 		HttpStatus status = HttpStatus.OK;
 		HttpHeaders headers = new HttpHeaders();
@@ -35,14 +51,14 @@ public class DownloadController {
 
 		try {
 
-			body = this.downloadService.getManual();
+			body = documento.get();
 			if(body == null) {
 				status = HttpStatus.NOT_FOUND;
 				body = new byte[0];
 			}
 			else {
 				headers.setContentType(MediaType.APPLICATION_PDF);
-				headers.setContentDisposition(ContentDisposition.attachment().filename(MANUAL_FILENAME).build());
+				headers.setContentDisposition(ContentDisposition.attachment().filename(filename).build());
 				headers.setContentLength(body.length);
 			}
 
@@ -50,6 +66,7 @@ public class DownloadController {
 		catch(Exception e) {
 
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
+			body = new byte[0];
 			System.out.println(e);
 		}
 

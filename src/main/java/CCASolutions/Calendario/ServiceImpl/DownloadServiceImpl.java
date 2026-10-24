@@ -45,33 +45,45 @@ public class DownloadServiceImpl implements DownloadService {
 	private EclipenosService eclipenosService;
 
 	private final static String MANUAL_PATH = "Documentacion/Manual_Calendario.pdf";
+	private final static String MANUAL_DESPLIEGUE_PATH = "Documentacion/Manual_de_despliegue.pdf";
 	private final static int ESTACION_INVIERNO = 1;
 
 	private final Map<Integer, byte[]> calendariosGenerados = new ConcurrentHashMap<>();
 
 	public byte[] getManual() {
 
-		byte[] manual = null;
+		return this.leerDocumento(MANUAL_PATH);
+	}
 
-		ClassPathResource manualResource = new ClassPathResource(MANUAL_PATH);
+	public byte[] getManualDespliegue() {
 
-		if(manualResource.exists()) {
+		return this.leerDocumento(MANUAL_DESPLIEGUE_PATH);
+	}
 
-			try (InputStream manualStream = manualResource.getInputStream()) {
+	/** Documentos de la carpeta Documentacion, empaquetados en el classpath (ver pom.xml). */
+	private byte[] leerDocumento(String ruta) {
 
-				manual = manualStream.readAllBytes();
+		byte[] documento = null;
+
+		ClassPathResource recurso = new ClassPathResource(ruta);
+
+		if(recurso.exists()) {
+
+			try (InputStream stream = recurso.getInputStream()) {
+
+				documento = stream.readAllBytes();
 			}
 			catch(Exception e) {
 
-				System.out.println("Error al leer el manual: " + e);
+				System.out.println("Error al leer " + ruta + ": " + e);
 			}
 		}
 		else {
 
-			System.out.println("No se ha encontrado el manual en el classpath: " + MANUAL_PATH);
+			System.out.println("No se ha encontrado en el classpath: " + ruta);
 		}
 
-		return manual;
+		return documento;
 	}
 
 	public byte[] getCalendarForAYear(int yearForCalendar) {
