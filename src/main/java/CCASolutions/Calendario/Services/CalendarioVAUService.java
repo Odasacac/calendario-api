@@ -11,8 +11,8 @@ import CCASolutions.Calendario.DTOs.MetonoIndiceDTO;
 /** Calendario VAU por lunaciones y su índice métono -> año VAU -> mes fasal. */
 public interface CalendarioVAUService {
 
-	/** Mismo rango que el calendario anual en PDF. */
-	public static final LocalDate FECHA_MINIMA = LocalDate.of(1434, 1, 1);
+	/** Rango de fechas que se pueden consultar: del 21-12-1433 (primer eclípeno invernal apofasal remoto) al final de los datos. */
+	public static final LocalDate FECHA_MINIMA = LocalDate.of(1433, 12, 21);
 	public static final LocalDate FECHA_MAXIMA = LocalDate.of(2099, 12, 31);
 
 	/** Lunación que contiene la fecha. Se guarda en caché: las lunaciones no cambian. */

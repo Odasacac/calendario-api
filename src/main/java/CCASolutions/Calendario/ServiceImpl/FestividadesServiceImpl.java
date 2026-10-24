@@ -17,6 +17,7 @@ import CCASolutions.Calendario.Entities.FestividadesEntity;
 import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 import CCASolutions.Calendario.Entities.MetonsEntity;
 import CCASolutions.Calendario.Entities.SolsticiosYEquinocciosEntity;
+import CCASolutions.Calendario.Repositories.FasesLunaresRepository;
 import CCASolutions.Calendario.Repositories.FestividadesRepository;
 import CCASolutions.Calendario.Services.FestividadesService;
 
@@ -25,6 +26,9 @@ public class FestividadesServiceImpl implements FestividadesService {
 
 	@Autowired
 	private FestividadesRepository festividadesRepository;
+
+	@Autowired
+	private FasesLunaresRepository fasesLunaresRepository;
 	
 	
 	private static final String CAMBIO_DE_ECLIPENO_IAR_CODE = "CEAR";	
@@ -64,7 +68,12 @@ public class FestividadesServiceImpl implements FestividadesService {
 		List<MinimaFestividadesDTO> festividadesFuturas = new ArrayList<>();
 		
 		for(MinimaFestividadesDTO festividad : festividadesObtenidasDTO) {
-			
+
+			// Sin datos para esa festividad (sin fecha) no se puede situar: ni es hoy, ni pasada, ni futura.
+			if(festividad.getDate() == null) {
+				continue;
+			}
+
 			if(festividad.getDiasDeDiferenciaConDate() == 0) {
 				
 				festividadesActuales.add(festividad);
@@ -377,6 +386,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 			}
 		}
 		
+		// Sin métono propio se toma la fecha del IAR, pero no su distancia: no debe salir como festividad aparte.
 		if(cambioDeMetonoIN.getDate() == null) {
 			cambioDeMetonoIN.setDate(cambioDeMetonoIAR.getDate());
 		}
@@ -582,8 +592,9 @@ public class FestividadesServiceImpl implements FestividadesService {
 		MinimaFestividadesDTO cambioDeAponovo = new MinimaFestividadesDTO();
 		cambioDeAponovo.setCode(CAMBIO_DE_APONOVO_CODE);		
 		long diasMinimosDeDiferenciaEntreAponovoYDate = Long.MAX_VALUE;
+		boolean hayAponovoPasado = false;
 
-		
+
 		for(FasesLunaresEntity luna : datosCosmicosParaVAUDTO.getLunas()) {
 			
 	
@@ -603,7 +614,11 @@ public class FestividadesServiceImpl implements FestividadesService {
 				}
 				
 				if(luna.isSelecta() ) {
-					
+
+					if(!luna.getDate().toLocalDate().isAfter(date)) {
+						hayAponovoPasado = true;
+					}
+
 					long diasDeDiferenciaEntreAponovoYDate = Math.abs(ChronoUnit.DAYS.between(date, luna.getDate().toLocalDate()));
 					if(diasDeDiferenciaEntreAponovoYDate < diasMinimosDeDiferenciaEntreAponovoYDate) {
 						
@@ -613,11 +628,29 @@ public class FestividadesServiceImpl implements FestividadesService {
 									
 					}
 				}
-				
+
 			}
-			
+
 		}
-		
+
+		// Las lunas empiezan en el último métono IAR: si es muy reciente (p. ej. 1433-12-21),
+		// el aponovo anterior queda fuera y el siguiente puede estar a más de un año.
+		if(!hayAponovoPasado) {
+
+			FasesLunaresEntity aponovoAnterior = this.fasesLunaresRepository.findFirstByDateLessThanAndNuevaIsTrueAndSelectaIsTrueOrderByDateDesc(date.plusDays(1).atStartOfDay());
+
+			if(aponovoAnterior != null) {
+
+				long diasDeDiferenciaEntreAponovoYDate = Math.abs(ChronoUnit.DAYS.between(date, aponovoAnterior.getDate().toLocalDate()));
+				if(diasDeDiferenciaEntreAponovoYDate < diasMinimosDeDiferenciaEntreAponovoYDate) {
+
+					diasMinimosDeDiferenciaEntreAponovoYDate = diasDeDiferenciaEntreAponovoYDate;
+					cambioDeAponovo.setDate(aponovoAnterior.getDate());
+					cambioDeAponovo.setDiasDeDiferenciaConDate(diasMinimosDeDiferenciaEntreAponovoYDate);
+				}
+			}
+		}
+
 
 		// Si hay un eclipeno no hay festividad de inicio del primer mes ni de cambio de metono
 		// Y si hay un metono, no hay inicio del primer mes
@@ -646,7 +679,7 @@ public class FestividadesServiceImpl implements FestividadesService {
 		midsisonAponoval.setDate(midsison.getDate());
 		midsisonAponoval.setDiasDeDiferenciaConDate(Long.MAX_VALUE);
 		
-		if(cambioDeAponovo.getDate().toLocalDate().isEqual(midsison.getDate().toLocalDate())) {
+		if(cambioDeAponovo.getDate() != null && cambioDeAponovo.getDate().toLocalDate().isEqual(midsison.getDate().toLocalDate())) {
 			midsisonAponoval.setDate(midsison.getDate());
 			midsisonAponoval.setDiasDeDiferenciaConDate(midsison.getDiasDeDiferenciaConDate());
 		}

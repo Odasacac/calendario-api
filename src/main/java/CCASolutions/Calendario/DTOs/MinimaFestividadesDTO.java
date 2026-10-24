@@ -5,7 +5,8 @@ import java.time.LocalDateTime;
 public class MinimaFestividadesDTO {
 
 	private String code;
-	private long diasDeDiferenciaConDate;
+	// Sin datos la festividad queda «infinitamente lejos»; con 0 contaría como que es hoy.
+	private long diasDeDiferenciaConDate = Long.MAX_VALUE;
 	private LocalDateTime date;
 	
 	public LocalDateTime getDate() {

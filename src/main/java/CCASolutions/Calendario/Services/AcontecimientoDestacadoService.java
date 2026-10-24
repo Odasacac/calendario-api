@@ -15,7 +15,7 @@ import CCASolutions.Calendario.DTOs.PaginaDTO;
  */
 public interface AcontecimientoDestacadoService {
 
-	public static final LocalDate FECHA_MINIMA = LocalDate.of(1, 1, 1);
+	public static final LocalDate FECHA_MINIMA = LocalDate.of(1433, 12, 21);
 	public static final LocalDate FECHA_MAXIMA = LocalDate.of(2099, 12, 31);
 
 	public static final int TAMANYO_MINIMO = 5;

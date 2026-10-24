@@ -87,7 +87,7 @@ public class DatosCosmicosServiceImpl implements DatosCosmicosService {
 					
 					if(datosCosmicosParaVAUDTO.getLastMetonIN() != null) {									
 						
-						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getDate(), dateO.plusYears(numeroAnyoSuperior)));
+						datosCosmicosParaVAUDTO.setLunas(this.lunasRepository.findByDateBetween(this.getLunasDesde(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto(), dateO), dateO.plusYears(numeroAnyoSuperior)));
 						datosCosmicosParaVAUDTO.setSoes(this.solsticiosYEquinocciosRepository.findByDateAfterAndDateLessThanEqual(datosCosmicosParaVAUDTO.getLastMetonIN().getDate().minusYears(numeroAnyosInferior), dateO.plusYears(numeroAnyoSuperior)));
 						datosCosmicosParaVAUDTO.setEclipses(this.eclipsesRepository.findEclipsesAbsoluteQuery(datosCosmicosParaVAUDTO.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay(), dateO.plusYears(numeroAnyoSuperior)));
 						datosCosmicosParaVAUDTO.setApoperis(this.apogeosYPerigeosLunaRepository.findByDateBetween(dateO.minusMonths(numeroMesesInferior), dateO.plusMonths(numeroMesesSuperior)));
@@ -180,7 +180,7 @@ public class DatosCosmicosServiceImpl implements DatosCosmicosService {
 				datosCosmicosRango.setMetons(allMetons);
 				datosCosmicosRango.setMetonsDesde(metonsDesde);
 
-				datosCosmicosRango.setLunasDesde(lastMetonIApofasalRemoto.getDate());
+				datosCosmicosRango.setLunasDesde(this.getLunasDesde(lastMetonIApofasalRemoto, primeraFechaO));
 				datosCosmicosRango.setLunas(this.lunasRepository.findByDateBetween(datosCosmicosRango.getLunasDesde(), hastaO.plusYears(numeroAnyoSuperior)));
 
 				datosCosmicosRango.setSoesDesde(lastMetonIN.getDate().minusYears(numeroAnyosInferior));
@@ -233,7 +233,7 @@ public class DatosCosmicosServiceImpl implements DatosCosmicosService {
 
 				if(datosCosmicosParaVAUDTO.getLastMetonIN() != null) {
 
-					LocalDateTime lunasDesde = datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto().getDate();
+					LocalDateTime lunasDesde = this.getLunasDesde(datosCosmicosParaVAUDTO.getLastMetonIApofasalRemoto(), dateO);
 					LocalDateTime soesDesde = datosCosmicosParaVAUDTO.getLastMetonIN().getDate().minusYears(numeroAnyosInferior);
 					LocalDateTime eclipsesDesde = datosCosmicosParaVAUDTO.getLastEclipenoIN().getDate().toLocalDate().atStartOfDay();
 					LocalDateTime apoperisDesde = dateO.minusMonths(numeroMesesInferior);
@@ -280,6 +280,19 @@ public class DatosCosmicosServiceImpl implements DatosCosmicosService {
 		}
 
 		return datosCosmicosParaVAUDTO;
+	}
+
+
+	/**
+	 * Las lunas empiezan en el último métono IAR, pero nunca después de un año antes de la fecha:
+	 * justo tras un métono IAR (p. ej. 1433-12-21) la última luna nueva anterior queda fuera
+	 * y no se pueden calcular la semana, el día ni el mes.
+	 */
+	private LocalDateTime getLunasDesde(MetonsEntity lastMetonIApofasalRemoto, LocalDateTime dateO) {
+
+		LocalDateTime unAnyoAntes = dateO.toLocalDate().minusYears(numeroAnyosInferior).atStartOfDay();
+
+		return lastMetonIApofasalRemoto.getDate().isBefore(unAnyoAntes) ? lastMetonIApofasalRemoto.getDate() : unAnyoAntes;
 	}
 
 

@@ -13,6 +13,8 @@ import CCASolutions.Calendario.Entities.FasesLunaresEntity;
 public interface FasesLunaresRepository extends JpaRepository <FasesLunaresEntity, Long> {
 	
 	public abstract FasesLunaresEntity findTopByDateGreaterThanEqualAndNuevaIsTrueOrderByDateAsc(LocalDateTime date);
+
+	public abstract FasesLunaresEntity findFirstByDateLessThanAndNuevaIsTrueAndSelectaIsTrueOrderByDateDesc(LocalDateTime date);
 	
 	public abstract List<FasesLunaresEntity> findByDateBetween(LocalDateTime inicio, LocalDateTime fin);
 	

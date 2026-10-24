@@ -274,7 +274,8 @@ public class CalendarioVAUServiceImpl implements CalendarioVAUService {
 
 			LocalDate dia = todos.get(i).getDate().toLocalDate();
 			LocalDate siguiente = i + 1 < todos.size() ? todos.get(i + 1).getDate().toLocalDate() : null;
-			boolean tocaElRango = !dia.isAfter(FECHA_MAXIMA) && (siguiente == null || !siguiente.isBefore(FECHA_MINIMA));
+			// El métono termina el día de su sucesor: el que acaba justo en FECHA_MINIMA (21-12-1433) se queda fuera.
+			boolean tocaElRango = !dia.isAfter(FECHA_MAXIMA) && (siguiente == null || siguiente.isAfter(FECHA_MINIMA));
 
 			if(tocaElRango) {
 				MetonoIndiceDTO metono = new MetonoIndiceDTO();
